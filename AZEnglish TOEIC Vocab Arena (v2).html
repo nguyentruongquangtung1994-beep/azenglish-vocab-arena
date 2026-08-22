@@ -84,7 +84,9 @@
     flex:none; width:40px; height:40px; border-radius:8px; background:var(--red); color:#fff;
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;
     letter-spacing:.02em; font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    text-decoration:none; cursor:pointer; transition:opacity .12s ease;
   }
+  .mark:hover{ opacity:.85; }
   .masthead-text{ flex:1; min-width:0; }
   .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; }
   .title{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-weight:700; font-size:21px; line-height:1.1; margin:0; text-wrap:balance; }
@@ -368,7 +370,7 @@
 <div class="stack">
 
   <header class="masthead">
-    <div class="mark">AZ</div>
+    <a class="mark" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
     <div class="masthead-text">
       <p class="eyebrow">AZEnglish · Vocab Arena</p>
       <h1 class="title">1000 từ TOEIC — A2 · B1 · B2</h1>
