@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>AZEnglish Vocab Arena</title>
+<link rel="icon" href="./icon-192.png" />
+<meta name="theme-color" content="#e0102b" />
+<style>
+  :root{
+    --paper:#fcfbfa; --paper-2:#f2f0ee; --ink:#1a1210; --ink-soft:#5c534f; --line:#e6e1dc;
+    --red:#e0102b; --red-ink:#8f0a1c;
+    --tier1:#1e7a4c; --tier1-bg:#e7f4ec;
+    --tier2:#1d6fa5; --tier2-bg:#e6f1f9;
+    --tier3:#7c3aed; --tier3-bg:#f1eafe;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+      --red:#ff4d5e; --red-ink:#ff8f98;
+      --tier1:#5fd394; --tier1-bg:#173226;
+      --tier2:#6fb8ea; --tier2-bg:#132633;
+      --tier3:#b794f6; --tier3-bg:#241c38;
+    }
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    display:flex; justify-content:center; padding:32px 16px 60px;
+  }
+  .stack{ width:100%; max-width:640px; display:flex; flex-direction:column; gap:20px; }
+  .masthead{ display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); padding-bottom:14px; }
+  .mark{
+    flex:none; width:44px; height:44px; border-radius:10px; background:var(--red); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px;
+    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  }
+  .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; }
+  h1{
+    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:700;
+    font-size:22px; line-height:1.15; margin:0; text-wrap:balance;
+  }
+  .lede{ font-size:15px; line-height:1.5; color:var(--ink-soft); margin:0; }
+  .card{
+    display:flex; gap:18px; align-items:flex-start; background:var(--paper-2);
+    border:1.5px solid var(--line); border-radius:16px; padding:22px;
+    text-decoration:none; color:inherit;
+    transition:border-color .15s ease, transform .12s ease;
+  }
+  .card:hover{ border-color:var(--red); transform:translateY(-1px); }
+  .card:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(224,16,43,.28); }
+  .badge{
+    flex:none; width:52px; height:52px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:800; font-size:12.5px; line-height:1.15;
+  }
+  .badge.t1{ background:var(--tier1-bg); color:var(--tier1); }
+  .badge.t2{ background:var(--tier2-bg); color:var(--tier2); }
+  .badge.t3{ background:var(--tier3-bg); color:var(--tier3); }
+  .card-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
+  .card-title{ font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:700; font-size:19px; line-height:1.2; }
+  .card-stats{ font-size:13px; font-weight:700; color:var(--red); }
+  .card-desc{ font-size:14px; line-height:1.5; color:var(--ink-soft); }
+  .arrow{ flex:none; align-self:center; font-size:20px; color:var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="stack">
+
+  <header class="masthead">
+    <div class="mark">AZ</div>
+    <div>
+      <p class="eyebrow">AZEnglish &middot; Vocab Arena</p>
+      <h1>Chọn chương trình học từ vựng</h1>
+    </div>
+  </header>
+
+  <p class="lede">Ba app luyện từ vựng riêng biệt, mỗi app một lộ trình &mdash; bấm vào để bắt đầu, tiến độ lưu riêng theo từng app trên trình duyệt này.</p>
+
+  <a class="card" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html">
+    <div class="badge t1">A1&ndash;B1</div>
+    <div class="card-body">
+      <div class="card-title">1500 Từ Giao Tiếp Cơ Bản</div>
+      <div class="card-stats">1500 từ &middot; 30 chủ đề đời sống</div>
+      <div class="card-desc">Nền tảng từ vựng dùng hằng ngày: chào hỏi, gia đình, ăn uống, mua sắm, du lịch&hellip;</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+  </a>
+
+  <a class="card" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html">
+    <div class="badge t2">A2&ndash;B2</div>
+    <div class="card-body">
+      <div class="card-title">TOEIC Vocab Arena</div>
+      <div class="card-stats">1000 từ &middot; 20 chủ đề thương mại &ndash; văn phòng</div>
+      <div class="card-desc">Trọng tâm từ vựng Part 7 &mdash; sát đề thi thật, ưu tiên từ thường gặp nhất.</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+  </a>
+
+  <a class="card" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html">
+    <div class="badge t3">B1&ndash;C1</div>
+    <div class="card-body">
+      <div class="card-title">Vocab Arena IELTS</div>
+      <div class="card-stats">1036 từ &middot; chủ đề IELTS phổ biến</div>
+      <div class="card-desc">Mở rộng vốn từ học thuật &mdash; chuẩn bị vững cho kỳ thi IELTS band cao.</div>
+    </div>
+    <div class="arrow">&rarr;</div>
+  </a>
+
+</div>
+</body>
+</html>
