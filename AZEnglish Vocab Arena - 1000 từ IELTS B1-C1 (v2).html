@@ -93,7 +93,13 @@
     width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:15px;
     display:flex; align-items:center; justify-content:center;
   }
-  .theme-btn:focus-visible, button:focus-visible, input:focus-visible{ outline:none; box-shadow:var(--focus); }
+  .music-btn{
+    flex:none; border:1px solid var(--line); background:var(--paper-2); color:var(--ink);
+    width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center; opacity:.55;
+  }
+  .music-btn.active{ background:var(--red); border-color:var(--red); color:#fff; opacity:1; }
+  .theme-btn:focus-visible, button:focus-visible, input:focus-visible, .music-btn:focus-visible{ outline:none; box-shadow:var(--focus); }
 
   /* ---- scoreboard ---- */
   .scoreboard{ display:grid; grid-template-columns: repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
@@ -368,8 +374,12 @@
       <span class="streak-pill" id="streakPill" title="Số ngày luyện liên tiếp">🔥 0</span>
       <span class="xp-pill" id="xpPill" title="Điểm kinh nghiệm">✦ 0 XP</span>
     </div>
+    <button class="music-btn" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền">🎵</button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
+  <audio id="bgMusic" loop preload="none">
+    <source src="./coffee-on-the-patio-avbe-main-version-21314-01-56.mp3" type="audio/mpeg" />
+  </audio>
 
   <div class="scoreboard" id="scoreboard">
     <div class="stat"><b id="statRound">0/0</b><span>Vòng này</span></div>
@@ -747,6 +757,22 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
 
   // ---------- theme ----------
   var themeBtn = document.getElementById("themeBtn");
+  var musicBtn = document.getElementById("musicBtn");
+  var bgMusic = document.getElementById("bgMusic");
+  bgMusic.volume = 0.18;
+  var musicOn = false;
+  try{ musicOn = localStorage.getItem(STORAGE_KEY + "_music") === "on"; }catch(e){}
+  musicBtn.classList.toggle("active", musicOn);
+  musicBtn.addEventListener("click", function(){
+    musicOn = !musicOn;
+    musicBtn.classList.toggle("active", musicOn);
+    if(musicOn){
+      bgMusic.play().catch(function(){});
+    }else{
+      bgMusic.pause();
+    }
+    try{ localStorage.setItem(STORAGE_KEY + "_music", musicOn ? "on" : "off"); }catch(e){}
+  });
   function applyTheme(mode){
     if(mode){ document.documentElement.setAttribute("data-theme", mode); }
     else{ document.documentElement.removeAttribute("data-theme"); }
