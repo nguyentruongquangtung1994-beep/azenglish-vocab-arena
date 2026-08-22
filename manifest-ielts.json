@@ -1,0 +1,16 @@
+{
+  "name": "AZEnglish Vocab Arena IELTS",
+  "short_name": "IELTS AZEnglish",
+  "description": "1036 từ vựng theo chủ đề IELTS phổ biến, mức B1-C1.",
+  "start_url": "./AZEnglish%20Vocab%20Arena%20-%201000%20t%E1%BB%AB%20IELTS%20B1-C1%20(v2).html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fcfbfa",
+  "theme_color": "#e0102b",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
