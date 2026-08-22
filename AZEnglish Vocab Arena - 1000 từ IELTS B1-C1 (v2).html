@@ -99,6 +99,9 @@
     display:flex; align-items:center; justify-content:center; opacity:.55;
   }
   .music-btn.active{ background:var(--red); border-color:var(--red); color:#fff; opacity:1; }
+  .music-vol-row{ display:flex; align-items:center; gap:10px; padding:0 2px; margin:-6px 0 2px; }
+  .music-vol-row .icon{ font-size:12px; flex:none; opacity:.6; }
+  .music-vol-row input[type="range"]{ flex:1; accent-color:var(--red); height:18px; cursor:pointer; }
   .theme-btn:focus-visible, button:focus-visible, input:focus-visible, .music-btn:focus-visible{ outline:none; box-shadow:var(--focus); }
 
   /* ---- scoreboard ---- */
@@ -377,6 +380,11 @@
     <button class="music-btn" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền">🎵</button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
+  <div class="music-vol-row hidden" id="musicVolRow">
+    <span class="icon">🔈</span>
+    <input type="range" id="musicVolSlider" min="0" max="100" value="18" step="1" aria-label="Âm lượng nhạc nền" />
+    <span class="icon">🔊</span>
+  </div>
   <audio id="bgMusic" loop preload="none">
     <source src="./coffee-on-the-patio-avbe-main-version-21314-01-56.mp3" type="audio/mpeg" />
   </audio>
@@ -759,13 +767,22 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   var themeBtn = document.getElementById("themeBtn");
   var musicBtn = document.getElementById("musicBtn");
   var bgMusic = document.getElementById("bgMusic");
-  bgMusic.volume = 0.18;
-  var musicOn = false;
-  try{ musicOn = localStorage.getItem(STORAGE_KEY + "_music") === "on"; }catch(e){}
+  var musicVolRow = document.getElementById("musicVolRow");
+  var musicVolSlider = document.getElementById("musicVolSlider");
+  var musicVolPref = null;
+  try{ musicVolPref = localStorage.getItem(STORAGE_KEY + "_musicvol"); }catch(e){}
+  var musicVolPct = musicVolPref === null ? 18 : Math.max(0, Math.min(100, parseInt(musicVolPref, 10) || 0));
+  bgMusic.volume = musicVolPct / 100;
+  musicVolSlider.value = String(musicVolPct);
+  var musicPref = null;
+  try{ musicPref = localStorage.getItem(STORAGE_KEY + "_music"); }catch(e){}
+  var musicOn = musicPref === null ? true : musicPref === "on";
   musicBtn.classList.toggle("active", musicOn);
+  musicVolRow.classList.toggle("hidden", !musicOn);
   musicBtn.addEventListener("click", function(){
     musicOn = !musicOn;
     musicBtn.classList.toggle("active", musicOn);
+    musicVolRow.classList.toggle("hidden", !musicOn);
     if(musicOn){
       bgMusic.play().catch(function(){});
     }else{
@@ -773,6 +790,20 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     }
     try{ localStorage.setItem(STORAGE_KEY + "_music", musicOn ? "on" : "off"); }catch(e){}
   });
+  musicVolSlider.addEventListener("input", function(){
+    var pct = parseInt(musicVolSlider.value, 10) || 0;
+    bgMusic.volume = pct / 100;
+    try{ localStorage.setItem(STORAGE_KEY + "_musicvol", String(pct)); }catch(e){}
+  });
+  function tryAutoStartMusic(){
+    document.removeEventListener("click", tryAutoStartMusic);
+    document.removeEventListener("touchstart", tryAutoStartMusic);
+    if(musicOn && bgMusic.paused){
+      bgMusic.play().catch(function(){});
+    }
+  }
+  document.addEventListener("click", tryAutoStartMusic);
+  document.addEventListener("touchstart", tryAutoStartMusic);
   function applyTheme(mode){
     if(mode){ document.documentElement.setAttribute("data-theme", mode); }
     else{ document.documentElement.removeAttribute("data-theme"); }
@@ -832,7 +863,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
       }else{
         utter.lang = "vi-VN";
       }
-      utter.rate = 1.0;
+      utter.rate = 1.5;
       utter.pitch = 1.0;
       window.speechSynthesis.speak(utter);
     }catch(e){}
@@ -1198,7 +1229,9 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
 
     if(isFirstTime){
       messages = [
-        {emoji:"👋", text:"Chào mừng bạn đến với Vocab Arena! Học vòng đầu tiên để mở chuỗi ngày học nhé."}
+        {emoji:"👋", text:"Chào mừng đến với AZEnglish Vocab Arena IELTS! Bắt đầu vòng từ vựng đầu tiên để mở chuỗi ngày ôn luyện nhé."},
+        {emoji:"🎓", text:"Rất vui vì bạn chọn đồng hành cùng AZEnglish trên chặng đường IELTS! Từ vựng học thuật đang chờ bạn."},
+        {emoji:"📈", text:"Vốn từ học thuật vững chắc là nền tảng cho band điểm cao — bắt đầu buổi học đầu tiên ngay nhé."}
       ];
     }else if(meta.dayStreak >= 3 && !isActiveToday){
       messages = [
