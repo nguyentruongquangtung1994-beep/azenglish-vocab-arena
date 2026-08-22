@@ -532,8 +532,9 @@
       </div>
 
       <div class="hint-row">
+        <button class="hint-btn" id="reviewWordBtn" type="button">↩️ Xem lại từ</button>
         <button class="hint-btn" id="hintAudio" type="button">🔊 Nghe lại</button>
-        <button class="hint-btn" id="hintFirst" type="button">💡 Gợi ý chữ cái đầu</button>
+        <button class="hint-btn" id="hintFirst" type="button">💡 Gợi ý</button>
       </div>
       <p class="hint-reveal" id="hintReveal"></p>
 
@@ -1300,6 +1301,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   var currentPhase = "study";
   var currentRecallMode = "meaning";
   var hintUsedThisWord = false;
+  var hintLetterCount = 0;
 
   function shuffle(arr){
     var a = arr.slice();
@@ -1466,6 +1468,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     renderLetterboxes("");
     hintReveal.textContent = "";
     hintUsedThisWord = false;
+    hintLetterCount = 0;
     document.querySelector(".hint-row").classList.remove("hidden");
     studyPhase.classList.add("hidden");
     recallPhase.classList.remove("hidden");
@@ -1474,11 +1477,17 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
   studyAudioBtn.addEventListener("click", function(){ speak(currentWord().w); });
   toRecallBtn.addEventListener("click", showRecallPhase);
+  var reviewWordBtn = document.getElementById("reviewWordBtn");
+  reviewWordBtn.addEventListener("click", function(){ renderCurrent(); });
   hintAudio.addEventListener("click", function(){ speak(currentWord().w); });
   hintFirst.addEventListener("click", function(){
     var word = currentWord();
     hintUsedThisWord = true;
-    hintReveal.innerHTML = "Chữ cái đầu: <b>" + word.w[0].toUpperCase() + "</b> (" + word.w.length + " chữ cái)";
+    var maxLen = word.w.length;
+    if(hintLetterCount < maxLen){ hintLetterCount++; }
+    var revealed = word.w.slice(0, hintLetterCount).toUpperCase();
+    var masked = new Array(maxLen - hintLetterCount + 1).join("_");
+    hintReveal.innerHTML = "Gợi ý: <b>" + revealed + masked + "</b> (" + maxLen + " chữ cái)";
   });
 
   var gameProgressFill = document.getElementById("gameProgressFill");
