@@ -779,12 +779,33 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   function stripEmoji(s){
     return s.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\uFE0F]/gu, "").trim();
   }
+  var viVoiceCache = null;
+  function pickViVoice(){
+    if(!window.speechSynthesis) return null;
+    var voices = window.speechSynthesis.getVoices() || [];
+    var exact = voices.filter(function(v){ return v.lang && v.lang.toLowerCase() === "vi-vn"; })[0];
+    if(exact) return exact;
+    var prefixed = voices.filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf("vi") === 0; })[0];
+    return prefixed || null;
+  }
+  if(window.speechSynthesis){
+    viVoiceCache = pickViVoice();
+    window.speechSynthesis.addEventListener("voiceschanged", function(){
+      viVoiceCache = pickViVoice();
+    });
+  }
   function speakReactionVi(text){
     if(!window.speechSynthesis) return;
     try{
       window.speechSynthesis.cancel();
       var utter = new SpeechSynthesisUtterance(stripEmoji(text));
-      utter.lang = "vi-VN";
+      var voice = viVoiceCache || pickViVoice();
+      if(voice){
+        utter.voice = voice;
+        utter.lang = voice.lang;
+      }else{
+        utter.lang = "vi-VN";
+      }
       utter.rate = 1.0;
       utter.pitch = 1.0;
       window.speechSynthesis.speak(utter);
