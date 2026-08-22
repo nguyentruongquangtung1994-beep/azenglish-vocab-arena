@@ -380,7 +380,7 @@
     <button class="music-btn" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền">🎵</button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
-  <div class="music-vol-row hidden" id="musicVolRow">
+  <div class="music-vol-row" id="musicVolRow">
     <span class="icon">🔈</span>
     <input type="range" id="musicVolSlider" min="0" max="100" value="18" step="1" aria-label="Âm lượng nhạc nền" />
     <span class="icon">🔊</span>
@@ -778,11 +778,9 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   try{ musicPref = localStorage.getItem(STORAGE_KEY + "_music"); }catch(e){}
   var musicOn = musicPref === null ? true : musicPref === "on";
   musicBtn.classList.toggle("active", musicOn);
-  musicVolRow.classList.toggle("hidden", !musicOn);
   musicBtn.addEventListener("click", function(){
     musicOn = !musicOn;
     musicBtn.classList.toggle("active", musicOn);
-    musicVolRow.classList.toggle("hidden", !musicOn);
     if(musicOn){
       bgMusic.play().catch(function(){});
     }else{
@@ -863,7 +861,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
       }else{
         utter.lang = "vi-VN";
       }
-      utter.rate = 1.5;
+      utter.rate = 1.2;
       utter.pitch = 1.0;
       window.speechSynthesis.speak(utter);
     }catch(e){}
