@@ -1,7 +1,7 @@
 {
   "name": "AZEnglish TOEIC Vocab Arena",
   "short_name": "TOEIC AZEnglish",
-  "description": "1000 từ vựng TOEIC theo 20 chủ đề thương mại - văn phòng, mức A2-B2.",
+  "description": "2500 từ vựng TOEIC theo 20 chủ đề thương mại - văn phòng, mức A2-B2.",
   "start_url": "./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html",
   "scope": "./",
   "display": "standalone",
