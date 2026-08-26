@@ -1,6 +1,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>AZEnglish 3000 Từ Giao Tiếp Cơ Bản</title>
+<title>AZEnglish 3000 Từ Giao Tiếp Căn Bản</title>
 <link rel="manifest" href="./manifest-1500.json" />
 <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 <link rel="icon" href="./icon-192.png" />
@@ -9,6 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="3000 Từ AZEnglish" />
 <meta name="mobile-web-app-capable" content="yes" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa;
@@ -27,6 +30,9 @@
     --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
     --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
     --focus: 0 0 0 3px rgba(224,16,43,.28);
+    --globe-op:.9; --globe-fill-op:.05;
+    --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
+    --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark){
@@ -39,6 +45,7 @@
       --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
       --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
       --focus: 0 0 0 3px rgba(255,77,94,.35);
+      --globe-op:1; --globe-fill-op:.07;
       color-scheme: dark;
     }
   }
@@ -51,6 +58,7 @@
     --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
     --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
     --focus: 0 0 0 3px rgba(255,77,94,.35);
+    --globe-op:1; --globe-fill-op:.07;
     color-scheme: dark;
   }
   :root[data-theme="light"]{
@@ -62,6 +70,7 @@
     --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
     --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
     --focus: 0 0 0 3px rgba(224,16,43,.28);
+    --globe-op:.9; --globe-fill-op:.05;
     color-scheme: light;
   }
 
@@ -70,26 +79,28 @@
   body{
     background: var(--paper);
     color: var(--ink);
-    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-body);
     min-height:100%;
     display:flex;
     justify-content:center;
     padding: 20px 14px 60px;
+    position:relative;
   }
-  .stack{ width:100%; max-width:640px; display:flex; flex-direction:column; gap:16px; }
+  #globeCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
+  .stack{ position:relative; z-index:1; width:100%; max-width:640px; display:flex; flex-direction:column; gap:16px; }
 
   /* ---- masthead ---- */
   .masthead{ display:flex; align-items:center; gap:12px; border-bottom: 3px solid var(--ink); padding-bottom:12px; }
   .mark{
     flex:none; width:40px; height:40px; border-radius:8px; background:var(--red); color:#fff;
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;
-    letter-spacing:.02em; font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    letter-spacing:.02em; font-family: var(--font-display);
     text-decoration:none; cursor:pointer; transition:opacity .12s ease;
   }
   .mark:hover{ opacity:.85; }
   .masthead-text{ flex:1; min-width:0; }
   .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; }
-  .title{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-weight:700; font-size:21px; line-height:1.1; margin:0; text-wrap:balance; }
+  .title{ font-family: var(--font-display); font-weight:700; font-size:21px; line-height:1.1; margin:0; text-wrap:balance; }
   .theme-btn{
     flex:none; border:1px solid var(--line); background:var(--paper-2); color:var(--ink);
     width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:15px;
@@ -205,7 +216,7 @@
   }
   .study-visual.pop-in{ animation:visualPopIn .5s cubic-bezier(.34,1.56,.64,1); }
   @media (prefers-reduced-motion: reduce){ .study-visual.pop-in{ animation:none; } }
-  .study-word{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-weight:800; font-size:32px; line-height:1.1; margin:0; letter-spacing:-.01em; text-wrap:balance; flex:1; min-width:0; }
+  .study-word{ font-family: var(--font-display); font-weight:800; font-size:32px; line-height:1.1; margin:0; letter-spacing:-.01em; text-wrap:balance; flex:1; min-width:0; }
   .audio-btn{
     flex:none; width:40px; height:40px; border-radius:50%; background:var(--paper-2); border:1px solid var(--line); color:var(--ink);
     font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -304,7 +315,7 @@
   .feedback-text{ flex:1; min-width:0; }
   .feedback-reaction{ font-size:14.5px; font-weight:800; margin:0 0 6px; text-wrap:balance; }
   .feedback-head{ display:flex; align-items:baseline; gap:8px; font-weight:800; font-size:15px; margin-bottom:4px; }
-  .feedback-head .word{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-size:19px; }
+  .feedback-head .word{ font-family: var(--font-display); font-size:19px; }
   .feedback-pos{ font-size:11px; text-transform:uppercase; letter-spacing:.06em; opacity:.75; font-weight:700; }
   .feedback-meaning{ color:var(--ink); font-size:14.5px; margin:0; }
   .feedback .study-visual{ width:64px; height:64px; font-size:34px; border-radius:18px; }
@@ -319,7 +330,7 @@
 
   /* ---- setup / summary screens ---- */
   .panel{ background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:var(--card-shadow); padding:24px 22px; }
-  .panel h2{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-size:19px; margin:0 0 6px; }
+  .panel h2{ font-family: var(--font-display); font-size:19px; margin:0 0 6px; }
   .panel p.desc{ color:var(--ink-soft); font-size:13.5px; line-height:1.55; margin:0 0 18px; }
   .mode-list{ display:flex; flex-direction:column; gap:10px; }
   .mode-btn{ text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:12px; padding:14px 16px; cursor:pointer; color:var(--ink); font-family:inherit; }
@@ -331,7 +342,7 @@
 
   .review-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .review-card-top{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
-  .review-card .rword{ font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif; font-weight:800; font-size:18px; flex:1; min-width:0; }
+  .review-card .rword{ font-family: var(--font-display); font-weight:800; font-size:18px; flex:1; min-width:0; }
   .review-card .rlvl{ flex:none; }
   .review-card .rmeaning{ font-size:14px; color:var(--ink-soft); margin:2px 0 0; }
   .review-card .rex{ font-size:13px; color:var(--ink-soft); margin:8px 0 0; line-height:1.5; }
@@ -375,13 +386,15 @@
   .motivate-toast .close:hover{ opacity:1; }
 </style>
 
+<canvas id="globeCanvas" aria-hidden="true"></canvas>
+
 <div class="stack">
 
   <header class="masthead">
     <a class="mark" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
     <div class="masthead-text">
       <p class="eyebrow">AZEnglish · Vocab Arena</p>
-      <h1 class="title">3000 từ giao tiếp cơ bản — theo chủ đề</h1>
+      <h1 class="title">3000 từ giao tiếp căn bản — theo chủ đề</h1>
     </div>
     <div class="pill-row">
       <span class="streak-pill" id="streakPill" title="Số ngày luyện liên tiếp">🔥 0</span>
@@ -591,7 +604,7 @@
   </section>
 
   <button class="hint-btn hidden" id="notifyBtn" type="button" style="align-self:center;">🔔 Bật nhắc nhở học mỗi ngày</button>
-  <p class="footer-note">3000 từ vựng giao tiếp cơ bản mức A1–B1, sắp xếp theo 30 chủ đề đời sống thường gặp. Nghĩa, câu ví dụ &amp; đoạn văn do AZEnglish tự biên soạn cho mục đích giảng dạy.<br/>Tiến độ lưu trên trình duyệt này (localStorage).</p>
+  <p class="footer-note">3000 từ vựng giao tiếp căn bản mức A1–B1, sắp xếp theo 30 chủ đề đời sống thường gặp. Nghĩa, câu ví dụ &amp; đoạn văn do AZEnglish tự biên soạn cho mục đích giảng dạy.<br/>Tiến độ lưu trên trình duyệt này (localStorage).</p>
 </div>
 
 <div class="motivate-toast" id="motivateToast" role="status" aria-live="polite">
@@ -1769,4 +1782,103 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       navigator.serviceWorker.register("./sw.js").catch(function(){});
     });
   }
+</script>
+<script>
+  /* Network-globe backdrop, in the spirit of the AZEnglish logo mark:
+     a translucent wireframe sphere built from dots + connecting lines. */
+  (function(){
+    var canvas = document.getElementById("globeCanvas");
+    if(!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+
+    function fibonacciSphere(n){
+      var pts = [], offset = 2 / n, increment = Math.PI * (3 - Math.sqrt(5));
+      for(var i = 0; i < n; i++){
+        var y = ((i * offset) - 1) + (offset / 2);
+        var r = Math.sqrt(Math.max(0, 1 - y * y));
+        var phi = (i % n) * increment;
+        pts.push({ x: Math.cos(phi) * r, y: y, z: Math.sin(phi) * r });
+      }
+      return pts;
+    }
+    function rotateX(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x, y:p.y*c - p.z*s, z:p.y*s + p.z*c }; }
+    function rotateY(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x*c - p.z*s, y:p.y, z:p.x*s + p.z*c }; }
+
+    var RAW = fibonacciSphere(130).map(function(p){ return rotateX(rotateY(p, 0.55), -0.28); });
+
+    var EDGES = [];
+    (function buildEdges(){
+      for(var i = 0; i < RAW.length; i++){
+        var dists = [];
+        for(var j = 0; j < RAW.length; j++){
+          if(i === j) continue;
+          var dot = RAW[i].x*RAW[j].x + RAW[i].y*RAW[j].y + RAW[i].z*RAW[j].z;
+          dists.push({ j:j, d: -dot });
+        }
+        dists.sort(function(a,b){ return a.d - b.d; });
+        for(var k = 0; k < 3; k++){
+          var a = i, b = dists[k].j;
+          if(a > b){ var t = a; a = b; b = t; }
+          EDGES.push([a, b]);
+        }
+      }
+    })();
+
+    function draw(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = window.innerWidth, h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      var cssColor = getComputedStyle(document.documentElement).getPropertyValue("--red").trim() || "#e0102b";
+      var baseOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-op")) || 0.9;
+      var fillOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-fill-op")) || 0.05;
+
+      var radius = Math.min(w * 0.34, h * 0.34, 340);
+      var cx = w * 0.82, cy = h * 0.02 + radius * 0.55;
+      if(w < 640){ cx = w * 0.62; cy = radius * 0.35; }
+
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      g.addColorStop(0, cssColor); g.addColorStop(1, "transparent");
+      ctx.globalAlpha = fillOp;
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.fill();
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = cssColor;
+      for(var e = 0; e < EDGES.length; e++){
+        var p1 = RAW[EDGES[e][0]], p2 = RAW[EDGES[e][1]];
+        var depth = (p1.z + p2.z) / 2;
+        var op = (0.05 + (depth + 1) / 2 * 0.22) * baseOp;
+        ctx.globalAlpha = op;
+        ctx.beginPath();
+        ctx.moveTo(cx + p1.x * radius, cy + p1.y * radius);
+        ctx.lineTo(cx + p2.x * radius, cy + p2.y * radius);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = cssColor;
+      for(var i = 0; i < RAW.length; i++){
+        var p = RAW[i];
+        var depth2 = (p.z + 1) / 2;
+        var size = 1.1 + depth2 * 2.1;
+        ctx.globalAlpha = (0.18 + depth2 * 0.45) * baseOp;
+        ctx.beginPath();
+        ctx.arc(cx + p.x * radius, cy + p.y * radius, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    draw();
+    var resizeTimer;
+    window.addEventListener("resize", function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(draw, 120);
+    });
+    if(window.MutationObserver){
+      new MutationObserver(draw).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
+    }
+  })();
 </script>

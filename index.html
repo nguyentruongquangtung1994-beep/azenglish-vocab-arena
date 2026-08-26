@@ -6,66 +6,155 @@
 <title>AZEnglish Vocab Arena</title>
 <link rel="icon" href="./icon-192.png" />
 <meta name="theme-color" content="#e0102b" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --paper:#fcfbfa; --paper-2:#f2f0ee; --ink:#1a1210; --ink-soft:#5c534f; --line:#e6e1dc;
+    --paper:#fcfbfa; --paper-2:#f2f0ee; --paper-3:#eeebe5; --ink:#1a1210; --ink-soft:#5c534f; --ink-faint:#8c8179; --line:#e6e1dc; --line-strong:#d8d2ca;
     --red:#e0102b; --red-ink:#8f0a1c;
+    --ember:#b5650f; --ember-bg:#f7ecdd;
     --tier1:#1e7a4c; --tier1-bg:#e7f4ec;
     --tier2:#1d6fa5; --tier2-bg:#e6f1f9;
     --tier3:#7c3aed; --tier3-bg:#f1eafe;
+    --icon-op:.12;
+    --globe-op:.9;
+    --globe-fill-op:.05;
+    --shadow-lift: 0 14px 28px -14px rgba(26,18,16,.22);
+    --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
+    --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+      --paper:#161211; --paper-2:#1f1a18; --paper-3:#241e1c; --ink:#f3ece9; --ink-soft:#b8aca6; --ink-faint:#8a7d76; --line:#332b28; --line-strong:#3f3532;
       --red:#ff4d5e; --red-ink:#ff8f98;
+      --ember:#e8944a; --ember-bg:#2c2013;
       --tier1:#5fd394; --tier1-bg:#173226;
       --tier2:#6fb8ea; --tier2-bg:#132633;
       --tier3:#b794f6; --tier3-bg:#241c38;
+      --icon-op:.16;
+      --globe-op:1;
+      --globe-fill-op:.07;
+      --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.6);
     }
   }
   *{ box-sizing:border-box; }
+  html{ -webkit-font-smoothing:antialiased; }
   body{
-    margin:0; background:var(--paper); color:var(--ink);
-    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    position:relative; margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+    font-family:var(--font-body);
     display:flex; justify-content:center; padding:32px 16px 60px;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.028'/></svg>");
+    background-repeat:repeat;
   }
-  .stack{ width:100%; max-width:640px; display:flex; flex-direction:column; gap:20px; }
+  #globeCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
+  .stack{ position:relative; z-index:1; width:100%; max-width:640px; display:flex; flex-direction:column; gap:20px; }
+
   .masthead{ display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); padding-bottom:14px; }
   .mark{
     flex:none; width:44px; height:44px; border-radius:10px; background:var(--red); color:#fff;
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px;
-    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+    font-family:var(--font-display);
   }
-  .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; }
+  .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; font-family:var(--font-body); }
   h1{
-    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:700;
-    font-size:22px; line-height:1.15; margin:0; text-wrap:balance;
+    font-family:var(--font-display); font-weight:700;
+    font-size:22px; line-height:1.18; margin:0; text-wrap:balance;
   }
-  .lede{ font-size:15px; line-height:1.5; color:var(--ink-soft); margin:0; }
+
+  .greet{ display:flex; flex-direction:column; gap:4px; }
+  .greet-line{
+    font-family:var(--font-display); font-style:italic; font-weight:500;
+    font-size:18px; line-height:1.4; color:var(--ink); margin:0; text-wrap:balance;
+  }
+  .greet-sub{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); margin:0; }
+
+  .today-box{
+    border:1.5px solid var(--ink); border-radius:14px; background:var(--paper-2);
+    display:flex; align-items:stretch; overflow:hidden;
+  }
+  .today-box.hidden{ display:none; }
+  .today-label{
+    flex:none; width:74px; display:flex; align-items:center; justify-content:center;
+    background:var(--ink); color:var(--paper);
+    font-family:var(--font-display); font-weight:700; font-size:12px;
+    letter-spacing:.05em; line-height:1.3; text-align:center; padding:8px 6px;
+  }
+  .today-stats{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; }
+  .today-stat{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    padding:12px 6px; border-left:1px solid var(--line-strong);
+    text-align:center;
+  }
+  .today-stat:first-child{ border-left:none; }
+  .today-stat svg{ width:17px; height:17px; stroke:var(--ink-soft); flex:none; }
+  .today-stat.is-flame svg{ stroke:var(--ember); fill:var(--ember-bg); }
+  .today-num{
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    font-variant-numeric:tabular-nums; line-height:1.1;
+  }
+  .today-cap{ font-size:10.5px; color:var(--ink-faint); letter-spacing:.03em; text-transform:uppercase; font-family:var(--font-body); }
+
   .card{
-    display:flex; gap:18px; align-items:flex-start; background:var(--paper-2);
-    border:1.5px solid var(--line); border-radius:16px; padding:22px;
-    text-decoration:none; color:inherit;
-    transition:border-color .15s ease, transform .12s ease;
+    position:relative; display:flex; flex-direction:column; gap:14px; background:var(--paper-2);
+    border:1.5px solid var(--line); border-radius:16px; padding:20px 22px;
+    text-decoration:none; color:inherit; overflow:hidden;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
   }
-  .card:hover{ border-color:var(--red); transform:translateY(-1px); }
-  .card:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(224,16,43,.28); }
+  @media (prefers-reduced-motion: reduce){ .card{ transition:none; } }
+  .card:hover{ border-color:var(--tier); transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .card:focus-visible{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--tier) 30%, transparent); }
+  .card.t1{ --tier:var(--tier1); --tier-bg:var(--tier1-bg); }
+  .card.t2{ --tier:var(--tier2); --tier-bg:var(--tier2-bg); }
+  .card.t3{ --tier:var(--tier3); --tier-bg:var(--tier3-bg); }
+
+  .card-glyph{
+    position:absolute; right:-18px; bottom:-18px; width:140px; height:140px;
+    color:var(--tier); opacity:var(--icon-op); pointer-events:none;
+    transition:transform .25s ease, opacity .2s ease;
+  }
+  @media (prefers-reduced-motion: reduce){ .card-glyph{ transition:none; } }
+  .card:hover .card-glyph{ transform:scale(1.06) rotate(-2deg); opacity:calc(var(--icon-op) + .05); }
+
+  .card-top{ position:relative; display:flex; gap:16px; align-items:flex-start; }
   .badge{
-    flex:none; width:52px; height:52px; border-radius:12px;
+    flex:none; width:50px; height:50px; border-radius:12px;
     display:flex; align-items:center; justify-content:center; text-align:center;
-    font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:800; font-size:12.5px; line-height:1.15;
+    background:var(--tier-bg); color:var(--tier);
+    font-family:var(--font-display); font-weight:800; font-size:12px; line-height:1.15;
   }
-  .badge.t1{ background:var(--tier1-bg); color:var(--tier1); }
-  .badge.t2{ background:var(--tier2-bg); color:var(--tier2); }
-  .badge.t3{ background:var(--tier3-bg); color:var(--tier3); }
   .card-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
-  .card-title{ font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; font-weight:700; font-size:19px; line-height:1.2; }
-  .card-stats{ font-size:13px; font-weight:700; color:var(--red); }
-  .card-desc{ font-size:14px; line-height:1.5; color:var(--ink-soft); }
-  .arrow{ flex:none; align-self:center; font-size:20px; color:var(--ink-soft); }
+  .card-title{ font-family:var(--font-display); font-weight:700; font-size:18.5px; line-height:1.2; }
+  .card-stats{ font-size:12.5px; font-weight:700; color:var(--tier); font-family:var(--font-body); }
+  .card-desc{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
+
+  .progress-row{ position:relative; display:flex; flex-direction:column; gap:6px; }
+  .progress-track{ height:6px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; border-radius:99px; background:var(--tier); transition:width .4s ease; }
+  @media (prefers-reduced-motion: reduce){ .progress-fill{ transition:none; } }
+  .progress-meta{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+
+  .card-foot{ position:relative; display:flex; align-items:center; justify-content:flex-end; }
+  .cta{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-body); font-size:13px; font-weight:700; padding:8px 16px; border-radius:99px;
+    border:1.5px solid var(--tier); color:var(--tier); background:var(--paper-2);
+    transition:background .15s ease, color .15s ease;
+  }
+  @media (prefers-reduced-motion: reduce){ .cta{ transition:none; } }
+  .card:hover .cta{ background:var(--tier); color:var(--paper-2); }
+  .cta-arrow{ transition:transform .15s ease; }
+  @media (prefers-reduced-motion: reduce){ .cta-arrow{ transition:none; } }
+  .card:hover .cta-arrow{ transform:translateX(2px); }
+
+  .foot-note{ text-align:center; font-size:11.5px; color:var(--ink-faint); margin:6px 0 0; font-family:var(--font-body); }
 </style>
 </head>
 <body>
+
+<canvas id="globeCanvas" aria-hidden="true"></canvas>
+
 <div class="stack">
 
   <header class="masthead">
@@ -76,38 +165,280 @@
     </div>
   </header>
 
-  <p class="lede">Ba app luyện từ vựng riêng biệt, mỗi app một lộ trình &mdash; bấm vào để bắt đầu, tiến độ lưu riêng theo từng app trên trình duyệt này.</p>
+  <div class="greet">
+    <p class="greet-line" id="greetLine">Chào bạn &mdash; sẵn sàng học từ vựng chưa?</p>
+    <p class="greet-sub">Ba app luyện từ vựng riêng biệt, mỗi app một lộ trình &mdash; bấm vào để bắt đầu, tiến độ lưu riêng theo từng app trên trình duyệt này.</p>
+  </div>
 
-  <a class="card" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html">
-    <div class="badge t1">A1&ndash;B1</div>
-    <div class="card-body">
-      <div class="card-title">1500 Từ Giao Tiếp Cơ Bản</div>
-      <div class="card-stats">3000 từ &middot; 30 chủ đề đời sống</div>
-      <div class="card-desc">Nền tảng từ vựng dùng hằng ngày: chào hỏi, gia đình, ăn uống, mua sắm, du lịch&hellip;</div>
+  <div class="today-box hidden" id="todayBox">
+    <div class="today-label">HÔM<br />NAY</div>
+    <div class="today-stats">
+      <div class="today-stat is-flame">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg>
+        <span class="today-num" id="statStreak">0</span>
+        <span class="today-cap">chuỗi dài nhất</span>
+      </div>
+      <div class="today-stat">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H13v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H11v16h7.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg>
+        <span class="today-num" id="statMastered">0</span>
+        <span class="today-cap">từ đã thuộc</span>
+      </div>
+      <div class="today-stat">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6Z"></path></svg>
+        <span class="today-num" id="statXP">0</span>
+        <span class="today-cap">tổng XP</span>
+      </div>
     </div>
-    <div class="arrow">&rarr;</div>
+  </div>
+
+  <a class="card t1" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
+    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 30c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v28c0 6.6-5.4 12-12 12H46l-14 14V70h-4c-6.6 0-12-5.4-12-12V30Z"></path>
+      <path d="M72 58c0-4.4 3.6-8 8-8h18c4.4 0 8 3.6 8 8v14c0 4.4-3.6 8-8 8h-2v9l-10-9h-6c-4.4 0-8-3.6-8-8V58Z"></path>
+    </svg>
+    <div class="card-top">
+      <div class="badge">A1&ndash;B1</div>
+      <div class="card-body">
+        <div class="card-title">3000 Từ Giao Tiếp Căn Bản</div>
+        <div class="card-stats">3000 từ &middot; 30 chủ đề đời sống</div>
+        <div class="card-desc">Nền tảng từ vựng dùng hằng ngày: chào hỏi, gia đình, ăn uống, mua sắm, du lịch&hellip;</div>
+      </div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
+    </div>
+    <div class="card-foot">
+      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+    </div>
   </a>
 
-  <a class="card" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html">
-    <div class="badge t2">A2&ndash;B2</div>
-    <div class="card-body">
-      <div class="card-title">TOEIC Vocab Arena</div>
-      <div class="card-stats">2500 từ &middot; 20 chủ đề thương mại &ndash; văn phòng</div>
-      <div class="card-desc">Trọng tâm từ vựng Part 7 &mdash; sát đề thi thật, ưu tiên từ thường gặp nhất.</div>
+  <a class="card t2" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html" data-storage-key="azvocab_v2_toeic_a2b2" data-total="2500">
+    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="14" y="42" width="92" height="58" rx="10"></rect>
+      <path d="M44 42v-8c0-5.5 4.5-10 10-10h12c5.5 0 10 4.5 10 10v8"></path>
+      <path d="M14 66h92"></path>
+      <rect x="52" y="60" width="16" height="12" rx="3"></rect>
+    </svg>
+    <div class="card-top">
+      <div class="badge">A2&ndash;B2</div>
+      <div class="card-body">
+        <div class="card-title">TOEIC Vocab Arena</div>
+        <div class="card-stats">2500 từ &middot; 20 chủ đề thương mại &ndash; văn phòng</div>
+        <div class="card-desc">Trọng tâm từ vựng Part 7 &mdash; sát đề thi thật, ưu tiên từ thường gặp nhất.</div>
+      </div>
     </div>
-    <div class="arrow">&rarr;</div>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
+    </div>
+    <div class="card-foot">
+      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+    </div>
   </a>
 
-  <a class="card" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html">
-    <div class="badge t3">B1&ndash;C1</div>
-    <div class="card-body">
-      <div class="card-title">Vocab Arena IELTS</div>
-      <div class="card-stats">2008 từ &middot; chủ đề IELTS phổ biến</div>
-      <div class="card-desc">Mở rộng vốn từ học thuật &mdash; chuẩn bị vững cho kỳ thi IELTS band cao.</div>
+  <a class="card t3" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html" data-storage-key="azvocab_v2_ielts1000" data-total="2008">
+    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M60 30 12 52l48 22 48-22-48-22Z" stroke-linejoin="round"></path>
+      <path d="M34 62v20c0 6 11.6 14 26 14s26-8 26-14V62"></path>
+      <path d="M108 52v24"></path>
+      <circle cx="108" cy="80" r="3.5" fill="currentColor" stroke="none"></circle>
+    </svg>
+    <div class="card-top">
+      <div class="badge">B1&ndash;C1</div>
+      <div class="card-body">
+        <div class="card-title">Vocab Arena IELTS</div>
+        <div class="card-stats">2008 từ &middot; chủ đề IELTS phổ biến</div>
+        <div class="card-desc">Mở rộng vốn từ học thuật &mdash; chuẩn bị vững cho kỳ thi IELTS band cao.</div>
+      </div>
     </div>
-    <div class="arrow">&rarr;</div>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill"></div></div>
+      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
+    </div>
+    <div class="card-foot">
+      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+    </div>
   </a>
+
+  <p class="foot-note">Tiến độ được đọc trực tiếp từ trình duyệt này &mdash; mở trên máy/trình duyệt khác sẽ không thấy số liệu cũ.</p>
 
 </div>
+
+<script>
+  (function(){
+    var h = new Date().getHours();
+    var part = h < 11 ? "sáng" : (h < 14 ? "trưa" : (h < 18 ? "chiều" : "tối"));
+    var el = document.getElementById("greetLine");
+    if(el){ el.textContent = "Chào buổi " + part + " — sẵn sàng học từ vựng chưa?"; }
+  })();
+</script>
+
+<script>
+  (function(){
+    var MASTERED_IVL_DAYS = 21;
+
+    function masteredCountFromState(raw){
+      if(!raw) return 0;
+      var state;
+      try{ state = JSON.parse(raw); }catch(e){ return 0; }
+      var count = 0;
+      for(var k in state){
+        if(k === "recentWords") continue;
+        if(!Object.prototype.hasOwnProperty.call(state, k)) continue;
+        var w = state[k];
+        if(w && typeof w.ivl === "number" && w.ivl >= MASTERED_IVL_DAYS) count++;
+      }
+      return count;
+    }
+
+    function readMeta(storageKey){
+      try{
+        var raw = localStorage.getItem(storageKey + "_meta");
+        if(!raw) return { dayStreak:0, xp:0 };
+        var m = JSON.parse(raw);
+        return { dayStreak: m.dayStreak || 0, xp: m.xp || 0 };
+      }catch(e){ return { dayStreak:0, xp:0 }; }
+    }
+
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+    var totalMastered = 0, maxStreak = 0, totalXP = 0;
+
+    cards.forEach(function(card){
+      var key = card.getAttribute("data-storage-key");
+      var total = parseInt(card.getAttribute("data-total"), 10) || 0;
+      var mastered = 0, raw = null;
+      try{ raw = localStorage.getItem(key); }catch(e){}
+      mastered = masteredCountFromState(raw);
+      var meta = readMeta(key);
+
+      totalMastered += mastered;
+      totalXP += meta.xp;
+      if(meta.dayStreak > maxStreak) maxStreak = meta.dayStreak;
+
+      var pct = total > 0 ? Math.min(100, Math.round((mastered / total) * 100)) : 0;
+      var fill = card.querySelector(".progress-fill");
+      var countEl = card.querySelector(".progress-count");
+      var pctEl = card.querySelector(".progress-pct");
+      var cta = card.querySelector(".cta");
+
+      if(fill) fill.style.width = pct + "%";
+      if(mastered > 0){
+        if(countEl) countEl.textContent = mastered.toLocaleString("vi-VN") + " / " + total.toLocaleString("vi-VN") + " từ";
+        if(pctEl) pctEl.textContent = pct + "%";
+        if(cta) cta.firstChild.textContent = "Tiếp tục học ";
+      } else {
+        if(countEl) countEl.textContent = "Chưa bắt đầu";
+        if(pctEl) pctEl.textContent = "0%";
+      }
+    });
+
+    if(totalMastered > 0 || maxStreak > 0 || totalXP > 0){
+      var box = document.getElementById("todayBox");
+      if(box) box.classList.remove("hidden");
+      document.getElementById("statStreak").textContent = maxStreak.toLocaleString("vi-VN");
+      document.getElementById("statMastered").textContent = totalMastered.toLocaleString("vi-VN");
+      document.getElementById("statXP").textContent = totalXP.toLocaleString("vi-VN");
+    }
+  })();
+</script>
+
+<script>
+  /* Network-globe backdrop, in the spirit of the AZEnglish logo mark:
+     a translucent wireframe sphere built from dots + connecting lines. */
+  (function(){
+    var canvas = document.getElementById("globeCanvas");
+    if(!canvas || !canvas.getContext) return;
+    var ctx = canvas.getContext("2d");
+
+    function fibonacciSphere(n){
+      var pts = [], offset = 2 / n, increment = Math.PI * (3 - Math.sqrt(5));
+      for(var i = 0; i < n; i++){
+        var y = ((i * offset) - 1) + (offset / 2);
+        var r = Math.sqrt(Math.max(0, 1 - y * y));
+        var phi = (i % n) * increment;
+        pts.push({ x: Math.cos(phi) * r, y: y, z: Math.sin(phi) * r });
+      }
+      return pts;
+    }
+    function rotateX(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x, y:p.y*c - p.z*s, z:p.y*s + p.z*c }; }
+    function rotateY(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x*c - p.z*s, y:p.y, z:p.x*s + p.z*c }; }
+
+    var RAW = fibonacciSphere(130).map(function(p){ return rotateX(rotateY(p, 0.55), -0.28); });
+
+    var EDGES = [];
+    (function buildEdges(){
+      for(var i = 0; i < RAW.length; i++){
+        var dists = [];
+        for(var j = 0; j < RAW.length; j++){
+          if(i === j) continue;
+          var dot = RAW[i].x*RAW[j].x + RAW[i].y*RAW[j].y + RAW[i].z*RAW[j].z;
+          dists.push({ j:j, d: -dot });
+        }
+        dists.sort(function(a,b){ return a.d - b.d; });
+        for(var k = 0; k < 3; k++){
+          var a = i, b = dists[k].j;
+          if(a > b){ var t = a; a = b; b = t; }
+          EDGES.push([a, b]);
+        }
+      }
+    })();
+
+    function draw(){
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = window.innerWidth, h = window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      var cssColor = getComputedStyle(document.documentElement).getPropertyValue("--red").trim() || "#e0102b";
+      var baseOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-op")) || 0.9;
+      var fillOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-fill-op")) || 0.05;
+
+      var radius = Math.min(w * 0.34, h * 0.34, 340);
+      var cx = w * 0.82, cy = h * 0.02 + radius * 0.55;
+      if(w < 640){ cx = w * 0.62; cy = radius * 0.35; }
+
+      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+      g.addColorStop(0, cssColor); g.addColorStop(1, "transparent");
+      ctx.globalAlpha = fillOp;
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.fill();
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = cssColor;
+      for(var e = 0; e < EDGES.length; e++){
+        var p1 = RAW[EDGES[e][0]], p2 = RAW[EDGES[e][1]];
+        var depth = (p1.z + p2.z) / 2;
+        var op = (0.05 + (depth + 1) / 2 * 0.22) * baseOp;
+        ctx.globalAlpha = op;
+        ctx.beginPath();
+        ctx.moveTo(cx + p1.x * radius, cy + p1.y * radius);
+        ctx.lineTo(cx + p2.x * radius, cy + p2.y * radius);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = cssColor;
+      for(var i = 0; i < RAW.length; i++){
+        var p = RAW[i];
+        var depth2 = (p.z + 1) / 2;
+        var size = 1.1 + depth2 * 2.1;
+        ctx.globalAlpha = (0.18 + depth2 * 0.45) * baseOp;
+        ctx.beginPath();
+        ctx.arc(cx + p.x * radius, cy + p.y * radius, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    draw();
+    var resizeTimer;
+    window.addEventListener("resize", function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(draw, 120);
+    });
+  })();
+</script>
+
 </body>
 </html>
