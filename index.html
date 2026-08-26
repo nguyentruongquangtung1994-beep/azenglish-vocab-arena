@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#e0102b" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa; --paper-2:#f2f0ee; --paper-3:#eeebe5; --ink:#1a1210; --ink-soft:#5c534f; --ink-faint:#8c8179; --line:#e6e1dc; --line-strong:#d8d2ca;
@@ -17,10 +17,11 @@
     --tier1:#1e7a4c; --tier1-bg:#e7f4ec;
     --tier2:#1d6fa5; --tier2-bg:#e6f1f9;
     --tier3:#7c3aed; --tier3-bg:#f1eafe;
-    --icon-op:.12;
     --globe-op:.9;
     --globe-fill-op:.05;
+    --shadow: 0 1px 2px rgba(26,18,16,.04);
     --shadow-lift: 0 14px 28px -14px rgba(26,18,16,.22);
+    --shadow-card: 0 18px 36px -20px rgba(26,18,16,.28);
     --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
     --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
@@ -32,10 +33,11 @@
       --tier1:#5fd394; --tier1-bg:#173226;
       --tier2:#6fb8ea; --tier2-bg:#132633;
       --tier3:#b794f6; --tier3-bg:#241c38;
-      --icon-op:.16;
       --globe-op:1;
       --globe-fill-op:.07;
+      --shadow: 0 1px 2px rgba(0,0,0,.3);
       --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.6);
+      --shadow-card: 0 20px 40px -20px rgba(0,0,0,.65);
     }
   }
   :root[data-theme="dark"]{
@@ -45,255 +47,422 @@
     --tier1:#5fd394; --tier1-bg:#173226;
     --tier2:#6fb8ea; --tier2-bg:#132633;
     --tier3:#b794f6; --tier3-bg:#241c38;
-    --icon-op:.16;
     --globe-op:1;
     --globe-fill-op:.07;
+    --shadow: 0 1px 2px rgba(0,0,0,.3);
     --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.6);
+    --shadow-card: 0 20px 40px -20px rgba(0,0,0,.65);
   }
-  :root[data-theme="light"]{
-    --paper:#fcfbfa; --paper-2:#f2f0ee; --paper-3:#eeebe5; --ink:#1a1210; --ink-soft:#5c534f; --ink-faint:#8c8179; --line:#e6e1dc; --line-strong:#d8d2ca;
-    --red:#e0102b; --red-ink:#8f0a1c;
-    --ember:#b5650f; --ember-bg:#f7ecdd;
-    --tier1:#1e7a4c; --tier1-bg:#e7f4ec;
-    --tier2:#1d6fa5; --tier2-bg:#e6f1f9;
-    --tier3:#7c3aed; --tier3-bg:#f1eafe;
-    --icon-op:.12;
-    --globe-op:.9;
-    --globe-fill-op:.05;
-    --shadow-lift: 0 14px 28px -14px rgba(26,18,16,.22);
-  }
+
   *{ box-sizing:border-box; }
-  html{ -webkit-font-smoothing:antialiased; }
+  html{ -webkit-font-smoothing:antialiased; scroll-behavior:smooth; }
   body{
     position:relative; margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
     font-family:var(--font-body);
-    display:flex; justify-content:center; padding:32px 16px 60px;
     background-image:
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='0.028'/></svg>");
     background-repeat:repeat;
   }
-  #globeCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
-  .stack{ position:relative; z-index:1; width:100%; max-width:640px; display:flex; flex-direction:column; gap:20px; }
+  #bgCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
+  a{ color:inherit; }
+  .page{ position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 20px 64px; }
 
-  .masthead{ display:flex; align-items:center; gap:12px; border-bottom:3px solid var(--ink); padding-bottom:14px; }
+  /* ---- top nav ---- */
+  .topnav{
+    display:flex; align-items:center; gap:22px; padding:16px 0; margin-bottom:8px;
+    border-bottom:1.5px solid var(--line);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; flex:none; }
   .mark{
-    flex:none; width:44px; height:44px; border-radius:10px; background:var(--red); color:#fff;
-    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px;
+    flex:none; width:42px; height:42px; border-radius:10px; background:var(--red); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;
     font-family:var(--font-display);
   }
-  .masthead-text{ flex:1; min-width:0; }
+  .brand-text{ font-family:var(--font-display); font-weight:800; font-size:16px; line-height:1.2; letter-spacing:.01em; }
+  .brand-text span{ display:block; font-family:var(--font-body); font-weight:600; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); }
+  .nav-links{ flex:1; display:flex; gap:6px; }
+  .nav-link{
+    display:flex; align-items:center; gap:6px; font-size:14px; font-weight:600; padding:8px 12px; border-radius:10px;
+    text-decoration:none; color:var(--ink-soft);
+  }
+  .nav-link.active{ color:var(--red); background:color-mix(in srgb, var(--red) 8%, transparent); }
+  .nav-link.disabled{ opacity:.4; cursor:not-allowed; }
+  .nav-stat{
+    flex:none; display:flex; align-items:center; gap:8px; border:1.5px solid var(--line); border-radius:99px;
+    padding:6px 14px 6px 12px; font-size:12.5px; color:var(--ink-soft);
+  }
+  .nav-stat b{ font-family:var(--font-display); font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums; }
+  @media (max-width:760px){ .nav-links{ display:none; } }
   .theme-btn{
-    flex:none; border:1px solid var(--line); background:var(--paper-2); color:var(--ink);
+    flex:none; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink);
     width:36px; height:36px; border-radius:9px; cursor:pointer; font-size:15px;
     display:flex; align-items:center; justify-content:center;
   }
   .theme-btn:focus-visible{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--red) 28%, transparent); }
-  .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; font-family:var(--font-body); }
-  h1{
-    font-family:var(--font-display); font-weight:700;
-    font-size:22px; line-height:1.18; margin:0; text-wrap:balance;
+
+  /* ---- hero ---- */
+  .hero{ display:flex; align-items:center; gap:36px; padding:44px 0 36px; }
+  .hero-copy{ flex:1; min-width:0; }
+  .hero-title{
+    font-family:var(--font-display); font-weight:800; font-size:clamp(32px,5.2vw,48px);
+    line-height:1.06; margin:0 0 14px; text-wrap:balance;
+  }
+  .hero-title .accent{ color:var(--red); }
+  .hero-sub{ font-size:15.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; max-width:46ch; }
+  .hero-proof{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 24px; }
+  .hero-proof span{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink-soft);
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:99px; padding:6px 13px;
+  }
+  .hero-cta{
+    display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff;
+    font-weight:700; font-size:14.5px; padding:13px 24px; border-radius:12px; text-decoration:none;
+    box-shadow:0 14px 28px -12px color-mix(in srgb, var(--red) 55%, transparent);
+  }
+  .hero-art{ flex:none; position:relative; width:300px; height:300px; }
+  .crest{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  }
+  .crest svg{ width:200px; height:220px; }
+  .float-word{
+    position:absolute; background:var(--paper-2); border:1.5px solid var(--line); border-radius:12px;
+    padding:8px 14px; font-family:var(--font-display); font-weight:700; font-size:15px;
+    box-shadow:var(--shadow-card); text-align:center; line-height:1.3;
+    animation:bob 4.5s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); } 50%{ transform:translateY(-8px) rotate(var(--r,0deg)); } }
+  @media (prefers-reduced-motion: reduce){ .float-word{ animation:none; } }
+  .float-word span{ display:block; font-family:var(--font-body); font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); }
+  .fw1{ top:2px; left:-4px; --r:-7deg; animation-delay:0s; }
+  .fw2{ top:36px; right:-18px; --r:6deg; animation-delay:.7s; }
+  .fw3{ bottom:40px; left:-24px; --r:5deg; animation-delay:1.4s; }
+  .fw4{ bottom:4px; right:-8px; --r:-5deg; animation-delay:2.1s; }
+  @media (max-width:760px){ .hero{ flex-direction:column; } .hero-art{ width:260px; height:260px; } }
+
+  /* ---- animated line-icon system (replaces emoji everywhere) ---- */
+  .micon{ flex:none; overflow:visible; }
+  @keyframes iconPulseRing{ 0%{ opacity:.7; transform:scale(.75); } 70%{ opacity:0; transform:scale(1.35); } 100%{ opacity:0; transform:scale(1.35); } }
+  @keyframes iconBlink{ 0%,60%,100%{ opacity:1; } 30%{ opacity:.25; } }
+  @keyframes iconBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2.5px); } }
+  @keyframes iconGrowBar{ 0%,100%{ transform:scaleY(.55); } 50%{ transform:scaleY(1); } }
+  @keyframes iconSway{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(6deg); } }
+  @keyframes iconSpin{ to{ transform:rotate(360deg); } }
+  .m-ring{ transform-origin:12px 12px; animation:iconPulseRing 2.6s ease-out infinite; }
+  .m-blink{ animation:iconBlink 2.4s ease-in-out infinite; }
+  .m-bounce{ transform-origin:center; animation:iconBounce 2.2s ease-in-out infinite; }
+  .m-bar{ transform-origin:bottom; animation:iconGrowBar 1.8s ease-in-out infinite; }
+  .m-sway{ transform-origin:12px 4px; animation:iconSway 2.4s ease-in-out infinite; }
+  .m-spin{ transform-origin:12px 12px; animation:iconSpin 3.5s linear infinite; }
+  @media (prefers-reduced-motion: reduce){
+    .m-ring, .m-blink, .m-bounce, .m-bar, .m-sway, .m-spin{ animation:none; }
   }
 
-  .greet{ display:flex; flex-direction:column; gap:4px; }
-  .greet-line{
-    font-family:var(--font-display); font-style:italic; font-weight:500;
-    font-size:18px; line-height:1.4; color:var(--ink); margin:0; text-wrap:balance;
+  /* ---- trust strip (shown to first-time visitors instead of an all-zero stats bar) ---- */
+  .trust-bar{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:34px;
   }
-  .greet-sub{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); margin:0; }
+  .trust-bar.hidden{ display:none; }
+  .trust-cell{
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px; padding:18px 16px;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .trust-icon{ flex:none; font-size:20px; line-height:1; }
+  .trust-num{ font-family:var(--font-display); font-weight:800; font-size:18px; line-height:1.2; }
+  .trust-cap{ font-size:12px; color:var(--ink-faint); line-height:1.4; }
+  @media (max-width:700px){ .trust-bar{ grid-template-columns:1fr; } }
 
-  .today-box{
-    border:1.5px solid var(--ink); border-radius:14px; background:var(--paper-2);
-    display:flex; align-items:stretch; overflow:hidden;
+  /* ---- how it works ---- */
+  .how{ display:flex; flex-wrap:wrap; gap:18px; margin-bottom:40px; }
+  .how-step{
+    flex:1; min-width:220px; display:flex; gap:14px; align-items:flex-start;
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px; padding:18px;
   }
-  .today-box.hidden{ display:none; }
-  .today-label{
-    flex:none; width:74px; display:flex; align-items:center; justify-content:center;
-    background:var(--ink); color:var(--paper);
-    font-family:var(--font-display); font-weight:700; font-size:12px;
-    letter-spacing:.05em; line-height:1.3; text-align:center; padding:8px 6px;
+  .how-num{
+    flex:none; width:30px; height:30px; border-radius:50%; background:var(--red); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:14px;
   }
-  .today-stats{ flex:1; display:grid; grid-template-columns:1fr 1fr 1fr; }
-  .today-stat{
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-    padding:12px 6px; border-left:1px solid var(--line-strong);
-    text-align:center;
-  }
-  .today-stat:first-child{ border-left:none; }
-  .today-stat svg{ width:17px; height:17px; stroke:var(--ink-soft); flex:none; }
-  .today-stat.is-flame svg{ stroke:var(--ember); fill:var(--ember-bg); }
-  .today-num{
-    font-family:var(--font-display); font-weight:700; font-size:18px;
-    font-variant-numeric:tabular-nums; line-height:1.1;
-  }
-  .today-cap{ font-size:10.5px; color:var(--ink-faint); letter-spacing:.03em; text-transform:uppercase; font-family:var(--font-body); }
+  .how-title{ font-weight:700; font-size:13.5px; margin-bottom:2px; }
+  .how-sub{ font-size:12px; color:var(--ink-faint); line-height:1.5; }
 
+  /* ---- stats bar ---- */
+  .stats-bar{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+    border:1.5px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:34px;
+  }
+  .stats-bar.hidden{ display:none; }
+  .stat-cell{
+    background:var(--paper-2); display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:18px 8px; text-align:center;
+  }
+  .stat-cell svg{ width:22px; height:22px; }
+  .stat-num{ font-family:var(--font-display); font-weight:800; font-size:24px; font-variant-numeric:tabular-nums; }
+  .stat-cap{ font-size:11.5px; color:var(--ink-faint); }
+
+  /* ---- course cards ---- */
+  .section-title{ font-family:var(--font-display); font-weight:700; font-size:20px; margin:0 0 16px; }
+  .cards{ display:flex; flex-direction:column; gap:16px; margin-bottom:40px; }
   .card{
-    position:relative; display:flex; flex-direction:column; gap:14px; background:var(--paper-2);
-    border:1.5px solid var(--line); border-radius:16px; padding:20px 22px;
-    text-decoration:none; color:inherit; overflow:hidden;
+    display:flex; align-items:stretch; gap:18px; background:var(--paper-2);
+    border:1.5px solid var(--line); border-radius:18px; padding:22px; text-decoration:none; color:inherit;
     transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
   }
   @media (prefers-reduced-motion: reduce){ .card{ transition:none; } }
   .card:hover{ border-color:var(--tier); transform:translateY(-2px); box-shadow:var(--shadow-lift); }
-  .card:focus-visible{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--tier) 30%, transparent); }
   .card.t1{ --tier:var(--tier1); --tier-bg:var(--tier1-bg); }
   .card.t2{ --tier:var(--tier2); --tier-bg:var(--tier2-bg); }
   .card.t3{ --tier:var(--tier3); --tier-bg:var(--tier3-bg); }
-
-  .card-glyph{
-    position:absolute; right:-18px; bottom:-18px; width:140px; height:140px;
-    color:var(--tier); opacity:var(--icon-op); pointer-events:none;
-    transition:transform .25s ease, opacity .2s ease;
-  }
-  @media (prefers-reduced-motion: reduce){ .card-glyph{ transition:none; } }
-  .card:hover .card-glyph{ transform:scale(1.06) rotate(-2deg); opacity:calc(var(--icon-op) + .05); }
-
-  .card-top{ position:relative; display:flex; gap:16px; align-items:flex-start; }
+  .card-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
   .badge{
-    flex:none; width:50px; height:50px; border-radius:12px;
-    display:flex; align-items:center; justify-content:center; text-align:center;
-    background:var(--tier-bg); color:var(--tier);
-    font-family:var(--font-display); font-weight:800; font-size:12px; line-height:1.15;
+    align-self:flex-start; padding:4px 10px; border-radius:99px; background:var(--tier-bg); color:var(--tier);
+    font-family:var(--font-body); font-weight:700; font-size:11.5px;
   }
-  .card-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
-  .card-title{ font-family:var(--font-display); font-weight:700; font-size:18.5px; line-height:1.2; }
-  .card-stats{ font-size:12.5px; font-weight:700; color:var(--tier); font-family:var(--font-body); }
+  .card-title{ font-family:var(--font-display); font-weight:700; font-size:19px; line-height:1.2; }
+  .card-stats{ font-size:12.5px; font-weight:700; color:var(--tier); }
   .card-desc{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
-
-  .progress-row{ position:relative; display:flex; flex-direction:column; gap:6px; }
+  .progress-row{ display:flex; flex-direction:column; gap:5px; margin-top:4px; }
   .progress-track{ height:6px; border-radius:99px; background:var(--line); overflow:hidden; }
   .progress-fill{ height:100%; width:0%; border-radius:99px; background:var(--tier); transition:width .4s ease; }
   @media (prefers-reduced-motion: reduce){ .progress-fill{ transition:none; } }
-  .progress-meta{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
-
-  .card-foot{ position:relative; display:flex; align-items:center; justify-content:flex-end; }
+  .progress-meta{ display:flex; justify-content:space-between; font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
   .cta{
-    display:inline-flex; align-items:center; gap:6px;
-    font-family:var(--font-body); font-size:13px; font-weight:700; padding:8px 16px; border-radius:99px;
+    align-self:flex-start; margin-top:2px; display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:700; padding:9px 16px; border-radius:99px;
     border:1.5px solid var(--tier); color:var(--tier); background:var(--paper-2);
     transition:background .15s ease, color .15s ease;
   }
   @media (prefers-reduced-motion: reduce){ .cta{ transition:none; } }
   .card:hover .cta{ background:var(--tier); color:var(--paper-2); }
-  .cta-arrow{ transition:transform .15s ease; }
-  @media (prefers-reduced-motion: reduce){ .cta-arrow{ transition:none; } }
-  .card:hover .cta-arrow{ transform:translateX(2px); }
+  .card-icon{
+    flex:none; width:110px; border-radius:14px; background:var(--tier-bg);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .card-icon::before{
+    content:""; position:absolute; width:130px; height:130px; border-radius:50%;
+    background:radial-gradient(circle, color-mix(in srgb, var(--tier) 30%, transparent), transparent 70%);
+  }
+  .card-icon svg{ position:relative; width:64px; height:64px; }
+  .recommend-tag{
+    align-self:flex-start; display:inline-flex; align-items:center; gap:5px; margin-bottom:2px;
+    font-size:11px; font-weight:700; color:var(--red); background:color-mix(in srgb, var(--red) 10%, transparent);
+    border-radius:99px; padding:3px 10px;
+  }
+  @media (max-width:560px){ .card{ flex-direction:column-reverse; } .card-icon{ width:100%; height:80px; } }
 
-  .foot-note{ text-align:center; font-size:11.5px; color:var(--ink-faint); margin:6px 0 0; font-family:var(--font-body); }
+  /* ---- feature strip ---- */
+  .features{
+    display:flex; flex-wrap:wrap; gap:22px; align-items:center; justify-content:space-between;
+    border-top:1.5px solid var(--line); padding-top:30px;
+  }
+  .feature-list{ display:flex; flex-wrap:wrap; gap:26px; flex:1; min-width:0; }
+  .feature{ display:flex; align-items:center; gap:10px; min-width:180px; }
+  .feature-icon{
+    flex:none; width:38px; height:38px; border-radius:10px; background:var(--tier1-bg); color:var(--tier1);
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .feature-icon.b{ background:var(--tier2-bg); color:var(--tier2); }
+  .feature-icon.c{ background:var(--tier3-bg); color:var(--tier3); }
+  .feature-icon.d{ background:var(--ember-bg); color:var(--ember); }
+  .feature-title{ font-weight:700; font-size:13.5px; }
 </style>
 </head>
 <body>
 
-<canvas id="globeCanvas" aria-hidden="true"></canvas>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-<div class="stack">
+<div class="page" id="top">
 
-  <header class="masthead">
-    <div class="mark">AZ</div>
-    <div class="masthead-text">
-      <p class="eyebrow">AZEnglish &middot; Vocab Arena</p>
-      <h1>Chọn chương trình học từ vựng</h1>
+  <header class="topnav">
+    <div class="brand">
+      <div class="mark">AZ</div>
+      <div class="brand-text">AZEnglish<span>Vocab Arena</span></div>
+    </div>
+    <nav class="nav-links">
+      <a class="nav-link active" href="#top"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"></path><path d="M6 10v9h12v-9"></path></svg> Trang chủ</a>
+      <a class="nav-link" href="#courses"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg> Chương trình</a>
+      <span class="nav-link disabled" title="Sắp ra mắt"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"></path><path d="M8 6H5a1 1 0 0 0-1 1c0 2.5 1.8 4 4 4M16 6h3a1 1 0 0 1 1 1c0 2.5-1.8 4-4 4"></path><path d="M12 13v4M9 20h6"></path></svg> Thành tích</span>
+      <span class="nav-link disabled" title="Sắp ra mắt"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-7"></path></svg> Bảng xếp hạng</span>
+    </nav>
+    <div class="nav-stat">
+      <svg class="micon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--ember)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg>
+      <b id="navStreak">0</b> chuỗi dài nhất
     </div>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
 
-  <div class="greet">
-    <p class="greet-line" id="greetLine">Chào bạn &mdash; sẵn sàng học từ vựng chưa?</p>
-    <p class="greet-sub">Ba app luyện từ vựng riêng biệt, mỗi app một lộ trình &mdash; bấm vào để bắt đầu, tiến độ lưu riêng theo từng app trên trình duyệt này.</p>
-  </div>
+  <section class="hero">
+    <div class="hero-copy">
+      <h1 class="hero-title">Học từ vựng<br /><span class="accent">vui như chơi game</span></h1>
+      <p class="hero-sub">Vừa học — vừa luyện — vừa chinh phục mục tiêu.</p>
+      <div class="hero-proof">
+        <span><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> 7.508 từ vựng</span>
+        <span><svg class="micon m-ring" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg> A1 → C1</span>
+        <span><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg> Ôn ngắt quãng</span>
+      </div>
+      <a class="hero-cta" href="#courses">Bắt đầu học ngay
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+    <div class="hero-art">
+      <div class="crest">
+        <svg viewBox="0 0 120 132" fill="none">
+          <path d="M60 4 108 20v42c0 34-20 56-48 66C32 118 12 96 12 62V20Z" fill="var(--red)" opacity=".1"></path>
+          <path d="M60 4 108 20v42c0 34-20 56-48 66C32 118 12 96 12 62V20Z" stroke="var(--red)" stroke-width="3.5"></path>
+          <rect x="26" y="50" width="68" height="42" rx="10" fill="var(--paper-2)" stroke="var(--red)" stroke-width="3"></rect>
+          <text x="60" y="70" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-weight="800" font-size="13" letter-spacing="1" fill="var(--red)">VOCAB</text>
+          <text x="60" y="86" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-weight="800" font-size="13" letter-spacing="1" fill="var(--red)">ARENA</text>
+        </svg>
+      </div>
+      <div class="float-word fw1">insight<span>noun</span></div>
+      <div class="float-word fw2">persistent<span>adjective</span></div>
+      <div class="float-word fw3">resilience<span>noun</span></div>
+      <div class="float-word fw4">curious<span>adjective</span></div>
+    </div>
+  </section>
 
-  <div class="today-box hidden" id="todayBox">
-    <div class="today-label">HÔM<br />NAY</div>
-    <div class="today-stats">
-      <div class="today-stat is-flame">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg>
-        <span class="today-num" id="statStreak">0</span>
-        <span class="today-cap">chuỗi dài nhất</span>
-      </div>
-      <div class="today-stat">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H13v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H11v16h7.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg>
-        <span class="today-num" id="statMastered">0</span>
-        <span class="today-cap">từ đã thuộc</span>
-      </div>
-      <div class="today-stat">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6Z"></path></svg>
-        <span class="today-num" id="statXP">0</span>
-        <span class="today-cap">tổng XP</span>
-      </div>
+  <div class="trust-bar" id="trustBar">
+    <div class="trust-cell">
+      <svg class="micon m-sway" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg>
+      <div><div class="trust-num">7.508 từ vựng</div><div class="trust-cap">3 lộ trình, A1 đến C1</div></div>
+    </div>
+    <div class="trust-cell">
+      <svg class="micon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle class="m-ring" cx="12" cy="12" r="7"></circle><path d="M9 8.5a3 3 0 0 1 4.2 4.2M12 12v3M12 8v.01"></path></svg>
+      <div><div class="trust-num">Nhớ lâu hơn</div><div class="trust-cap">Ôn theo trí nhớ ngắt quãng</div></div>
+    </div>
+    <div class="trust-cell">
+      <svg class="micon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--tier3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"></rect><circle class="m-blink" cx="12" cy="18" r="1" fill="var(--tier3)" stroke="none"></circle></svg>
+      <div><div class="trust-num">Học mọi lúc</div><div class="trust-cap">Không cần tài khoản</div></div>
     </div>
   </div>
 
-  <a class="card t1" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
-    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M18 30c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v28c0 6.6-5.4 12-12 12H46l-14 14V70h-4c-6.6 0-12-5.4-12-12V30Z"></path>
-      <path d="M72 58c0-4.4 3.6-8 8-8h18c4.4 0 8 3.6 8 8v14c0 4.4-3.6 8-8 8h-2v9l-10-9h-6c-4.4 0-8-3.6-8-8V58Z"></path>
-    </svg>
-    <div class="card-top">
-      <div class="badge">A1&ndash;B1</div>
-      <div class="card-body">
+  <div class="stats-bar hidden" id="statsBar">
+    <div class="stat-cell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--ember)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg>
+      <span class="stat-num" id="statStreak">0</span>
+      <span class="stat-cap">Chuỗi dài nhất</span>
+    </div>
+    <div class="stat-cell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H13v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H11v16h7.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg>
+      <span class="stat-num" id="statMastered">0</span>
+      <span class="stat-cap">Từ đã thuộc</span>
+    </div>
+    <div class="stat-cell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6Z"></path></svg>
+      <span class="stat-num" id="statXP">0</span>
+      <span class="stat-cap">Tổng XP</span>
+    </div>
+    <div class="stat-cell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--tier3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="var(--tier3)"></circle></svg>
+      <span class="stat-num" id="statBadges">0</span>
+      <span class="stat-cap">Huy hiệu đạt được</span>
+    </div>
+  </div>
+
+  <h2 class="section-title">Học hiệu quả trong 3 bước</h2>
+  <div class="how">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div><div class="how-title">Chọn lộ trình phù hợp</div></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div><div class="how-title">Học 15–20 phút mỗi ngày</div></div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div><div class="how-title">Theo dõi tiến độ, nhận huy hiệu</div></div>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="courses">Chọn chương trình học</h2>
+  <div class="cards">
+
+    <a class="card t1" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
+      <div class="card-main">
+        <span class="recommend-tag">✨ Gợi ý cho người mới bắt đầu</span>
+        <span class="badge">A1–B1</span>
         <div class="card-title">3000 Từ Giao Tiếp Căn Bản</div>
-        <div class="card-stats">3000 từ &middot; 30 chủ đề đời sống</div>
-        <div class="card-desc">Nền tảng từ vựng dùng hằng ngày: chào hỏi, gia đình, ăn uống, mua sắm, du lịch&hellip;</div>
+        <div class="card-stats">3000 từ · 30 chủ đề đời sống</div>
+        <div class="card-desc">Nền tảng từ vựng dùng hằng ngày.</div>
+        <div class="progress-row">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
+        </div>
+        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
-    </div>
-    <div class="card-foot">
-      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-    </div>
-  </a>
+      <div class="card-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 4c8 6 12 16 12 28 0 8-3 15-6 19l-6 7-6-7c-3-4-6-11-6-19 0-12 4-22 12-28Z" fill="var(--tier1)"></path>
+          <circle cx="32" cy="26" r="6" fill="var(--paper-2)"></circle>
+          <path d="M22 50l-6 10M42 50l6 10" stroke="var(--tier1)" stroke-width="3.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+    </a>
 
-  <a class="card t2" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html" data-storage-key="azvocab_v2_toeic_a2b2" data-total="2500">
-    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <rect x="14" y="42" width="92" height="58" rx="10"></rect>
-      <path d="M44 42v-8c0-5.5 4.5-10 10-10h12c5.5 0 10 4.5 10 10v8"></path>
-      <path d="M14 66h92"></path>
-      <rect x="52" y="60" width="16" height="12" rx="3"></rect>
-    </svg>
-    <div class="card-top">
-      <div class="badge">A2&ndash;B2</div>
-      <div class="card-body">
+    <a class="card t2" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html" data-storage-key="azvocab_v2_toeic_a2b2" data-total="2500">
+      <div class="card-main">
+        <span class="badge">A2–B2</span>
         <div class="card-title">TOEIC Vocab Arena</div>
-        <div class="card-stats">2500 từ &middot; 20 chủ đề thương mại &ndash; văn phòng</div>
-        <div class="card-desc">Trọng tâm từ vựng Part 7 &mdash; sát đề thi thật, ưu tiên từ thường gặp nhất.</div>
+        <div class="card-stats">2500 từ · 20 chủ đề thương mại – văn phòng</div>
+        <div class="card-desc">Trọng tâm từ vựng Part 7, sát đề thi thật.</div>
+        <div class="progress-row">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
+        </div>
+        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
-    </div>
-    <div class="progress-row">
-      <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
-    </div>
-    <div class="card-foot">
-      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-    </div>
-  </a>
+      <div class="card-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <rect x="14" y="10" width="36" height="48" rx="4" fill="var(--paper-2)" stroke="var(--tier2)" stroke-width="3"></rect>
+          <rect x="24" y="4" width="16" height="10" rx="3" fill="var(--tier2)"></rect>
+          <path d="M22 26l4 4 8-8M22 38l4 4 8-8" stroke="var(--tier2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+    </a>
 
-  <a class="card t3" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html" data-storage-key="azvocab_v2_ielts1000" data-total="2008">
-    <svg class="card-glyph" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M60 30 12 52l48 22 48-22-48-22Z" stroke-linejoin="round"></path>
-      <path d="M34 62v20c0 6 11.6 14 26 14s26-8 26-14V62"></path>
-      <path d="M108 52v24"></path>
-      <circle cx="108" cy="80" r="3.5" fill="currentColor" stroke="none"></circle>
-    </svg>
-    <div class="card-top">
-      <div class="badge">B1&ndash;C1</div>
-      <div class="card-body">
+    <a class="card t3" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html" data-storage-key="azvocab_v2_ielts1000" data-total="2008">
+      <div class="card-main">
+        <span class="badge">B1–C1</span>
         <div class="card-title">Vocab Arena IELTS</div>
-        <div class="card-stats">2008 từ &middot; chủ đề IELTS phổ biến</div>
-        <div class="card-desc">Mở rộng vốn từ học thuật &mdash; chuẩn bị vững cho kỳ thi IELTS band cao.</div>
+        <div class="card-stats">2008 từ · chủ đề IELTS phổ biến</div>
+        <div class="card-desc">Mở rộng vốn từ học thuật, luyện IELTS band cao.</div>
+        <div class="progress-row">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
+        </div>
+        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+      </div>
+      <div class="card-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M32 6 12 14v6c0 12 8 20 20 24 12-4 20-12 20-24v-6Z" fill="var(--tier3)"></path>
+          <path d="M25 30l5 5 10-11" stroke="var(--paper-2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <rect x="18" y="46" width="28" height="6" rx="2" fill="var(--tier3)"></rect>
+          <rect x="21" y="53" width="22" height="5" rx="2" fill="var(--tier3)" opacity=".6"></rect>
+        </svg>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="features">
+    <div class="feature-list">
+      <div class="feature">
+        <div class="feature-icon"><svg class="micon m-ring" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg></div>
+        <div class="feature-title">Học đúng trọng tâm</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon b"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="10" rx="5"></rect><circle class="m-blink" cx="8" cy="13" r="1.3" fill="currentColor" stroke="none"></circle><circle class="m-blink" cx="16" cy="13" r="1.3" fill="currentColor" stroke="none" style="animation-delay:.6s"></circle></svg></div>
+        <div class="feature-title">Học như chơi game</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon c"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"></path><rect class="m-bar" x="7" y="12" width="3" height="8" fill="currentColor" stroke="none" style="animation-delay:0s"></rect><rect class="m-bar" x="12" y="9" width="3" height="11" fill="currentColor" stroke="none" style="animation-delay:.3s"></rect><rect class="m-bar" x="17" y="6" width="3" height="14" fill="currentColor" stroke="none" style="animation-delay:.6s"></rect></svg></div>
+        <div class="feature-title">Theo dõi tiến độ</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon d"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="1.5"></rect><path class="m-bounce" d="M2 9h20M12 9v12M12 9c-1.5-4-6-4-6-1s3 1 6 1Zm0 0c1.5-4 6-4 6-1s-3 1-6 1Z"></path></svg></div>
+        <div class="feature-title">Huy hiệu thành tích</div>
       </div>
     </div>
-    <div class="progress-row">
-      <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-meta"><span class="progress-count">&mdash;</span><span class="progress-pct">0%</span></div>
-    </div>
-    <div class="card-foot">
-      <span class="cta">Bắt đầu học <svg class="cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-    </div>
-  </a>
-
-  <p class="foot-note">Tiến độ được đọc trực tiếp từ trình duyệt này &mdash; mở trên máy/trình duyệt khác sẽ không thấy số liệu cũ.</p>
+  </div>
 
 </div>
 
@@ -325,16 +494,8 @@
 
 <script>
   (function(){
-    var h = new Date().getHours();
-    var part = h < 11 ? "sáng" : (h < 14 ? "trưa" : (h < 18 ? "chiều" : "tối"));
-    var el = document.getElementById("greetLine");
-    if(el){ el.textContent = "Chào buổi " + part + " — sẵn sàng học từ vựng chưa?"; }
-  })();
-</script>
-
-<script>
-  (function(){
     var MASTERED_IVL_DAYS = 21;
+    var STORAGE_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000"];
 
     function masteredCountFromState(raw){
       if(!raw) return 0;
@@ -349,29 +510,29 @@
       }
       return count;
     }
-
     function readMeta(storageKey){
       try{
         var raw = localStorage.getItem(storageKey + "_meta");
-        if(!raw) return { dayStreak:0, xp:0 };
+        if(!raw) return { dayStreak:0, xp:0, badges:[] };
         var m = JSON.parse(raw);
-        return { dayStreak: m.dayStreak || 0, xp: m.xp || 0 };
-      }catch(e){ return { dayStreak:0, xp:0 }; }
+        return { dayStreak: m.dayStreak || 0, xp: m.xp || 0, badges: m.badges || [] };
+      }catch(e){ return { dayStreak:0, xp:0, badges:[] }; }
     }
 
     var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
-    var totalMastered = 0, maxStreak = 0, totalXP = 0;
+    var totalMastered = 0, maxStreak = 0, totalXP = 0, totalBadges = 0;
 
     cards.forEach(function(card){
       var key = card.getAttribute("data-storage-key");
       var total = parseInt(card.getAttribute("data-total"), 10) || 0;
-      var mastered = 0, raw = null;
+      var raw = null;
       try{ raw = localStorage.getItem(key); }catch(e){}
-      mastered = masteredCountFromState(raw);
+      var mastered = masteredCountFromState(raw);
       var meta = readMeta(key);
 
       totalMastered += mastered;
       totalXP += meta.xp;
+      totalBadges += (meta.badges || []).length;
       if(meta.dayStreak > maxStreak) maxStreak = meta.dayStreak;
 
       var pct = total > 0 ? Math.min(100, Math.round((mastered / total) * 100)) : 0;
@@ -391,12 +552,21 @@
       }
     });
 
-    if(totalMastered > 0 || maxStreak > 0 || totalXP > 0){
-      var box = document.getElementById("todayBox");
-      if(box) box.classList.remove("hidden");
-      document.getElementById("statStreak").textContent = maxStreak.toLocaleString("vi-VN");
-      document.getElementById("statMastered").textContent = totalMastered.toLocaleString("vi-VN");
-      document.getElementById("statXP").textContent = totalXP.toLocaleString("vi-VN");
+    document.getElementById("statStreak").textContent = maxStreak.toLocaleString("vi-VN");
+    document.getElementById("statMastered").textContent = totalMastered.toLocaleString("vi-VN");
+    document.getElementById("statXP").textContent = totalXP.toLocaleString("vi-VN");
+    document.getElementById("statBadges").textContent = totalBadges.toLocaleString("vi-VN");
+    document.getElementById("navStreak").textContent = maxStreak.toLocaleString("vi-VN");
+
+    var hasProgress = totalMastered > 0 || maxStreak > 0 || totalXP > 0 || totalBadges > 0;
+    var statsBar = document.getElementById("statsBar");
+    var trustBar = document.getElementById("trustBar");
+    if(hasProgress){
+      if(statsBar) statsBar.classList.remove("hidden");
+      if(trustBar) trustBar.classList.add("hidden");
+    } else {
+      if(statsBar) statsBar.classList.add("hidden");
+      if(trustBar) trustBar.classList.remove("hidden");
     }
   })();
 </script>
@@ -405,7 +575,7 @@
   /* Network-globe backdrop, in the spirit of the AZEnglish logo mark:
      a translucent wireframe sphere built from dots + connecting lines. */
   (function(){
-    var canvas = document.getElementById("globeCanvas");
+    var canvas = document.getElementById("bgCanvas");
     if(!canvas || !canvas.getContext) return;
     var ctx = canvas.getContext("2d");
 
