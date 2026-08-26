@@ -25,7 +25,7 @@
     --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   @media (prefers-color-scheme: dark){
-    :root{
+    :root:not([data-theme="light"]){
       --paper:#161211; --paper-2:#1f1a18; --paper-3:#241e1c; --ink:#f3ece9; --ink-soft:#b8aca6; --ink-faint:#8a7d76; --line:#332b28; --line-strong:#3f3532;
       --red:#ff4d5e; --red-ink:#ff8f98;
       --ember:#e8944a; --ember-bg:#2c2013;
@@ -37,6 +37,30 @@
       --globe-fill-op:.07;
       --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.6);
     }
+  }
+  :root[data-theme="dark"]{
+    --paper:#161211; --paper-2:#1f1a18; --paper-3:#241e1c; --ink:#f3ece9; --ink-soft:#b8aca6; --ink-faint:#8a7d76; --line:#332b28; --line-strong:#3f3532;
+    --red:#ff4d5e; --red-ink:#ff8f98;
+    --ember:#e8944a; --ember-bg:#2c2013;
+    --tier1:#5fd394; --tier1-bg:#173226;
+    --tier2:#6fb8ea; --tier2-bg:#132633;
+    --tier3:#b794f6; --tier3-bg:#241c38;
+    --icon-op:.16;
+    --globe-op:1;
+    --globe-fill-op:.07;
+    --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"]{
+    --paper:#fcfbfa; --paper-2:#f2f0ee; --paper-3:#eeebe5; --ink:#1a1210; --ink-soft:#5c534f; --ink-faint:#8c8179; --line:#e6e1dc; --line-strong:#d8d2ca;
+    --red:#e0102b; --red-ink:#8f0a1c;
+    --ember:#b5650f; --ember-bg:#f7ecdd;
+    --tier1:#1e7a4c; --tier1-bg:#e7f4ec;
+    --tier2:#1d6fa5; --tier2-bg:#e6f1f9;
+    --tier3:#7c3aed; --tier3-bg:#f1eafe;
+    --icon-op:.12;
+    --globe-op:.9;
+    --globe-fill-op:.05;
+    --shadow-lift: 0 14px 28px -14px rgba(26,18,16,.22);
   }
   *{ box-sizing:border-box; }
   html{ -webkit-font-smoothing:antialiased; }
@@ -57,6 +81,13 @@
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px;
     font-family:var(--font-display);
   }
+  .masthead-text{ flex:1; min-width:0; }
+  .theme-btn{
+    flex:none; border:1px solid var(--line); background:var(--paper-2); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .theme-btn:focus-visible{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--red) 28%, transparent); }
   .eyebrow{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin:0 0 2px; font-family:var(--font-body); }
   h1{
     font-family:var(--font-display); font-weight:700;
@@ -159,10 +190,11 @@
 
   <header class="masthead">
     <div class="mark">AZ</div>
-    <div>
+    <div class="masthead-text">
       <p class="eyebrow">AZEnglish &middot; Vocab Arena</p>
       <h1>Chọn chương trình học từ vựng</h1>
     </div>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
 
   <div class="greet">
@@ -264,6 +296,32 @@
   <p class="foot-note">Tiến độ được đọc trực tiếp từ trình duyệt này &mdash; mở trên máy/trình duyệt khác sẽ không thấy số liệu cũ.</p>
 
 </div>
+
+<script>
+  (function(){
+    var THEME_KEY = "azvocab_index_theme";
+    function applyTheme(mode){
+      if(mode){ document.documentElement.setAttribute("data-theme", mode); }
+      else{ document.documentElement.removeAttribute("data-theme"); }
+    }
+    var saved = null;
+    try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+    applyTheme(saved);
+    var themeBtn = document.getElementById("themeBtn");
+    if(themeBtn){
+      themeBtn.addEventListener("click", function(){
+        var current = document.documentElement.getAttribute("data-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var next;
+        if(!current){ next = prefersDark ? "light" : "dark"; }
+        else if(current === "dark"){ next = "light"; }
+        else{ next = "dark"; }
+        applyTheme(next);
+        try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+      });
+    }
+  })();
+</script>
 
 <script>
   (function(){
@@ -437,6 +495,9 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(draw, 120);
     });
+    if(window.MutationObserver){
+      new MutationObserver(draw).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
+    }
   })();
 </script>
 
