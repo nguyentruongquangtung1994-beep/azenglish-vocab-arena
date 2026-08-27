@@ -17,6 +17,7 @@
     --tier1:#1e7a4c; --tier1-bg:#e3f5ea;
     --tier2:#1d6fa5; --tier2-bg:#e2f1fb;
     --tier3:#7c3aed; --tier3-bg:#efe6fe;
+    --tier4:#c47f0e; --tier4-bg:#fbedd2;
     --shadow: 0 1px 2px rgba(36,26,18,.05);
     --shadow-lift: 0 14px 28px -14px rgba(36,26,18,.24);
     --shadow-card: 0 18px 36px -20px rgba(36,26,18,.3);
@@ -31,6 +32,7 @@
       --tier1:#5fd394; --tier1-bg:#1a3327;
       --tier2:#6fb8ea; --tier2-bg:#152a3a;
       --tier3:#c3a2fb; --tier3-bg:#2c2140;
+      --tier4:#f0a83d; --tier4-bg:#3a2a15;
       --shadow: 0 1px 2px rgba(0,0,0,.3);
       --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.55);
       --shadow-card: 0 20px 40px -20px rgba(0,0,0,.6);
@@ -43,6 +45,7 @@
     --tier1:#5fd394; --tier1-bg:#1a3327;
     --tier2:#6fb8ea; --tier2-bg:#152a3a;
     --tier3:#c3a2fb; --tier3-bg:#2c2140;
+    --tier4:#f0a83d; --tier4-bg:#3a2a15;
     --shadow: 0 1px 2px rgba(0,0,0,.3);
     --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.55);
     --shadow-card: 0 20px 40px -20px rgba(0,0,0,.6);
@@ -234,6 +237,7 @@
   .card.t1{ --tier:var(--tier1); --tier-bg:var(--tier1-bg); }
   .card.t2{ --tier:var(--tier2); --tier-bg:var(--tier2-bg); }
   .card.t3{ --tier:var(--tier3); --tier-bg:var(--tier3-bg); }
+  .card.t4{ --tier:var(--tier4); --tier-bg:var(--tier4-bg); }
   .card-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
   .badge{
     align-self:flex-start; padding:4px 11px; border-radius:99px; background:var(--tier-bg); color:var(--tier);
@@ -317,7 +321,7 @@
       <h1 class="hero-title">Học từ vựng<br /><span class="accent">vui như chơi game</span></h1>
       <p class="hero-sub">Vừa học — vừa luyện — vừa chinh phục mục tiêu.</p>
       <div class="hero-proof">
-        <span><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> 7.508 từ vựng</span>
+        <span><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> 12.008 từ vựng</span>
         <span><svg class="micon m-ring" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg> A1 → C1</span>
         <span><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg> Ôn ngắt quãng</span>
       </div>
@@ -370,7 +374,7 @@
   <div class="trust-bar" id="trustBar">
     <div class="trust-cell">
       <div class="trust-icon-wrap"><svg class="micon m-sway" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></div>
-      <div><div class="trust-num">7.508 từ vựng</div><div class="trust-cap">3 lộ trình, A1 đến C1</div></div>
+      <div><div class="trust-num">12.008 từ vựng</div><div class="trust-cap">4 lộ trình, A1 đến C1</div></div>
     </div>
     <div class="trust-cell">
       <div class="trust-icon-wrap"><svg class="micon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle class="m-ring" cx="12" cy="12" r="7"></circle><path d="M9 8.5a3 3 0 0 1 4.2 4.2M12 12v3M12 8v.01"></path></svg></div>
@@ -425,12 +429,12 @@
   <h2 class="section-title" id="courses">Chọn chương trình học</h2>
   <div class="cards">
 
-    <a class="card t1" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
+    <a class="card t1" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="2968">
       <div class="card-main">
         <span class="recommend-tag">✨ Gợi ý cho người mới bắt đầu</span>
         <span class="badge">A1–B1</span>
         <div class="card-title">3000 Từ Giao Tiếp Căn Bản</div>
-        <div class="card-stats">3000 từ · 30 chủ đề đời sống</div>
+        <div class="card-stats">2968 từ · 30 chủ đề đời sống</div>
         <div class="card-desc">Nền tảng từ vựng dùng hằng ngày.</div>
         <div class="progress-row">
           <div class="progress-track"><div class="progress-fill"></div></div>
@@ -490,6 +494,28 @@
       </div>
     </a>
 
+    <a class="card t4" href="./AZEnglish%20Career%20Vocab%20Arena%20(v1).html" data-storage-key="azvocab_v1_career9" data-total="4500">
+      <div class="card-main">
+        <span class="badge">A2–C1</span>
+        <div class="card-title">Từ Vựng Chuyên Ngành</div>
+        <div class="card-stats">4500 từ · 9 khối ngành đào tạo</div>
+        <div class="card-desc">Đúng chuyên môn bạn theo đuổi, từ CNTT đến Y tế, Du lịch, Kỹ thuật...</div>
+        <div class="progress-row">
+          <div class="progress-track"><div class="progress-fill"></div></div>
+          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
+        </div>
+        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+      </div>
+      <div class="card-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <path d="M24 16V12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="var(--tier4)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <rect x="8" y="16" width="48" height="34" rx="5" fill="var(--tier4)"></rect>
+          <path d="M8 30h48" stroke="var(--paper-2)" stroke-width="3"></path>
+          <rect x="26" y="26" width="12" height="9" rx="2" fill="var(--paper-2)"></rect>
+        </svg>
+      </div>
+    </a>
+
   </div>
 
   <div class="features">
@@ -544,7 +570,7 @@
 <script>
   (function(){
     var MASTERED_IVL_DAYS = 21;
-    var STORAGE_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000"];
+    var STORAGE_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000", "azvocab_v1_career9"];
 
     function masteredCountFromState(raw){
       if(!raw) return 0;

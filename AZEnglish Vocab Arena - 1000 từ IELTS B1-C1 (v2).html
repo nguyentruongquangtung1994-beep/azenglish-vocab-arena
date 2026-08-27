@@ -190,6 +190,7 @@
   .lvl-badge.B2{ color:var(--lvl-b2); background:var(--lvl-b2-bg); }
   .lvl-badge.C1{ color:var(--lvl-c1); background:var(--lvl-c1-bg); }
   .topic-emoji{ font-size:20px; line-height:1; }
+  .review-badge{ display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:800; letter-spacing:.02em; padding:4px 10px; border-radius:99px; background:var(--amber-bg); color:var(--amber); white-space:nowrap; flex:none; }
 
   /* ---- card ---- */
   .card{ background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:var(--card-shadow); padding:26px 22px; position:relative; }
@@ -470,7 +471,10 @@
   <!-- GAME SCREEN -->
   <section class="card hidden" id="gameCard">
     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:16px;">
-      <span class="source-chip" id="sourceChip" style="margin-bottom:0;"><span class="topic-emoji" id="chipEmoji">✳️</span><span id="chipText">B1</span></span>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span class="source-chip" id="sourceChip" style="margin-bottom:0;"><span class="topic-emoji" id="chipEmoji">✳️</span><span id="chipText">B1</span></span>
+        <span class="review-badge hidden" id="reviewBadge">🔁 Ôn lại</span>
+      </div>
       <div style="display:flex; gap:6px; flex:none;">
         <button class="hint-btn" id="exitSessionBtn" type="button">← Màn hình chính</button>
         <button class="hint-btn" id="openReviewMidBtn" type="button">🕐 Từ vừa qua</button>
@@ -935,6 +939,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   var sourceChip = document.getElementById("sourceChip");
   var chipEmoji = document.getElementById("chipEmoji");
   var chipText = document.getElementById("chipText");
+  var reviewBadge = document.getElementById("reviewBadge");
 
   var studyPhase = document.getElementById("studyPhase");
   var studyVisual = document.getElementById("studyVisual");
@@ -1321,6 +1326,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     chipEmoji.textContent = emoji;
     chipText.innerHTML = '<span class="lvl-badge ' + word.lvl + '">' + word.lvl + "</span>" +
       (word.src ? " · " + word.src : "");
+    reviewBadge.classList.toggle("hidden", !session.wrongIds[word.w]);
 
     studyVisual.textContent = word.e || emoji;
     studyVisual.classList.remove("pop-in");
