@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#e0102b" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa; --paper-2:#f2f0ee; --ink:#1a1210; --ink-soft:#5c534f; --line:#e6e1dc;
@@ -20,7 +20,7 @@
     --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
     --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
     --focus: 0 0 0 3px rgba(224,16,43,.28);
-    --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
+    --font-display:"Baloo 2","Be Vietnam Pro",-apple-system,sans-serif;
     --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     color-scheme: light;
   }
@@ -80,7 +80,7 @@
 
   .intro{ font-size:14px; line-height:1.6; color:var(--ink-soft); }
 
-  /* ---- search + filter ---- */
+  /* ---- search ---- */
   .search-box{
     display:flex; align-items:center; gap:8px; background:var(--paper-2); border:1.5px solid var(--line);
     border-radius:12px; padding:10px 14px;
@@ -89,13 +89,29 @@
     flex:1; border:none; background:none; outline:none; font-size:14px; color:var(--ink); font-family:var(--font-body);
   }
   .search-box input:focus-visible{ box-shadow:none; }
-  .filter-row{ display:flex; flex-wrap:wrap; gap:8px; }
-  .filter-chip{
+  .no-results{ display:none; text-align:center; font-size:13px; color:var(--ink-soft); padding:24px 0; }
+
+  /* ---- category tiles ---- */
+  .cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:640px){ .cat-grid{ grid-template-columns:repeat(3,1fr); } }
+  .cat-tile{
+    display:flex; flex-direction:column; align-items:flex-start; gap:8px;
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:14px;
+    padding:16px; cursor:pointer; text-align:left; font-family:var(--font-body);
+    box-shadow:0 2px 0 var(--line);
+    transition:border-color .12s ease, transform .12s ease, box-shadow .12s ease;
+  }
+  .cat-tile:hover{ border-color:var(--red); transform:translateY(-2px); box-shadow:var(--card-shadow); }
+  .cat-swatch{ width:22px; height:22px; border-radius:7px; }
+  .cat-name{ font-family:var(--font-display); font-weight:700; font-size:14.5px; color:var(--ink); line-height:1.3; }
+  .cat-count{ font-size:11.5px; color:var(--ink-soft); font-weight:600; }
+  .cat-back{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .cat-back-btn{
     border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft);
     font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:99px; cursor:pointer; font-family:var(--font-body);
   }
-  .filter-chip.active{ border-color:var(--red); color:var(--red); background:var(--paper); }
-  .no-results{ display:none; text-align:center; font-size:13px; color:var(--ink-soft); padding:24px 0; }
+  .cat-back-btn:hover{ border-color:var(--red); color:var(--red); }
+  .cat-back-title{ font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--ink); }
 
   /* ---- compare callouts ---- */
   .compare-title{ font-family:var(--font-display); font-weight:700; font-size:16px; margin:4px 0 0; }
@@ -193,23 +209,12 @@
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
 
-  <p class="intro">Toàn bộ ngữ pháp AZEnglish, sắp theo 7 nhóm chủ điểm. Mỗi mục có tình huống mở đầu, ý nghĩa, công thức, ví dụ có âm thanh và lỗi hay gặp. Bấm vào từng thẻ để mở/đóng, dùng ô tìm kiếm hoặc bộ lọc để tra nhanh.</p>
+  <p class="intro">Toàn bộ ngữ pháp AZEnglish, sắp theo 7 nhóm chủ điểm — chọn một nhóm để bắt đầu, hoặc gõ từ khoá để tìm nhanh.</p>
 
   <div class="search-box">
     <span>🔎</span>
     <input type="text" id="searchInput" placeholder="Tìm chủ điểm, dấu hiệu nhận biết, ví dụ…" />
   </div>
-  <div class="filter-row" id="filterRow">
-    <button class="filter-chip active" data-fam="all" type="button">Tất cả (46)</button>
-    <button class="filter-chip" data-fam="tenses" type="button">Thì</button>
-    <button class="filter-chip" data-fam="passive" type="button">Bị động &amp; Hoà hợp</button>
-    <button class="filter-chip" data-fam="conditional" type="button">Điều kiện</button>
-    <button class="filter-chip" data-fam="pronoun" type="button">Đại từ &amp; MĐ quan hệ</button>
-    <button class="filter-chip" data-fam="compare" type="button">So sánh · Giới từ · Liên từ</button>
-    <button class="filter-chip" data-fam="wordform" type="button">Từ loại &amp; Cụm ĐT</button>
-    <button class="filter-chip" data-fam="special" type="button">Cấu trúc đặc biệt</button>
-  </div>
-  <p class="no-results" id="noResults">Không tìm thấy chủ điểm nào khớp — thử từ khoá khác.</p>
 
   <div>
     <p class="compare-title">⚡ 3 cặp hay nhầm nhất</p>
@@ -224,6 +229,52 @@
     <p><b>Past Simple</b> vs <b>Past Continuous</b> — hành động ngắn, trọn vẹn dùng <b>Past Simple</b>; hành động đang kéo dài thì bị xen vào dùng <b>Past Continuous</b> ("I <u>was cooking</u> when the phone <u>rang</u>").</p>
   </div>
 
+  <div class="cat-grid" id="catGrid">
+    <button class="cat-tile" data-fam="tenses" type="button">
+      <span class="cat-swatch" style="background:var(--green)"></span>
+      <span class="cat-name">Thì</span>
+      <span class="cat-count">13 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="passive" type="button">
+      <span class="cat-swatch" style="background:var(--lvl-b2)"></span>
+      <span class="cat-name">Bị động &amp; Hoà hợp</span>
+      <span class="cat-count">7 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="conditional" type="button">
+      <span class="cat-swatch" style="background:var(--lvl-c1)"></span>
+      <span class="cat-name">Điều kiện</span>
+      <span class="cat-count">5 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="pronoun" type="button">
+      <span class="cat-swatch" style="background:var(--amber)"></span>
+      <span class="cat-name">Đại từ &amp; MĐ quan hệ</span>
+      <span class="cat-count">5 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="compare" type="button">
+      <span class="cat-swatch" style="background:var(--green)"></span>
+      <span class="cat-name">So sánh · Giới từ · Liên từ</span>
+      <span class="cat-count">4 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="wordform" type="button">
+      <span class="cat-swatch" style="background:var(--lvl-b2)"></span>
+      <span class="cat-name">Từ loại &amp; Cụm ĐT</span>
+      <span class="cat-count">6 chủ điểm</span>
+    </button>
+    <button class="cat-tile" data-fam="special" type="button">
+      <span class="cat-swatch" style="background:var(--lvl-c1)"></span>
+      <span class="cat-name">Cấu trúc đặc biệt</span>
+      <span class="cat-count">6 chủ điểm</span>
+    </button>
+  </div>
+
+  <div class="cat-back hidden" id="catBack">
+    <button class="cat-back-btn" id="catBackBtn" type="button">← Tất cả danh mục</button>
+    <span class="cat-back-title" id="catBackTitle"></span>
+  </div>
+
+  <p class="no-results" id="noResults">Không tìm thấy chủ điểm nào khớp — thử từ khoá khác.</p>
+
+  <div id="cardsView" class="hidden">
   <!-- ================= SIMPLE TENSES ================= -->
   <div class="fam-head"><span class="sw" style="background:var(--green)"></span><h2>Thì đơn <span class="en">— Simple Tenses</span></h2></div>
 
@@ -1627,6 +1678,7 @@
   </details>
 
   <p class="footer-note">Nội dung biên soạn dựa trên tài liệu ngữ pháp AZEnglish — đầy đủ toàn bộ chủ điểm.</p>
+  </div>
 
 </div>
 
@@ -1667,15 +1719,20 @@
   (function(){
     var cards = Array.prototype.slice.call(document.querySelectorAll(".g-card"));
     var searchInput = document.getElementById("searchInput");
-    var filterRow = document.getElementById("filterRow");
+    var catGrid = document.getElementById("catGrid");
+    var catBack = document.getElementById("catBack");
+    var catBackBtn = document.getElementById("catBackBtn");
+    var catBackTitle = document.getElementById("catBackTitle");
     var noResults = document.getElementById("noResults");
-    var activeFam = "all";
+    var cardsView = document.getElementById("cardsView");
+    if(!searchInput || !catGrid || !cardsView) return;
+    var activeFam = null;
 
-    function applyFilters(){
+    function renderCards(){
       var q = searchInput.value.trim().toLowerCase();
       var visibleCount = 0;
       cards.forEach(function(card){
-        var famOk = activeFam === "all" || card.getAttribute("data-fam") === activeFam;
+        var famOk = activeFam === "all" || (activeFam && card.getAttribute("data-fam") === activeFam);
         var text = (card.getAttribute("data-search") + " " + card.textContent).toLowerCase();
         var searchOk = q === "" || text.indexOf(q) !== -1;
         var show = famOk && searchOk;
@@ -1694,15 +1751,44 @@
       noResults.style.display = visibleCount === 0 ? "block" : "none";
     }
 
-    searchInput.addEventListener("input", applyFilters);
-    filterRow.addEventListener("click", function(e){
-      var btn = e.target.closest(".filter-chip");
+    function showTiles(){
+      activeFam = null;
+      searchInput.value = "";
+      catGrid.classList.remove("hidden");
+      catBack.classList.add("hidden");
+      cardsView.classList.add("hidden");
+      noResults.style.display = "none";
+    }
+
+    function showCategory(fam, label){
+      activeFam = fam;
+      catGrid.classList.add("hidden");
+      catBack.classList.remove("hidden");
+      catBackTitle.textContent = label || "";
+      cardsView.classList.remove("hidden");
+      renderCards();
+    }
+
+    catGrid.addEventListener("click", function(e){
+      var btn = e.target.closest(".cat-tile");
       if(!btn) return;
-      activeFam = btn.getAttribute("data-fam");
-      Array.prototype.slice.call(filterRow.children).forEach(function(c){ c.classList.remove("active"); });
-      btn.classList.add("active");
-      applyFilters();
+      showCategory(btn.getAttribute("data-fam"), btn.querySelector(".cat-name").textContent);
     });
+
+    catBackBtn.addEventListener("click", showTiles);
+
+    searchInput.addEventListener("input", function(){
+      var q = searchInput.value.trim();
+      if(q === ""){ showTiles(); return; }
+      activeFam = "all";
+      catGrid.classList.add("hidden");
+      catBack.classList.remove("hidden");
+      catBackTitle.textContent = "Kết quả tìm kiếm";
+      cardsView.classList.remove("hidden");
+      renderCards();
+    });
+
+    showTiles();
   })();
 </script>
 
