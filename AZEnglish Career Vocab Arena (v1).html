@@ -340,6 +340,33 @@
   .mode-btn span{ font-size:12.5px; color:var(--ink-soft); }
   .mode-btn .count{ float:right; font-variant-numeric:tabular-nums; font-weight:800; color:var(--red); }
   .mode-btn:disabled{ opacity:.4; cursor:default; }
+  .mode-btn-sprint{ border-color:var(--red); background:linear-gradient(135deg, var(--amber-bg), var(--paper-2)); }
+  .mode-btn-sprint b{ color:var(--red); }
+
+  /* ---- sprint mode ---- */
+  .sprint-head{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:22px; }
+  .sprint-timer-wrap{ flex:1; display:flex; align-items:center; gap:10px; }
+  .sprint-timer-bar{ flex:1; height:10px; border-radius:99px; background:var(--paper-2); border:1px solid var(--line); overflow:hidden; }
+  .sprint-timer-fill{ height:100%; background:var(--red); width:100%; transition:width 1s linear; }
+  @media (prefers-reduced-motion: reduce){ .sprint-timer-fill{ transition:none; } }
+  .sprint-timer-text{ flex:none; font-family:var(--font-display); font-weight:800; font-size:20px; font-variant-numeric:tabular-nums; min-width:28px; text-align:right; }
+  .sprint-score-wrap{ flex:none; display:flex; align-items:center; gap:8px; }
+  .sprint-score{ font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--red); font-variant-numeric:tabular-nums; }
+  .sprint-combo{ font-size:12.5px; font-weight:800; color:#fff; background:var(--red); padding:4px 9px; border-radius:99px; }
+  .sprint-combo.pulse{ animation:streakPulse .4s ease; }
+  @media (prefers-reduced-motion: reduce){ .sprint-combo.pulse{ animation:none; } }
+  .sprint-question{ text-align:center; margin-bottom:22px; }
+  .sprint-word{ font-family:var(--font-display); font-weight:800; font-size:32px; }
+  .sprint-ipa{ font-size:14px; color:var(--ink-soft); margin-top:4px; }
+  .sprint-options{ display:flex; flex-direction:column; gap:10px; }
+  .sprint-opt{
+    text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:12px;
+    padding:14px 16px; cursor:pointer; color:var(--ink); font-family:inherit; font-size:14.5px; font-weight:600;
+    transition:border-color .1s ease, background .1s ease;
+  }
+  .sprint-opt:hover{ border-color:var(--red); }
+  .sprint-opt-correct{ border-color:var(--green); background:var(--green-bg); color:var(--green); }
+  .sprint-opt-wrong{ border-color:var(--red-ink); background:var(--red-ink); color:#fff; }
 
   .review-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .review-card-top{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -456,6 +483,10 @@
           <b>Chỉ ôn từ hay sai</b>
           <span>Những từ có tỉ lệ sai cao nhất từ trước tới nay</span>
         </button>
+        <button class="mode-btn mode-btn-sprint" id="modeSprint" type="button">
+          <b>⚡ Đấu trường 60 giây</b>
+          <span>Trả lời càng nhiều càng tốt trong 60 giây. Kỷ lục của bạn: <b id="sprintBestInline">0</b> điểm</span>
+        </button>
       </div>
     </div>
     <div class="panel" style="margin-bottom:14px;">
@@ -565,6 +596,39 @@
     <div class="review-list-wrap" id="reviewCardList"></div>
     <div class="btn-row" style="margin-top:14px;">
       <button class="btn-ghost" id="closeReviewBtn" type="button">← Về màn hình chọn</button>
+    </div>
+  </section>
+
+  <!-- SPRINT MODE SCREEN -->
+  <section class="card hidden" id="sprintCard">
+    <div class="sprint-head">
+      <div class="sprint-timer-wrap">
+        <div class="sprint-timer-bar"><div class="sprint-timer-fill" id="sprintTimerFill"></div></div>
+        <span class="sprint-timer-text" id="sprintTimerText">60</span>
+      </div>
+      <div class="sprint-score-wrap">
+        <span class="sprint-score" id="sprintScore">0</span>
+        <span class="sprint-combo hidden" id="sprintCombo">x1</span>
+      </div>
+    </div>
+    <div class="sprint-question">
+      <div class="sprint-word" id="sprintWord">word</div>
+      <div class="sprint-ipa" id="sprintIpa"></div>
+    </div>
+    <div class="sprint-options" id="sprintOptions"></div>
+  </section>
+
+  <!-- SPRINT RESULT SCREEN -->
+  <section class="panel hidden" id="sprintSummary">
+    <h2 id="sprintResultTitle">Hết giờ!</h2>
+    <div class="summary-grid">
+      <div class="summary-tile"><b id="sprintResultScore">0</b><span>Điểm đạt được</span></div>
+      <div class="summary-tile"><b id="sprintResultBest">0</b><span>Kỷ lục của bạn</span></div>
+    </div>
+    <p class="desc" id="sprintResultSub"></p>
+    <div class="btn-row">
+      <button class="btn-ghost" id="sprintBackBtn" type="button">← Về màn hình chọn</button>
+      <button class="btn-primary" id="sprintAgainBtn" type="button">Chơi lại →</button>
     </div>
   </section>
 
@@ -1443,7 +1507,8 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
 
     gameProgressFill.style.width = pct + "%";
     gameProgressText.textContent = done + "/" + session.totalPlanned;
-    gameStreakChip.textContent = "🔥 " + streakText;
+    var comboMult = session.streak >= 10 ? 5 : session.streak >= 6 ? 3 : session.streak >= 3 ? 2 : 1;
+    gameStreakChip.textContent = "🔥 " + streakText + (comboMult > 1 ? "  ⚡x" + comboMult : "");
   }
 
   function pulseStreak(){
@@ -1649,6 +1714,148 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
   modeDue.addEventListener("click", function(){ startSession(shuffle(dueWords(selectedLevel)).slice(0, BATCH_DUE_CAP), "due"); });
   modeNew.addEventListener("click", function(){ startSession(shuffle(newWords(selectedLevel)).slice(0, BATCH_NEW), "new"); });
   modeMissed.addEventListener("click", function(){ startSession(missedWords(selectedLevel), "missed"); });
+
+  // ---------- sprint mode: 60-second speed challenge ----------
+  (function(){
+    var SPRINT_KEY = STORAGE_KEY + "_sprintbest";
+    var SPRINT_DURATION = 60;
+    var sprintTimer = null, sprintTimeLeft = 0, sprintScore = 0, sprintCombo = 0;
+    var sprintFullPool = [], sprintQueue = [], sprintCurrent = null;
+
+    var modeSprint = document.getElementById("modeSprint");
+    var sprintCard = document.getElementById("sprintCard");
+    var sprintSummary = document.getElementById("sprintSummary");
+    var sprintTimerFill = document.getElementById("sprintTimerFill");
+    var sprintTimerText = document.getElementById("sprintTimerText");
+    var sprintScoreEl = document.getElementById("sprintScore");
+    var sprintComboEl = document.getElementById("sprintCombo");
+    var sprintWordEl = document.getElementById("sprintWord");
+    var sprintIpaEl = document.getElementById("sprintIpa");
+    var sprintOptionsEl = document.getElementById("sprintOptions");
+    var sprintBestInline = document.getElementById("sprintBestInline");
+    var sprintResultTitle = document.getElementById("sprintResultTitle");
+    var sprintResultScore = document.getElementById("sprintResultScore");
+    var sprintResultBest = document.getElementById("sprintResultBest");
+    var sprintResultSub = document.getElementById("sprintResultSub");
+
+    function getSprintBest(){
+      try{ return parseInt(localStorage.getItem(SPRINT_KEY), 10) || 0; }catch(e){ return 0; }
+    }
+    function setSprintBest(v){ try{ localStorage.setItem(SPRINT_KEY, String(v)); }catch(e){} }
+    function refreshSprintBestUI(){ sprintBestInline.textContent = getSprintBest(); }
+    refreshSprintBestUI();
+
+    function comboMultiplier(combo){
+      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function pickDistractors(correctWord, pool, n){
+      var others = pool.filter(function(w){ return w.w !== correctWord.w; });
+      others = shuffle(others);
+      return others.slice(0, n);
+    }
+
+    function nextSprintQuestion(){
+      if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
+      sprintCurrent = sprintQueue.pop();
+      sprintWordEl.textContent = sprintCurrent.w;
+      sprintIpaEl.textContent = sprintCurrent.ipa ? "/" + sprintCurrent.ipa + "/" : "";
+      var distractors = pickDistractors(sprintCurrent, sprintFullPool, 3);
+      if(distractors.length < 3){ distractors = pickDistractors(sprintCurrent, WORDS, 3); }
+      var options = shuffle([sprintCurrent].concat(distractors));
+      sprintOptionsEl.innerHTML = "";
+      options.forEach(function(opt){
+        var btn = document.createElement("button");
+        btn.className = "sprint-opt";
+        btn.type = "button";
+        btn.textContent = opt.m;
+        btn.addEventListener("click", function(){ answerSprint(opt.w === sprintCurrent.w, btn); });
+        sprintOptionsEl.appendChild(btn);
+      });
+      speak(sprintCurrent.w);
+    }
+
+    function answerSprint(correct, btnEl){
+      Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
+      if(correct){
+        sprintCombo++;
+        var mult = comboMultiplier(sprintCombo);
+        sprintScore += 10 * mult;
+        btnEl.classList.add("sprint-opt-correct");
+        chimeCorrect();
+        if(mult > 1){
+          sprintComboEl.textContent = "⚡x" + mult;
+          sprintComboEl.classList.remove("hidden");
+          sprintComboEl.classList.remove("pulse");
+          void sprintComboEl.offsetWidth;
+          sprintComboEl.classList.add("pulse");
+        }else{
+          sprintComboEl.classList.add("hidden");
+        }
+      }else{
+        sprintCombo = 0;
+        btnEl.classList.add("sprint-opt-wrong");
+        chimeWrong();
+        sprintComboEl.classList.add("hidden");
+      }
+      sprintScoreEl.textContent = sprintScore;
+      setTimeout(function(){
+        if(sprintTimeLeft > 0){
+          Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
+          nextSprintQuestion();
+        }
+      }, 350);
+    }
+
+    function startSprint(){
+      sprintScore = 0; sprintCombo = 0; sprintTimeLeft = SPRINT_DURATION;
+      sprintFullPool = poolForLevel(selectedLevel);
+      sprintQueue = shuffle(sprintFullPool.slice());
+      setupPanel.classList.add("hidden");
+      sprintSummary.classList.add("hidden");
+      sprintCard.classList.remove("hidden");
+      sprintScoreEl.textContent = "0";
+      sprintComboEl.classList.add("hidden");
+      sprintTimerText.textContent = sprintTimeLeft;
+      sprintTimerFill.style.width = "100%";
+      nextSprintQuestion();
+      sprintTimer = setInterval(function(){
+        sprintTimeLeft--;
+        sprintTimerText.textContent = Math.max(0, sprintTimeLeft);
+        sprintTimerFill.style.width = Math.max(0, (sprintTimeLeft / SPRINT_DURATION * 100)) + "%";
+        if(sprintTimeLeft <= 0){
+          clearInterval(sprintTimer);
+          endSprint();
+        }
+      }, 1000);
+    }
+
+    function endSprint(){
+      sprintCard.classList.add("hidden");
+      sprintSummary.classList.remove("hidden");
+      var best = getSprintBest();
+      var isNewBest = sprintScore > best;
+      if(isNewBest) setSprintBest(sprintScore);
+      sprintResultScore.textContent = sprintScore;
+      sprintResultBest.textContent = Math.max(best, sprintScore);
+      sprintResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới!" : "Hết giờ!";
+      sprintResultSub.textContent = isNewBest
+        ? "Bạn vừa vượt qua kỷ lục cũ (" + best + " điểm) — chơi lại để nâng kỷ lục cao hơn nữa!"
+        : "Chơi lại để phá kỷ lục " + Math.max(best, sprintScore) + " điểm của chính bạn!";
+      refreshSprintBestUI();
+      markDailyActivity();
+      renderStreakAndXp();
+    }
+
+    modeSprint.addEventListener("click", startSprint);
+    document.getElementById("sprintBackBtn").addEventListener("click", function(){
+      clearInterval(sprintTimer);
+      sprintCard.classList.add("hidden");
+      sprintSummary.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    });
+    document.getElementById("sprintAgainBtn").addEventListener("click", startSprint);
+  })();
 
   // ---------- optional in-tab reminder (Notification API) ----------
   // Only works while this browser tab stays open — there is no server here to
