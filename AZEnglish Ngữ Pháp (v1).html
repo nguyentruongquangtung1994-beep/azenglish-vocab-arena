@@ -1,0 +1,1710 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>AZEnglish Ngữ Pháp</title>
+<link rel="icon" href="./icon-192.png" />
+<meta name="theme-color" content="#e0102b" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#fcfbfa; --paper-2:#f2f0ee; --ink:#1a1210; --ink-soft:#5c534f; --line:#e6e1dc;
+    --red:#e0102b; --red-ink:#8f0a1c;
+    --green:#1e7a4c; --green-bg:#e7f4ec;
+    --amber:#a5680a; --amber-bg:#faf1de;
+    --lvl-b1:#1e7a4c; --lvl-b1-bg:#e7f4ec;
+    --lvl-b2:#1d6fa5; --lvl-b2-bg:#e6f1f9;
+    --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
+    --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
+    --focus: 0 0 0 3px rgba(224,16,43,.28);
+    --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
+    --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+      --red:#ff4d5e; --red-ink:#ff8f98; --green:#5fd394; --green-bg:#173226;
+      --amber:#e3ac52; --amber-bg:#332a16;
+      --lvl-b1:#5fd394; --lvl-b1-bg:#173226;
+      --lvl-b2:#6fb8ea; --lvl-b2-bg:#132633;
+      --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
+      --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
+      --focus: 0 0 0 3px rgba(255,77,94,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+    --red:#ff4d5e; --red-ink:#ff8f98; --green:#5fd394; --green-bg:#173226;
+    --amber:#e3ac52; --amber-bg:#332a16;
+    --lvl-b1:#5fd394; --lvl-b1-bg:#173226;
+    --lvl-b2:#6fb8ea; --lvl-b2-bg:#132633;
+    --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
+    --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
+    --focus: 0 0 0 3px rgba(255,77,94,.35);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--paper); color: var(--ink); font-family: var(--font-body);
+    min-height:100%; display:flex; justify-content:center; padding: 20px 14px 60px;
+  }
+  a{ color:inherit; }
+  .stack{ width:100%; max-width:720px; display:flex; flex-direction:column; gap:16px; }
+
+  /* ---- masthead (matches vocab games) ---- */
+  .masthead{ display:flex; align-items:center; gap:12px; border-bottom: 3px solid var(--ink); padding-bottom:12px; }
+  .mark{
+    flex:none; width:40px; height:40px; border-radius:8px; background:var(--red); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;
+    font-family: var(--font-display); text-decoration:none;
+  }
+  .masthead-text{ flex:1; min-width:0; }
+  .masthead-title{ font-family:var(--font-display); font-weight:700; font-size:18px; line-height:1.2; }
+  .masthead-sub{ font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); }
+  .home-link{
+    flex:none; font-size:13px; font-weight:700; color:var(--ink-soft); text-decoration:none;
+    border:1.5px solid var(--line); border-radius:99px; padding:7px 14px;
+  }
+  .theme-btn{
+    flex:none; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink);
+    width:36px; height:36px; border-radius:9px; cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .intro{ font-size:14px; line-height:1.6; color:var(--ink-soft); }
+
+  /* ---- search + filter ---- */
+  .search-box{
+    display:flex; align-items:center; gap:8px; background:var(--paper-2); border:1.5px solid var(--line);
+    border-radius:12px; padding:10px 14px;
+  }
+  .search-box input{
+    flex:1; border:none; background:none; outline:none; font-size:14px; color:var(--ink); font-family:var(--font-body);
+  }
+  .search-box input:focus-visible{ box-shadow:none; }
+  .filter-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .filter-chip{
+    border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft);
+    font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:99px; cursor:pointer; font-family:var(--font-body);
+  }
+  .filter-chip.active{ border-color:var(--red); color:var(--red); background:var(--paper); }
+  .no-results{ display:none; text-align:center; font-size:13px; color:var(--ink-soft); padding:24px 0; }
+
+  /* ---- compare callouts ---- */
+  .compare-title{ font-family:var(--font-display); font-weight:700; font-size:16px; margin:4px 0 0; }
+  .compare-box{
+    background:var(--amber-bg); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px;
+    font-size:13px; line-height:1.55;
+  }
+  .compare-box b{ color:var(--amber); }
+
+  /* ---- family section headers ---- */
+  .fam-head{ display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .fam-head .sw{ width:10px; height:10px; border-radius:3px; flex:none; }
+  .fam-head h2{ font-family:var(--font-display); font-weight:700; font-size:16px; margin:0; }
+  .fam-head .en{ font-size:11px; color:var(--ink-soft); font-weight:600; }
+
+  /* ---- grammar card ---- */
+  .g-card{
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px;
+    box-shadow:var(--card-shadow); overflow:hidden;
+  }
+  .g-card summary{
+    list-style:none; cursor:pointer; padding:16px 18px; display:flex; flex-direction:column; gap:8px;
+  }
+  .g-card summary::-webkit-details-marker{ display:none; }
+  .g-card summary:focus-visible{ outline:none; box-shadow:var(--focus); }
+  .g-card-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .fam-badge{
+    font-size:10.5px; font-weight:700; letter-spacing:.03em; padding:3px 9px; border-radius:99px;
+  }
+  .fam-simple{ color:var(--green); background:var(--green-bg); }
+  .fam-continuous{ color:var(--lvl-b2); background:var(--lvl-b2-bg); }
+  .fam-perfect{ color:var(--lvl-c1); background:var(--lvl-c1-bg); }
+  .fam-perfectcont{ color:var(--amber); background:var(--amber-bg); }
+  .fam-passive{ color:var(--lvl-b2); background:var(--lvl-b2-bg); }
+  .fam-conditional{ color:var(--lvl-c1); background:var(--lvl-c1-bg); }
+  .fam-pronoun{ color:var(--amber); background:var(--amber-bg); }
+  .fam-compare{ color:var(--green); background:var(--green-bg); }
+  .fam-wordform{ color:var(--lvl-b2); background:var(--lvl-b2-bg); }
+  .fam-special{ color:var(--lvl-c1); background:var(--lvl-c1-bg); }
+  .ref-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  .ref-table th{ text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); padding:5px 10px 5px 0; border-bottom:1.5px solid var(--line); }
+  .ref-table td{ padding:6px 10px 6px 0; border-top:1px solid var(--line); vertical-align:top; line-height:1.5; }
+  .ref-table td.ex{ color:var(--ink-soft); font-style:italic; }
+  .lvl-badge{ font-size:10.5px; font-weight:800; letter-spacing:.03em; padding:3px 9px; border-radius:99px; }
+  .lvl-b1{ color:var(--lvl-b1); background:var(--lvl-b1-bg); }
+  .lvl-b2{ color:var(--lvl-b2); background:var(--lvl-b2-bg); }
+  .lvl-c1{ color:var(--lvl-c1); background:var(--lvl-c1-bg); }
+  .expand-hint{ margin-left:auto; font-size:11px; color:var(--ink-soft); font-weight:600; }
+  .g-card[open] .expand-hint{ display:none; }
+  .g-title{ font-family:var(--font-display); font-weight:700; font-size:17px; margin:0; }
+  .g-title .vi{ font-weight:600; color:var(--ink-soft); font-size:14px; }
+  .g-hook{ font-size:13px; font-style:italic; color:var(--ink-soft); line-height:1.5; margin:0; }
+
+  .g-body{ padding:0 18px 20px; display:flex; flex-direction:column; gap:14px; }
+  .g-body h4{
+    font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--red);
+    margin:0 0 6px;
+  }
+  .g-body p{ font-size:13.5px; line-height:1.6; margin:0; }
+  .formula-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  .formula-table th{ text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); padding:4px 8px 4px 0; }
+  .formula-table td{ padding:5px 8px 5px 0; border-top:1px solid var(--line); font-family:var(--font-display); }
+  .usage-list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .usage-list li{ font-size:13.5px; line-height:1.55; }
+  .usage-list .rule{ font-weight:700; }
+  .usage-list .ex{ color:var(--ink-soft); font-style:italic; }
+  .audio-btn{
+    border:none; background:var(--paper); border:1.5px solid var(--line); border-radius:8px; cursor:pointer;
+    font-size:11px; padding:2px 7px; margin-left:4px; vertical-align:middle;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .sig-chip{
+    font-size:11.5px; background:var(--paper); border:1.5px solid var(--line); border-radius:99px; padding:4px 10px;
+  }
+  .mistake-list{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; }
+  .mistake-list li{ font-size:13px; line-height:1.55; }
+  .mistake-list .wrong{ color:var(--red); text-decoration:line-through; }
+  .mistake-list .right{ color:var(--green); font-weight:700; }
+
+  .hidden{ display:none !important; }
+  .footer-note{ font-size:12px; color:var(--ink-soft); text-align:center; padding-top:8px; }
+</style>
+</head>
+<body>
+
+<div class="stack">
+
+  <header class="masthead">
+    <a class="mark" href="./index.html">AZ</a>
+    <div class="masthead-text">
+      <div class="masthead-title">Ngữ Pháp AZEnglish</div>
+      <div class="masthead-sub">Tra cứu ngữ pháp · 46 chủ điểm</div>
+    </div>
+    <a class="home-link" href="./index.html">← Trang chủ</a>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
+  </header>
+
+  <p class="intro">Toàn bộ ngữ pháp AZEnglish, sắp theo 7 nhóm chủ điểm. Mỗi mục có tình huống mở đầu, ý nghĩa, công thức, ví dụ có âm thanh và lỗi hay gặp. Bấm vào từng thẻ để mở/đóng, dùng ô tìm kiếm hoặc bộ lọc để tra nhanh.</p>
+
+  <div class="search-box">
+    <span>🔎</span>
+    <input type="text" id="searchInput" placeholder="Tìm chủ điểm, dấu hiệu nhận biết, ví dụ…" />
+  </div>
+  <div class="filter-row" id="filterRow">
+    <button class="filter-chip active" data-fam="all" type="button">Tất cả (46)</button>
+    <button class="filter-chip" data-fam="tenses" type="button">Thì</button>
+    <button class="filter-chip" data-fam="passive" type="button">Bị động &amp; Hoà hợp</button>
+    <button class="filter-chip" data-fam="conditional" type="button">Điều kiện</button>
+    <button class="filter-chip" data-fam="pronoun" type="button">Đại từ &amp; MĐ quan hệ</button>
+    <button class="filter-chip" data-fam="compare" type="button">So sánh · Giới từ · Liên từ</button>
+    <button class="filter-chip" data-fam="wordform" type="button">Từ loại &amp; Cụm ĐT</button>
+    <button class="filter-chip" data-fam="special" type="button">Cấu trúc đặc biệt</button>
+  </div>
+  <p class="no-results" id="noResults">Không tìm thấy chủ điểm nào khớp — thử từ khoá khác.</p>
+
+  <div>
+    <p class="compare-title">⚡ 3 cặp hay nhầm nhất</p>
+  </div>
+  <div class="compare-box">
+    <p><b>Will</b> vs <b>Going to</b> — <b>will</b> dùng khi vừa nghĩ ra, chưa chắc chắn ("I think it will rain"); <b>going to</b> dùng khi đã có kế hoạch hoặc nhìn thấy dấu hiệu rõ ràng ("Look at those clouds, it's going to rain").</p>
+  </div>
+  <div class="compare-box">
+    <p><b>Present Perfect</b> vs <b>Past Simple</b> — không có mốc thời gian cụ thể → <b>Present Perfect</b> ("I have lost my key"); có mốc thời gian cụ thể (yesterday, in 2020) → bắt buộc <b>Past Simple</b> ("I lost my key yesterday").</p>
+  </div>
+  <div class="compare-box">
+    <p><b>Past Simple</b> vs <b>Past Continuous</b> — hành động ngắn, trọn vẹn dùng <b>Past Simple</b>; hành động đang kéo dài thì bị xen vào dùng <b>Past Continuous</b> ("I <u>was cooking</u> when the phone <u>rang</u>").</p>
+  </div>
+
+  <!-- ================= SIMPLE TENSES ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--green)"></span><h2>Thì đơn <span class="en">— Simple Tenses</span></h2></div>
+
+  <details class="g-card" data-fam="tenses" data-search="present simple hiện tại đơn thói quen chân lý lịch trình">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-simple">Thì đơn</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">1. Present Simple <span class="vi">— Hiện tại đơn</span></h3>
+      <p class="g-hook">"She go to school" hay "She goes to school"? Đây là thì nền tảng nhất — sai một chữ "s" là lộ ngay trình độ.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả thói quen, sự thật hiển nhiên, lịch trình cố định — những điều "luôn đúng", không phải chuyện đang xảy ra ngay lúc nói.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th></th><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>to be</td><td>S + is/am/are</td><td>S + is/am/are not</td><td>Is/Am/Are + S…?</td></tr>
+        <tr><td>động từ thường</td><td>S + V(s/es)</td><td>S + do/does not + V0</td><td>Do/Does + S + V0?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Thói quen, tần suất:</span> <span class="ex">Mary often gets up at 6 o'clock.<button class="audio-btn" onclick="speak('Mary often gets up at 6 o clock.')">🔊</button></span></li>
+        <li><span class="rule">Chân lý, sự thật hiển nhiên:</span> <span class="ex">Water boils at 100°C.<button class="audio-btn" onclick="speak('Water boils at 100 degrees Celsius.')">🔊</button></span></li>
+        <li><span class="rule">Nghề nghiệp, sở thích:</span> <span class="ex">I am a doctor. I don't like ice-cream.<button class="audio-btn" onclick="speak('I am a doctor. I do not like ice cream.')">🔊</button></span></li>
+        <li><span class="rule">Lịch trình, thời gian biểu:</span> <span class="ex">The train leaves at 7:00 a.m every day.<button class="audio-btn" onclick="speak('The train leaves at seven a m every day.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">always — luôn luôn</span>
+        <span class="sig-chip">usually/often/frequently/regularly — thường xuyên</span>
+        <span class="sig-chip">rarely/seldom/hardly — hiếm khi</span>
+        <span class="sig-chip">sometimes/occasionally — thỉnh thoảng</span>
+        <span class="sig-chip">never — không bao giờ</span>
+        <span class="sig-chip">every day/week/month/year — mỗi ngày/tuần/tháng/năm</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">She go to work.</span> → <span class="right">She goes to work.</span> — quên thêm s/es ở ngôi thứ 3 số ít.</li>
+        <li>Nhầm quy tắc thêm đuôi: động từ tận cùng bằng <b>o, s, ch, x, sh, z</b> → thêm <b>es</b> (watch→watches); phụ âm+y → đổi thành <b>ies</b> (fly→flies); nguyên âm+y → chỉ thêm <b>s</b> (play→plays).</li>
+        <li>Dùng thì này cho việc đang xảy ra ngay lúc nói — trường hợp đó phải dùng <b>Present Continuous</b> (mục 5 bên dưới).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="past simple quá khứ đơn đã xảy ra bất quy tắc">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-simple">Thì đơn</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">2. Past Simple <span class="vi">— Quá khứ đơn</span></h3>
+      <p class="g-hook">Kể một chuyện đã xong hẳn, không còn dính dáng gì tới hiện tại — "nhân vật chính" để kể chuyện quá khứ.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Việc đã xảy ra và kết thúc hẳn trong quá khứ, thường có mốc thời gian cụ thể hoặc ngầm hiểu.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th></th><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>to be</td><td>S + was/were</td><td>S + was/were not</td><td>Was/Were + S…?</td></tr>
+        <tr><td>động từ thường</td><td>S + Ved/V2</td><td>S + did not + V0</td><td>Did + S + V0?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Đã diễn ra, chấm dứt hẳn:</span> <span class="ex">I traveled to Japan last year.<button class="audio-btn" onclick="speak('I traveled to Japan last year.')">🔊</button></span></li>
+        <li><span class="rule">Hồi ức, kỷ niệm:</span> <span class="ex">It wasn't very hot when I was there.<button class="audio-btn" onclick="speak('It was not very hot when I was there.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">ago, yesterday — trước đây, hôm qua</span>
+        <span class="sig-chip">last week/month/year/night — tuần/tháng/năm/đêm vừa qua</span>
+        <span class="sig-chip">in + mốc thời gian (in 2001…)</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">She goed there.</span> → <span class="right">She went there.</span> — chia sai động từ bất quy tắc, phải học thuộc bảng động từ bất quy tắc riêng.</li>
+        <li>Dùng Past Simple khi câu KHÔNG có mốc thời gian rõ ràng — trường hợp đó nên dùng <b>Present Perfect</b> (mục 8).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="future simple will tương lai đơn dự đoán lời hứa">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-simple">Thì đơn</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">3. Future Simple <span class="vi">— Tương lai đơn (will)</span></h3>
+      <p class="g-hook">"Tôi nghĩ trời sẽ mưa" và "Tôi sẽ đón bạn lúc 6 giờ" — cùng là tương lai nhưng khác hẳn độ chắc chắn.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Dự đoán không chắc chắn, quyết định bộc phát ngay lúc nói, lời hứa, lời đề nghị/gợi ý.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + will (be) + V0</td><td>S + will not (be) + V0</td><td>Will + S (+ be) + V0?</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Có thể dùng <b>shall</b> thay <b>will</b> với chủ ngữ I và We.</p>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Sẽ diễn ra:</span> <span class="ex">I will go camping next week.<button class="audio-btn" onclick="speak('I will go camping next week.')">🔊</button></span></li>
+        <li><span class="rule">Quyết định bộc phát:</span> <span class="ex">I think Mr. Smith will move at the end of the year.<button class="audio-btn" onclick="speak('I think Mr Smith will move at the end of the year.')">🔊</button></span></li>
+        <li><span class="rule">Gợi ý, lời khuyên:</span> <span class="ex">Shall we have Japanese food for lunch?<button class="audio-btn" onclick="speak('Shall we have Japanese food for lunch?')">🔊</button></span></li>
+        <li><span class="rule">Dự đoán không chắc chắn:</span> <span class="ex">I think the weather will be nice today.<button class="audio-btn" onclick="speak('I think the weather will be nice today.')">🔊</button></span></li>
+        <li><span class="rule">Lời hứa:</span> <span class="ex">I promise I will drive you to the airport tomorrow.<button class="audio-btn" onclick="speak('I promise I will drive you to the airport tomorrow.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">tomorrow, soon, someday</span>
+        <span class="sig-chip">in + khoảng thời gian (in 10 days…)</span>
+        <span class="sig-chip">next + day/week/month/year</span>
+        <span class="sig-chip">think/believe/suppose/hope/expect/promise</span>
+        <span class="sig-chip">perhaps/probably/maybe</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng <b>will</b> cho việc đã lên kế hoạch từ trước — trường hợp đó nên dùng <b>going to</b> (mục 4).</li>
+        <li>Nhầm will với going to khi dự đoán: <b>will</b> = cảm tính, nghĩ vậy thôi; <b>going to</b> = có căn cứ nhìn thấy được (xem "3 cặp hay nhầm" ở đầu trang).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="near future going to tương lai gần kế hoạch dự đoán căn cứ">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-simple">Thì đơn</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">4. Near Future <span class="vi">— Tương lai gần (going to)</span></h3>
+      <p class="g-hook">Nhìn trời đầy mây đen, bạn nói "It's going to rain" chứ không nói "It will rain" — vì sao?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Kế hoạch đã định trước, hoặc dự đoán có căn cứ (nhìn/thấy được ngay lúc nói).</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + is/am/are going to (be) + V0</td><td>S + is/am/are not going to + V0</td><td>Is/Am/Are + S + going to + V0?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Kế hoạch định trước:</span> <span class="ex">I'm going to open my store this weekend.<button class="audio-btn" onclick="speak('I am going to open my store this weekend.')">🔊</button></span></li>
+        <li><span class="rule">Dự đoán có căn cứ:</span> <span class="ex">The sky is full of clouds. It's going to rain.<button class="audio-btn" onclick="speak('The sky is full of clouds. It is going to rain.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Quên chia <b>is/am/are</b> theo đúng chủ ngữ trước "going to".</li>
+        <li>Dùng going to cho quyết định bộc phát ngay lúc nói — trường hợp đó nên dùng <b>will</b> (mục 3).</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= CONTINUOUS TENSES ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-b2)"></span><h2>Thì tiếp diễn <span class="en">— Continuous Tenses</span></h2></div>
+
+  <details class="g-card" data-fam="tenses" data-search="present continuous hiện tại tiếp diễn đang xảy ra">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-continuous">Tiếp diễn</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">5. Present Continuous <span class="vi">— Hiện tại tiếp diễn</span></h3>
+      <p class="g-hook">"I'm eating right now" — hành động đang diễn ra ngay lúc bạn nói câu này.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đang xảy ra ngay lúc nói, hoặc kế hoạch gần và chắc chắn trong tương lai gần.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + is/am/are + V-ing</td><td>S + is/am/are not + V-ing</td><td>Is/Am/Are + S + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Đang xảy ra ngay lúc nói:</span> <span class="ex">I'm eating right now.<button class="audio-btn" onclick="speak('I am eating right now.')">🔊</button></span></li>
+        <li><span class="rule">Kế hoạch gần, chắc chắn:</span> <span class="ex">We are moving next Monday.<button class="audio-btn" onclick="speak('We are moving next Monday.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">now, right now, at the moment</span>
+        <span class="sig-chip">at present, currently</span>
+        <span class="sig-chip">Look! Watch out! Listen! (câu cầu khiến)</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">I am understanding.</span> → <span class="right">I understand.</span> — các động từ tri giác/nhận thức (want, know, understand, love, hate, smell, feel…) <b>không</b> chia dạng V-ing.</li>
+        <li>Quên chia is/am/are theo chủ ngữ.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="past continuous quá khứ tiếp diễn khi while xen vào">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-continuous">Tiếp diễn</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">6. Past Continuous <span class="vi">— Quá khứ tiếp diễn</span></h3>
+      <p class="g-hook">"Tôi đang xem TV thì bạn gọi điện" — một việc đang diễn ra thì việc kia xen vào.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đang xảy ra tại một thời điểm xác định trong quá khứ, hoặc bị hành động khác xen vào, hoặc hai việc song song.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + was/were + V-ing</td><td>S + was/were not + V-ing</td><td>Was/Were + S + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Tại thời điểm xác định trong quá khứ:</span> <span class="ex">Lan was watching TV at 7 p.m last night.<button class="audio-btn" onclick="speak('Lan was watching TV at seven p m last night.')">🔊</button></span></li>
+        <li><span class="rule">Đang diễn ra, bị xen vào:</span> <span class="ex">Tom was cooking when I came home.<button class="audio-btn" onclick="speak('Tom was cooking when I came home.')">🔊</button></span></li>
+        <li><span class="rule">Song song, đồng thời:</span> <span class="ex">While I was cooking, my sister was doing her homework.<button class="audio-btn" onclick="speak('While I was cooking, my sister was doing her homework.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">at + giờ cụ thể + trạng từ quá khứ</span>
+        <span class="sig-chip">when — hành động ngắn xen vào</span>
+        <span class="sig-chip">while — hai việc song song</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng Past Continuous cho hành động đã hoàn tất hẳn, gọn — trường hợp đó chỉ cần <b>Past Simple</b>.</li>
+        <li>Nhầm khi nào dùng <b>when</b> (đi với mệnh đề Past Simple — hành động ngắn xen vào) và <b>while</b> (đi với mệnh đề Past Continuous — hành động đang kéo dài).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="future continuous tương lai tiếp diễn">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-continuous">Tiếp diễn</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">7. Future Continuous <span class="vi">— Tương lai tiếp diễn</span></h3>
+      <p class="g-hook">Ngày mai giờ này bạn đang làm gì? "I will be playing tennis at 4 p.m tomorrow."</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đang diễn ra tại một thời điểm xác định trong tương lai, bị xen vào, kéo dài liên tục, hoặc theo lịch trình.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + will be + V-ing</td><td>S + will not be + V-ing</td><td>Will + S + be + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Tại thời điểm xác định trong tương lai:</span> <span class="ex">I will be playing tennis at 4 p.m tomorrow.<button class="audio-btn" onclick="speak('I will be playing tennis at four p m tomorrow.')">🔊</button></span></li>
+        <li><span class="rule">Bị xen vào:</span> <span class="ex">His wife will be sleeping when he goes out.<button class="audio-btn" onclick="speak('His wife will be sleeping when he goes out.')">🔊</button></span></li>
+        <li><span class="rule">Theo lịch trình:</span> <span class="ex">The meeting will be starting at 9 a.m tomorrow.<button class="audio-btn" onclick="speak('The meeting will be starting at nine a m tomorrow.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng khi không cần nhấn mạnh "đang diễn ra tại 1 thời điểm" — <b>Future Simple</b> đơn giản hơn là đủ.</li>
+        <li>Cấu trúc dài (will be + V-ing) nên hay bị chia thiếu "be" khi làm câu phủ định/nghi vấn.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= PERFECT TENSES ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-c1)"></span><h2>Thì hoàn thành <span class="en">— Perfect Tenses</span></h2></div>
+
+  <details class="g-card" data-fam="tenses" data-search="present perfect hiện tại hoàn thành since for">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfect">Hoàn thành</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">8. Present Perfect <span class="vi">— Hiện tại hoàn thành</span></h3>
+      <p class="g-hook">"I have lost my key" — chuyện xảy ra khi nào không quan trọng, quan trọng là BÂY GIỜ không có chìa khoá.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Việc xảy ra trong quá khứ nhưng không cần nói rõ thời gian, hoặc còn ảnh hưởng/kết quả tới hiện tại, hoặc bắt đầu trong quá khứ và kéo dài đến hiện tại.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + have/has + Ved/V3</td><td>S + have/has not + Ved/V3</td><td>Have/Has + S + Ved/V3?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Không rõ/không cần nói thời gian:</span> <span class="ex">I have lost my key.<button class="audio-btn" onclick="speak('I have lost my key.')">🔊</button></span></li>
+        <li><span class="rule">Lặp lại nhiều lần:</span> <span class="ex">I have seen "Titanic" 5 times.<button class="audio-btn" onclick="speak('I have seen Titanic five times.')">🔊</button></span></li>
+        <li><span class="rule">Để lại kết quả ở hiện tại:</span> <span class="ex">I have eaten lunch, so I'm not hungry.<button class="audio-btn" onclick="speak('I have eaten lunch, so I am not hungry.')">🔊</button></span></li>
+        <li><span class="rule">Bắt đầu quá khứ, kéo dài đến nay:</span> <span class="ex">We have worked here since 2011.<button class="audio-btn" onclick="speak('We have worked here since 2011.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">already/never/ever/just + Ved</span>
+        <span class="sig-chip">yet (câu phủ định/nghi vấn)</span>
+        <span class="sig-chip">How long…? — mất bao lâu</span>
+        <span class="sig-chip">since + mốc thời gian</span>
+        <span class="sig-chip">for + khoảng thời gian</span>
+        <span class="sig-chip">up to now, so far, recently</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">I have met her yesterday.</span> → <span class="right">I met her yesterday.</span> — <b>lỗi kinh điển:</b> Present Perfect không đi chung với mốc thời gian xác định (yesterday, last year, in 2020…), gặp mốc rõ phải chuyển sang <b>Past Simple</b>.</li>
+        <li>Nhầm <b>since</b> (mốc bắt đầu: since 2011) với <b>for</b> (khoảng thời gian: for 3 years).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="past perfect quá khứ hoàn thành before after had">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfect">Hoàn thành</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">9. Past Perfect <span class="vi">— Quá khứ hoàn thành</span></h3>
+      <p class="g-hook">"Khi tôi về đến nhà, bố mẹ đã đi rồi" — việc nào xảy ra trước, việc nào xảy ra sau?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Hoàn thành trước một hành động hoặc thời điểm khác trong quá khứ — nói nôm na là "quá khứ của quá khứ".</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + had + Ved/V3</td><td>S + had not + Ved/V3</td><td>Had + S + Ved/V3?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Hoàn thành trước hành động khác:</span> <span class="ex">When I came home yesterday, my parents had already left.<button class="audio-btn" onclick="speak('When I came home yesterday, my parents had already left.')">🔊</button></span></li>
+        <li><span class="rule">Hoàn thành trước một thời điểm:</span> <span class="ex">I had done my homework by 7 yesterday.<button class="audio-btn" onclick="speak('I had done my homework by seven yesterday.')">🔊</button></span></li>
+        <li><span class="rule">Tiếc nuối về quá khứ:</span> <span class="ex">I wished I had told him the truth.<button class="audio-btn" onclick="speak('I wished I had told him the truth.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">by/by the end of/by the beginning of</span>
+        <span class="sig-chip">by the time + mệnh đề QKĐ</span>
+        <span class="sig-chip">before/when/until/as soon as + QKĐ</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Lạm dụng Past Perfect cho MỌI việc quá khứ dù thứ tự trước-sau đã rõ nhờ before/after — không bắt buộc phải chia Past Perfect trong trường hợp này.</li>
+        <li>Nhầm lẫn việc nào xảy ra TRƯỚC (chia Past Perfect) và việc nào xảy ra SAU (chia Past Simple).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="future perfect tương lai hoàn thành by the time">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfect">Hoàn thành</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">10. Future Perfect <span class="vi">— Tương lai hoàn thành</span></h3>
+      <p class="g-hook">"Đến lúc tôi làm xong việc, đồng nghiệp đã về nhà rồi" — dự đoán một việc sẽ HOÀN TẤT trước một mốc trong tương lai.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Hoàn thành trước khi một hành động hoặc thời điểm khác xảy đến trong tương lai.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + will have + Ved/V3</td><td>S + will not have + Ved/V3</td><td>Will + S + have + Ved/V3?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Hoàn thành trước hành động khác trong tương lai:</span> <span class="ex">By the time I finish my work, my coworker will have gone home.<button class="audio-btn" onclick="speak('By the time I finish my work, my coworker will have gone home.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">by/by the end of/by the beginning of</span>
+        <span class="sig-chip">by the time + mệnh đề HTĐ</span>
+        <span class="sig-chip">before + thời điểm tương lai</span>
+        <span class="sig-chip">khoảng thời gian + from now</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm với Future Simple khi câu có ý "hoàn tất TRƯỚC mốc X" chứ không chỉ đơn thuần "sẽ xảy ra".</li>
+        <li>Thiếu mốc "by/by the time" khiến câu mất nghĩa hoàn thành, người nghe không hiểu đang so với mốc nào.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= PERFECT CONTINUOUS ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--amber)"></span><h2>Hoàn thành tiếp diễn <span class="en">— Perfect Continuous</span></h2></div>
+
+  <details class="g-card" data-fam="tenses" data-search="present perfect continuous hiện tại hoàn thành tiếp diễn liên tục">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfectcont">HT tiếp diễn</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">11. Present Perfect Continuous <span class="vi">— HTHT tiếp diễn</span></h3>
+      <p class="g-hook">"I have been waiting for you for 2 hours" — không chỉ ĐÃ chờ, mà chờ MIỆT MÀI suốt 2 tiếng, có thể vẫn đang chờ.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Nhấn mạnh tính LIÊN TỤC của hành động, bắt đầu từ quá khứ và kéo dài đến hiện tại (có thể vẫn đang tiếp diễn).</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + have/has been + V-ing</td><td>S + have/has not been + V-ing</td><td>Have/Has + S + been + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Nhấn mạnh tính liên tục từ quá khứ đến hiện tại:</span> <span class="ex">I have been waiting for you for 2 hours.<button class="audio-btn" onclick="speak('I have been waiting for you for two hours.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">all day/week/month/year</span>
+        <span class="sig-chip">almost every day this week</span>
+        <span class="sig-chip">in the past week/year, in recent years</span>
+        <span class="sig-chip">up until now</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng cho hành động đã DỪNG HẲN, không còn liên quan gì đến hiện tại — trường hợp đó dùng <b>Present Perfect</b> thường (mục 8) là đủ.</li>
+        <li>Nhầm với Present Continuous — thì này bắt buộc phải có "have/has <b>been</b>" trước V-ing.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="past perfect continuous quá khứ hoàn thành tiếp diễn">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfectcont">HT tiếp diễn</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">12. Past Perfect Continuous <span class="vi">— QKHT tiếp diễn</span></h3>
+      <p class="g-hook">"Đến lúc tôi làm xong báo cáo, vợ tôi đã nấu ăn được 2 tiếng rồi" — nhấn mạnh việc nấu ăn kéo dài SUỐT 2 tiếng.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Nhấn mạnh hành động kéo dài liên tục trước một thời điểm hoặc hành động khác trong quá khứ.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + had been + V-ing</td><td>S + had not been + V-ing</td><td>Had + S + been + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Nhấn mạnh tính liên tục trước 1 mốc quá khứ:</span> <span class="ex">By the time I finished my report, my wife had been cooking for 2 hours.<button class="audio-btn" onclick="speak('By the time I finished my report, my wife had been cooking for two hours.')">🔊</button></span></li>
+      </ul>
+      <h4>Dấu hiệu nhận biết</h4>
+      <div class="chip-row">
+        <span class="sig-chip">until then</span>
+        <span class="sig-chip">all day</span>
+        <span class="sig-chip">prior to that time</span>
+        <span class="sig-chip">by the time…</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng khi không cần nhấn mạnh tính liên tục — <b>Past Perfect</b> thường (mục 9) đã đủ nghĩa.</li>
+        <li>Cấu trúc dài (had been + V-ing) dễ bị chia thiếu "been".</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="tenses" data-search="future perfect continuous tương lai hoàn thành tiếp diễn">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-perfectcont">HT tiếp diễn</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">13. Future Perfect Continuous <span class="vi">— TLHT tiếp diễn</span></h3>
+      <p class="g-hook">"Đến tháng sau, tôi sẽ làm việc ở đây được TRÒN 5 năm" — nhấn mạnh khoảng thời gian liên tục tính đến một mốc tương lai.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Nhấn mạnh hành động kéo dài liên tục cho tới một thời điểm xác định trong tương lai. Đây là thì <b>ít dùng nhất</b> trong tiếng Anh.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Khẳng định</th><th>Phủ định</th><th>Nghi vấn</th></tr>
+        <tr><td>S + will have been + V-ing</td><td>S + will not have been + V-ing</td><td>Will + S + have been + V-ing?</td></tr>
+      </table>
+      <h4>Cách dùng &amp; ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Nhấn mạnh khoảng thời gian liên tục tính đến mốc tương lai:</span> <span class="ex">By next month, I will have been working here for 5 years.<button class="audio-btn" onclick="speak('By next month, I will have been working here for five years.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Cố dùng thì này khi câu có thể diễn đạt đơn giản, rõ nghĩa hơn bằng <b>Future Perfect</b> (mục 10) — chỉ dùng khi thật sự cần nhấn mạnh khoảng thời gian liên tục "for + …".</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= PASSIVE & AGREEMENT ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-b2)"></span><h2>Bị động &amp; Hoà hợp <span class="en">— Passive &amp; Agreement</span></h2></div>
+
+  <details class="g-card" data-fam="passive" data-search="passive voice câu bị động cấu trúc chung">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Bị động</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">14. Câu bị động <span class="vi">— Cấu trúc chung</span></h3>
+      <p class="g-hook">"History is written by the victors" — ai viết sử không quan trọng bằng chính lịch sử. Đó là lúc câu bị động lên tiếng.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Dùng khi muốn nhấn mạnh đối tượng CHỊU tác động của hành động, hơn là ai gây ra hành động (hoặc không biết/không cần nói rõ ai làm).</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><th>Chủ động</th><th>Bị động</th></tr>
+        <tr><td>S + V + O</td><td>O (→S) + be + Vpp (+ by O cũ)</td></tr>
+      </table>
+      <h4>Ví dụ chuyển đổi</h4>
+      <ul class="usage-list">
+        <li><span class="ex">People know Carol for her aesthetic voice. → Carol is known for her aesthetic voice.<button class="audio-btn" onclick="speak('Carol is known for her aesthetic voice.')">🔊</button></span></li>
+        <li><span class="ex">Someone broke the window with a hammer. → The window was broken with a hammer.<button class="audio-btn" onclick="speak('The window was broken with a hammer.')">🔊</button></span></li>
+        <li><span class="ex">Everyone makes mistakes. → Mistakes are made by everyone.<button class="audio-btn" onclick="speak('Mistakes are made by everyone.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nội động từ (arrive, happen, rise, appear, retire, exist…) <b>không</b> có dạng bị động vì không đi cùng tân ngữ. <span class="ex">She sleeps.</span> không thể chuyển bị động.</li>
+        <li>Chỉ đổi "be" theo đúng thì mà quên đổi động từ chính thành Vpp.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="passive voice trong các thì bảng 12 thì bị động">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Bị động</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">15. Câu bị động trong các thì</h3>
+      <p class="g-hook">Bị động không chỉ có một dạng — nó đổi theo đúng 12 thì, y hệt câu chủ động.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Công thức chung mỗi thì: chia đúng "be" theo thì đó + Vpp.</p>
+      <table class="ref-table">
+        <tr><th>Thì</th><th>Công thức</th><th>Ví dụ</th></tr>
+        <tr><td>Present Simple</td><td>am/is/are + Vpp</td><td class="ex">The book is read by many people.</td></tr>
+        <tr><td>Present Continuous</td><td>am/is/are being + Vpp</td><td class="ex">The house is being painted now.</td></tr>
+        <tr><td>Present Perfect</td><td>have/has been + Vpp</td><td class="ex">The project has been finished.</td></tr>
+        <tr><td>Past Simple</td><td>was/were + Vpp</td><td class="ex">The letter was sent yesterday.</td></tr>
+        <tr><td>Past Continuous</td><td>was/were being + Vpp</td><td class="ex">The apples were being harvested.</td></tr>
+        <tr><td>Past Perfect</td><td>had been + Vpp</td><td class="ex">The house had been sold before 2010.</td></tr>
+        <tr><td>Future Simple</td><td>will be + Vpp</td><td class="ex">The results will be announced tomorrow.</td></tr>
+        <tr><td>Near Future</td><td>is/am/are going to be + Vpp</td><td class="ex">The cake is going to be baked soon.</td></tr>
+        <tr><td>Future Perfect</td><td>will have been + Vpp</td><td class="ex">The work will have been done by then.</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Các thì tiếp diễn/hoàn thành tiếp diễn ở dạng bị động (has been being, had been being…) <b>rất hiếm dùng</b> trong thực tế — chỉ cần nhận biết, không nên cố dùng khi viết/nói.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="cấu trúc bị động đặc biệt get go become have had done modal">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Bị động</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">16. Cấu trúc bị động đặc biệt</h3>
+      <p class="g-hook">"He got promoted last year" nghe tự nhiên hơn "He was promoted last year" trong giao tiếp hằng ngày — vì sao?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Ngoài be + Vpp, tiếng Anh còn dùng get/go/become/have-get + O để diễn tả bị động với sắc thái khác nhau.</p>
+      <table class="ref-table">
+        <tr><th>Cấu trúc</th><th>Sắc thái</th><th>Ví dụ</th></tr>
+        <tr><td>Modal + be + Vpp</td><td>Bắt buộc phải được thực hiện</td><td class="ex">The report must be done now.</td></tr>
+        <tr><td>Get + Vpp</td><td>Tương tự be Vpp, thân mật hơn</td><td class="ex">He got promoted last year.</td></tr>
+        <tr><td>Go + Vpp</td><td>Điều tệ đi/xảy ra ngoài dự kiến</td><td class="ex">The milk went sour.</td></tr>
+        <tr><td>Become + Vpp</td><td>Nhấn mạnh sự thay đổi</td><td class="ex">She became known as an artist.</td></tr>
+        <tr><td>Have/Get + O + Vpp</td><td>Nhờ/khiến ai làm gì cho mình</td><td class="ex">She got her hair cut.</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm "have/get + O + Vpp" (NHỜ người khác làm) với bị động thường — "I had my car washed" nghĩa là <b>tôi thuê người rửa xe</b>, không phải "xe tôi tự bị rửa".</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="s v agreement hoà hợp chủ ngữ động từ chủ ngữ ghép">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Hoà hợp</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">17. Hoà hợp chủ ngữ – động từ <span class="vi">— Quy tắc chung &amp; chủ ngữ ghép</span></h3>
+      <p class="g-hook">"Neither Tom nor Harry has arrived" — vì sao chia "has" số ít dù nói tới 2 người?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Động từ phải chia đúng theo chủ ngữ là số ít hay số nhiều — kể cả với danh từ không đếm được và chủ ngữ ghép.</p>
+      <h4>Quy tắc</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Danh từ không đếm được → V số ít:</span> <span class="ex">Information is crucial.</span></li>
+        <li><span class="rule">N1 and N2 → thường số nhiều:</span> <span class="ex">Tom and Harry have arrived.</span> Ngoại trừ khi 2 danh từ chỉ MỘT chủ thể (<span class="ex">Spaghetti and meatballs is delicious</span>) hoặc có "each/every" đứng trước.</li>
+        <li><span class="rule">N1 or/nor N2 → chia theo N2 (từ gần động từ nhất):</span> <span class="ex">Neither Tom nor Harry has arrived.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Quên rằng "each/every N1 and N2" luôn kéo theo động từ số ít dù có chữ "and": <span class="ex">Every man and woman has the right.</span></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="đại từ bất định lượng từ danh từ tập thể agreement">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Hoà hợp</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">18. Đại từ bất định &amp; lượng từ <span class="vi">— trong hoà hợp chủ-vị</span></h3>
+      <p class="g-hook">"All of the information has been reviewed" nhưng "Most of the students are playing" — cùng kiểu cấu trúc sao chia khác nhau?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đại từ bất định luôn chia số ít; lượng từ + danh từ thì chia theo chính danh từ đứng sau "of".</p>
+      <ul class="usage-list">
+        <li><span class="rule">Đại từ bất định luôn số ít:</span> <span class="ex">Someone has left their bag. Neither of the options is ideal.</span></li>
+        <li><span class="rule">Lượng từ + of + N → chia theo N:</span> <span class="ex">Most of the work is done. (không đếm được) / Most of the students are playing. (đếm được, nhiều)</span></li>
+        <li><span class="rule">Danh từ tập thể (team/family/group):</span> số ít khi coi là 1 khối — <span class="ex">The team is practicing.</span> Số nhiều khi nói từng cá nhân — <span class="ex">The team go to their homes.</span></li>
+        <li><span class="rule">The + adj (chỉ một nhóm người) → luôn số nhiều:</span> <span class="ex">The rich are not always happy.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">Neither of the options are ideal.</span> → <span class="right">Neither of the options is ideal.</span> — nhiều người nhầm chia số nhiều vì "options" đứng gần, nhưng chủ ngữ thật là "neither" (số ít).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="tense consistency hoà hợp thì reported speech lùi thì">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Hoà hợp</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">19. Sự hoà hợp về thì</h3>
+      <p class="g-hook">"She says she IS a star" nhưng khi kể lại: "She said she WAS a star" — thì đổi theo mệnh đề chính.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Trong câu nhiều mệnh đề, thì ở mệnh đề phụ phải hoà hợp với mốc thời gian của mệnh đề chính — mệnh đề chính chia quá khứ thì mệnh đề phụ cũng lùi về quá khứ.</p>
+      <h4>Ví dụ lùi thì</h4>
+      <ul class="usage-list">
+        <li><span class="ex">She says she is a star. → She said she was a star.<button class="audio-btn" onclick="speak('She said she was a star.')">🔊</button></span></li>
+        <li><span class="ex">She says she has been famous for 2 years. → She said she had been famous for 2 years.<button class="audio-btn" onclick="speak('She said she had been famous for two years.')">🔊</button></span></li>
+        <li><span class="ex">She says she will become a star. → She said she would become a star.<button class="audio-btn" onclick="speak('She said she would become a star.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Quên đổi modal verbs khi lùi thì: can→could, will→would, may→might, shall→should.</li>
+        <li>Các thì ở QUÁ KHỨ chỉ có thể kết hợp với các thì ở QUÁ KHỨ — không lùi ngược lại hiện tại/tương lai.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="passive" data-search="when as soon as since by the time after before until liên từ thời gian">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-passive">Hoà hợp</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">20. Liên từ chỉ thời gian &amp; sự hoà hợp thì <span class="vi">— When/As soon as/Since/By the time…</span></h3>
+      <p class="g-hook">"When I lived in London, I worked for a bank" và "When I see him, I will give him this" — cùng WHEN nhưng thì khác hẳn.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Mỗi liên từ chỉ thời gian đòi hỏi cặp thì tương ứng ở hai mệnh đề, tuỳ mối quan hệ trước-sau hay đồng thời.</p>
+      <table class="ref-table">
+        <tr><th>Liên từ</th><th>Quan hệ</th><th>Ví dụ</th></tr>
+        <tr><td>When</td><td>Nối tiếp / xen vào / xong trước</td><td class="ex">When I lived in London, I worked for a bank.</td></tr>
+        <tr><td>As soon as</td><td>Nối tiếp ngay sau</td><td class="ex">As soon as she saw a mouse, she ran away.</td></tr>
+        <tr><td>Since</td><td>Kể từ khi (HTHT since QKĐ)</td><td class="ex">We have known each other since we were in high school.</td></tr>
+        <tr><td>By the time</td><td>Hoàn thành/kết thúc vào lúc</td><td class="ex">By the time she came home, everyone had gone to bed.</td></tr>
+        <tr><td>After / Before</td><td>Trước – sau rõ ràng</td><td class="ex">After she had done her homework, she went out.</td></tr>
+        <tr><td>Till / Until</td><td>Kéo dài cho đến khi</td><td class="ex">He studied until no-one was there.</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">When I will arrive, I will call you.</span> → <span class="right">When I arrive, I will call you.</span> — <b>không dùng thì tương lai</b> trong mệnh đề trạng ngữ chỉ thời gian, dù ý nghĩa vẫn là tương lai.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= CONDITIONAL ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-c1)"></span><h2>Câu điều kiện <span class="en">— Conditional Sentences</span></h2></div>
+
+  <details class="g-card" data-fam="conditional" data-search="zero conditional câu điều kiện loại 0 chân lý">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-conditional">Điều kiện</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">21. Zero Conditional <span class="vi">— Câu điều kiện loại 0</span></h3>
+      <p class="g-hook">"If you heat water to 100°C, it boils" — quy luật này đúng mãi mãi, không phải chuyện giả sử.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả chân lý, quy luật tự nhiên, thói quen — điều luôn đúng.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table"><tr><th colspan="2">If + Hiện tại đơn, Hiện tại đơn</th></tr></table>
+      <h4>Ví dụ</h4>
+      <ul class="usage-list">
+        <li><span class="rule">Quy luật tự nhiên:</span> <span class="ex">If you heat water to 100°C, it boils.<button class="audio-btn" onclick="speak('If you heat water to one hundred degrees Celsius, it boils.')">🔊</button></span></li>
+        <li><span class="rule">Nhờ vả, nhắn nhủ:</span> <span class="ex">If you meet him, give him this letter.<button class="audio-btn" onclick="speak('If you meet him, give him this letter.')">🔊</button></span></li>
+        <li><span class="rule">Thói quen:</span> <span class="ex">I often go climbing if the weather is good.<button class="audio-btn" onclick="speak('I often go climbing if the weather is good.')">🔊</button></span></li>
+      </ul>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Có thể dùng <b>WHEN</b> thay cho IF mà không đổi nghĩa.</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm với First Conditional khi câu đang nói về việc CÓ THỂ xảy ra (không phải "luôn đúng") — lúc đó phải dùng loại 1 (mục 22).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="conditional" data-search="first conditional câu điều kiện loại 1 will">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-conditional">Điều kiện</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">22. First Conditional <span class="vi">— Câu điều kiện loại 1</span></h3>
+      <p class="g-hook">"If it rains, I will stay at home" — có thể xảy ra thật, không phải chuyện giả định suông.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả tình huống có thể xảy ra ở tương lai nếu điều kiện ở mệnh đề IF xảy ra.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table"><tr><th colspan="2">If + Hiện tại đơn, Tương lai đơn (will)</th></tr></table>
+      <h4>Ví dụ &amp; đảo ngữ</h4>
+      <ul class="usage-list">
+        <li><span class="ex">If you study hard, you will pass the exam.<button class="audio-btn" onclick="speak('If you study hard, you will pass the exam.')">🔊</button></span></li>
+        <li><span class="rule">Đảo ngữ (Should + S + V0, …):</span> <span class="ex">If he comes, we will go. → Should he come, we will go.<button class="audio-btn" onclick="speak('Should he come, we will go to the cinema.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">If it will rain, I will stay home.</span> → <span class="right">If it rains, I will stay home.</span> — mệnh đề IF luôn chia hiện tại đơn dù ý nghĩa là tương lai.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="conditional" data-search="second conditional câu điều kiện loại 2 were">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-conditional">Điều kiện</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">23. Second Conditional <span class="vi">— Câu điều kiện loại 2</span></h3>
+      <p class="g-hook">"If I were you, I wouldn't buy that dress" — bạn không thể LÀ tôi, đây là chuyện không có thật ở hiện tại.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả sự việc không có thật/khó xảy ra ở hiện tại, hoặc lời khuyên mang tính giả định.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table"><tr><th colspan="2">If + Quá khứ đơn, S + could/would/might + V0</th></tr></table>
+      <h4>Ví dụ &amp; đảo ngữ</h4>
+      <ul class="usage-list">
+        <li><span class="ex">If we lived closer, we would visit them.<button class="audio-btn" onclick="speak('If we lived closer, we would visit them.')">🔊</button></span></li>
+        <li><span class="rule">Đảo ngữ (Were + S…, …):</span> <span class="ex">If I were you, I wouldn't buy that dress. → Were I you, I wouldn't buy that dress.<button class="audio-btn" onclick="speak('Were I you, I would not buy that dress.')">🔊</button></span></li>
+      </ul>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Luôn dùng <b>WERE</b> cho MỌI ngôi (kể cả I/He/She/It) trong câu điều kiện loại 2.</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">If I was you…</span> → <span class="right">If I were you…</span> — lỗi cực phổ biến vì "was" nghe tự nhiên trong giao tiếp nhưng sai ngữ pháp chuẩn.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="conditional" data-search="third conditional câu điều kiện loại 3 had">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-conditional">Điều kiện</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">24. Third Conditional <span class="vi">— Câu điều kiện loại 3</span></h3>
+      <p class="g-hook">"If you had arrived sooner, you would have seen a famous singer" — chuyện đã lỡ rồi, không thể quay lại quá khứ để sửa.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả sự việc không có thật ở quá khứ — thể hiện sự hối hận, tiếc nuối.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table"><tr><th colspan="2">If + Quá khứ hoàn thành, S + could/would/might + have Vpp</th></tr></table>
+      <h4>Ví dụ &amp; đảo ngữ</h4>
+      <ul class="usage-list">
+        <li><span class="ex">If you had arrived sooner, you would have seen a famous singer.<button class="audio-btn" onclick="speak('If you had arrived sooner, you would have seen a famous singer.')">🔊</button></span></li>
+        <li><span class="rule">Đảo ngữ (Had + S + Vpp, …):</span> <span class="ex">If I had seen you, I would have said hello. → Had I seen you, I would have said hello.<button class="audio-btn" onclick="speak('Had I seen you, I would have said hello.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">If you arrived sooner, you would have seen…</span> → <span class="right">If you had arrived sooner…</span> — lỗi phổ biến nhất: dùng Quá khứ đơn thay vì Quá khứ hoàn thành ở mệnh đề IF.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="conditional" data-search="mixed conditional câu điều kiện hỗn hợp as if as though unless">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-conditional">Điều kiện</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">25. Mixed Conditional <span class="vi">— Câu điều kiện hỗn hợp &amp; As if/Unless</span></h3>
+      <p class="g-hook">"If I had studied harder, I would be more successful now" — điều kiện ở quá khứ nhưng kết quả lại ở hiện tại, vì sao?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Câu điều kiện hỗn hợp trộn 2 mốc thời gian khác nhau giữa mệnh đề IF và mệnh đề kết quả.</p>
+      <table class="formula-table">
+        <tr><th>Loại 3 + 2</th><td>If + QKHT, S + could/would/might + V0 — điều kiện không xảy ra ở quá khứ → kết quả không có thật ở <b>hiện tại</b>.</td></tr>
+        <tr><th>Loại 2 + 3</th><td>If + QKĐ, S + could/would/might + have Vpp — trạng thái/tính cách chung → kết quả cụ thể trong <b>quá khứ</b> thay đổi.</td></tr>
+      </table>
+      <ul class="usage-list">
+        <li><span class="ex">If I had studied harder, I would be more successful now.<button class="audio-btn" onclick="speak('If I had studied harder, I would be more successful now.')">🔊</button></span></li>
+        <li><span class="ex">If I were you, I would have apologized.<button class="audio-btn" onclick="speak('If I were you, I would have apologized.')">🔊</button></span></li>
+      </ul>
+      <p style="font-size:12px; color:var(--ink-soft);">★ <b>AS IF/AS THOUGH</b> (như thể là) + QKHT để giả định điều không có thật. ★ <b>UNLESS</b> = IF … NOT.</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm 2 dạng mixed — chú ý xem "kết quả" đang nói về thời điểm nào: <b>now</b> (hiện tại) = loại 3+2; mốc quá khứ cụ thể = loại 2+3.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= PRONOUN & RELATIVE CLAUSE ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--amber)"></span><h2>Đại từ &amp; Mệnh đề quan hệ <span class="en">— Pronouns &amp; Relative Clauses</span></h2></div>
+
+  <details class="g-card" data-fam="pronoun" data-search="đại từ nhân xưng sở hữu phản thân personal possessive reflexive">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-pronoun">Đại từ</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">26. Đại từ nhân xưng, sở hữu, phản thân</h3>
+      <p class="g-hook">"They brought their own food, but we shared ours with them" — bốn loại đại từ trong một câu, phân biệt được không?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đại từ thay thế cho danh từ/cụm danh từ, mỗi loại có vai trò riêng trong câu.</p>
+      <table class="ref-table">
+        <tr><th>Loại</th><th>Ví dụ đại từ</th><th>Vai trò</th></tr>
+        <tr><td>Personal – S</td><td>I, you, we, they, he, she, it</td><td>Làm chủ ngữ, đứng đầu câu</td></tr>
+        <tr><td>Personal – O</td><td>me, you, us, them, him, her, it</td><td>Làm tân ngữ sau V hoặc giới từ</td></tr>
+        <tr><td>Possessive Adj</td><td>my, your, our, their, his, her, its</td><td>Đứng trước danh từ, chỉ sở hữu</td></tr>
+        <tr><td>Possessive Pronoun</td><td>mine, yours, ours, theirs, his, hers</td><td>= Tính từ sở hữu + danh từ</td></tr>
+        <tr><td>Reflexive</td><td>myself, yourself, ourselves…</td><td>Tân ngữ trùng với chủ ngữ</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--ink-soft);">★ …self/selves = on/of + tính từ sở hữu + own (myself = on/of my own)</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm "its" (sở hữu) với "it's" (= it is).</li>
+        <li><span class="wrong">This book is my.</span> → <span class="right">This book is mine.</span> — dùng possessive pronoun khi không có danh từ theo sau, không dùng possessive adjective.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="pronoun" data-search="đại từ bất định indefinite pronouns everyone somebody nothing">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-pronoun">Đại từ</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">27. Đại từ bất định</h3>
+      <p class="g-hook">"Everybody was looking for something, but nobody found it" — không danh từ cụ thể nào trong câu, ai/thứ gì đang được nhắc tới?</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Thay thế cho người hoặc vật một cách chung chung, không xác định.</p>
+      <table class="ref-table">
+        <tr><th>Thay cho người</th><th>Thay cho vật</th></tr>
+        <tr><td>anyone/anybody, someone/somebody, everyone/everybody, no one/nobody</td><td>anything, something, everything, nothing</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">Everybody were looking…</span> → <span class="right">Everybody was looking…</span> — đại từ bất định LUÔN được coi là danh từ số ít, động từ theo sau phải chia số ít dù nghĩa nghe có vẻ "nhiều người".</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="pronoun" data-search="đại từ quan hệ who whom which that whose relative pronouns">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-pronoun">Mệnh đề QH</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">28. Đại từ quan hệ <span class="vi">— Who/Whom/Which/That/Whose</span></h3>
+      <p class="g-hook">Ghép "My teacher lives in Nha Trang" + "He is really smart" thành một câu mượt mà — đại từ quan hệ làm việc đó.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Đứng đầu mệnh đề quan hệ, bổ nghĩa cho danh từ đứng ngay trước nó.</p>
+      <table class="ref-table">
+        <tr><th>Đại từ</th><th>Bổ nghĩa cho</th><th>Ví dụ</th></tr>
+        <tr><td>WHO</td><td>Người (làm S)</td><td class="ex">My teacher, who is really smart, lives in NT.</td></tr>
+        <tr><td>WHOM</td><td>Người (làm O)</td><td class="ex">My teacher whom I have studied with lives in NT.</td></tr>
+        <tr><td>WHICH</td><td>Vật, sự việc/mệnh đề</td><td class="ex">The book which Mai read is informative.</td></tr>
+        <tr><td>THAT</td><td>Người, vật, nơi chốn, thời gian</td><td class="ex">The man that helped me is very kind.</td></tr>
+        <tr><td>WHOSE</td><td>Sở hữu (người hoặc vật)</td><td class="ex">My teacher whose house is big lives in NT.</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Giới từ cuối mệnh đề WHOM/WHICH có thể đưa lên trước: "…whom I spoke to" → "…to whom I spoke". ★ Dùng THAT khi cụm danh từ gồm cả người và vật.</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng THAT ngay sau dấu phẩy (mệnh đề quan hệ không xác định) — <b>không được phép</b>, phải dùng who/which.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="pronoun" data-search="trạng từ quan hệ when where why relative adverbs">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-pronoun">Mệnh đề QH</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">29. Trạng từ quan hệ <span class="vi">— When/Where/Why</span></h3>
+      <p class="g-hook">"This is the house where I was born" — thay vì nói dài dòng "in which I was born".</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>Trạng từ</th><th>Bổ nghĩa cho</th><th>Tương đương</th></tr>
+        <tr><td>WHEN</td><td>Thời gian</td><td>in/on/at + which</td></tr>
+        <tr><td>WHERE</td><td>Địa điểm</td><td>in/on/at + which</td></tr>
+        <tr><td>WHY</td><td>Lý do</td><td>for which</td></tr>
+      </table>
+      <p style="font-size:13px; line-height:1.6;"><span class="ex">This is the house where I was born. = This is the house in which I was born.</span></p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Dùng "where" khi danh từ chỉ địa điểm nhưng đóng vai trò tân ngữ trực tiếp — lúc đó cần <b>which/that</b>, không phải where.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="pronoun" data-search="rút gọn mệnh đề quan hệ reduced relative clauses v-ing v-pp">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-pronoun">Mệnh đề QH</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">30. Rút gọn mệnh đề quan hệ</h3>
+      <p class="g-hook">"The students who are laughing aren't good at Maths" → "The students laughing aren't good at Maths" — ngắn gọn hơn mà vẫn đúng.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Khi đại từ quan hệ làm CHỦ NGỮ, có thể bỏ đại từ quan hệ và đổi động từ; khi làm TÂN NGỮ, chỉ cần bỏ đại từ quan hệ.</p>
+      <ul class="usage-list">
+        <li><span class="rule">Chủ động → V-ing:</span> <span class="ex">The students who are laughing → The students laughing…</span></li>
+        <li><span class="rule">Bị động → V-pp:</span> <span class="ex">The house which was built last year → The house built last year…</span></li>
+        <li><span class="rule">Tân ngữ → chỉ bỏ đại từ:</span> <span class="ex">The book that I bought yesterday → The book I bought yesterday…</span></li>
+      </ul>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Whoever (S) = anyone who. ★ Those (S) = the people/things.</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Cố đổi động từ thành V-ing khi đại từ quan hệ làm TÂN NGỮ — quy tắc đổi V-ing/V-pp chỉ áp dụng khi đại từ quan hệ làm <b>chủ ngữ</b>.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= COMPARE / PREPOSITION / CONJUNCTION ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--green)"></span><h2>So sánh · Giới từ · Liên từ</h2></div>
+
+  <details class="g-card" data-fam="compare" data-search="câu so sánh comparative bằng gấp hơn nhất kép">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-compare">So sánh</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">31. Câu so sánh <span class="vi">— 5 loại</span></h3>
+      <p class="g-hook">"The more we practice, the better we get" — một câu, hai vế đối xứng, tăng tiến song song.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Tính từ ngắn/dài</h4>
+      <p>1 âm tiết, hoặc 2 âm tiết tận cùng -y/-ow/-le → thêm <b>-er/-est</b>. Từ 2 âm tiết khác trở lên → <b>more/most</b>.</p>
+      <table class="ref-table">
+        <tr><th>Loại</th><th>Công thức</th><th>Ví dụ</th></tr>
+        <tr><td>So sánh bằng</td><td>as + adj/adv + as</td><td class="ex">This book is as interesting as the movie.</td></tr>
+        <tr><td>So sánh gấp</td><td>half/twice/3 times as…as</td><td class="ex">This car is twice as expensive as that one.</td></tr>
+        <tr><td>So sánh hơn</td><td>-er / more…than</td><td class="ex">My dog is smaller than yours.</td></tr>
+        <tr><td>So sánh nhất</td><td>the -est / the most</td><td class="ex">He is the tallest boy in the class.</td></tr>
+        <tr><td>So sánh kép</td><td>-er and -er / the -er…, the -er…</td><td class="ex">The weather is getting colder and colder.</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--ink-soft);">★ Bất quy tắc: good→better→best · bad→worse→worst · far→further→furthest · little→less→least · much/many→more→most</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">more tall</span> → <span class="right">taller</span>; <span class="wrong">beautifuler</span> → <span class="right">more beautiful</span> — nhầm quy tắc tính từ ngắn/dài.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="compare" data-search="giới từ thời gian in on at prepositions of time">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-compare">Giới từ</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">32. Giới từ chỉ thời gian <span class="vi">— In/On/At</span></h3>
+      <p class="g-hook">IN July, ON Monday, AT 7:00 PM — cùng là thời gian nhưng ba giới từ khác nhau, quy tắc nào?</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>IN</th><th>ON</th><th>AT</th></tr>
+        <tr><td>Tháng, năm, mùa, buổi, thế kỷ<br><span class="ex">in July, in 2025, in the morning</span></td><td>Thứ, ngày, ngày lễ<br><span class="ex">on Monday, on Feb 14th</span></td><td>Thời điểm cụ thể<br><span class="ex">at 7:00 PM, at noon</span></td></tr>
+      </table>
+      <div class="chip-row">
+        <span class="sig-chip">after/before</span><span class="sig-chip">from…to</span><span class="sig-chip">during</span>
+        <span class="sig-chip">for</span><span class="sig-chip">until/till</span><span class="sig-chip">since</span>
+        <span class="sig-chip">over</span><span class="sig-chip">within</span><span class="sig-chip">by</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">at Monday</span> → <span class="right">on Monday</span> — thứ trong tuần luôn đi với ON.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="compare" data-search="giới từ vị trí di chuyển in on at prepositions of place movement">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-compare">Giới từ</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">33. Giới từ chỉ vị trí &amp; di chuyển</h3>
+      <p class="g-hook">IN the kitchen, ON the table, AT the door — càng thu hẹp không gian, giới từ càng cụ thể.</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>IN</th><th>ON</th><th>AT</th></tr>
+        <tr><td>Không gian bao quanh<br><span class="ex">in the kitchen, in Vietnam</span></td><td>Bề mặt, tiếp xúc<br><span class="ex">on the table, on the train</span></td><td>Vị trí cụ thể<br><span class="ex">at home, at the door</span></td></tr>
+      </table>
+      <div class="chip-row">
+        <span class="sig-chip">beside/next to/by</span><span class="sig-chip">under</span><span class="sig-chip">above/below</span>
+        <span class="sig-chip">near</span><span class="sig-chip">between</span><span class="sig-chip">among</span>
+        <span class="sig-chip">toward</span><span class="sig-chip">through</span><span class="sig-chip">into</span><span class="sig-chip">across</span>
+      </div>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm "in the car" (không gian kín, xe con) với "on the train/on the flight" (phương tiện lớn, coi như một "sàn/bề mặt").</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="compare" data-search="liên từ conjunctions because although despite in spite of">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-compare">Liên từ</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">34. Liên từ <span class="vi">— Conjunctions</span></h3>
+      <p class="g-hook">"Despite the heavy rain, they decided to go camping" — DESPITE nối ý trái ngược mà không cần "but".</p>
+    </summary>
+    <div class="g-body">
+      <h4>3 nhóm chính</h4>
+      <table class="ref-table">
+        <tr><th>Kết hợp</th><td>and, but, or, nor, for, yet, so</td></tr>
+        <tr><th>Tương quan</th><td>either…or, neither…nor, both…and, not only…but also</td></tr>
+        <tr><th>Phụ thuộc</th><td>because, although, since, if, when, unless, while, as</td></tr>
+      </table>
+      <h4>Theo sau là gì?</h4>
+      <table class="ref-table">
+        <tr><th>+ V0</th><td>to / in order to</td></tr>
+        <tr><th>+ N / V-ing</th><td>because of, due to, despite, in spite of, in addition to</td></tr>
+        <tr><th>+ mệnh đề</th><td>so that, although, now that, as if, even if, provided that</td></tr>
+      </table>
+      <p style="font-size:12px; color:var(--ink-soft);">★ However/Therefore/Nevertheless không đứng đầu câu — thường đi sau dấu chấm phẩy ";".</p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">because of it rained</span> → <span class="right">because it rained / because of the rain</span> — "because" theo sau mệnh đề, "because of" theo sau danh từ.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= WORD FORMS / PHRASAL VERBS ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-b2)"></span><h2>Từ loại &amp; Cụm động từ</h2></div>
+
+  <details class="g-card" data-fam="wordform" data-search="danh từ tính từ động từ word forms noun adjective verb">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Từ loại</span>
+        <span class="lvl-badge lvl-b1">Cơ bản</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">35. Danh từ, Tính từ, Động từ <span class="vi">— vai trò trong câu</span></h3>
+      <p class="g-hook">"The soup tastes salty" — "salty" là tính từ dù đứng sau động từ "tastes", không phải trạng từ.</p>
+    </summary>
+    <div class="g-body">
+      <ul class="usage-list">
+        <li><span class="rule">Noun:</span> làm S/O, đứng sau a/an/the/tính từ/sở hữu. V-ing cũng có thể làm danh từ (gerund): <span class="ex">Swimming is a good exercise.</span></li>
+        <li><span class="rule">Adjective:</span> trước danh từ, sau "be", sau động từ cảm giác (feel/smell/sound/taste) và động từ liên kết (become/remain/seem): <span class="ex">The soup tastes salty.</span></li>
+        <li><span class="rule">Verb:</span> nội động từ không cần tân ngữ (sit, sleep) — ngoại động từ cần tân ngữ (make, buy, send).</li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">She looks beautifully.</span> → <span class="right">She looks beautiful.</span> — sau động từ liên kết (look/seem/become) dùng tính từ, không dùng trạng từ.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="wordform" data-search="tính từ v-ing v-pp interesting interested boring bored">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Từ loại</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">36. Tính từ V-ing vs V-pp <span class="vi">— interesting hay interested?</span></h3>
+      <p class="g-hook">"I am boring" hay "I am bored"? Một chữ khác biệt, ý nghĩa ngược hẳn nhau — lỗi học viên Việt hay mắc nhất.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p><b>V-ing</b> dùng cho vật/sự việc TỰ THÂN gây ra cảm xúc đó. <b>V-pp</b> dùng cho người BỊ tác động, cảm nhận cảm xúc đó.</p>
+      <ul class="usage-list">
+        <li><span class="ex">The book is interesting. (chính quyển sách gây hứng thú)</span></li>
+        <li><span class="ex">She is interested in the book. (cô ấy cảm thấy hứng thú)</span></li>
+        <li><span class="ex">The job is tiring. / He feels tired after work.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">I am boring.</span> (= tôi LÀ một người nhàm chán, gây chán cho người khác!) → ý muốn nói "tôi thấy chán" phải là <span class="right">I am bored.</span></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="wordform" data-search="modal verbs động từ khiếm khuyết can could may might should will would must">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Từ loại</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">37. Trợ động từ &amp; Động từ khiếm khuyết</h3>
+      <p class="g-hook">CAN, COULD, MAY, MIGHT, SHOULD, WILL, WOULD, MUST — 8 từ nhỏ nhưng đổi hẳn sắc thái cả câu.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Trợ động từ (be/do/have)</h4>
+      <p><b>BE</b> — bị động, thì tiếp diễn · <b>DO</b> — câu phủ định, câu hỏi · <b>HAVE</b> — các thì hoàn thành.</p>
+      <h4>Modal verbs</h4>
+      <table class="ref-table">
+        <tr><th>Modal</th><th>Sắc thái</th></tr>
+        <tr><td>CAN</td><td>Khả năng, năng lực, cho phép</td></tr>
+        <tr><td>COULD</td><td>Khả năng trong quá khứ, đề nghị lịch sự</td></tr>
+        <tr><td>MAY / MIGHT</td><td>Xác suất (may cao hơn might), cho phép lịch sự</td></tr>
+        <tr><td>SHOULD</td><td>Lời khuyên, dự đoán chắc chắn vừa</td></tr>
+        <tr><td>WILL / WOULD</td><td>Chắc chắn/hứa hẹn — would lịch sự hơn, dùng cho điều kiện quá khứ</td></tr>
+        <tr><td>MUST</td><td>Bắt buộc, suy đoán chắc chắn</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Modal verbs <b>không chia theo chủ ngữ</b> và luôn theo sau bởi V0: <span class="wrong">She cans speak.</span> → <span class="right">She can speak.</span></li>
+        <li><span class="wrong">must to go</span> → <span class="right">must go</span> — không thêm "to" sau modal verb thuần.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="wordform" data-search="hậu tố nhận biết từ loại suffix noun adjective verb adverb">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Từ loại</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">38. Nhận biết từ loại qua hậu tố</h3>
+      <p class="g-hook">Nhìn đuôi từ đoán được từ loại — mẹo cứu cánh khi làm bài trắc nghiệm.</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>Nouns</th><td>-tion/-ment (information), -ance/-ence (silence), -ist/-ian (scientist), -ship/-dom (friendship), -ity (community), -er/-or (teacher), -ee (employee)</td></tr>
+        <tr><th>Adjectives</th><td>-y/-ly (costly), -ous (mountainous), -able (capable), -al (musical), -ic (athletic), -ful (useful), -less (careless), -ive (expensive)</td></tr>
+        <tr><th>Verbs</th><td>-ize (memorize), -ate (manipulate), -en (strengthen), -fy (clarify)</td></tr>
+        <tr><th>Adverbs</th><td>-ly (quickly)</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Đuôi "-ly" <b>không phải luôn là trạng từ</b> — nó cũng tạo tính từ (costly, friendly, lovely). Phải xét nghĩa gốc, không chỉ nhìn đuôi.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="wordform" data-search="phrasal verbs cụm động từ look up turn down put off">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Cụm ĐT</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">39. Cụm động từ <span class="vi">— Phrasal Verbs</span></h3>
+      <p class="g-hook">"Look up" (tra cứu) khác hẳn "look after" (chăm sóc) và "look forward to" (mong đợi) — cùng "look" nhưng mỗi giới từ đi kèm là một nghĩa mới.</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Cụm động từ = động từ + giới từ/trạng từ, tạo nghĩa khác hẳn nghĩa gốc của từng từ riêng lẻ. Một số cụm <b>tách rời được</b> (turn the job down), một số <b>không tách rời</b> khi giới từ đi liền trước danh từ (look after her parents).</p>
+      <table class="ref-table">
+        <tr><th>Công việc</th><td>carry out (thực hiện), come up with (nghĩ ra), fill out (điền), hand in (nộp), put off (hoãn), keep up with (theo kịp)</td></tr>
+        <tr><th>Tài chính</th><td>account for (giải trình), cut down on (cắt giảm), pay off (trả hết nợ), write off (xoá nợ)</td></tr>
+        <tr><th>Giao tiếp</th><td>call back (gọi lại), get back to (phản hồi), wrap up (kết thúc)</td></tr>
+        <tr><th>Du lịch</th><td>check in/out, get on/off, pick up (đón), set off (khởi hành)</td></tr>
+        <tr><th>Sự cố</th><td>break down (hỏng), figure out (tìm giải pháp), run into (gặp sự cố), sort out (giải quyết)</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Tách rời cụm động từ KHÔNG THỂ tách: <span class="wrong">look her after</span> → <span class="right">look after her</span>.</li>
+        <li>Nhầm "put off" (hoãn lại) với "put on" (mặc vào) — chỉ khác 1 giới từ nhưng nghĩa hoàn toàn khác.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="wordform" data-search="v-ing to v0 verb patterns remember forget like need">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-wordform">Cụm ĐT</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">40. Động từ theo sau là V-ing hay to V0</h3>
+      <p class="g-hook">"I remember turning off the light" và "I remember to turn off the light" — cùng động từ REMEMBER, nghĩa lại khác nhau.</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>V + V-ing</th><td>consider, avoid, enjoy, suggest, deny, postpone, mind, quit — thường mang tính tiêu cực</td></tr>
+        <tr><th>V + to V0</th><td>hope, expect, agree, want, promise, decide, persuade, order</td></tr>
+      </table>
+      <h4>Nhóm đổi nghĩa theo dạng</h4>
+      <ul class="usage-list">
+        <li><span class="rule">remember/forget/regret/stop</span> — V-ing = đã làm rồi; to V0 = sắp/phải làm: <span class="ex">I remember turning off the light. (đã tắt) vs I remember to turn off the light. (nhớ là phải tắt)</span></li>
+        <li><span class="rule">like/love/prefer/hate</span> — V-ing = sở thích chung; to V0 = lựa chọn cụ thể lúc đó.</li>
+        <li><span class="rule">need</span> — V-ing = mang nghĩa bị động (<span class="ex">The car needs washing.</span>); to V0 = chủ động (<span class="ex">You need to wash your car.</span>)</li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm 2 nghĩa của "remember + V-ing/to V0" — đây là cặp dễ gây hiểu lầm nhất trong nhóm này.</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- ================= SPECIAL STRUCTURES ================= -->
+  <div class="fam-head"><span class="sw" style="background:var(--lvl-c1)"></span><h2>Cấu trúc ngữ pháp đặc biệt</h2></div>
+
+  <details class="g-card" data-fam="special" data-search="s v o o s v o c cấu trúc hai tân ngữ bổ ngữ">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">41. S V O O &amp; S V O C</h3>
+      <p class="g-hook">"The company gave its employees a bonus" — ai NHẬN, cái gì được TRAO, một câu chứa cả hai tân ngữ.</p>
+    </summary>
+    <div class="g-body">
+      <ul class="usage-list">
+        <li><span class="rule">S V O1 O2</span> (give/send/offer/show/tell/lend/pay/teach): O1 = người nhận, O2 = vật/thông tin. <span class="ex">The manager sent the clients an invitation.</span></li>
+        <li><span class="rule">S V O C</span> (make/appoint/consider/name/find/call/elect): C mô tả trạng thái/vai trò của O sau hành động. <span class="ex">They appointed him manager. They made the room clean.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm bổ ngữ (C) với tân ngữ thứ 2 — C mô tả TRẠNG THÁI của O, không phải một vật riêng biệt.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="special" data-search="would prefer would rather thích hơn">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">42. Would prefer &amp; Would rather</h3>
+      <p class="g-hook">"I would prefer coffee to tea" và "I would rather stay home than go out" — cùng ý thích nhưng cấu trúc khác hẳn.</p>
+    </summary>
+    <div class="g-body">
+      <ul class="usage-list">
+        <li><span class="rule">Would prefer:</span> N/V-ing + to + N/V-ing, hoặc would prefer to V0 (rather than V0). <span class="ex">She would prefer coffee to tea.</span></li>
+        <li><span class="rule">Would rather:</span> V0 (than V0) — thích làm gì. <span class="ex">I would rather stay here than go out.</span></li>
+        <li><span class="rule">Would rather + S + V-ed:</span> muốn NGƯỜI KHÁC làm gì. <span class="ex">I would rather you went home now.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">would rather to stay</span> → <span class="right">would rather stay</span> — không có "to" sau would rather (khác với would PREFER TO).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="special" data-search="it's time spend time v-ing đã đến lúc">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">43. It's (high) time &amp; Spend time V-ing</h3>
+      <p class="g-hook">"It's time you went home" — chia quá khứ nhưng ý nói về hiện tại/tương lai gần, nghe lạ mà đúng ngữ pháp.</p>
+    </summary>
+    <div class="g-body">
+      <ul class="usage-list">
+        <li><span class="rule">It's (high) time for sb to V0:</span> đã đến lúc, trung tính. <span class="ex">It's time for you to shine.</span></li>
+        <li><span class="rule">It's (high) time + S + V-ed:</span> nhấn mạnh hơn, mang ý "đáng lẽ nên làm rồi". <span class="ex">It's high time we changed our strategy.</span></li>
+        <li><span class="rule">Spend time / have a difficult time + V-ing:</span> dành thời gian / gặp khó khăn khi làm gì. <span class="ex">She spends a lot of time reading books.</span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Chia hiện tại/tương lai sau "It's time + S" thay vì <b>quá khứ đơn</b> — cấu trúc đặc biệt này chia quá khứ nhưng không mang nghĩa quá khứ.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="special" data-search="used to be used to be used for thói quen quá khứ quen">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">44. Used to / Be used to / Be used for</h3>
+      <p class="g-hook">"He used to live in New York" (đã từng) khác hẳn "I am used to working late" (đã quen) — hai chữ "used" na ná nhưng nghĩa trái ngược.</p>
+    </summary>
+    <div class="g-body">
+      <table class="ref-table">
+        <tr><th>Cấu trúc</th><th>Ý nghĩa</th></tr>
+        <tr><td>used to + V0</td><td>Thói quen quá khứ, giờ không còn nữa</td></tr>
+        <tr><td>be used to + N/V-ing</td><td>Đã quen với điều gì</td></tr>
+        <tr><td>be used + to V0</td><td>Được sử dụng để làm gì (bị động)</td></tr>
+        <tr><td>be used for + N/V-ing</td><td>Được sử dụng cho việc gì</td></tr>
+      </table>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li>Nhầm "used to" (thói quen quá khứ) với "be used to" (sự quen thuộc) — <b>cặp lỗi kinh điển nhất</b> trong ngữ pháp tiếng Anh với học viên Việt Nam.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="special" data-search="had better lời khuyên mạnh">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-b2">Trung cấp</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">45. Had better (not) + V</h3>
+      <p class="g-hook">"You had better leave now" — nghe như "had" (quá khứ) nhưng thực ra là lời khuyên mạnh cho hiện tại.</p>
+    </summary>
+    <div class="g-body">
+      <p>Lời khuyên mạnh, gần như mệnh lệnh nhẹ — mạnh hơn "should". Công thức: S + had better (not) + <b>V0</b> (luôn nguyên mẫu).</p>
+      <p><span class="ex">We had better not stay out too late.<button class="audio-btn" onclick="speak('We had better not stay out too late.')">🔊</button></span></p>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">had better to go / had better going</span> → <span class="right">had better go</span> — luôn V0 nguyên mẫu, không "to", không V-ing.</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="g-card" data-fam="special" data-search="thể giả định subjunctive suggest recommend important that">
+    <summary>
+      <div class="g-card-head">
+        <span class="fam-badge fam-special">Đặc biệt</span>
+        <span class="lvl-badge lvl-c1">Nâng cao</span>
+        <span class="expand-hint">Bấm để xem chi tiết →</span>
+      </div>
+      <h3 class="g-title">46. Thể giả định <span class="vi">— Subjunctive</span></h3>
+      <p class="g-hook">"My boss suggested that David stop smoking" — không phải "stops", dù David là ngôi thứ 3 số ít!</p>
+    </summary>
+    <div class="g-body">
+      <h4>Ý nghĩa</h4>
+      <p>Diễn tả điều mong muốn/yêu cầu/đề xuất — động từ trong mệnh đề "that" luôn ở dạng <b>nguyên mẫu (V0)</b>, bất kể chủ ngữ hay thì của mệnh đề chính.</p>
+      <h4>Công thức</h4>
+      <table class="formula-table">
+        <tr><td>S + V (advise/demand/recommend/require/insist/suggest/propose/order) + that + S + V0</td></tr>
+        <tr><td>S + be + adj (important/essential/necessary/vital/crucial/mandatory) + that + S + V0</td></tr>
+      </table>
+      <ul class="usage-list">
+        <li><span class="ex">My boss suggested that David stop smoking.<button class="audio-btn" onclick="speak('My boss suggested that David stop smoking.')">🔊</button></span></li>
+        <li><span class="ex">It is vital that everyone get vaccinated.<button class="audio-btn" onclick="speak('It is vital that everyone get vaccinated.')">🔊</button></span></li>
+      </ul>
+      <h4>⚠️ Lỗi hay gặp</h4>
+      <ul class="mistake-list">
+        <li><span class="wrong">suggested that David stops</span> → <span class="right">suggested that David stop</span> — điểm ngữ pháp học viên hay quên nhất vì nó "phá vỡ" quy tắc chia thì thông thường.</li>
+      </ul>
+    </div>
+  </details>
+
+  <p class="footer-note">Nội dung biên soạn dựa trên tài liệu ngữ pháp AZEnglish — đầy đủ toàn bộ chủ điểm.</p>
+
+</div>
+
+<script>
+  (function(){
+    var THEME_KEY = "azgrammar_theme";
+    function applyTheme(mode){
+      if(mode){ document.documentElement.setAttribute("data-theme", mode); }
+      else{ document.documentElement.removeAttribute("data-theme"); }
+    }
+    var saved = null;
+    try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+    applyTheme(saved);
+    var themeBtn = document.getElementById("themeBtn");
+    themeBtn.addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme");
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var next;
+      if(!current){ next = prefersDark ? "light" : "dark"; }
+      else if(current === "dark"){ next = "light"; }
+      else{ next = "dark"; }
+      applyTheme(next);
+      try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+    });
+  })();
+
+  function speak(text){
+    if(!window.speechSynthesis) return;
+    try{
+      window.speechSynthesis.cancel();
+      var utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      utter.rate = 0.88;
+      window.speechSynthesis.speak(utter);
+    }catch(e){}
+  }
+
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".g-card"));
+    var searchInput = document.getElementById("searchInput");
+    var filterRow = document.getElementById("filterRow");
+    var noResults = document.getElementById("noResults");
+    var activeFam = "all";
+
+    function applyFilters(){
+      var q = searchInput.value.trim().toLowerCase();
+      var visibleCount = 0;
+      cards.forEach(function(card){
+        var famOk = activeFam === "all" || card.getAttribute("data-fam") === activeFam;
+        var text = (card.getAttribute("data-search") + " " + card.textContent).toLowerCase();
+        var searchOk = q === "" || text.indexOf(q) !== -1;
+        var show = famOk && searchOk;
+        card.classList.toggle("hidden", !show);
+        if(show) visibleCount++;
+      });
+      document.querySelectorAll(".fam-head").forEach(function(head){
+        var next = head.nextElementSibling;
+        var famVisible = false;
+        while(next && next.classList && next.classList.contains("g-card")){
+          if(!next.classList.contains("hidden")) famVisible = true;
+          next = next.nextElementSibling;
+        }
+        head.classList.toggle("hidden", !famVisible);
+      });
+      noResults.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", applyFilters);
+    filterRow.addEventListener("click", function(e){
+      var btn = e.target.closest(".filter-chip");
+      if(!btn) return;
+      activeFam = btn.getAttribute("data-fam");
+      Array.prototype.slice.call(filterRow.children).forEach(function(c){ c.classList.remove("active"); });
+      btn.classList.add("active");
+      applyFilters();
+    });
+  })();
+</script>
+
+</body>
+</html>
