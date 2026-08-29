@@ -353,20 +353,38 @@
   .sprint-score-wrap{ flex:none; display:flex; align-items:center; gap:8px; }
   .sprint-score{ font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--red); font-variant-numeric:tabular-nums; }
   .sprint-combo{ font-size:12.5px; font-weight:800; color:#fff; background:var(--red); padding:4px 9px; border-radius:99px; }
+  @keyframes sprintCelebrate{ 0%{ transform:scale(.5); opacity:0; } 60%{ transform:scale(1.18); opacity:1; } 100%{ transform:scale(1); } }
+  .sprint-celebrate{ animation:sprintCelebrate .5s cubic-bezier(.34,1.56,.64,1); display:inline-block; }
+  @media (prefers-reduced-motion: reduce){ .sprint-celebrate{ animation:none; } }
   .sprint-combo.pulse{ animation:streakPulse .4s ease; }
   @media (prefers-reduced-motion: reduce){ .sprint-combo.pulse{ animation:none; } }
   .sprint-question{ text-align:center; margin-bottom:22px; }
   .sprint-word{ font-family:var(--font-display); font-weight:800; font-size:32px; }
   .sprint-ipa{ font-size:14px; color:var(--ink-soft); margin-top:4px; }
   .sprint-options{ display:flex; flex-direction:column; gap:10px; }
+  @keyframes sprintOptIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
   .sprint-opt{
-    text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:12px;
-    padding:14px 16px; cursor:pointer; color:var(--ink); font-family:inherit; font-size:14.5px; font-weight:600;
-    transition:border-color .1s ease, background .1s ease;
+    display:flex; align-items:center; gap:12px;
+    text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:14px;
+    padding:12px 16px; cursor:pointer; color:var(--ink); font-family:inherit; font-size:14.5px; font-weight:600;
+    transition:border-color .1s ease, background .1s ease, transform .1s ease;
+    animation:sprintOptIn .22s ease both;
   }
-  .sprint-opt:hover{ border-color:var(--red); }
+  .sprint-opt:hover{ border-color:var(--red); transform:translateY(-2px); }
+  .sprint-opt:active{ transform:translateY(0) scale(.98); }
+  .sprint-opt:disabled{ cursor:default; }
+  .sprint-opt:disabled:hover{ transform:none; }
+  .sprint-opt-letter{
+    flex:none; width:28px; height:28px; border-radius:8px; background:var(--paper); border:1.5px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800;
+    font-size:13px; color:var(--ink-soft); transition:background .1s ease, color .1s ease, border-color .1s ease;
+  }
+  .sprint-opt-text{ flex:1; }
   .sprint-opt-correct{ border-color:var(--green); background:var(--green-bg); color:var(--green); }
+  .sprint-opt-correct .sprint-opt-letter{ background:var(--green); border-color:var(--green); color:#fff; }
   .sprint-opt-wrong{ border-color:var(--red-ink); background:var(--red-ink); color:#fff; }
+  .sprint-opt-wrong .sprint-opt-letter{ background:#fff; border-color:#fff; color:var(--red-ink); }
+  @media (prefers-reduced-motion: reduce){ .sprint-opt{ animation:none; } .sprint-opt:hover{ transform:none; } }
 
   .review-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .review-card-top{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -597,6 +615,8 @@
       <button class="btn-ghost" id="closeReviewBtn" type="button">← Về màn hình chọn</button>
     </div>
   </section>
+
+  <canvas id="sprintParticleCanvas" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:250;"></canvas>
 
   <!-- SPRINT MODE SCREEN -->
   <section class="card hidden" id="sprintCard">
@@ -1755,6 +1775,82 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
       return others.slice(0, n);
     }
 
+    // ---- particle burst (juice on correct answers / new records) ----
+    var pCanvas = document.getElementById("sprintParticleCanvas");
+    var pctx = pCanvas ? pCanvas.getContext("2d") : null;
+    var particles = [];
+    var particleAnimating = false;
+    function resizeParticleCanvas(){
+      if(!pCanvas) return;
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+    }
+    function SprintParticle(x, y, big){
+      this.x = x; this.y = y;
+      this.size = Math.random() * (big ? 9 : 6) + (big ? 4 : 3);
+      this.speedX = (Math.random() - 0.5) * (big ? 14 : 9);
+      this.speedY = (Math.random() - 0.5) * (big ? 14 : 9) - 3;
+      this.color = "hsl(" + (Math.random() * 60 + 25) + ",95%,58%)";
+      this.alpha = 1;
+      this.decay = Math.random() * 0.03 + 0.02;
+    }
+    SprintParticle.prototype.update = function(){
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.speedY += 0.25;
+      this.alpha -= this.decay;
+    };
+    SprintParticle.prototype.draw = function(){
+      if(!pctx) return;
+      pctx.save();
+      pctx.globalAlpha = Math.max(0, this.alpha);
+      pctx.fillStyle = this.color;
+      pctx.beginPath();
+      pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      pctx.fill();
+      pctx.restore();
+    };
+    function animateParticles(){
+      if(!pctx) return;
+      pctx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      for(var i = particles.length - 1; i >= 0; i--){
+        particles[i].update();
+        particles[i].draw();
+        if(particles[i].alpha <= 0){ particles.splice(i, 1); }
+      }
+      if(particles.length > 0){
+        requestAnimationFrame(animateParticles);
+      }else{
+        particleAnimating = false;
+      }
+    }
+    function createExplosion(x, y, count, big){
+      if(!pctx) return;
+      for(var i = 0; i < count; i++){ particles.push(new SprintParticle(x, y, big)); }
+      if(!particleAnimating){ particleAnimating = true; requestAnimationFrame(animateParticles); }
+    }
+
+    // ---- combo-scaled correct-answer tone (pitch rises as combo builds) ----
+    function playSprintCorrectTone(combo){
+      var ctx = getCtx();
+      if(!ctx) return;
+      var baseFreq = 523.25;
+      var offset = Math.min(combo * 60, 400);
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sine";
+      var t0 = ctx.currentTime;
+      osc.frequency.setValueAtTime(baseFreq + offset, t0);
+      osc.frequency.exponentialRampToValueAtTime((baseFreq + offset) * 1.5, t0 + 0.15);
+      gain.gain.setValueAtTime(0.001, t0);
+      gain.gain.exponentialRampToValueAtTime(0.28, t0 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t0); osc.stop(t0 + 0.25);
+    }
+
+    var sprintCorrectBtnRef = null;
+
     function nextSprintQuestion(){
       if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
       sprintCurrent = sprintQueue.pop();
@@ -1763,12 +1859,23 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
       var distractors = pickDistractors(sprintCurrent, sprintFullPool, 3);
       if(distractors.length < 3){ distractors = pickDistractors(sprintCurrent, WORDS, 3); }
       var options = shuffle([sprintCurrent].concat(distractors));
+      var letters = ["A", "B", "C", "D"];
       sprintOptionsEl.innerHTML = "";
-      options.forEach(function(opt){
+      sprintCorrectBtnRef = null;
+      options.forEach(function(opt, idx){
         var btn = document.createElement("button");
         btn.className = "sprint-opt";
         btn.type = "button";
-        btn.textContent = opt.m;
+        btn.style.animationDelay = (idx * 0.05) + "s";
+        var letterSpan = document.createElement("span");
+        letterSpan.className = "sprint-opt-letter";
+        letterSpan.textContent = letters[idx] || "";
+        var textSpan = document.createElement("span");
+        textSpan.className = "sprint-opt-text";
+        textSpan.textContent = opt.m;
+        btn.appendChild(letterSpan);
+        btn.appendChild(textSpan);
+        if(opt.w === sprintCurrent.w){ sprintCorrectBtnRef = btn; }
         btn.addEventListener("click", function(){ answerSprint(opt.w === sprintCurrent.w, btn); });
         sprintOptionsEl.appendChild(btn);
       });
@@ -1777,12 +1884,16 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
 
     function answerSprint(correct, btnEl){
       Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
+      var rect = btnEl.getBoundingClientRect();
+      var clickX = rect.left + rect.width / 2;
+      var clickY = rect.top + rect.height / 2;
       if(correct){
         sprintCombo++;
         var mult = comboMultiplier(sprintCombo);
         sprintScore += 10 * mult;
         btnEl.classList.add("sprint-opt-correct");
-        chimeCorrect();
+        playSprintCorrectTone(sprintCombo);
+        createExplosion(clickX, clickY, 18 + Math.min(sprintCombo * 2, 20), false);
         if(mult > 1){
           sprintComboEl.textContent = "⚡x" + mult;
           sprintComboEl.classList.remove("hidden");
@@ -1795,6 +1906,7 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
       }else{
         sprintCombo = 0;
         btnEl.classList.add("sprint-opt-wrong");
+        if(sprintCorrectBtnRef && sprintCorrectBtnRef !== btnEl){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
         chimeWrong();
         sprintComboEl.classList.add("hidden");
       }
@@ -1804,13 +1916,14 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
           Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
           nextSprintQuestion();
         }
-      }, 350);
+      }, correct ? 350 : 750);
     }
 
     function startSprint(){
       sprintScore = 0; sprintCombo = 0; sprintTimeLeft = SPRINT_DURATION;
       sprintFullPool = poolForLevel(selectedLevel);
       sprintQueue = shuffle(sprintFullPool.slice());
+      resizeParticleCanvas();
       setupPanel.classList.add("hidden");
       sprintSummary.classList.add("hidden");
       sprintCard.classList.remove("hidden");
@@ -1842,6 +1955,17 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
       sprintResultSub.textContent = isNewBest
         ? "Bạn vừa vượt qua kỷ lục cũ (" + best + " điểm) — chơi lại để nâng kỷ lục cao hơn nữa!"
         : "Chơi lại để phá kỷ lục " + Math.max(best, sprintScore) + " điểm của chính bạn!";
+      sprintResultTitle.classList.remove("sprint-celebrate");
+      if(isNewBest && sprintScore > 0){
+        void sprintResultTitle.offsetWidth;
+        sprintResultTitle.classList.add("sprint-celebrate");
+        resizeParticleCanvas();
+        createExplosion(window.innerWidth / 2, window.innerHeight * 0.35, 60, true);
+        setTimeout(function(){ createExplosion(window.innerWidth * 0.25, window.innerHeight * 0.3, 30, true); }, 150);
+        setTimeout(function(){ createExplosion(window.innerWidth * 0.75, window.innerHeight * 0.3, 30, true); }, 300);
+        var praise = REACTIONS_CORRECT[Math.floor(Math.random() * REACTIONS_CORRECT.length)];
+        setTimeout(function(){ speakReactionVi(praise); }, 200);
+      }
       refreshSprintBestUI();
       markDailyActivity();
       renderStreakAndXp();
