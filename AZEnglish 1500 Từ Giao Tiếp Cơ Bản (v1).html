@@ -530,6 +530,20 @@
   .race-review-item{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; background:var(--paper-2); border-radius:10px; padding:8px 12px; font-size:13px; }
   .race-review-item b{ font-family:var(--font-display); flex:none; }
   .race-review-item span{ color:var(--ink-soft); text-align:right; }
+
+  /* ---- leaderboard ---- */
+  .leaderboard-name-row{ display:flex; gap:8px; margin-bottom:12px; }
+  .leaderboard-name-row input{ flex:1; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); font-size:14px; font-family:inherit; }
+  .leaderboard-name-row input:focus{ outline:none; border-color:var(--red); }
+  .leaderboard-name-row button{ flex:none; padding:10px 16px; border-radius:10px; border:none; background:var(--red); color:#fff; font-weight:700; cursor:pointer; font-family:inherit; }
+  .leaderboard-status{ font-size:12.5px; color:var(--ink-soft); text-align:center; margin-bottom:10px; min-height:16px; }
+  .leaderboard-list{ display:flex; flex-direction:column; gap:6px; }
+  .leaderboard-row{ display:flex; align-items:center; gap:10px; background:var(--paper-2); border-radius:10px; padding:9px 14px; font-size:13.5px; }
+  .leaderboard-row b:first-child{ flex:none; width:28px; color:var(--ink-soft); font-family:var(--font-display); }
+  .leaderboard-row span{ flex:1; font-weight:600; }
+  .leaderboard-row b:last-child{ flex:none; color:var(--red); font-family:var(--font-display); }
+  .leaderboard-row.me{ border:1.5px solid var(--red); background:var(--red-bg); }
+  #leaderboardMeRow .leaderboard-row{ margin-top:10px; }
   @media (prefers-reduced-motion: reduce){ .race-input.wrong{ animation:none; } .race-zombie.danger{ animation:none; } #raceHearts.pulse{ animation:none; } }
 
   .footer-note{ text-align:center; font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
@@ -577,6 +591,7 @@
       <span class="streak-pill" id="streakPill" title="Số ngày luyện liên tiếp">🔥 0</span>
       <span class="xp-pill" id="xpPill" title="Điểm kinh nghiệm">✦ 0 XP</span>
     </div>
+    <button class="music-btn" id="leaderboardBtn" type="button" aria-label="Bảng xếp hạng" title="Bảng xếp hạng">🏆</button>
     <button class="music-btn" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền">🎵</button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
@@ -726,6 +741,20 @@
       <h2>Huy hiệu đã đạt</h2>
       <div class="badge-row" id="badgeRow"></div>
     </div>
+  </section>
+
+  <!-- LEADERBOARD SCREEN -->
+  <section class="panel hidden" id="leaderboardPanel">
+    <h2>🏆 Bảng xếp hạng</h2>
+    <p class="desc">Top học viên theo điểm kinh nghiệm (XP) — cập nhật mỗi khi bạn học xong.</p>
+    <div class="leaderboard-name-row">
+      <input type="text" id="leaderboardNameInput" placeholder="Tên hiển thị của bạn (vd: Tùng)" maxlength="20" />
+      <button id="leaderboardNameSaveBtn" type="button">Lưu</button>
+    </div>
+    <div id="leaderboardStatus" class="leaderboard-status"></div>
+    <div id="leaderboardList" class="leaderboard-list"></div>
+    <div id="leaderboardMeRow"></div>
+    <button class="btn-ghost" id="leaderboardBackBtn" type="button" style="width:100%; margin-top:16px; padding:12px; border-radius:10px; font-weight:700; cursor:pointer;">← Về màn hình chọn</button>
   </section>
 
   <!-- PASSAGE SCREEN -->
@@ -1191,6 +1220,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     xpPill.textContent = "✦ " + meta.xp + " XP";
     renderTodayGoal();
     renderJourney();
+    if(window.__az_scheduleLeaderboardSync) window.__az_scheduleLeaderboardSync();
 
     var risk = document.getElementById("riskBanner");
     var riskText = document.getElementById("riskBannerText");
@@ -3083,6 +3113,108 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     document.getElementById("raceAgainBtn").addEventListener("click", openRaceBriefing);
   })();
 
+  // ---------- leaderboard: sync progress + show ranking (Firebase) ----------
+  (function(){
+    var LEADERBOARD_COLLECTION = "leaderboard_communication1500";
+    var NAME_KEY = STORAGE_KEY + "_displayname";
+    var lbSyncTimer = null;
+    var lbLastSyncedXp = -1;
+
+    var leaderboardBtn = document.getElementById("leaderboardBtn");
+    var leaderboardPanel = document.getElementById("leaderboardPanel");
+    var leaderboardNameInput = document.getElementById("leaderboardNameInput");
+    var leaderboardNameSaveBtn = document.getElementById("leaderboardNameSaveBtn");
+    var leaderboardStatus = document.getElementById("leaderboardStatus");
+    var leaderboardList = document.getElementById("leaderboardList");
+    var leaderboardMeRow = document.getElementById("leaderboardMeRow");
+    var leaderboardBackBtn = document.getElementById("leaderboardBackBtn");
+
+    function getDisplayName(){
+      try{ return localStorage.getItem(NAME_KEY) || ""; }catch(e){ return ""; }
+    }
+    function setDisplayName(name){
+      try{ localStorage.setItem(NAME_KEY, name); }catch(e){}
+    }
+
+    function syncLeaderboard(){
+      if(!window.__az_firebase || !window.__az_uid) return;
+      var name = getDisplayName();
+      if(!name) return;
+      if(meta.xp === lbLastSyncedXp) return;
+      lbLastSyncedXp = meta.xp;
+      var fb = window.__az_firebase;
+      var ref = fb.doc(fb.db, LEADERBOARD_COLLECTION, window.__az_uid);
+      fb.setDoc(ref, {
+        displayName: name,
+        xp: meta.xp,
+        streak: meta.dayStreak,
+        mastered: totalMasteredCount(),
+        updatedAt: fb.serverTimestamp()
+      }, { merge: true }).catch(function(e){ console.warn("Leaderboard sync failed", e); });
+    }
+    function scheduleLeaderboardSync(){
+      if(lbSyncTimer) clearTimeout(lbSyncTimer);
+      lbSyncTimer = setTimeout(syncLeaderboard, 3000);
+    }
+    window.__az_scheduleLeaderboardSync = scheduleLeaderboardSync;
+
+    async function loadLeaderboardList(){
+      leaderboardList.innerHTML = "";
+      leaderboardMeRow.innerHTML = "";
+      if(!window.__az_firebase){
+        leaderboardStatus.textContent = "Chưa kết nối được bảng xếp hạng — thử lại sau.";
+        return;
+      }
+      leaderboardStatus.textContent = "Đang tải...";
+      try{
+        var fb = window.__az_firebase;
+        var q = fb.query(fb.collection(fb.db, LEADERBOARD_COLLECTION), fb.orderBy("xp", "desc"), fb.limit(20));
+        var snap = await fb.getDocs(q);
+        leaderboardStatus.textContent = "";
+        var rank = 0;
+        var meUid = window.__az_uid;
+        var foundMe = false;
+        snap.forEach(function(docSnap){
+          rank++;
+          var d = docSnap.data();
+          var isMe = docSnap.id === meUid;
+          if(isMe) foundMe = true;
+          var row = document.createElement("div");
+          row.className = "leaderboard-row" + (isMe ? " me" : "");
+          row.innerHTML = "<b>#" + rank + "</b><span>" + (d.displayName || "Ẩn danh") + (isMe ? " (bạn)" : "") + "</span><b>" + (d.xp || 0) + " XP</b>";
+          leaderboardList.appendChild(row);
+        });
+        if(rank === 0){
+          leaderboardStatus.textContent = "Chưa có ai trên bảng xếp hạng — hãy là người đầu tiên!";
+        }else if(!foundMe && getDisplayName()){
+          leaderboardMeRow.innerHTML = '<p style="font-size:12px; color:var(--ink-soft); margin:10px 0 4px;">Bạn chưa lọt top 20 — tiếp tục học để leo hạng nhé!</p>';
+        }
+      }catch(e){
+        leaderboardStatus.textContent = "Không tải được bảng xếp hạng — kiểm tra kết nối mạng và thử lại.";
+      }
+    }
+
+    leaderboardBtn.addEventListener("click", function(){
+      leaderboardNameInput.value = getDisplayName();
+      setupPanel.classList.add("hidden");
+      leaderboardPanel.classList.remove("hidden");
+      loadLeaderboardList();
+    });
+    leaderboardBackBtn.addEventListener("click", function(){
+      leaderboardPanel.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    });
+    leaderboardNameSaveBtn.addEventListener("click", function(){
+      var name = leaderboardNameInput.value.trim().slice(0, 20);
+      if(!name) return;
+      setDisplayName(name);
+      lbLastSyncedXp = -1;
+      syncLeaderboard();
+      leaderboardStatus.textContent = "Đã lưu tên — đang cập nhật bảng xếp hạng...";
+      setTimeout(loadLeaderboardList, 800);
+    });
+  })();
+
   // ---------- optional in-tab reminder (Notification API) ----------
   // Only works while this browser tab stays open — there is no server here to
   // send a real push notification once the tab or browser is closed.
@@ -3237,4 +3369,37 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       new MutationObserver(draw).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
     }
   })();
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDocs, collection, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyBtE_5WF49NJd1u9CeMEedyLhGADHts-Qk",
+    authDomain: "azenglish-vocab.firebaseapp.com",
+    projectId: "azenglish-vocab",
+    storageBucket: "azenglish-vocab.firebasestorage.app",
+    messagingSenderId: "373526079702",
+    appId: "1:373526079702:web:9e0a1173d610e1ef31c177"
+  };
+
+  var fbApp = initializeApp(firebaseConfig);
+  var fbAuth = getAuth(fbApp);
+  var fbDb = getFirestore(fbApp);
+
+  window.__az_firebase = {
+    db: fbDb, doc: doc, setDoc: setDoc, getDocs: getDocs,
+    collection: collection, query: query, orderBy: orderBy, limit: limit, serverTimestamp: serverTimestamp
+  };
+
+  onAuthStateChanged(fbAuth, function(user){
+    window.__az_uid = user ? user.uid : null;
+    document.dispatchEvent(new Event("az-auth-ready"));
+  });
+
+  signInAnonymously(fbAuth).catch(function(e){
+    console.warn("AZ leaderboard: anonymous sign-in failed", e);
+  });
 </script>
