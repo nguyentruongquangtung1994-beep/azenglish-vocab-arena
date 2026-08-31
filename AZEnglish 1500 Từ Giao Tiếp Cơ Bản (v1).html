@@ -512,6 +512,21 @@
   .btn-primary{ background:var(--red); color:#fff; border:none; }
   .btn-ghost{ background:transparent; color:var(--ink); border:1.5px solid var(--line); }
 
+  /* ---- race mode: type the phrase before the zombie reaches you ---- */
+  .race-input{ width:100%; padding:16px; border-radius:14px; border:2px solid var(--line); background:var(--paper-2); color:var(--ink); font-size:20px; font-weight:700; text-align:center; font-family:var(--font-display); }
+  .race-input:focus{ outline:none; border-color:var(--red); }
+  .race-input.wrong{ animation:shakeX .3s ease; border-color:var(--red-ink); }
+  @keyframes shakeX{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+  .race-prompt{ font-size:24px; font-weight:800; text-align:center; margin:14px 0 2px; color:var(--ink); font-family:var(--font-display); }
+  .race-progress-track{ height:10px; border-radius:999px; background:var(--paper-2); margin:4px 0 6px; overflow:hidden; }
+  .race-progress-fill{ height:100%; border-radius:999px; background:var(--green); transition:width .1s linear, background .3s ease; }
+  .race-progress-fill.danger{ background:var(--red); }
+  @keyframes zombieShake{ 0%,100%{transform:translateX(0) scale(1);} 25%{transform:translateX(-4px) scale(1.05);} 75%{transform:translateX(4px) scale(1.05);} }
+  #raceZombieEmoji.danger{ animation:zombieShake .3s ease infinite; }
+  @keyframes heartLoss{ 0%{ transform:scale(1.4); } 100%{ transform:scale(1); } }
+  #raceHearts.pulse{ animation:heartLoss .3s ease; }
+  @media (prefers-reduced-motion: reduce){ .race-input.wrong{ animation:none; } #raceZombieEmoji.danger{ animation:none; } #raceHearts.pulse{ animation:none; } }
+
   .footer-note{ text-align:center; font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
   .hidden{ display:none !important; }
 
@@ -691,6 +706,10 @@
           <b>🧩 Ghép cụm từ</b>
           <span>Sắp xếp thẻ từ thành đúng cụm từ giao tiếp thực tế — vd: make · a · decision</span>
         </button>
+        <button class="mode-btn mode-btn-sprint" id="modeRace" type="button">
+          <b>🧟 Trốn Thoát Zombie</b>
+          <span>Gõ đúng cụm từ để đẩy lùi zombie — chậm tay là bị bắt kịp! Kỷ lục sinh tồn: <b id="raceBestInline">--</b></span>
+        </button>
       </div>
     </div>
     <div class="panel" style="margin-bottom:14px;">
@@ -865,6 +884,48 @@
     <div class="btn-row">
       <button class="btn-ghost" id="chunkBackBtn" type="button">← Về màn hình chọn</button>
       <button id="chunkAgainBtn" type="button" style="border:none; color:#fff; background:var(--lvl-c1);">Chơi lại →</button>
+    </div>
+  </section>
+
+  <!-- RACE BRIEFING SCREEN -->
+  <section class="panel hidden" id="raceBriefing">
+    <h2>🧟 Sắp vào: Chặn Đứng Zombie</h2>
+    <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn có 3 mạng (❤️❤️❤️); hết mạng trước khi diệt đủ 20 zombie là thua.</p>
+    <div class="btn-row">
+      <button class="btn-ghost" id="raceBriefingBackBtn" type="button">← Về màn hình chọn</button>
+      <button class="btn-primary" id="raceBriefingStartBtn" type="button">Bắt đầu →</button>
+    </div>
+  </section>
+
+  <!-- RACE GAMEPLAY SCREEN -->
+  <section class="card hidden" id="raceCard">
+    <div class="sprint-head">
+      <div class="sprint-timer-wrap">
+        <span id="raceIndexText" style="font-weight:800; font-family:var(--font-display); font-size:15px;">0/20</span>
+      </div>
+      <div class="sprint-score-wrap">
+        <span id="raceHearts" style="font-size:16px; letter-spacing:2px;">❤️❤️❤️</span>
+        <span class="sprint-combo hidden" id="raceCombo">x1</span>
+      </div>
+    </div>
+    <div class="race-progress-track"><div class="race-progress-fill" id="raceProgressFill"></div></div>
+    <div style="text-align:center; font-size:72px; margin:6px 0; line-height:1;" id="raceZombieEmoji">🧟</div>
+    <p class="race-prompt" id="racePrompt">take out the trash</p>
+    <p style="text-align:center; font-size:13.5px; color:var(--ink-soft); margin:-14px 0 16px;" id="racePromptMeaning">"đổ rác"</p>
+    <input type="text" class="race-input" id="raceInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ lại đúng cụm từ ở trên..." />
+  </section>
+
+  <!-- RACE RESULT SCREEN -->
+  <section class="panel hidden" id="raceSummary">
+    <h2 id="raceResultTitle">Về đích!</h2>
+    <div class="summary-grid">
+      <div class="summary-tile"><b id="raceResultKills">0</b><span>Zombie đã diệt</span></div>
+      <div class="summary-tile"><b id="raceResultHearts">0</b><span>Mạng còn lại</span></div>
+    </div>
+    <p class="desc" id="raceResultSub"></p>
+    <div class="btn-row">
+      <button class="btn-ghost" id="raceBackBtn" type="button">← Về màn hình chọn</button>
+      <button class="btn-primary" id="raceAgainBtn" type="button">Chơi lại →</button>
     </div>
   </section>
 
@@ -2762,6 +2823,222 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       setupPanel.classList.remove("hidden");
     });
     document.getElementById("chunkAgainBtn").addEventListener("click", startChunk);
+  })();
+
+  // ---------- race mode: type the phrase before the zombie reaches you ----------
+  (function(){
+    var RACE_KEY = STORAGE_KEY + "_racebest";
+    var RACE_KILLS_TO_WIN = 20;
+    var RACE_LIVES = 3;
+    var RACE_BASE_SECONDS = 3;
+    var RACE_PER_CHAR_SECONDS = 0.4;
+    var raceQueue = [], raceIdx = 0, raceCurrent = null, raceCombo = 0, raceKills = 0, raceLives = RACE_LIVES;
+    var raceStartTime = 0, racePhraseDeadline = 0, racePhraseLimit = 0;
+    var raceTickTimer = null;
+    var raceEnded = false;
+
+    var modeRace = document.getElementById("modeRace");
+    var raceBriefing = document.getElementById("raceBriefing");
+    var raceCard = document.getElementById("raceCard");
+    var raceSummary = document.getElementById("raceSummary");
+    var raceIndexText = document.getElementById("raceIndexText");
+    var raceHeartsEl = document.getElementById("raceHearts");
+    var raceComboEl = document.getElementById("raceCombo");
+    var raceProgressFill = document.getElementById("raceProgressFill");
+    var raceZombieEl = document.getElementById("raceZombieEmoji");
+    var racePromptEl = document.getElementById("racePrompt");
+    var racePromptMeaningEl = document.getElementById("racePromptMeaning");
+    var raceInput = document.getElementById("raceInput");
+    var raceResultTitle = document.getElementById("raceResultTitle");
+    var raceResultKills = document.getElementById("raceResultKills");
+    var raceResultHearts = document.getElementById("raceResultHearts");
+    var raceResultSub = document.getElementById("raceResultSub");
+    var raceBestInline = document.getElementById("raceBestInline");
+
+    function getRaceBest(){
+      try{ return JSON.parse(localStorage.getItem(RACE_KEY)); }catch(e){ return null; }
+    }
+    function setRaceBest(data){ try{ localStorage.setItem(RACE_KEY, JSON.stringify(data)); }catch(e){} }
+    function refreshRaceBestUI(){
+      var best = getRaceBest();
+      raceBestInline.textContent = best ? best.totalTime.toFixed(1) + "s" : "--";
+    }
+    refreshRaceBestUI();
+
+    function raceComboMultiplier(combo){
+      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function buildRacePool(){
+      var phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
+      return shuffle(phrases.slice());
+    }
+
+    function nextRacePhrase(){
+      if(raceIdx >= raceQueue.length){ raceQueue = raceQueue.concat(buildRacePool()); }
+      return raceQueue[raceIdx];
+    }
+
+    function openRaceBriefing(){
+      setupPanel.classList.add("hidden");
+      raceSummary.classList.add("hidden");
+      raceBriefing.classList.remove("hidden");
+    }
+
+    function renderRaceHearts(){
+      var hearts = "";
+      for(var i = 0; i < RACE_LIVES; i++){ hearts += i < raceLives ? "❤️" : "🖤"; }
+      raceHeartsEl.textContent = hearts;
+    }
+
+    function loadRacePhrase(){
+      raceCurrent = nextRacePhrase();
+      racePromptEl.textContent = raceCurrent.w;
+      racePromptMeaningEl.textContent = '"' + raceCurrent.m + '"';
+      raceInput.value = "";
+      raceInput.classList.remove("wrong");
+      raceIndexText.textContent = raceKills + "/" + RACE_KILLS_TO_WIN;
+      racePhraseLimit = RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS;
+      racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
+      raceZombieEl.classList.remove("danger");
+      raceProgressFill.classList.remove("danger");
+      speak(raceCurrent.w);
+    }
+
+    function raceTick(){
+      if(raceEnded) return;
+      var remain = (racePhraseDeadline - performance.now()) / 1000;
+      var pct = Math.max(0, Math.min(100, (remain / racePhraseLimit) * 100));
+      raceProgressFill.style.width = pct + "%";
+      var isDanger = pct < 30;
+      raceProgressFill.classList.toggle("danger", isDanger);
+      raceZombieEl.classList.toggle("danger", isDanger);
+      if(remain <= 0){
+        raceLoseHeart();
+      }
+    }
+
+    function raceLoseHeart(){
+      raceLives--;
+      raceCombo = 0;
+      raceComboEl.classList.add("hidden");
+      raceHeartsEl.classList.remove("pulse");
+      void raceHeartsEl.offsetWidth;
+      raceHeartsEl.classList.add("pulse");
+      renderRaceHearts();
+      chimeWrong();
+      if(raceLives <= 0){
+        endRace(false);
+      }else{
+        raceIdx++;
+        loadRacePhrase();
+      }
+    }
+
+    function startRace(){
+      raceQueue = buildRacePool();
+      raceIdx = 0; raceCombo = 0; raceKills = 0; raceLives = RACE_LIVES;
+      raceStartTime = performance.now();
+      raceEnded = false;
+      raceBriefing.classList.add("hidden");
+      raceSummary.classList.add("hidden");
+      raceCard.classList.remove("hidden");
+      raceComboEl.classList.add("hidden");
+      renderRaceHearts();
+      resizeParticleCanvas();
+      loadRacePhrase();
+      raceInput.disabled = false;
+      raceInput.focus();
+      if(raceTickTimer) clearInterval(raceTickTimer);
+      raceTickTimer = setInterval(raceTick, 100);
+    }
+
+    function checkRaceInput(){
+      var typed = raceInput.value.trim().toLowerCase();
+      if(!typed || typed !== raceCurrent.w.toLowerCase()) return false;
+      raceKills++;
+      raceCombo++;
+      var mult = raceComboMultiplier(raceCombo);
+      playComboTone(raceCombo, 500);
+      var rect = raceInput.getBoundingClientRect();
+      createExplosion(rect.left + rect.width / 2, rect.top, 14 + Math.min(raceCombo * 2, 20), false);
+      if(mult > 1){
+        raceComboEl.textContent = "⚡x" + mult;
+        raceComboEl.classList.remove("hidden");
+        raceComboEl.classList.remove("pulse");
+        void raceComboEl.offsetWidth;
+        raceComboEl.classList.add("pulse");
+      }else{
+        raceComboEl.classList.add("hidden");
+      }
+      raceIdx++;
+      if(raceKills >= RACE_KILLS_TO_WIN){
+        endRace(true);
+      }else{
+        loadRacePhrase();
+      }
+      return true;
+    }
+
+    raceInput.addEventListener("input", function(){
+      raceInput.classList.remove("wrong");
+      var typed = raceInput.value.trim().toLowerCase();
+      if(typed && typed === raceCurrent.w.toLowerCase()){ checkRaceInput(); }
+    });
+    raceInput.addEventListener("keydown", function(e){
+      if(e.key !== "Enter") return;
+      var ok = checkRaceInput();
+      if(!ok){
+        raceInput.classList.remove("wrong");
+        void raceInput.offsetWidth;
+        raceInput.classList.add("wrong");
+      }
+    });
+
+    function endRace(won){
+      raceEnded = true;
+      clearInterval(raceTickTimer);
+      raceCard.classList.add("hidden");
+      raceSummary.classList.remove("hidden");
+      raceResultKills.textContent = raceKills;
+      raceResultHearts.textContent = raceLives;
+      if(won){
+        var totalTime = (performance.now() - raceStartTime) / 1000;
+        var best = getRaceBest();
+        var isNewBest = !best || totalTime < best.totalTime;
+        raceResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Zombie đã bị tiêu diệt!" : "🧟 Zombie đã bị tiêu diệt!";
+        raceResultSub.textContent = isNewBest
+          ? "Bạn vừa diệt 20 zombie trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(isNewBest) setRaceBest({ totalTime: totalTime });
+        celebrate(true);
+        var xpGain = 40;
+        meta.xp += xpGain;
+        saveMeta(meta);
+        bumpTodayProgress();
+        markDailyActivity();
+        renderStreakAndXp();
+      }else{
+        raceResultTitle.textContent = "💀 Bạn đã bị zombie bắt kịp!";
+        raceResultSub.textContent = "Diệt được " + raceKills + "/" + RACE_KILLS_TO_WIN + " zombie trước khi hết mạng — thử lại nhé!";
+      }
+      refreshRaceBestUI();
+    }
+
+    modeRace.addEventListener("click", openRaceBriefing);
+    document.getElementById("raceBriefingBackBtn").addEventListener("click", function(){
+      raceBriefing.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    });
+    document.getElementById("raceBriefingStartBtn").addEventListener("click", startRace);
+    document.getElementById("raceBackBtn").addEventListener("click", function(){
+      raceEnded = true;
+      clearInterval(raceTickTimer);
+      raceCard.classList.add("hidden");
+      raceSummary.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    });
+    document.getElementById("raceAgainBtn").addEventListener("click", openRaceBriefing);
   })();
 
   // ---------- optional in-tab reminder (Notification API) ----------
