@@ -250,6 +250,11 @@
     font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .audio-btn:hover{ border-color:var(--red); }
+  .pause-btn{
+    flex:none; width:32px; height:32px; border-radius:50%; background:var(--paper-2); border:1px solid var(--line); color:var(--ink);
+    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .pause-btn:hover{ border-color:var(--red); }
   .study-ipa{ font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size:15px; color:var(--red-ink); margin:0 0 8px; }
   .study-pos{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 12px; }
   .study-meaning{ font-size:17px; font-weight:600; color:var(--ink); margin:0 0 14px; }
@@ -481,7 +486,96 @@
   .chunk-dot{ width:9px; height:9px; border-radius:50%; background:var(--line); transition:background .2s ease, transform .2s ease; }
   .chunk-dot.done{ background:var(--lvl-c1); transform:scale(1.15); }
   .chunk-dot.current{ background:var(--lvl-c1); opacity:.45; }
+
+  /* ---- sprint: per-word time-attack bar ---- */
+  .sprint-word-timer-bar{ height:6px; border-radius:99px; background:var(--paper-2); border:1px solid var(--line); overflow:hidden; margin:-10px 0 16px; }
+  .sprint-word-timer-fill{ height:100%; background:var(--green); width:100%; transition:width .1s linear, background .3s ease; }
+  .sprint-word-timer-fill.danger{ background:var(--red-ink); }
+  @media (prefers-reduced-motion: reduce){ .sprint-word-timer-fill{ transition:none; } }
+
+  /* ---- sprint: streak / combo flame effect ---- */
+  .sprint-flame{ font-size:18px; line-height:1; }
+  @keyframes flameGrow{ 0%{ transform:scale(.4); opacity:0; } 60%{ transform:scale(1.25); opacity:1; } 100%{ transform:scale(1); } }
+  .sprint-flame:not(.hidden){ animation:flameGrow .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes comboFirePulse{
+    0%,100%{ box-shadow:0 0 0 2px var(--ember,#c47f0e), 0 0 22px 2px rgba(255,120,20,.35); }
+    50%{ box-shadow:0 0 0 3px var(--ember,#c47f0e), 0 0 34px 6px rgba(255,120,20,.6); }
+  }
+  #sprintCard.combo-fire{ animation:comboFirePulse 1s ease-in-out infinite; }
+  #sprintCard.combo-fire-big{ animation-duration:.6s; }
+  @media (prefers-reduced-motion: reduce){ #sprintCard.combo-fire{ animation:none; } .sprint-flame:not(.hidden){ animation:none; } }
+
+  /* ---- chunk builder (word-tile assembly) ---- */
+  .chunk-tile{
+    background:var(--paper); border:1.5px solid var(--line); border-radius:10px;
+    padding:10px 16px; font-weight:700; font-size:14px; cursor:pointer; color:var(--ink);
+    box-shadow:0 3px 0 var(--line); transition:opacity .15s ease, transform .1s ease, background .1s ease, color .1s ease;
+    font-family:inherit; user-select:none;
+  }
+  .chunk-tile:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--line); }
+  .chunk-tile.used{ opacity:.25; pointer-events:none; }
+  @keyframes chunkPlaceIn{ 0%{ transform:scale(.6); opacity:.3; } 60%{ transform:scale(1.1); opacity:1; } 100%{ transform:scale(1); } }
+  .chunk-tile.placed{
+    background:var(--lvl-c1-bg); border-color:var(--lvl-c1); color:var(--lvl-c1); box-shadow:0 3px 0 var(--lvl-c1);
+    animation:chunkPlaceIn .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .chunk-shake{ animation:chunkShake .35s ease; border-color:var(--red-ink) !important; }
+  @keyframes chunkShake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+  @media (prefers-reduced-motion: reduce){ .chunk-shake{ animation:none; } .chunk-tile.placed{ animation:none; } }
+  .chunk-dot{ width:9px; height:9px; border-radius:50%; background:var(--line); transition:background .2s ease, transform .2s ease; }
+  .chunk-dot.done{ background:var(--lvl-c1); transform:scale(1.15); }
+  .chunk-dot.current{ background:var(--lvl-c1); opacity:.45; }
   @media (prefers-reduced-motion: reduce){ .sprint-opt{ animation:none; } .sprint-opt:hover{ transform:none; } }
+
+  /* ---- chase mode: assemble the phrase from memory before the monster reaches the princess ---- */
+  .chase-danger-track{ position:relative; height:56px; border-radius:14px; margin:6px 0 10px; overflow:hidden; background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 65%, var(--red-ink) 100%); transition:background 1s ease; }
+  .chase-danger-track[data-tier="1"]{ background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 50%, var(--red-ink) 100%); }
+  .chase-danger-track[data-tier="2"]{ background:linear-gradient(90deg, var(--paper-2), var(--red-bg) 40%, var(--red-ink) 100%); }
+  .chase-danger-track[data-tier="3"]{ background:linear-gradient(90deg, var(--red-bg), var(--red-ink) 55%, var(--red) 100%); }
+  @keyframes monsterIdleBounce{ 0%,100%{ transform:translateY(-50%) translateY(0) rotate(0deg); } 50%{ transform:translateY(-50%) translateY(-4px) rotate(-4deg); } }
+  @keyframes monsterRecoil{ 0%{ transform:translateY(-50%) translateX(0) scale(1); } 30%{ transform:translateY(-50%) translateX(-20px) scale(.9); } 100%{ transform:translateY(-50%) translateX(0) scale(1); } }
+  .chase-monster{ position:absolute; top:50%; left:2%; transform:translateY(-50%); font-size:38px; line-height:1; transition:left .1s linear; animation:monsterIdleBounce 1s ease-in-out infinite; }
+  .chase-monster.danger{ animation:zombieApproach .3s ease infinite; }
+  .chase-monster.recoil{ animation:monsterRecoil .4s ease; }
+  @keyframes princessIdleSway{ 0%,100%{ transform:translateY(-50%) rotate(0deg); } 50%{ transform:translateY(-50%) rotate(5deg); } }
+  @keyframes princessFear{ 0%,100%{ transform:translateY(-50%) translateX(0); } 50%{ transform:translateY(-50%) translateX(3px); } }
+  .chase-princess{ position:absolute; top:50%; right:8px; transform:translateY(-50%); font-size:30px; line-height:1; transform-origin:bottom center; animation:princessIdleSway 2.2s ease-in-out infinite; }
+  .chase-princess.danger{ animation:princessFear .25s ease infinite; }
+  @media (prefers-reduced-motion: reduce){ .chase-monster, .chase-princess, .chase-monster.danger, .chase-princess.danger, .chase-monster.recoil, .chase-danger-track{ animation:none; transition:none; } }
+  #chaseChallenge .chunk-tile.placed{ background:var(--red-bg); border-color:var(--red); color:var(--red); box-shadow:0 3px 0 var(--red); }
+  #chaseDots .chunk-dot.done, #chaseDots .chunk-dot.current{ background:var(--red); }
+  .chase-preview-label{ font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--red); text-align:center; margin-bottom:10px; }
+  .chase-preview-word{ text-align:center; font-size:26px; }
+  .chase-preview-meaning{ text-align:center; font-size:15px; color:var(--ink-soft); margin:6px 0 14px; }
+  .chase-memorize-bar-track{ height:6px; border-radius:99px; background:var(--paper-2); overflow:hidden; margin-bottom:18px; }
+  .chase-memorize-bar-fill{ height:100%; background:var(--red); width:100%; transition:width .1s linear; }
+  @media (prefers-reduced-motion: reduce){ .chase-memorize-bar-fill{ transition:none; } }
+  .chase-preview-btn{ width:100%; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; border:none; color:#fff; background:var(--red); }
+  .chase-tier-toast{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2;
+    background:var(--red); color:#fff; font-family:var(--font-display); font-weight:800; font-size:15px;
+    padding:6px 16px; border-radius:99px; white-space:nowrap; pointer-events:none; opacity:0;
+  }
+  .chase-tier-toast.show{ animation:chaseTierToast 1.4s ease; }
+  @keyframes chaseTierToast{ 0%{ opacity:0; transform:translate(-50%,-50%) scale(.6); } 20%{ opacity:1; transform:translate(-50%,-50%) scale(1.1); } 35%{ transform:translate(-50%,-50%) scale(1); } 80%{ opacity:1; } 100%{ opacity:0; } }
+  @media (prefers-reduced-motion: reduce){ .chase-tier-toast.show{ animation:none; } }
+
+  /* ---- shared pause overlay (used by all 3 timed games) ---- */
+  .pause-overlay{
+    position:fixed; inset:0; z-index:400; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.55); padding:20px;
+  }
+  .pause-card{
+    background:var(--paper); border-radius:20px; box-shadow:var(--shadow-card); padding:28px 24px;
+    max-width:360px; width:100%; text-align:center;
+  }
+  .pause-icon{ font-size:40px; margin-bottom:8px; }
+  .pause-card h2{ margin-bottom:6px; }
+  .pause-card .btn-row{ margin-top:18px; }
+
+  /* ---- compact level picker reused inside the mini-game panel ---- */
+  .level-row-compact{ margin-bottom:12px; }
+  .level-row-compact .level-chip{ padding:6px 12px; font-size:12.5px; }
 
   .review-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .review-card-top{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -528,6 +622,7 @@
   .race-review-head{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin:16px 0 8px; }
   .race-review-list{ display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto; margin-bottom:16px; }
   .race-review-item{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; background:var(--paper-2); border-radius:10px; padding:8px 12px; font-size:13px; }
+  .race-review-item.missed{ background:var(--red-bg); border:1px solid var(--red-ink); }
   .race-review-item b{ font-family:var(--font-display); flex:none; }
   .race-review-item span{ color:var(--ink-soft); text-align:right; }
 
@@ -716,15 +811,21 @@
 
     <div class="panel" style="margin-top:14px;">
       <h2>🎮 Chế độ chơi</h2>
-      <p class="desc">Luyện phản xạ nhanh hơn với 2 mini-game gamification.</p>
+      <p class="desc">Luyện phản xạ nhanh hơn với các mini-game gamification.</p>
+      <div class="level-row level-row-compact" id="levelRowGames">
+        <button class="level-chip active" data-level="all" type="button">Tất cả</button>
+        <button class="level-chip" data-level="A1" type="button">A1</button>
+        <button class="level-chip" data-level="A2" type="button">A2</button>
+        <button class="level-chip" data-level="B1" type="button">B1</button>
+      </div>
       <div class="mode-list">
         <button class="mode-btn mode-btn-sprint" id="modeSprint" type="button">
           <b>⚡ Đấu trường 60 giây</b>
           <span>Trả lời càng nhiều càng tốt trong 60 giây. Kỷ lục của bạn: <b id="sprintBestInline">0</b> điểm</span>
         </button>
-        <button class="mode-btn mode-btn-sprint" id="modeChunk" type="button">
-          <b>🧩 Ghép cụm từ</b>
-          <span>Sắp xếp thẻ từ thành đúng cụm từ giao tiếp thực tế — vd: make · a · decision</span>
+        <button class="mode-btn mode-btn-sprint" id="modeChase" type="button">
+          <b>🦁 Người Đẹp Và Quái Vật</b>
+          <span>Ghi nhớ rồi ghép đúng 20 cụm từ để đẩy lùi sư tử trước khi nó bắt được người đẹp — càng về sau càng gấp! Kỷ lục: <b id="chaseBestInline">--</b></span>
         </button>
         <button class="mode-btn mode-btn-sprint" id="modeRace" type="button">
           <b>🧟 Trốn Thoát Zombie</b>
@@ -874,57 +975,22 @@
 
   <canvas id="sprintParticleCanvas" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:250;"></canvas>
 
-  <!-- CHUNK BUILDER SCREEN -->
-  <section class="card hidden" id="chunkCard">
-    <div class="sprint-head">
-      <div style="font-weight:700; font-size:14px; color:var(--lvl-c1);">🧩 Ghép cụm từ</div>
-      <div class="sprint-score-wrap">
-        <span class="sprint-score" id="chunkScore" style="color:var(--lvl-c1);">0</span>
-        <span class="sprint-combo hidden" id="chunkCombo" style="background:var(--lvl-c1);">x1</span>
+  <div class="pause-overlay hidden" id="pauseOverlay">
+    <div class="pause-card">
+      <div class="pause-icon">⏸️</div>
+      <h2>Đã tạm dừng</h2>
+      <p class="desc">Thời gian đang dừng lại, quay lại khi bạn sẵn sàng nhé.</p>
+      <div class="btn-row">
+        <button class="btn-ghost" id="pauseExitBtn" type="button">🚪 Thoát</button>
+        <button class="btn-primary" id="pauseResumeBtn" type="button">▶️ Tiếp tục</button>
       </div>
     </div>
-    <div id="chunkDots" style="display:flex; gap:6px; justify-content:center; margin-bottom:18px;"></div>
-
-    <!-- Preview sub-phase: shown once for a phrase never answered correctly before -->
-    <div id="chunkPreview">
-      <div style="font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--lvl-c1); text-align:center; margin-bottom:10px;">✨ Cụm từ mới — xem trước</div>
-      <div class="sprint-word" id="chunkPreviewWord" style="text-align:center; font-size:26px;">...</div>
-      <div style="text-align:center; font-size:15px; color:var(--ink-soft); margin:6px 0 22px;" id="chunkPreviewMeaning">"..."</div>
-      <button id="chunkPreviewBtn" type="button" style="width:100%; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; border:none; color:#fff; background:var(--lvl-c1);">Đã nhớ, bắt đầu ghép →</button>
-    </div>
-
-    <!-- Challenge sub-phase: scrambled tiles to reassemble -->
-    <div id="chunkChallenge" class="hidden">
-      <div class="sprint-question">
-        <div style="font-size:13px; color:var(--ink-soft); margin-bottom:8px;">Sắp xếp thẻ bên dưới thành đúng cụm từ có nghĩa:</div>
-        <div class="sprint-word" id="chunkMeaning" style="font-size:22px;">"..."</div>
-      </div>
-      <div id="chunkSlots" style="min-height:52px; border:2px dashed var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; padding:10px; margin-bottom:16px; transition:border-color .2s ease;"></div>
-      <div id="chunkPool" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px;"></div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-ghost" id="chunkHintBtn" type="button" style="flex:none; padding:14px 16px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">💡 Gợi ý</button>
-        <button id="chunkSubmitBtn" type="button" style="flex:1; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; border:none; color:#fff; background:var(--lvl-c1);">Xác nhận đáp án</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- CHUNK BUILDER RESULT SCREEN -->
-  <section class="panel hidden" id="chunkSummary">
-    <h2>Xong vòng ghép cụm từ!</h2>
-    <div class="summary-grid">
-      <div class="summary-tile"><b id="chunkResultScore" style="color:var(--lvl-c1);">0</b><span>Cụm từ đúng</span></div>
-      <div class="summary-tile"><b id="chunkResultTotal">8</b><span>Tổng số cụm</span></div>
-    </div>
-    <div class="btn-row">
-      <button class="btn-ghost" id="chunkBackBtn" type="button">← Về màn hình chọn</button>
-      <button id="chunkAgainBtn" type="button" style="border:none; color:#fff; background:var(--lvl-c1);">Chơi lại →</button>
-    </div>
-  </section>
+  </div>
 
   <!-- RACE BRIEFING SCREEN -->
   <section class="panel hidden" id="raceBriefing">
     <h2>🧟 Sắp vào: Chặn Đứng Zombie</h2>
-    <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn có 3 mạng (❤️❤️❤️); hết mạng trước khi diệt đủ 20 zombie là thua.</p>
+    <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn có 3 mạng (❤️❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi diệt đủ 20 zombie là thua.</p>
     <div class="btn-row">
       <button class="btn-ghost" id="raceBriefingBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="raceBriefingStartBtn" type="button">Bắt đầu →</button>
@@ -940,6 +1006,7 @@
       <div class="sprint-score-wrap">
         <span id="raceHearts" style="font-size:16px; letter-spacing:2px;">❤️❤️❤️</span>
         <span class="sprint-combo hidden" id="raceCombo">x1</span>
+        <button class="pause-btn" id="racePauseBtn" type="button" aria-label="Tạm dừng">⏸️</button>
       </div>
     </div>
     <div class="race-danger-track" id="raceDangerTrack">
@@ -967,6 +1034,74 @@
     </div>
   </section>
 
+  <!-- CHASE BRIEFING SCREEN -->
+  <section class="panel hidden" id="chaseBriefing">
+    <h2>🦁 Sắp vào: Người Đẹp Và Quái Vật</h2>
+    <p class="desc">Lấy cảm hứng từ Người Đẹp và Quái Vật — quái vật là một chú sư tử 🦁. Mỗi lượt hiện cụm từ + nghĩa tiếng Việt trong ít giây để bạn ghi nhớ, rồi ẩn đi — ghép đúng thẻ từ theo thứ tự trước khi sư tử chạm tới người đẹp. Bạn có 3 mạng (❤️❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi giải cứu đủ 20 lượt là thua.</p>
+    <div class="btn-row">
+      <button class="btn-ghost" id="chaseBriefingBackBtn" type="button">← Về màn hình chọn</button>
+      <button class="btn-primary" id="chaseBriefingStartBtn" type="button">Bắt đầu →</button>
+    </div>
+  </section>
+
+  <!-- CHASE GAMEPLAY SCREEN -->
+  <section class="card hidden" id="chaseCard">
+    <div class="sprint-head">
+      <div class="sprint-timer-wrap">
+        <span id="chaseIndexText" style="font-weight:800; font-family:var(--font-display); font-size:15px;">0/20</span>
+      </div>
+      <div class="sprint-score-wrap">
+        <span id="chaseHearts" style="font-size:16px; letter-spacing:2px;">❤️❤️❤️</span>
+        <span class="sprint-combo hidden" id="chaseCombo" style="background:var(--red);">x1</span>
+        <button class="pause-btn" id="chasePauseBtn" type="button" aria-label="Tạm dừng">⏸️</button>
+      </div>
+    </div>
+    <div class="chase-danger-track" id="chaseDangerTrack">
+      <span class="chase-monster" id="chaseMonsterEmoji">🦁</span>
+      <span class="chase-princess" id="chasePrincessEmoji">👸</span>
+      <span class="chase-tier-toast hidden" id="chaseTierToast">⚡ Nhanh hơn!</span>
+    </div>
+    <div id="chaseDots" style="display:flex; gap:6px; justify-content:center; margin-bottom:12px;"></div>
+
+    <!-- Memorize sub-phase: brief timed look at the phrase before tiles appear -->
+    <div id="chasePreview">
+      <div class="chase-preview-label">✨ Ghi nhớ nhanh</div>
+      <div class="sprint-word chase-preview-word" id="chasePreviewWord">...</div>
+      <div class="chase-preview-meaning" id="chasePreviewMeaning">"..."</div>
+      <div class="chase-memorize-bar-track"><div class="chase-memorize-bar-fill" id="chaseMemorizeFill"></div></div>
+      <button id="chasePreviewBtn" type="button" class="chase-preview-btn">Đã nhớ, ghép ngay →</button>
+    </div>
+
+    <div id="chaseChallenge" class="hidden">
+      <div class="sprint-question">
+        <div style="font-size:13px; color:var(--ink-soft); margin-bottom:8px;">Ghép thẻ bên dưới thành đúng cụm từ có nghĩa:</div>
+        <div class="sprint-word" id="chaseMeaning" style="font-size:22px;">"..."</div>
+      </div>
+      <div id="chaseSlots" style="min-height:52px; border:2px dashed var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; padding:10px; margin-bottom:16px; transition:border-color .2s ease;"></div>
+      <div id="chasePool" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px;"></div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-ghost" id="chaseHintBtn" type="button" style="flex:none; padding:14px 16px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">💡 Gợi ý</button>
+        <button id="chaseSubmitBtn" type="button" style="flex:1; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; border:none; color:#fff; background:var(--red);">Xác nhận đáp án</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHASE RESULT SCREEN -->
+  <section class="panel hidden" id="chaseSummary">
+    <h2 id="chaseResultTitle">Về đích!</h2>
+    <div class="summary-grid">
+      <div class="summary-tile"><b id="chaseResultKills" style="color:var(--red);">0</b><span>Cụm từ đã ghép đúng</span></div>
+      <div class="summary-tile"><b id="chaseResultHearts">0</b><span>Mạng còn lại</span></div>
+    </div>
+    <p class="desc" id="chaseResultSub"></p>
+    <div class="race-review-head">📖 Ôn lại các cụm từ vừa gặp</div>
+    <div class="race-review-list" id="chaseReviewList"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" id="chaseBackBtn" type="button">← Về màn hình chọn</button>
+      <button class="btn-primary" id="chaseAgainBtn" type="button">Chơi lại →</button>
+    </div>
+  </section>
+
   <!-- SPRINT MODE SCREEN -->
   <!-- SPRINT BRIEFING SCREEN -->
   <section class="panel hidden" id="sprintBriefing">
@@ -986,14 +1121,17 @@
         <span class="sprint-timer-text" id="sprintTimerText">60</span>
       </div>
       <div class="sprint-score-wrap">
+        <span class="sprint-flame hidden" id="sprintFlame"></span>
         <span class="sprint-score" id="sprintScore">0</span>
         <span class="sprint-combo hidden" id="sprintCombo">x1</span>
+        <button class="pause-btn" id="sprintPauseBtn" type="button" aria-label="Tạm dừng">⏸️</button>
       </div>
     </div>
     <div class="sprint-question">
       <div class="sprint-word" id="sprintWord">word</div>
       <div class="sprint-ipa" id="sprintIpa"></div>
     </div>
+    <div class="sprint-word-timer-bar"><div class="sprint-word-timer-fill" id="sprintWordTimerFill"></div></div>
     <div class="sprint-options" id="sprintOptions"></div>
   </section>
 
@@ -1751,14 +1889,23 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     speak(btn.dataset.word);
   });
 
+  var levelRowGames = document.getElementById("levelRowGames");
+  function selectLevel(value){
+    selectedLevel = value;
+    Array.prototype.forEach.call(document.querySelectorAll(".level-chip"), function(c){
+      c.classList.toggle("active", c.dataset.level === value);
+    });
+    refreshScoreboard();
+  }
   levelRow.addEventListener("click", function(e){
     var chip = e.target.closest(".level-chip");
     if(!chip) return;
-    selectedLevel = chip.dataset.level;
-    Array.prototype.forEach.call(levelRow.querySelectorAll(".level-chip"), function(c){
-      c.classList.toggle("active", c === chip);
-    });
-    refreshScoreboard();
+    selectLevel(chip.dataset.level);
+  });
+  levelRowGames.addEventListener("click", function(e){
+    var chip = e.target.closest(".level-chip");
+    if(!chip) return;
+    selectLevel(chip.dataset.level);
   });
 
   var topicSelect = document.getElementById("topicSelect");
@@ -2445,12 +2592,37 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     playFanfare(big);
   }
 
+  // ---------- shared pause overlay (used by Sprint, Chase, Race) ----------
+  var pauseOverlayEl = document.getElementById("pauseOverlay");
+  var pauseResumeBtn = document.getElementById("pauseResumeBtn");
+  var pauseExitBtn = document.getElementById("pauseExitBtn");
+  var activePauseResume = null;
+  var activePauseExit = null;
+
+  function openPause(onResume, onExit){
+    activePauseResume = onResume;
+    activePauseExit = onExit;
+    pauseOverlayEl.classList.remove("hidden");
+  }
+  pauseResumeBtn.addEventListener("click", function(){
+    pauseOverlayEl.classList.add("hidden");
+    if(activePauseResume) activePauseResume();
+  });
+  pauseExitBtn.addEventListener("click", function(){
+    pauseOverlayEl.classList.add("hidden");
+    if(activePauseExit) activePauseExit();
+  });
+
   // ---------- sprint mode: 60-second speed challenge ----------
   (function(){
     var SPRINT_KEY = STORAGE_KEY + "_sprintbest";
     var SPRINT_DURATION = 60;
+    var SPRINT_WORD_LIMIT = 6;
     var sprintTimer = null, sprintTimeLeft = 0, sprintScore = 0, sprintCombo = 0;
+    var sprintPauseStart = 0;
     var sprintFullPool = [], sprintQueue = [], sprintCurrent = null;
+    var sprintWordTimer = null, sprintWordDeadline = 0;
+    var sprintFlameTier = 0;
 
     var modeSprint = document.getElementById("modeSprint");
     var sprintBriefing = document.getElementById("sprintBriefing");
@@ -2462,6 +2634,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var sprintTimerText = document.getElementById("sprintTimerText");
     var sprintScoreEl = document.getElementById("sprintScore");
     var sprintComboEl = document.getElementById("sprintCombo");
+    var sprintFlameEl = document.getElementById("sprintFlame");
+    var sprintWordTimerFill = document.getElementById("sprintWordTimerFill");
     var sprintWordEl = document.getElementById("sprintWord");
     var sprintIpaEl = document.getElementById("sprintIpa");
     var sprintOptionsEl = document.getElementById("sprintOptions");
@@ -2479,13 +2653,63 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     refreshSprintBestUI();
 
     function comboMultiplier(combo){
-      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
+      return combo >= 10 ? 5 : combo >= 5 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function flameTierFor(combo){
+      return combo >= 10 ? 3 : combo >= 5 ? 2 : combo >= 3 ? 1 : 0;
+    }
+
+    function updateSprintFlame(tier){
+      sprintCard.classList.toggle("combo-fire", tier >= 1);
+      sprintCard.classList.toggle("combo-fire-big", tier >= 3);
+      sprintFlameEl.textContent = tier >= 3 ? "🔥🔥🔥" : tier >= 2 ? "🔥🔥" : tier >= 1 ? "🔥" : "";
+      sprintFlameEl.classList.toggle("hidden", tier === 0);
     }
 
     function pickDistractors(correctWord, pool, n){
       var others = pool.filter(function(w){ return w.w !== correctWord.w; });
       others = shuffle(others);
       return others.slice(0, n);
+    }
+
+    function stopSprintWordTimer(){ clearInterval(sprintWordTimer); }
+
+    function sprintWordTimeout(){
+      Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
+      if(sprintCorrectBtnRef){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
+      sprintCombo = 0;
+      sprintFlameTier = 0;
+      updateSprintFlame(0);
+      sprintComboEl.classList.add("hidden");
+      chimeWrong();
+      setTimeout(function(){
+        if(sprintTimeLeft > 0){
+          Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
+          nextSprintQuestion();
+        }
+      }, 750);
+    }
+
+    function runSprintWordTimerInterval(){
+      stopSprintWordTimer();
+      sprintWordTimer = setInterval(function(){
+        var remain = (sprintWordDeadline - performance.now()) / 1000;
+        var pct = Math.max(0, Math.min(100, (remain / SPRINT_WORD_LIMIT) * 100));
+        sprintWordTimerFill.style.width = pct + "%";
+        sprintWordTimerFill.classList.toggle("danger", pct < 35);
+        if(remain <= 0){
+          stopSprintWordTimer();
+          sprintWordTimeout();
+        }
+      }, 100);
+    }
+
+    function startSprintWordTimer(){
+      sprintWordDeadline = performance.now() + SPRINT_WORD_LIMIT * 1000;
+      sprintWordTimerFill.style.width = "100%";
+      sprintWordTimerFill.classList.remove("danger");
+      runSprintWordTimerInterval();
     }
 
     var sprintCorrectBtnRef = null;
@@ -2519,9 +2743,11 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         sprintOptionsEl.appendChild(btn);
       });
       speak(sprintCurrent.w);
+      startSprintWordTimer();
     }
 
     function answerSprint(correct, btnEl){
+      stopSprintWordTimer();
       Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
       var rect = btnEl.getBoundingClientRect();
       var clickX = rect.left + rect.width / 2;
@@ -2532,7 +2758,15 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         sprintScore += 10 * mult;
         btnEl.classList.add("sprint-opt-correct");
         playComboTone(sprintCombo);
-        createExplosion(clickX, clickY, 18 + Math.min(sprintCombo * 2, 20), false);
+        var tier = flameTierFor(sprintCombo);
+        if(tier > sprintFlameTier){
+          var cardRect = sprintCard.getBoundingClientRect();
+          createExplosion(cardRect.left + cardRect.width / 2, cardRect.top + 30, 26 + tier * 10, true);
+        }else{
+          createExplosion(clickX, clickY, 18 + Math.min(sprintCombo * 2, 20), false);
+        }
+        sprintFlameTier = tier;
+        updateSprintFlame(tier);
         if(mult > 1){
           sprintComboEl.textContent = "⚡x" + mult;
           sprintComboEl.classList.remove("hidden");
@@ -2542,8 +2776,16 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         }else{
           sprintComboEl.classList.add("hidden");
         }
+        var xpGain = 5 * mult;
+        meta.xp += xpGain;
+        saveMeta(meta);
+        bumpTodayProgress();
+        renderStreakAndXp();
+        flyXp(xpGain);
       }else{
         sprintCombo = 0;
+        sprintFlameTier = 0;
+        updateSprintFlame(0);
         btnEl.classList.add("sprint-opt-wrong");
         if(sprintCorrectBtnRef && sprintCorrectBtnRef !== btnEl){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
         chimeWrong();
@@ -2592,6 +2834,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function startSprint(){
       sprintScore = 0; sprintCombo = 0; sprintTimeLeft = SPRINT_DURATION;
+      sprintFlameTier = 0;
+      updateSprintFlame(0);
       sprintQueue = shuffle(sprintFullPool.slice());
       resizeParticleCanvas();
       sprintBriefing.classList.add("hidden");
@@ -2602,18 +2846,25 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       sprintTimerText.textContent = sprintTimeLeft;
       sprintTimerFill.style.width = "100%";
       nextSprintQuestion();
+      runSprintMainTimer();
+    }
+
+    function runSprintMainTimer(){
+      clearInterval(sprintTimer);
       sprintTimer = setInterval(function(){
         sprintTimeLeft--;
         sprintTimerText.textContent = Math.max(0, sprintTimeLeft);
         sprintTimerFill.style.width = Math.max(0, (sprintTimeLeft / SPRINT_DURATION * 100)) + "%";
         if(sprintTimeLeft <= 0){
           clearInterval(sprintTimer);
+          stopSprintWordTimer();
           endSprint();
         }
       }, 1000);
     }
 
     function endSprint(){
+      stopSprintWordTimer();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.remove("hidden");
       var best = getSprintBest();
@@ -2646,223 +2897,28 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       setupPanel.classList.remove("hidden");
     });
     document.getElementById("sprintBriefingStartBtn").addEventListener("click", startSprint);
-    document.getElementById("sprintBackBtn").addEventListener("click", function(){
+    function exitSprint(){
       clearInterval(sprintTimer);
+      stopSprintWordTimer();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
-    });
+    }
+    document.getElementById("sprintBackBtn").addEventListener("click", exitSprint);
     document.getElementById("sprintAgainBtn").addEventListener("click", openSprintBriefing);
-  })();
-
-  // ---------- chunk builder: word-tile phrase assembly ----------
-  (function(){
-    var CHUNK_ROUND_SIZE = 8;
-    var CHUNK_SEEN_KEY = STORAGE_KEY + "_chunkseen";
-    var chunkAllPhrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
-    var chunkFillerWords = ["take", "make", "get", "have", "do", "go", "the", "a", "to", "for", "with", "on", "in", "of"];
-    var chunkQueue = [], chunkScore = 0, chunkCombo = 0, chunkIdx = 0, chunkCurrent = null, chunkSelected = [], chunkHintUsed = false;
-
-    var modeChunk = document.getElementById("modeChunk");
-    var chunkCard = document.getElementById("chunkCard");
-    var chunkSummary = document.getElementById("chunkSummary");
-    var chunkScoreEl = document.getElementById("chunkScore");
-    var chunkComboEl = document.getElementById("chunkCombo");
-    var chunkDotsEl = document.getElementById("chunkDots");
-    var chunkPreviewEl = document.getElementById("chunkPreview");
-    var chunkPreviewWordEl = document.getElementById("chunkPreviewWord");
-    var chunkPreviewMeaningEl = document.getElementById("chunkPreviewMeaning");
-    var chunkPreviewBtn = document.getElementById("chunkPreviewBtn");
-    var chunkChallengeEl = document.getElementById("chunkChallenge");
-    var chunkMeaningEl = document.getElementById("chunkMeaning");
-    var chunkSlotsEl = document.getElementById("chunkSlots");
-    var chunkPoolEl = document.getElementById("chunkPool");
-    var chunkSubmitBtn = document.getElementById("chunkSubmitBtn");
-    var chunkHintBtn = document.getElementById("chunkHintBtn");
-
-    function comboMultiplier(combo){
-      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
-    }
-
-    function getChunkSeen(){
-      try{ return JSON.parse(localStorage.getItem(CHUNK_SEEN_KEY)) || {}; }catch(e){ return {}; }
-    }
-    function markChunkSeen(word){
-      try{
-        var seen = getChunkSeen();
-        seen[word] = true;
-        localStorage.setItem(CHUNK_SEEN_KEY, JSON.stringify(seen));
-      }catch(e){}
-    }
-
-    function pickFillerWord(correctWords){
-      var candidates = chunkFillerWords.filter(function(c){ return correctWords.indexOf(c) === -1; });
-      return candidates[Math.floor(Math.random() * candidates.length)] || "the";
-    }
-
-    function renderChunkDots(){
-      chunkDotsEl.innerHTML = "";
-      for(var i = 0; i < chunkQueue.length; i++){
-        var dot = document.createElement("span");
-        dot.className = "chunk-dot" + (i < chunkIdx ? " done" : i === chunkIdx ? " current" : "");
-        chunkDotsEl.appendChild(dot);
-      }
-    }
-
-    function renderChunkSlots(){
-      chunkSlotsEl.innerHTML = "";
-      chunkSelected.forEach(function(sel){
-        var tile = document.createElement("div");
-        tile.className = "chunk-tile placed";
-        tile.textContent = sel.word;
-        tile.addEventListener("click", function(){
-          playTickSound();
-          chunkSelected = chunkSelected.filter(function(s){ return s.id !== sel.id; });
-          var poolTile = chunkPoolEl.querySelector('[data-id="' + sel.id + '"]');
-          if(poolTile) poolTile.classList.remove("used");
-          renderChunkSlots();
-        });
-        chunkSlotsEl.appendChild(tile);
-      });
-    }
-
-    function loadChunkQuestion(){
-      chunkCurrent = chunkQueue[chunkIdx];
-      chunkSelected = [];
-      chunkHintUsed = false;
-      renderChunkDots();
-
-      var seen = getChunkSeen();
-      var isNew = !seen[chunkCurrent.w];
-
-      if(isNew){
-        chunkPreviewEl.classList.remove("hidden");
-        chunkChallengeEl.classList.add("hidden");
-        chunkPreviewWordEl.textContent = (chunkCurrent.e ? chunkCurrent.e + " " : "") + chunkCurrent.w;
-        chunkPreviewMeaningEl.textContent = '"' + chunkCurrent.m + '"';
-        speak(chunkCurrent.w);
-      }else{
-        chunkPreviewEl.classList.add("hidden");
-        beginChunkChallenge();
-      }
-    }
-
-    function beginChunkChallenge(){
-      chunkPreviewEl.classList.add("hidden");
-      chunkChallengeEl.classList.remove("hidden");
-      chunkMeaningEl.textContent = (chunkCurrent.e ? chunkCurrent.e + " " : "") + '"' + chunkCurrent.m + '"';
-      chunkPoolEl.innerHTML = "";
-      var correctWords = chunkCurrent.w.trim().split(/\s+/);
-      var filler = pickFillerWord(correctWords);
-      var tiles = shuffle(correctWords.concat([filler]));
-      tiles.forEach(function(word, idx){
-        var tile = document.createElement("div");
-        tile.className = "chunk-tile";
-        tile.textContent = word;
-        tile.setAttribute("data-id", idx);
-        tile.addEventListener("click", function(){
-          if(tile.classList.contains("used")) return;
-          playTickSound();
-          tile.classList.add("used");
-          chunkSelected.push({ word: word, id: idx });
-          renderChunkSlots();
-        });
-        chunkPoolEl.appendChild(tile);
-      });
-      renderChunkSlots();
-      speak(chunkCurrent.w);
-    }
-
-    function useChunkHint(){
-      var correctWords = chunkCurrent.w.trim().split(/\s+/);
-      var nextIndex = chunkSelected.length;
-      if(nextIndex >= correctWords.length) return;
-      var neededWord = correctWords[nextIndex];
-      var poolTiles = Array.prototype.slice.call(chunkPoolEl.children);
-      var match = poolTiles.filter(function(t){ return !t.classList.contains("used") && t.textContent === neededWord; })[0];
-      if(!match) return;
-      chunkHintUsed = true;
-      match.click();
-    }
-
-    function chunkShake(){
-      chunkSlotsEl.classList.remove("chunk-shake");
-      void chunkSlotsEl.offsetWidth;
-      chunkSlotsEl.classList.add("chunk-shake");
-    }
-
-    function checkChunkAnswer(){
-      if(chunkSelected.length === 0) return;
-      var userPhrase = chunkSelected.map(function(s){ return s.word; }).join(" ").toLowerCase();
-      var correctPhrase = chunkCurrent.w.trim().toLowerCase();
-      if(userPhrase === correctPhrase){
-        chunkScore++;
-        chunkCombo++;
-        var mult = comboMultiplier(chunkCombo);
-        chunkScoreEl.textContent = chunkScore;
-        playComboTone(chunkCombo, 440);
-        var rect = chunkSubmitBtn.getBoundingClientRect();
-        createExplosion(rect.left + rect.width / 2, rect.top, 16 + Math.min(chunkCombo * 2, 20), false);
-        if(mult > 1){
-          chunkComboEl.textContent = "⚡x" + mult;
-          chunkComboEl.classList.remove("hidden");
-          chunkComboEl.classList.remove("pulse");
-          void chunkComboEl.offsetWidth;
-          chunkComboEl.classList.add("pulse");
-        }else{
-          chunkComboEl.classList.add("hidden");
-        }
-        markChunkSeen(chunkCurrent.w);
-        var xpGain = chunkHintUsed ? 15 : 25;
-        meta.xp += xpGain;
-        saveMeta(meta);
-        renderStreakAndXp();
-        flyXp(xpGain);
-        markDailyActivity();
-        chunkIdx++;
-        setTimeout(function(){
-          if(chunkIdx < chunkQueue.length){ loadChunkQuestion(); }
-          else{ renderChunkDots(); endChunk(); }
-        }, 500);
-      }else{
-        chunkCombo = 0;
-        chunkComboEl.classList.add("hidden");
-        chimeWrong();
-        chunkShake();
-      }
-    }
-
-    function startChunk(){
-      chunkQueue = shuffle(chunkAllPhrases.slice()).slice(0, Math.min(CHUNK_ROUND_SIZE, chunkAllPhrases.length));
-      chunkScore = 0; chunkCombo = 0; chunkIdx = 0;
-      chunkScoreEl.textContent = "0";
-      chunkComboEl.classList.add("hidden");
-      resizeParticleCanvas();
-      setupPanel.classList.add("hidden");
-      chunkSummary.classList.add("hidden");
-      chunkCard.classList.remove("hidden");
-      loadChunkQuestion();
-    }
-
-    function endChunk(){
-      chunkCard.classList.add("hidden");
-      chunkSummary.classList.remove("hidden");
-      document.getElementById("chunkResultScore").textContent = chunkScore;
-      document.getElementById("chunkResultTotal").textContent = chunkQueue.length;
-      celebrate(chunkScore === chunkQueue.length && chunkScore > 0);
-    }
-
-    modeChunk.addEventListener("click", startChunk);
-    chunkPreviewBtn.addEventListener("click", beginChunkChallenge);
-    chunkSubmitBtn.addEventListener("click", checkChunkAnswer);
-    chunkHintBtn.addEventListener("click", useChunkHint);
-    document.getElementById("chunkBackBtn").addEventListener("click", function(){
-      chunkCard.classList.add("hidden");
-      chunkSummary.classList.add("hidden");
-      setupPanel.classList.remove("hidden");
+    document.getElementById("sprintPauseBtn").addEventListener("click", function(){
+      clearInterval(sprintTimer);
+      stopSprintWordTimer();
+      sprintPauseStart = performance.now();
+      openPause(function(){
+        var pausedMs = performance.now() - sprintPauseStart;
+        sprintWordDeadline += pausedMs;
+        runSprintMainTimer();
+        runSprintWordTimerInterval();
+      }, exitSprint);
     });
-    document.getElementById("chunkAgainBtn").addEventListener("click", startChunk);
   })();
+
 
   // ---------- race mode: type the phrase before the zombie reaches you ----------
   (function(){
@@ -2871,11 +2927,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var RACE_LIVES = 3;
     var RACE_BASE_SECONDS = 3;
     var RACE_PER_CHAR_SECONDS = 0.4;
+    var RACE_MIN_TIME_FACTOR = 0.6;
     var raceQueue = [], raceIdx = 0, raceCurrent = null, raceCombo = 0, raceKills = 0, raceLives = RACE_LIVES;
     var raceStartTime = 0, racePhraseDeadline = 0, racePhraseLimit = 0;
     var raceTickTimer = null;
+    var racePauseStart = 0;
     var raceEnded = false;
     var raceSeenPhrases = [];
+    var raceCurrentEntry = null;
     var RACE_ZOMBIE_MAX_LEFT = 82;
 
     var modeRace = document.getElementById("modeRace");
@@ -2906,7 +2965,12 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     refreshRaceBestUI();
 
     function raceComboMultiplier(combo){
-      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
+      return combo >= 10 ? 5 : combo >= 5 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function raceDifficultyFactor(){
+      var progress = Math.min(raceKills / RACE_KILLS_TO_WIN, 1);
+      return 1 - progress * (1 - RACE_MIN_TIME_FACTOR);
     }
 
     function playZombieGroan(urgent){
@@ -2929,7 +2993,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function buildRacePool(){
-      var phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
+      var phrases = poolForLevel(selectedLevel).filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
+      if(phrases.length < RACE_KILLS_TO_WIN) phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
       return shuffle(phrases.slice());
     }
 
@@ -2952,13 +3017,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function loadRacePhrase(){
       raceCurrent = nextRacePhrase();
-      raceSeenPhrases.push(raceCurrent);
+      raceCurrentEntry = { word: raceCurrent, ok: false };
+      raceSeenPhrases.push(raceCurrentEntry);
       racePromptEl.textContent = raceCurrent.w;
       racePromptMeaningEl.textContent = '"' + raceCurrent.m + '"';
       raceInput.value = "";
       raceInput.classList.remove("wrong");
       raceIndexText.textContent = raceKills + "/" + RACE_KILLS_TO_WIN;
-      racePhraseLimit = RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS;
+      racePhraseLimit = (RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS) * raceDifficultyFactor();
       racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
       raceZombieEl.classList.remove("danger");
       raceZombieEl.style.left = "2%";
@@ -3022,6 +3088,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       if(!typed || typed !== raceCurrent.w.toLowerCase()) return false;
       raceKills++;
       raceCombo++;
+      if(raceCurrentEntry) raceCurrentEntry.ok = true;
       var mult = raceComboMultiplier(raceCombo);
       playComboTone(raceCombo, 500);
       var rect = raceInput.getBoundingClientRect();
@@ -3088,10 +3155,11 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       }
       var reviewList = document.getElementById("raceReviewList");
       reviewList.innerHTML = "";
-      raceSeenPhrases.forEach(function(w){
+      raceSeenPhrases.forEach(function(entry){
+        var w = entry.word;
         var item = document.createElement("div");
-        item.className = "race-review-item";
-        item.innerHTML = "<b>" + w.w + "</b><span>" + w.m + "</span>";
+        item.className = "race-review-item" + (entry.ok ? "" : " missed");
+        item.innerHTML = "<b>" + (entry.ok ? "✅ " : "❌ ") + w.w + "</b><span>" + w.m + "</span>";
         reviewList.appendChild(item);
       });
       refreshRaceBestUI();
@@ -3103,14 +3171,452 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       setupPanel.classList.remove("hidden");
     });
     document.getElementById("raceBriefingStartBtn").addEventListener("click", startRace);
-    document.getElementById("raceBackBtn").addEventListener("click", function(){
+    function exitRace(){
       raceEnded = true;
       clearInterval(raceTickTimer);
       raceCard.classList.add("hidden");
       raceSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
-    });
+    }
+    document.getElementById("raceBackBtn").addEventListener("click", exitRace);
     document.getElementById("raceAgainBtn").addEventListener("click", openRaceBriefing);
+    document.getElementById("racePauseBtn").addEventListener("click", function(){
+      clearInterval(raceTickTimer);
+      raceInput.disabled = true;
+      racePauseStart = performance.now();
+      openPause(function(){
+        var pausedMs = performance.now() - racePauseStart;
+        racePhraseDeadline += pausedMs;
+        raceStartTime += pausedMs;
+        raceInput.disabled = false;
+        raceInput.focus();
+        raceTickTimer = setInterval(raceTick, 100);
+      }, exitRace);
+    });
+  })();
+
+  // ---------- chase mode: assemble the phrase from memory before the monster reaches the princess ----------
+  (function(){
+    var CHASE_KEY = STORAGE_KEY + "_chasebest";
+    var CHASE_WIN_COUNT = 20;
+    var CHASE_LIVES = 3;
+    var CHASE_BASE_SECONDS = 6;
+    var CHASE_PER_CHAR_SECONDS = 0.5;
+    var CHASE_DIFFICULTY_TIERS = [1, 0.7, 0.5, 0.32];
+    var CHASE_ROUND_SIZE = 20;
+    var chaseTier = 0;
+    var CHASE_MEMORIZE_SECONDS = 3.5;
+    var chaseFillerWords = ["take", "make", "get", "have", "do", "go", "the", "a", "to", "for", "with", "on", "in", "of"];
+    var chaseQueue = [], chaseIdx = 0, chaseCurrent = null, chaseSelected = [], chaseHintUsed = false;
+    var chaseCombo = 0, chaseWins = 0, chaseLives = CHASE_LIVES;
+    var chaseStartTime = 0, chasePhraseDeadline = 0, chasePhraseLimit = 0;
+    var chaseInMemorize = false, chaseMemorizeDeadline = 0;
+    var chaseTickTimer = null;
+    var chasePauseStart = 0;
+    var chaseEnded = false;
+    var chaseSeenPhrases = [];
+    var chaseCurrentEntry = null;
+    var CHASE_MONSTER_MAX_LEFT = 82;
+
+    var modeChase = document.getElementById("modeChase");
+    var chaseBriefing = document.getElementById("chaseBriefing");
+    var chaseCard = document.getElementById("chaseCard");
+    var chaseSummary = document.getElementById("chaseSummary");
+    var chaseIndexText = document.getElementById("chaseIndexText");
+    var chaseHeartsEl = document.getElementById("chaseHearts");
+    var chaseComboEl = document.getElementById("chaseCombo");
+    var chaseMonsterEl = document.getElementById("chaseMonsterEmoji");
+    var chasePrincessEl = document.getElementById("chasePrincessEmoji");
+    var chaseDangerTrackEl = document.getElementById("chaseDangerTrack");
+    var chaseTierToastEl = document.getElementById("chaseTierToast");
+    var chaseDotsEl = document.getElementById("chaseDots");
+    var chasePreviewEl = document.getElementById("chasePreview");
+    var chasePreviewWordEl = document.getElementById("chasePreviewWord");
+    var chasePreviewMeaningEl = document.getElementById("chasePreviewMeaning");
+    var chasePreviewBtn = document.getElementById("chasePreviewBtn");
+    var chaseMemorizeFillEl = document.getElementById("chaseMemorizeFill");
+    var chaseChallengeEl = document.getElementById("chaseChallenge");
+    var chaseMeaningEl = document.getElementById("chaseMeaning");
+    var chaseSlotsEl = document.getElementById("chaseSlots");
+    var chasePoolEl = document.getElementById("chasePool");
+    var chaseSubmitBtn = document.getElementById("chaseSubmitBtn");
+    var chaseHintBtn = document.getElementById("chaseHintBtn");
+    var chaseResultTitle = document.getElementById("chaseResultTitle");
+    var chaseResultKills = document.getElementById("chaseResultKills");
+    var chaseResultHearts = document.getElementById("chaseResultHearts");
+    var chaseResultSub = document.getElementById("chaseResultSub");
+    var chaseBestInline = document.getElementById("chaseBestInline");
+
+    function getChaseBest(){
+      try{ return JSON.parse(localStorage.getItem(CHASE_KEY)); }catch(e){ return null; }
+    }
+    function setChaseBest(data){ try{ localStorage.setItem(CHASE_KEY, JSON.stringify(data)); }catch(e){} }
+    function refreshChaseBestUI(){
+      var best = getChaseBest();
+      chaseBestInline.textContent = best ? best.totalTime.toFixed(1) + "s" : "--";
+    }
+    refreshChaseBestUI();
+
+    function chaseComboMultiplier(combo){
+      return combo >= 10 ? 5 : combo >= 5 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function chaseTierFor(wins){
+      return Math.min(Math.floor(wins / 5), CHASE_DIFFICULTY_TIERS.length - 1);
+    }
+
+    function chaseDifficultyFactor(){
+      return CHASE_DIFFICULTY_TIERS[chaseTierFor(chaseWins)];
+    }
+
+    function showChaseTierToast(){
+      chaseTierToastEl.classList.remove("show");
+      void chaseTierToastEl.offsetWidth;
+      chaseTierToastEl.classList.remove("hidden");
+      chaseTierToastEl.classList.add("show");
+    }
+
+    function playTierUpSting(){
+      var ctx = getCtx();
+      if(!ctx) return;
+      [660, 880].forEach(function(freq, i){
+        setTimeout(function(){
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.type = "square";
+          var t0 = ctx.currentTime;
+          osc.frequency.setValueAtTime(freq, t0);
+          gain.gain.setValueAtTime(0.001, t0);
+          gain.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(t0); osc.stop(t0 + 0.22);
+        }, i * 120);
+      });
+    }
+
+    function playMonsterRoar(urgent){
+      var ctx = getCtx();
+      if(!ctx) return;
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "square";
+      var t0 = ctx.currentTime;
+      var base = urgent ? 160 : 110;
+      var dur = urgent ? 0.3 : 0.45;
+      osc.frequency.setValueAtTime(base, t0);
+      osc.frequency.linearRampToValueAtTime(base * 0.6, t0 + dur * 0.6);
+      osc.frequency.linearRampToValueAtTime(base * 0.8, t0 + dur);
+      gain.gain.setValueAtTime(0.001, t0);
+      gain.gain.exponentialRampToValueAtTime(urgent ? 0.14 : 0.08, t0 + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t0); osc.stop(t0 + dur);
+    }
+
+    function buildChasePool(){
+      var phrases = poolForLevel(selectedLevel).filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
+      if(phrases.length < CHASE_WIN_COUNT) phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
+      return shuffle(phrases.slice());
+    }
+
+    function nextChasePhrase(){
+      if(chaseIdx >= chaseQueue.length){ chaseQueue = chaseQueue.concat(buildChasePool()); }
+      return chaseQueue[chaseIdx];
+    }
+
+    function openChaseBriefing(){
+      setupPanel.classList.add("hidden");
+      chaseSummary.classList.add("hidden");
+      chaseBriefing.classList.remove("hidden");
+    }
+
+    function renderChaseHearts(){
+      var hearts = "";
+      for(var i = 0; i < CHASE_LIVES; i++){ hearts += i < chaseLives ? "❤️" : "🖤"; }
+      chaseHeartsEl.textContent = hearts;
+    }
+
+    function pickChaseFiller(correctWords){
+      var candidates = chaseFillerWords.filter(function(c){ return correctWords.indexOf(c) === -1; });
+      return candidates[Math.floor(Math.random() * candidates.length)] || "the";
+    }
+
+    function renderChaseDots(){
+      chaseDotsEl.innerHTML = "";
+      for(var i = 0; i < CHASE_ROUND_SIZE; i++){
+        var dot = document.createElement("span");
+        dot.className = "chunk-dot" + (i < chaseWins ? " done" : i === chaseWins ? " current" : "");
+        chaseDotsEl.appendChild(dot);
+      }
+    }
+
+    function renderChaseSlots(){
+      chaseSlotsEl.innerHTML = "";
+      chaseSelected.forEach(function(sel){
+        var tile = document.createElement("div");
+        tile.className = "chunk-tile placed";
+        tile.textContent = sel.word;
+        tile.addEventListener("click", function(){
+          playTickSound();
+          chaseSelected = chaseSelected.filter(function(s){ return s.id !== sel.id; });
+          var poolTile = chasePoolEl.querySelector('[data-id="' + sel.id + '"]');
+          if(poolTile) poolTile.classList.remove("used");
+          renderChaseSlots();
+        });
+        chaseSlotsEl.appendChild(tile);
+      });
+    }
+
+    function loadChasePhrase(){
+      chaseCurrent = nextChasePhrase();
+      chaseCurrentEntry = { word: chaseCurrent, ok: false };
+      chaseSeenPhrases.push(chaseCurrentEntry);
+      chaseSelected = [];
+      chaseHintUsed = false;
+      chaseIndexText.textContent = chaseWins + "/" + CHASE_WIN_COUNT;
+      renderChaseDots();
+      var newTier = chaseTierFor(chaseWins);
+      if(newTier > chaseTier){
+        chaseTier = newTier;
+        chaseDangerTrackEl.setAttribute("data-tier", String(chaseTier));
+        playTierUpSting();
+        showChaseTierToast();
+      }
+      chaseMonsterEl.classList.remove("danger");
+      chaseMonsterEl.style.left = "2%";
+      chaseInMemorize = true;
+      chasePreviewEl.classList.remove("hidden");
+      chaseChallengeEl.classList.add("hidden");
+      chasePreviewWordEl.textContent = (chaseCurrent.e ? chaseCurrent.e + " " : "") + chaseCurrent.w;
+      chasePreviewMeaningEl.textContent = '"' + chaseCurrent.m + '"';
+      chaseMemorizeFillEl.style.width = "100%";
+      chaseMemorizeDeadline = performance.now() + CHASE_MEMORIZE_SECONDS * 1000;
+      speak(chaseCurrent.w);
+    }
+
+    function beginChaseChallenge(){
+      chaseInMemorize = false;
+      chasePreviewEl.classList.add("hidden");
+      chaseChallengeEl.classList.remove("hidden");
+      chaseMeaningEl.textContent = (chaseCurrent.e ? chaseCurrent.e + " " : "") + '"' + chaseCurrent.m + '"';
+      chasePoolEl.innerHTML = "";
+      var correctWords = chaseCurrent.w.trim().split(/\s+/);
+      var filler = pickChaseFiller(correctWords);
+      var tiles = shuffle(correctWords.concat([filler]));
+      tiles.forEach(function(word, idx){
+        var tile = document.createElement("div");
+        tile.className = "chunk-tile";
+        tile.textContent = word;
+        tile.setAttribute("data-id", idx);
+        tile.addEventListener("click", function(){
+          if(tile.classList.contains("used")) return;
+          playTickSound();
+          tile.classList.add("used");
+          chaseSelected.push({ word: word, id: idx });
+          renderChaseSlots();
+        });
+        chasePoolEl.appendChild(tile);
+      });
+      renderChaseSlots();
+      chasePhraseLimit = (CHASE_BASE_SECONDS + chaseCurrent.w.trim().length * CHASE_PER_CHAR_SECONDS) * chaseDifficultyFactor();
+      chasePhraseDeadline = performance.now() + chasePhraseLimit * 1000;
+      chaseMonsterEl.classList.remove("danger");
+      chaseMonsterEl.style.left = "2%";
+      playMonsterRoar(false);
+    }
+
+    function chaseTick(){
+      if(chaseEnded) return;
+      if(chaseInMemorize){
+        var mRemain = (chaseMemorizeDeadline - performance.now()) / 1000;
+        var mPct = Math.max(0, Math.min(100, (mRemain / CHASE_MEMORIZE_SECONDS) * 100));
+        chaseMemorizeFillEl.style.width = mPct + "%";
+        if(mRemain <= 0){ beginChaseChallenge(); }
+        return;
+      }
+      var remain = (chasePhraseDeadline - performance.now()) / 1000;
+      var pct = Math.max(0, Math.min(100, (remain / chasePhraseLimit) * 100));
+      var progressed = 100 - pct;
+      chaseMonsterEl.style.left = (2 + (progressed / 100) * (CHASE_MONSTER_MAX_LEFT - 2)) + "%";
+      var isDanger = pct < 30;
+      var wasDanger = chaseMonsterEl.classList.contains("danger");
+      chaseMonsterEl.classList.toggle("danger", isDanger);
+      chasePrincessEl.classList.toggle("danger", isDanger);
+      if(isDanger && !wasDanger){ playMonsterRoar(true); }
+      if(remain <= 0){
+        chaseLoseHeart();
+      }
+    }
+
+    function chaseLoseHeart(){
+      chaseLives--;
+      chaseCombo = 0;
+      chaseComboEl.classList.add("hidden");
+      chaseHeartsEl.classList.remove("pulse");
+      void chaseHeartsEl.offsetWidth;
+      chaseHeartsEl.classList.add("pulse");
+      renderChaseHearts();
+      chimeWrong();
+      if(chaseLives <= 0){
+        endChase(false);
+      }else{
+        chaseIdx++;
+        loadChasePhrase();
+      }
+    }
+
+    function chaseShake(){
+      chaseSlotsEl.classList.remove("chunk-shake");
+      void chaseSlotsEl.offsetWidth;
+      chaseSlotsEl.classList.add("chunk-shake");
+    }
+
+    function startChase(){
+      chaseQueue = buildChasePool();
+      chaseIdx = 0; chaseCombo = 0; chaseWins = 0; chaseLives = CHASE_LIVES; chaseTier = 0;
+      chaseDangerTrackEl.removeAttribute("data-tier");
+      chaseStartTime = performance.now();
+      chaseEnded = false;
+      chaseSeenPhrases = [];
+      chaseBriefing.classList.add("hidden");
+      chaseSummary.classList.add("hidden");
+      chaseCard.classList.remove("hidden");
+      chaseComboEl.classList.add("hidden");
+      renderChaseHearts();
+      resizeParticleCanvas();
+      loadChasePhrase();
+      if(chaseTickTimer) clearInterval(chaseTickTimer);
+      chaseTickTimer = setInterval(chaseTick, 100);
+    }
+
+    function useChaseHint(){
+      var correctWords = chaseCurrent.w.trim().split(/\s+/);
+      var nextIndex = chaseSelected.length;
+      if(nextIndex >= correctWords.length) return;
+      var neededWord = correctWords[nextIndex];
+      var poolTiles = Array.prototype.slice.call(chasePoolEl.children);
+      var match = poolTiles.filter(function(t){ return !t.classList.contains("used") && t.textContent === neededWord; })[0];
+      if(!match) return;
+      chaseHintUsed = true;
+      match.click();
+    }
+
+    function checkChaseAnswer(){
+      if(chaseSelected.length === 0) return;
+      var userPhrase = chaseSelected.map(function(s){ return s.word; }).join(" ").toLowerCase();
+      var correctPhrase = chaseCurrent.w.trim().toLowerCase();
+      if(userPhrase !== correctPhrase){
+        chaseCombo = 0;
+        chaseComboEl.classList.add("hidden");
+        chimeWrong();
+        chaseShake();
+        return;
+      }
+      chaseWins++;
+      chaseCombo++;
+      if(chaseCurrentEntry) chaseCurrentEntry.ok = true;
+      var mult = chaseComboMultiplier(chaseCombo);
+      playComboTone(chaseCombo, 460);
+      var rect = chaseSubmitBtn.getBoundingClientRect();
+      createExplosion(rect.left + rect.width / 2, rect.top, 16 + Math.min(chaseCombo * 2, 20), false);
+      chaseMonsterEl.classList.remove("recoil");
+      void chaseMonsterEl.offsetWidth;
+      chaseMonsterEl.classList.add("recoil");
+      var monsterRect = chaseMonsterEl.getBoundingClientRect();
+      createExplosion(monsterRect.left + monsterRect.width / 2, monsterRect.top + monsterRect.height / 2, 12, false);
+      if(mult > 1){
+        chaseComboEl.textContent = "⚡x" + mult;
+        chaseComboEl.classList.remove("hidden");
+        chaseComboEl.classList.remove("pulse");
+        void chaseComboEl.offsetWidth;
+        chaseComboEl.classList.add("pulse");
+      }else{
+        chaseComboEl.classList.add("hidden");
+      }
+      var xpGain = chaseHintUsed ? 15 : 25;
+      meta.xp += xpGain;
+      saveMeta(meta);
+      renderStreakAndXp();
+      flyXp(xpGain);
+      markDailyActivity();
+      chaseIdx++;
+      if(chaseWins >= CHASE_WIN_COUNT){
+        endChase(true);
+      }else{
+        loadChasePhrase();
+      }
+    }
+
+    function endChase(won){
+      chaseEnded = true;
+      clearInterval(chaseTickTimer);
+      chaseCard.classList.add("hidden");
+      chaseSummary.classList.remove("hidden");
+      chaseResultKills.textContent = chaseWins;
+      chaseResultHearts.textContent = chaseLives;
+      if(won){
+        var totalTime = (performance.now() - chaseStartTime) / 1000;
+        var best = getChaseBest();
+        var isNewBest = !best || totalTime < best.totalTime;
+        chaseResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Người đẹp đã được giải cứu!" : "👸 Người đẹp đã được giải cứu!";
+        chaseResultSub.textContent = isNewBest
+          ? "Bạn vừa ghép đúng 20 cụm từ trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(isNewBest) setChaseBest({ totalTime: totalTime });
+        celebrate(true);
+        meta.xp += 40;
+        saveMeta(meta);
+        bumpTodayProgress();
+        markDailyActivity();
+        renderStreakAndXp();
+      }else{
+        chaseResultTitle.textContent = "💀 Quái vật đã bắt được người đẹp!";
+        chaseResultSub.textContent = "Giải cứu được " + chaseWins + "/" + CHASE_WIN_COUNT + " lượt trước khi hết mạng — thử lại nhé!";
+      }
+      var reviewList = document.getElementById("chaseReviewList");
+      reviewList.innerHTML = "";
+      chaseSeenPhrases.forEach(function(entry){
+        var w = entry.word;
+        var item = document.createElement("div");
+        item.className = "race-review-item" + (entry.ok ? "" : " missed");
+        item.innerHTML = "<b>" + (entry.ok ? "✅ " : "❌ ") + w.w + "</b><span>" + w.m + "</span>";
+        reviewList.appendChild(item);
+      });
+      refreshChaseBestUI();
+    }
+
+    modeChase.addEventListener("click", openChaseBriefing);
+    document.getElementById("chaseBriefingBackBtn").addEventListener("click", function(){
+      chaseBriefing.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    });
+    document.getElementById("chaseBriefingStartBtn").addEventListener("click", startChase);
+    function exitChase(){
+      chaseEnded = true;
+      clearInterval(chaseTickTimer);
+      chaseCard.classList.add("hidden");
+      chaseSummary.classList.add("hidden");
+      setupPanel.classList.remove("hidden");
+    }
+    document.getElementById("chaseBackBtn").addEventListener("click", exitChase);
+    document.getElementById("chaseAgainBtn").addEventListener("click", openChaseBriefing);
+    chaseSubmitBtn.addEventListener("click", checkChaseAnswer);
+    chaseHintBtn.addEventListener("click", useChaseHint);
+    chasePreviewBtn.addEventListener("click", function(){
+      if(chaseInMemorize) beginChaseChallenge();
+    });
+    document.getElementById("chasePauseBtn").addEventListener("click", function(){
+      clearInterval(chaseTickTimer);
+      chasePauseStart = performance.now();
+      openPause(function(){
+        var pausedMs = performance.now() - chasePauseStart;
+        chaseMemorizeDeadline += pausedMs;
+        chasePhraseDeadline += pausedMs;
+        chaseStartTime += pausedMs;
+        chaseTickTimer = setInterval(chaseTick, 100);
+      }, exitChase);
+    });
   })();
 
   // ---------- leaderboard: sync progress + show ranking (Firebase) ----------
