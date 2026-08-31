@@ -427,12 +427,7 @@
   /* ---- sprint mode ---- */
   .sprint-head{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:22px; }
   .sprint-timer-wrap{ flex:1; display:flex; align-items:center; gap:10px; }
-  .sprint-timer-bar{ flex:1; height:10px; border-radius:99px; background:var(--paper-2); border:1px solid var(--line); overflow:hidden; }
-  .sprint-timer-fill{ height:100%; background:var(--red); width:100%; transition:width 1s linear; }
-  @media (prefers-reduced-motion: reduce){ .sprint-timer-fill{ transition:none; } }
-  .sprint-timer-text{ flex:none; font-family:var(--font-display); font-weight:800; font-size:20px; font-variant-numeric:tabular-nums; min-width:28px; text-align:right; }
   .sprint-score-wrap{ flex:none; display:flex; align-items:center; gap:8px; }
-  .sprint-score{ font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--red); font-variant-numeric:tabular-nums; }
   .sprint-combo{ font-size:12.5px; font-weight:800; color:#fff; background:var(--red); padding:4px 9px; border-radius:99px; }
   @keyframes sprintCelebrate{ 0%{ transform:scale(.5); opacity:0; } 60%{ transform:scale(1.18); opacity:1; } 100%{ transform:scale(1); } }
   .sprint-celebrate{ animation:sprintCelebrate .5s cubic-bezier(.34,1.56,.64,1); display:inline-block; }
@@ -487,11 +482,28 @@
   .chunk-dot.done{ background:var(--lvl-c1); transform:scale(1.15); }
   .chunk-dot.current{ background:var(--lvl-c1); opacity:.45; }
 
-  /* ---- sprint: per-word time-attack bar ---- */
-  .sprint-word-timer-bar{ height:6px; border-radius:99px; background:var(--paper-2); border:1px solid var(--line); overflow:hidden; margin:-10px 0 16px; }
-  .sprint-word-timer-fill{ height:100%; background:var(--green); width:100%; transition:width .1s linear, background .3s ease; }
-  .sprint-word-timer-fill.danger{ background:var(--red-ink); }
-  @media (prefers-reduced-motion: reduce){ .sprint-word-timer-fill{ transition:none; } }
+  /* ---- sprint: witch-chase danger meter ---- */
+  .sprint-danger-track{ position:relative; height:56px; border-radius:14px; margin:6px 0 10px; overflow:hidden; background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 65%, var(--red-ink) 100%); transition:background 1s ease; }
+  .sprint-danger-track[data-tier="1"]{ background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 50%, var(--red-ink) 100%); }
+  .sprint-danger-track[data-tier="2"]{ background:linear-gradient(90deg, var(--paper-2), var(--red-bg) 40%, var(--red-ink) 100%); }
+  .sprint-danger-track[data-tier="3"]{ background:linear-gradient(90deg, var(--red-bg), var(--red-ink) 55%, var(--red) 100%); }
+  @keyframes witchIdleBounce{ 0%,100%{ transform:translateY(-50%) translateY(0) rotate(0deg); } 50%{ transform:translateY(-50%) translateY(-4px) rotate(4deg); } }
+  @keyframes witchRecoil{ 0%{ transform:translateY(-50%) translateX(0) scale(1); } 30%{ transform:translateY(-50%) translateX(-20px) scale(.9); } 100%{ transform:translateY(-50%) translateX(0) scale(1); } }
+  .sprint-witch{ position:absolute; top:50%; left:2%; transform:translateY(-50%); font-size:38px; line-height:1; transition:left .1s linear; animation:witchIdleBounce 1s ease-in-out infinite; }
+  .sprint-witch.danger{ animation:zombieApproach .3s ease infinite; }
+  .sprint-witch.recoil{ animation:witchRecoil .4s ease; }
+  @keyframes snowwhiteIdleSway{ 0%,100%{ transform:translateY(-50%) rotate(0deg); } 50%{ transform:translateY(-50%) rotate(5deg); } }
+  @keyframes snowwhiteFear{ 0%,100%{ transform:translateY(-50%) translateX(0); } 50%{ transform:translateY(-50%) translateX(3px); } }
+  .sprint-snowwhite{ position:absolute; top:50%; right:8px; transform:translateY(-50%); font-size:30px; line-height:1; transform-origin:bottom center; animation:snowwhiteIdleSway 2.2s ease-in-out infinite; }
+  .sprint-apple{ position:absolute; bottom:-4px; left:-6px; font-size:14px; }
+  .sprint-snowwhite.danger{ animation:snowwhiteFear .25s ease infinite; }
+  .sprint-tier-toast{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2;
+    background:var(--red); color:#fff; font-family:var(--font-display); font-weight:800; font-size:15px;
+    padding:6px 16px; border-radius:99px; white-space:nowrap; pointer-events:none; opacity:0;
+  }
+  .sprint-tier-toast.show{ animation:chaseTierToast 1.4s ease; }
+  @media (prefers-reduced-motion: reduce){ .sprint-witch, .sprint-snowwhite, .sprint-witch.danger, .sprint-snowwhite.danger, .sprint-witch.recoil, .sprint-danger-track, .sprint-tier-toast.show{ animation:none; transition:none; } }
 
   /* ---- sprint: streak / combo flame effect ---- */
   .sprint-flame{ font-size:18px; line-height:1; }
@@ -612,11 +624,21 @@
   .race-input.wrong{ animation:shakeX .3s ease; border-color:var(--red-ink); }
   @keyframes shakeX{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
   .race-prompt{ font-size:24px; font-weight:800; text-align:center; margin:14px 0 2px; color:var(--ink); font-family:var(--font-display); }
-  .race-danger-track{ position:relative; height:56px; border-radius:14px; margin:6px 0 10px; overflow:hidden; background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 65%, var(--red-ink) 100%); }
-  .race-zombie{ position:absolute; top:50%; left:2%; transform:translateY(-50%); font-size:38px; line-height:1; transition:left .1s linear; }
+  .race-danger-track{ position:relative; height:56px; border-radius:14px; margin:6px 0 10px; overflow:hidden; background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 65%, var(--red-ink) 100%); transition:background 1s ease; }
+  .race-danger-track[data-tier="1"]{ background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 50%, var(--red-ink) 100%); }
+  .race-danger-track[data-tier="2"]{ background:linear-gradient(90deg, var(--paper-2), var(--red-bg) 40%, var(--red-ink) 100%); }
+  .race-danger-track[data-tier="3"]{ background:linear-gradient(90deg, var(--red-bg), var(--red-ink) 55%, var(--red) 100%); }
+  @keyframes zombieIdleBounce{ 0%,100%{ transform:translateY(-50%) translateY(0) rotate(0deg); } 50%{ transform:translateY(-50%) translateY(-4px) rotate(-4deg); } }
+  @keyframes zombieRecoil{ 0%{ transform:translateY(-50%) translateX(0) scale(1); } 30%{ transform:translateY(-50%) translateX(-20px) scale(.9); } 100%{ transform:translateY(-50%) translateX(0) scale(1); } }
+  .race-zombie{ position:absolute; top:50%; left:2%; transform:translateY(-50%); font-size:38px; line-height:1; transition:left .1s linear; animation:zombieIdleBounce 1s ease-in-out infinite; }
   @keyframes zombieApproach{ 0%,100%{ transform:translateY(-50%) scale(1); } 50%{ transform:translateY(-50%) scale(1.1); } }
   .race-zombie.danger{ animation:zombieApproach .3s ease infinite; }
-  .race-player{ position:absolute; top:50%; right:8px; transform:translateY(-50%); font-size:30px; line-height:1; }
+  .race-zombie.recoil{ animation:zombieRecoil .4s ease; }
+  @keyframes playerIdleSway{ 0%,100%{ transform:translateY(-50%) rotate(0deg); } 50%{ transform:translateY(-50%) rotate(-5deg); } }
+  @keyframes playerFear{ 0%,100%{ transform:translateY(-50%) translateX(0); } 50%{ transform:translateY(-50%) translateX(-3px); } }
+  .race-player{ position:absolute; top:50%; right:8px; transform:translateY(-50%); font-size:30px; line-height:1; transform-origin:bottom center; animation:playerIdleSway 2.2s ease-in-out infinite; }
+  .race-player.danger{ animation:playerFear .25s ease infinite; }
+  @media (prefers-reduced-motion: reduce){ .race-zombie, .race-player, .race-zombie.recoil{ animation:none; } }
   @keyframes heartLoss{ 0%{ transform:scale(1.4); } 100%{ transform:scale(1); } }
   #raceHearts.pulse{ animation:heartLoss .3s ease; }
   .race-review-head{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin:16px 0 8px; }
@@ -639,6 +661,7 @@
   .leaderboard-row b:last-child{ flex:none; color:var(--red); font-family:var(--font-display); }
   .leaderboard-row.me{ border:1.5px solid var(--red); background:var(--red-bg); }
   #leaderboardMeRow .leaderboard-row{ margin-top:10px; }
+
   @media (prefers-reduced-motion: reduce){ .race-input.wrong{ animation:none; } .race-zombie.danger{ animation:none; } #raceHearts.pulse{ animation:none; } }
 
   .footer-note{ text-align:center; font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
@@ -820,8 +843,8 @@
       </div>
       <div class="mode-list">
         <button class="mode-btn mode-btn-sprint" id="modeSprint" type="button">
-          <b>⚡ Đấu trường 60 giây</b>
-          <span>Trả lời càng nhiều càng tốt trong 60 giây. Kỷ lục của bạn: <b id="sprintBestInline">0</b> điểm</span>
+          <b>🧙‍♀️ Phù Thủy Đuổi Theo Bạch Tuyết</b>
+          <span>Trả lời đúng 20 câu để Bạch Tuyết trốn thoát — mỗi câu đúng đẩy lùi phù thủy, câu sai hoặc chần chừ sẽ bị bắt kịp! Kỷ lục: <b id="sprintBestInline">--</b></span>
         </button>
         <button class="mode-btn mode-btn-sprint" id="modeChase" type="button">
           <b>🦁 Người Đẹp Và Quái Vật</b>
@@ -990,7 +1013,7 @@
   <!-- RACE BRIEFING SCREEN -->
   <section class="panel hidden" id="raceBriefing">
     <h2>🧟 Sắp vào: Chặn Đứng Zombie</h2>
-    <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn có 3 mạng (❤️❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi diệt đủ 20 zombie là thua.</p>
+    <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn chỉ có 2 mạng (❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi diệt đủ 20 zombie là thua.</p>
     <div class="btn-row">
       <button class="btn-ghost" id="raceBriefingBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="raceBriefingStartBtn" type="button">Bắt đầu →</button>
@@ -1011,7 +1034,8 @@
     </div>
     <div class="race-danger-track" id="raceDangerTrack">
       <span class="race-zombie" id="raceZombieEmoji">🧟</span>
-      <span class="race-player">🧑</span>
+      <span class="race-player" id="racePlayerEmoji">🧑</span>
+      <span class="sprint-tier-toast hidden" id="raceTierToast">⚡ Nhanh hơn!</span>
     </div>
     <p class="race-prompt" id="racePrompt">take out the trash</p>
     <p style="text-align:center; font-size:13.5px; color:var(--ink-soft); margin:-14px 0 16px;" id="racePromptMeaning">"đổ rác"</p>
@@ -1037,7 +1061,7 @@
   <!-- CHASE BRIEFING SCREEN -->
   <section class="panel hidden" id="chaseBriefing">
     <h2>🦁 Sắp vào: Người Đẹp Và Quái Vật</h2>
-    <p class="desc">Lấy cảm hứng từ Người Đẹp và Quái Vật — quái vật là một chú sư tử 🦁. Mỗi lượt hiện cụm từ + nghĩa tiếng Việt trong ít giây để bạn ghi nhớ, rồi ẩn đi — ghép đúng thẻ từ theo thứ tự trước khi sư tử chạm tới người đẹp. Bạn có 3 mạng (❤️❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi giải cứu đủ 20 lượt là thua.</p>
+    <p class="desc">Lấy cảm hứng từ Người Đẹp và Quái Vật — quái vật là một chú sư tử 🦁. Mỗi lượt hiện cụm từ + nghĩa tiếng Việt trong ít giây để bạn ghi nhớ, rồi ẩn đi — ghép đúng thẻ từ theo thứ tự trước khi sư tử chạm tới người đẹp. Bạn chỉ có 2 mạng (❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi giải cứu đủ 20 lượt là thua.</p>
     <div class="btn-row">
       <button class="btn-ghost" id="chaseBriefingBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="chaseBriefingStartBtn" type="button">Bắt đầu →</button>
@@ -1080,8 +1104,7 @@
       <div id="chaseSlots" style="min-height:52px; border:2px dashed var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; padding:10px; margin-bottom:16px; transition:border-color .2s ease;"></div>
       <div id="chasePool" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px;"></div>
       <div style="display:flex; gap:10px;">
-        <button class="btn-ghost" id="chaseHintBtn" type="button" style="flex:none; padding:14px 16px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">💡 Gợi ý</button>
-        <button id="chaseSubmitBtn" type="button" style="flex:1; padding:14px; border-radius:12px; font-weight:700; font-size:15px; cursor:pointer; border:none; color:#fff; background:var(--red);">Xác nhận đáp án</button>
+        <button class="btn-ghost" id="chaseHintBtn" type="button" style="flex:1; padding:14px 16px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">💡 Gợi ý</button>
       </div>
     </div>
   </section>
@@ -1105,33 +1128,35 @@
   <!-- SPRINT MODE SCREEN -->
   <!-- SPRINT BRIEFING SCREEN -->
   <section class="panel hidden" id="sprintBriefing">
-    <h2>⚡ Sắp vào Đấu trường 60 giây</h2>
-    <p class="desc" id="sprintBriefingDesc">Đang chuẩn bị câu hỏi...</p>
+    <h2>🧙‍♀️ Sắp vào: Phù Thủy Đuổi Theo Bạch Tuyết</h2>
+    <p class="desc" id="sprintBriefingDesc">Trả lời đúng 20 câu để giúp Bạch Tuyết trốn thoát. Mỗi câu đúng đẩy lùi phù thủy; câu sai hoặc trả lời chậm sẽ khiến bà ta tiến gần hơn. Bị bắt kịp trước khi xong 20 câu là thua — càng về sau phù thủy càng đuổi nhanh!</p>
     <div class="sprint-preview-list" id="sprintPreviewList"></div>
     <div class="btn-row">
       <button class="btn-ghost" id="sprintBriefingBackBtn" type="button">← Về màn hình chọn</button>
-      <button class="btn-primary" id="sprintBriefingStartBtn" type="button">Bắt đầu 60 giây →</button>
+      <button class="btn-primary" id="sprintBriefingStartBtn" type="button">Bắt đầu →</button>
     </div>
   </section>
 
   <section class="card hidden" id="sprintCard">
     <div class="sprint-head">
       <div class="sprint-timer-wrap">
-        <div class="sprint-timer-bar"><div class="sprint-timer-fill" id="sprintTimerFill"></div></div>
-        <span class="sprint-timer-text" id="sprintTimerText">60</span>
+        <span id="sprintIndexText" style="font-weight:800; font-family:var(--font-display); font-size:15px;">0/20</span>
       </div>
       <div class="sprint-score-wrap">
         <span class="sprint-flame hidden" id="sprintFlame"></span>
-        <span class="sprint-score" id="sprintScore">0</span>
         <span class="sprint-combo hidden" id="sprintCombo">x1</span>
         <button class="pause-btn" id="sprintPauseBtn" type="button" aria-label="Tạm dừng">⏸️</button>
       </div>
+    </div>
+    <div class="sprint-danger-track" id="sprintDangerTrack">
+      <span class="sprint-witch" id="sprintWitchEmoji">🧙‍♀️</span>
+      <span class="sprint-snowwhite">👧<span class="sprint-apple">🍎</span></span>
+      <span class="sprint-tier-toast hidden" id="sprintTierToast">⚡ Nhanh hơn!</span>
     </div>
     <div class="sprint-question">
       <div class="sprint-word" id="sprintWord">word</div>
       <div class="sprint-ipa" id="sprintIpa"></div>
     </div>
-    <div class="sprint-word-timer-bar"><div class="sprint-word-timer-fill" id="sprintWordTimerFill"></div></div>
     <div class="sprint-options" id="sprintOptions"></div>
   </section>
 
@@ -1139,8 +1164,8 @@
   <section class="panel hidden" id="sprintSummary">
     <h2 id="sprintResultTitle">Hết giờ!</h2>
     <div class="summary-grid">
-      <div class="summary-tile"><b id="sprintResultScore">0</b><span>Điểm đạt được</span></div>
-      <div class="summary-tile"><b id="sprintResultBest">0</b><span>Kỷ lục của bạn</span></div>
+      <div class="summary-tile"><b id="sprintResultScore">0</b><span>Câu trả lời đúng</span></div>
+      <div class="summary-tile"><b id="sprintResultBest">--</b><span>Kỷ lục hoàn thành</span></div>
     </div>
     <p class="desc" id="sprintResultSub"></p>
     <div class="btn-row">
@@ -2592,6 +2617,53 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     playFanfare(big);
   }
 
+  function playTierUpSting(){
+    var ctx = getCtx();
+    if(!ctx) return;
+    [660, 880].forEach(function(freq, i){
+      setTimeout(function(){
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = "square";
+        var t0 = ctx.currentTime;
+        osc.frequency.setValueAtTime(freq, t0);
+        gain.gain.setValueAtTime(0.001, t0);
+        gain.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t0); osc.stop(t0 + 0.22);
+      }, i * 120);
+    });
+  }
+
+  // ---------- shared sound-effect clips (used by Sprint, Chase, Race) ----------
+  function playSfx(url, volume, maxDurationMs){
+    try{
+      var a = new Audio(url);
+      a.volume = volume == null ? 0.5 : volume;
+      a.play().catch(function(){});
+      if(maxDurationMs){
+        setTimeout(function(){
+          var fadeStart = a.volume;
+          var fadeSteps = 6;
+          var i = 0;
+          var fadeTimer = setInterval(function(){
+            i++;
+            a.volume = Math.max(0, fadeStart * (1 - i / fadeSteps));
+            if(i >= fadeSteps){
+              clearInterval(fadeTimer);
+              a.pause();
+            }
+          }, 30);
+        }, maxDurationMs);
+      }
+    }catch(e){}
+  }
+  function playWhistleSfx(){ playSfx("./mixkit-cartoon-toy-whistle-616.wav", 0.45); }
+  function playClapSfx(){ playSfx("./mixkit-ending-show-audience-clapping-478.wav", 0.55); }
+  function playMilestoneClapSfx(){ playSfx("./mixkit-ending-show-audience-clapping-478.wav", 0.4, 1200); }
+  function playTromboneSfx(){ playSfx("./mixkit-sad-game-over-trombone-471.wav", 0.5); }
+
   // ---------- shared pause overlay (used by Sprint, Chase, Race) ----------
   var pauseOverlayEl = document.getElementById("pauseOverlay");
   var pauseResumeBtn = document.getElementById("pauseResumeBtn");
@@ -2613,16 +2685,21 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     if(activePauseExit) activePauseExit();
   });
 
-  // ---------- sprint mode: 60-second speed challenge ----------
+  // ---------- sprint mode: witch chases Snow White across 20 questions ----------
   (function(){
     var SPRINT_KEY = STORAGE_KEY + "_sprintbest";
-    var SPRINT_DURATION = 60;
-    var SPRINT_WORD_LIMIT = 6;
-    var sprintTimer = null, sprintTimeLeft = 0, sprintScore = 0, sprintCombo = 0;
+    var SPRINT_WIN_COUNT = 20;
+    var SPRINT_DRIFT_TIERS = [3.5, 4.6, 10, 15];
+    var SPRINT_BONUS_TIERS = [10, 8, 3.6, 2.4];
+    var SPRINT_WRONG_PENALTY = 8;
+    var SPRINT_WITCH_MAX_LEFT = 82;
+    var sprintDangerPct = 0, sprintTier = 0, sprintCorrectCount = 0;
+    var sprintTimer = null, sprintCombo = 0;
+    var sprintStartTime = 0;
     var sprintPauseStart = 0;
     var sprintFullPool = [], sprintQueue = [], sprintCurrent = null;
-    var sprintWordTimer = null, sprintWordDeadline = 0;
     var sprintFlameTier = 0;
+    var sprintEnded = false;
 
     var modeSprint = document.getElementById("modeSprint");
     var sprintBriefing = document.getElementById("sprintBriefing");
@@ -2630,12 +2707,12 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var sprintBriefingDesc = document.getElementById("sprintBriefingDesc");
     var sprintCard = document.getElementById("sprintCard");
     var sprintSummary = document.getElementById("sprintSummary");
-    var sprintTimerFill = document.getElementById("sprintTimerFill");
-    var sprintTimerText = document.getElementById("sprintTimerText");
-    var sprintScoreEl = document.getElementById("sprintScore");
+    var sprintIndexText = document.getElementById("sprintIndexText");
     var sprintComboEl = document.getElementById("sprintCombo");
     var sprintFlameEl = document.getElementById("sprintFlame");
-    var sprintWordTimerFill = document.getElementById("sprintWordTimerFill");
+    var sprintDangerTrackEl = document.getElementById("sprintDangerTrack");
+    var sprintWitchEl = document.getElementById("sprintWitchEmoji");
+    var sprintTierToastEl = document.getElementById("sprintTierToast");
     var sprintWordEl = document.getElementById("sprintWord");
     var sprintIpaEl = document.getElementById("sprintIpa");
     var sprintOptionsEl = document.getElementById("sprintOptions");
@@ -2646,10 +2723,16 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var sprintResultSub = document.getElementById("sprintResultSub");
 
     function getSprintBest(){
-      try{ return parseInt(localStorage.getItem(SPRINT_KEY), 10) || 0; }catch(e){ return 0; }
+      try{
+        var v = JSON.parse(localStorage.getItem(SPRINT_KEY));
+        return (v && typeof v.totalTime === "number") ? v : null;
+      }catch(e){ return null; }
     }
-    function setSprintBest(v){ try{ localStorage.setItem(SPRINT_KEY, String(v)); }catch(e){} }
-    function refreshSprintBestUI(){ sprintBestInline.textContent = getSprintBest(); }
+    function setSprintBest(data){ try{ localStorage.setItem(SPRINT_KEY, JSON.stringify(data)); }catch(e){} }
+    function refreshSprintBestUI(){
+      var best = getSprintBest();
+      sprintBestInline.textContent = best ? best.totalTime.toFixed(1) + "s" : "--";
+    }
     refreshSprintBestUI();
 
     function comboMultiplier(combo){
@@ -2667,49 +2750,40 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       sprintFlameEl.classList.toggle("hidden", tier === 0);
     }
 
+    function sprintTierFor(correctCount){
+      return Math.min(Math.floor(correctCount / 5), SPRINT_DRIFT_TIERS.length - 1);
+    }
+
+    function showSprintTierToast(){
+      sprintTierToastEl.classList.remove("show");
+      void sprintTierToastEl.offsetWidth;
+      sprintTierToastEl.classList.remove("hidden");
+      sprintTierToastEl.classList.add("show");
+    }
+
     function pickDistractors(correctWord, pool, n){
       var others = pool.filter(function(w){ return w.w !== correctWord.w; });
       others = shuffle(others);
       return others.slice(0, n);
     }
 
-    function stopSprintWordTimer(){ clearInterval(sprintWordTimer); }
-
-    function sprintWordTimeout(){
-      Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
-      if(sprintCorrectBtnRef){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
-      sprintCombo = 0;
-      sprintFlameTier = 0;
-      updateSprintFlame(0);
-      sprintComboEl.classList.add("hidden");
-      chimeWrong();
-      setTimeout(function(){
-        if(sprintTimeLeft > 0){
-          Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
-          nextSprintQuestion();
-        }
-      }, 750);
+    function renderSprintDanger(){
+      sprintWitchEl.style.left = (2 + (sprintDangerPct / 100) * (SPRINT_WITCH_MAX_LEFT - 2)) + "%";
+      var isDanger = sprintDangerPct > 70;
+      sprintWitchEl.classList.toggle("danger", isDanger);
     }
 
-    function runSprintWordTimerInterval(){
-      stopSprintWordTimer();
-      sprintWordTimer = setInterval(function(){
-        var remain = (sprintWordDeadline - performance.now()) / 1000;
-        var pct = Math.max(0, Math.min(100, (remain / SPRINT_WORD_LIMIT) * 100));
-        sprintWordTimerFill.style.width = pct + "%";
-        sprintWordTimerFill.classList.toggle("danger", pct < 35);
-        if(remain <= 0){
-          stopSprintWordTimer();
-          sprintWordTimeout();
+    function startSprintTicker(){
+      clearInterval(sprintTimer);
+      sprintTimer = setInterval(function(){
+        var drift = SPRINT_DRIFT_TIERS[sprintTier];
+        sprintDangerPct = Math.min(100, sprintDangerPct + drift * 0.1);
+        renderSprintDanger();
+        if(sprintDangerPct >= 100){
+          clearInterval(sprintTimer);
+          endSprint(false);
         }
       }, 100);
-    }
-
-    function startSprintWordTimer(){
-      sprintWordDeadline = performance.now() + SPRINT_WORD_LIMIT * 1000;
-      sprintWordTimerFill.style.width = "100%";
-      sprintWordTimerFill.classList.remove("danger");
-      runSprintWordTimerInterval();
     }
 
     var sprintCorrectBtnRef = null;
@@ -2717,6 +2791,15 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function nextSprintQuestion(){
       if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
       sprintCurrent = sprintQueue.pop();
+      sprintIndexText.textContent = sprintCorrectCount + "/" + SPRINT_WIN_COUNT;
+      var newTier = sprintTierFor(sprintCorrectCount);
+      if(newTier > sprintTier){
+        sprintTier = newTier;
+        sprintDangerTrackEl.setAttribute("data-tier", String(sprintTier));
+        playTierUpSting();
+        playMilestoneClapSfx();
+        showSprintTierToast();
+      }
       sprintWordEl.textContent = sprintCurrent.w;
       sprintIpaEl.textContent = sprintCurrent.ipa ? "/" + sprintCurrent.ipa + "/" : "";
       var distractors = pickDistractors(sprintCurrent, sprintFullPool, 3);
@@ -2743,25 +2826,29 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         sprintOptionsEl.appendChild(btn);
       });
       speak(sprintCurrent.w);
-      startSprintWordTimer();
     }
 
     function answerSprint(correct, btnEl){
-      stopSprintWordTimer();
       Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
       var rect = btnEl.getBoundingClientRect();
       var clickX = rect.left + rect.width / 2;
       var clickY = rect.top + rect.height / 2;
       if(correct){
         sprintCombo++;
+        sprintCorrectCount++;
         var mult = comboMultiplier(sprintCombo);
-        sprintScore += 10 * mult;
+        sprintDangerPct = Math.max(0, sprintDangerPct - SPRINT_BONUS_TIERS[sprintTier]);
+        renderSprintDanger();
         btnEl.classList.add("sprint-opt-correct");
         playComboTone(sprintCombo);
+        sprintWitchEl.classList.remove("recoil");
+        void sprintWitchEl.offsetWidth;
+        sprintWitchEl.classList.add("recoil");
         var tier = flameTierFor(sprintCombo);
         if(tier > sprintFlameTier){
           var cardRect = sprintCard.getBoundingClientRect();
           createExplosion(cardRect.left + cardRect.width / 2, cardRect.top + 30, 26 + tier * 10, true);
+          playWhistleSfx();
         }else{
           createExplosion(clickX, clickY, 18 + Math.min(sprintCombo * 2, 20), false);
         }
@@ -2786,14 +2873,23 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         sprintCombo = 0;
         sprintFlameTier = 0;
         updateSprintFlame(0);
+        sprintDangerPct = Math.min(100, sprintDangerPct + SPRINT_WRONG_PENALTY);
+        renderSprintDanger();
         btnEl.classList.add("sprint-opt-wrong");
         if(sprintCorrectBtnRef && sprintCorrectBtnRef !== btnEl){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
         chimeWrong();
         sprintComboEl.classList.add("hidden");
       }
-      sprintScoreEl.textContent = sprintScore;
+      if(sprintDangerPct >= 100){
+        setTimeout(function(){ endSprint(false); }, correct ? 0 : 400);
+        return;
+      }
+      if(sprintCorrectCount >= SPRINT_WIN_COUNT){
+        setTimeout(function(){ endSprint(true); }, 350);
+        return;
+      }
       setTimeout(function(){
-        if(sprintTimeLeft > 0){
+        if(!sprintEnded){
           Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
           nextSprintQuestion();
         }
@@ -2833,58 +2929,56 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function startSprint(){
-      sprintScore = 0; sprintCombo = 0; sprintTimeLeft = SPRINT_DURATION;
+      sprintCombo = 0; sprintCorrectCount = 0; sprintDangerPct = 0; sprintTier = 0;
+      sprintDangerTrackEl.removeAttribute("data-tier");
       sprintFlameTier = 0;
+      sprintEnded = false;
+      sprintStartTime = performance.now();
       updateSprintFlame(0);
       sprintQueue = shuffle(sprintFullPool.slice());
       resizeParticleCanvas();
       sprintBriefing.classList.add("hidden");
       sprintSummary.classList.add("hidden");
       sprintCard.classList.remove("hidden");
-      sprintScoreEl.textContent = "0";
       sprintComboEl.classList.add("hidden");
-      sprintTimerText.textContent = sprintTimeLeft;
-      sprintTimerFill.style.width = "100%";
+      sprintWitchEl.classList.remove("danger");
+      renderSprintDanger();
       nextSprintQuestion();
-      runSprintMainTimer();
+      startSprintTicker();
     }
 
-    function runSprintMainTimer(){
+    function endSprint(won){
+      sprintEnded = true;
       clearInterval(sprintTimer);
-      sprintTimer = setInterval(function(){
-        sprintTimeLeft--;
-        sprintTimerText.textContent = Math.max(0, sprintTimeLeft);
-        sprintTimerFill.style.width = Math.max(0, (sprintTimeLeft / SPRINT_DURATION * 100)) + "%";
-        if(sprintTimeLeft <= 0){
-          clearInterval(sprintTimer);
-          stopSprintWordTimer();
-          endSprint();
-        }
-      }, 1000);
-    }
-
-    function endSprint(){
-      stopSprintWordTimer();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.remove("hidden");
-      var best = getSprintBest();
-      var isNewBest = sprintScore > best;
-      if(isNewBest) setSprintBest(sprintScore);
-      sprintResultScore.textContent = sprintScore;
-      sprintResultBest.textContent = Math.max(best, sprintScore);
-      sprintResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới!" : "Hết giờ!";
-      sprintResultSub.textContent = isNewBest
-        ? "Bạn vừa vượt qua kỷ lục cũ (" + best + " điểm) — chơi lại để nâng kỷ lục cao hơn nữa!"
-        : "Chơi lại để phá kỷ lục " + Math.max(best, sprintScore) + " điểm của chính bạn!";
-      sprintResultTitle.classList.remove("sprint-celebrate");
-      if(isNewBest && sprintScore > 0){
+      sprintResultScore.textContent = sprintCorrectCount + "/" + SPRINT_WIN_COUNT;
+      if(won){
+        var totalTime = (performance.now() - sprintStartTime) / 1000;
+        var best = getSprintBest();
+        var isNewBest = !best || totalTime < best.totalTime;
+        sprintResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Bạch Tuyết đã trốn thoát!" : "🎉 Bạch Tuyết đã trốn thoát!";
+        sprintResultSub.textContent = isNewBest
+          ? "Bạn vừa trả lời đúng 20 câu trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(isNewBest) setSprintBest({ totalTime: totalTime });
+        sprintResultBest.textContent = (isNewBest ? totalTime : best.totalTime).toFixed(1) + "s";
+        sprintResultTitle.classList.remove("sprint-celebrate");
         void sprintResultTitle.offsetWidth;
         sprintResultTitle.classList.add("sprint-celebrate");
-        celebrate(true);
+        celebrate(isNewBest);
+        playClapSfx();
         var praise = REACTIONS_CORRECT[Math.floor(Math.random() * REACTIONS_CORRECT.length)];
         setTimeout(function(){ speakReactionVi(praise); }, 200);
-      }else if(sprintScore > 0){
-        celebrate(false);
+        meta.xp += 40;
+        saveMeta(meta);
+        bumpTodayProgress();
+      }else{
+        sprintResultTitle.textContent = "🧙‍♀️ Phù thủy đã bắt kịp Bạch Tuyết!";
+        sprintResultSub.textContent = "Trả lời đúng " + sprintCorrectCount + "/" + SPRINT_WIN_COUNT + " câu trước khi bị bắt kịp — thử lại nhé!";
+        var best2 = getSprintBest();
+        sprintResultBest.textContent = best2 ? best2.totalTime.toFixed(1) + "s" : "--";
+        playTromboneSfx();
       }
       refreshSprintBestUI();
       markDailyActivity();
@@ -2898,8 +2992,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     });
     document.getElementById("sprintBriefingStartBtn").addEventListener("click", startSprint);
     function exitSprint(){
+      sprintEnded = true;
       clearInterval(sprintTimer);
-      stopSprintWordTimer();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
@@ -2908,13 +3002,10 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     document.getElementById("sprintAgainBtn").addEventListener("click", openSprintBriefing);
     document.getElementById("sprintPauseBtn").addEventListener("click", function(){
       clearInterval(sprintTimer);
-      stopSprintWordTimer();
       sprintPauseStart = performance.now();
       openPause(function(){
-        var pausedMs = performance.now() - sprintPauseStart;
-        sprintWordDeadline += pausedMs;
-        runSprintMainTimer();
-        runSprintWordTimerInterval();
+        sprintStartTime += (performance.now() - sprintPauseStart);
+        startSprintTicker();
       }, exitSprint);
     });
   })();
@@ -2924,17 +3015,19 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   (function(){
     var RACE_KEY = STORAGE_KEY + "_racebest";
     var RACE_KILLS_TO_WIN = 20;
-    var RACE_LIVES = 3;
+    var RACE_LIVES = 2;
     var RACE_BASE_SECONDS = 3;
     var RACE_PER_CHAR_SECONDS = 0.4;
-    var RACE_MIN_TIME_FACTOR = 0.6;
+    var RACE_DIFFICULTY_TIERS = [0.85, 0.65, 0.30, 0.20];
     var raceQueue = [], raceIdx = 0, raceCurrent = null, raceCombo = 0, raceKills = 0, raceLives = RACE_LIVES;
+    var raceComboTier = 0;
     var raceStartTime = 0, racePhraseDeadline = 0, racePhraseLimit = 0;
     var raceTickTimer = null;
     var racePauseStart = 0;
     var raceEnded = false;
     var raceSeenPhrases = [];
     var raceCurrentEntry = null;
+    var raceTier = 0;
     var RACE_ZOMBIE_MAX_LEFT = 82;
 
     var modeRace = document.getElementById("modeRace");
@@ -2945,6 +3038,9 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var raceHeartsEl = document.getElementById("raceHearts");
     var raceComboEl = document.getElementById("raceCombo");
     var raceZombieEl = document.getElementById("raceZombieEmoji");
+    var racePlayerEl = document.getElementById("racePlayerEmoji");
+    var raceDangerTrackEl = document.getElementById("raceDangerTrack");
+    var raceTierToastEl = document.getElementById("raceTierToast");
     var racePromptEl = document.getElementById("racePrompt");
     var racePromptMeaningEl = document.getElementById("racePromptMeaning");
     var raceInput = document.getElementById("raceInput");
@@ -2968,9 +3064,19 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       return combo >= 10 ? 5 : combo >= 5 ? 3 : combo >= 3 ? 2 : 1;
     }
 
+    function raceTierFor(kills){
+      return Math.min(Math.floor(kills / 5), RACE_DIFFICULTY_TIERS.length - 1);
+    }
+
     function raceDifficultyFactor(){
-      var progress = Math.min(raceKills / RACE_KILLS_TO_WIN, 1);
-      return 1 - progress * (1 - RACE_MIN_TIME_FACTOR);
+      return RACE_DIFFICULTY_TIERS[raceTierFor(raceKills)];
+    }
+
+    function showRaceTierToast(){
+      raceTierToastEl.classList.remove("show");
+      void raceTierToastEl.offsetWidth;
+      raceTierToastEl.classList.remove("hidden");
+      raceTierToastEl.classList.add("show");
     }
 
     function playZombieGroan(urgent){
@@ -3024,6 +3130,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       raceInput.value = "";
       raceInput.classList.remove("wrong");
       raceIndexText.textContent = raceKills + "/" + RACE_KILLS_TO_WIN;
+      var newRaceTier = raceTierFor(raceKills);
+      if(newRaceTier > raceTier){
+        raceTier = newRaceTier;
+        raceDangerTrackEl.setAttribute("data-tier", String(raceTier));
+        playTierUpSting();
+        playMilestoneClapSfx();
+        showRaceTierToast();
+      }
       racePhraseLimit = (RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS) * raceDifficultyFactor();
       racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
       raceZombieEl.classList.remove("danger");
@@ -3041,6 +3155,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var isDanger = pct < 30;
       var wasDanger = raceZombieEl.classList.contains("danger");
       raceZombieEl.classList.toggle("danger", isDanger);
+      racePlayerEl.classList.toggle("danger", isDanger);
       if(isDanger && !wasDanger){ playZombieGroan(true); }
       if(remain <= 0){
         raceLoseHeart();
@@ -3050,6 +3165,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function raceLoseHeart(){
       raceLives--;
       raceCombo = 0;
+      raceComboTier = 0;
       raceComboEl.classList.add("hidden");
       raceHeartsEl.classList.remove("pulse");
       void raceHeartsEl.offsetWidth;
@@ -3066,7 +3182,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function startRace(){
       raceQueue = buildRacePool();
-      raceIdx = 0; raceCombo = 0; raceKills = 0; raceLives = RACE_LIVES;
+      raceIdx = 0; raceCombo = 0; raceKills = 0; raceLives = RACE_LIVES; raceTier = 0; raceComboTier = 0;
+      raceDangerTrackEl.removeAttribute("data-tier");
       raceStartTime = performance.now();
       raceEnded = false;
       raceSeenPhrases = [];
@@ -3093,6 +3210,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       playComboTone(raceCombo, 500);
       var rect = raceInput.getBoundingClientRect();
       createExplosion(rect.left + rect.width / 2, rect.top, 14 + Math.min(raceCombo * 2, 20), false);
+      raceZombieEl.classList.remove("recoil");
+      void raceZombieEl.offsetWidth;
+      raceZombieEl.classList.add("recoil");
+      var zombieRect = raceZombieEl.getBoundingClientRect();
+      createExplosion(zombieRect.left + zombieRect.width / 2, zombieRect.top + zombieRect.height / 2, 12, false);
+      var raceComboTierNow = raceCombo >= 10 ? 3 : raceCombo >= 5 ? 2 : raceCombo >= 3 ? 1 : 0;
+      if(raceComboTierNow > raceComboTier){ playWhistleSfx(); }
+      raceComboTier = raceComboTierNow;
       if(mult > 1){
         raceComboEl.textContent = "⚡x" + mult;
         raceComboEl.classList.remove("hidden");
@@ -3143,6 +3268,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
           : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
         if(isNewBest) setRaceBest({ totalTime: totalTime });
         celebrate(true);
+        playClapSfx();
         var xpGain = 40;
         meta.xp += xpGain;
         saveMeta(meta);
@@ -3152,6 +3278,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       }else{
         raceResultTitle.textContent = "💀 Bạn đã bị zombie bắt kịp!";
         raceResultSub.textContent = "Diệt được " + raceKills + "/" + RACE_KILLS_TO_WIN + " zombie trước khi hết mạng — thử lại nhé!";
+        playTromboneSfx();
       }
       var reviewList = document.getElementById("raceReviewList");
       reviewList.innerHTML = "";
@@ -3199,16 +3326,17 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   (function(){
     var CHASE_KEY = STORAGE_KEY + "_chasebest";
     var CHASE_WIN_COUNT = 20;
-    var CHASE_LIVES = 3;
+    var CHASE_LIVES = 2;
     var CHASE_BASE_SECONDS = 6;
     var CHASE_PER_CHAR_SECONDS = 0.5;
-    var CHASE_DIFFICULTY_TIERS = [1, 0.7, 0.5, 0.32];
+    var CHASE_DIFFICULTY_TIERS = [0.85, 0.65, 0.30, 0.20];
     var CHASE_ROUND_SIZE = 20;
     var chaseTier = 0;
     var CHASE_MEMORIZE_SECONDS = 3.5;
     var chaseFillerWords = ["take", "make", "get", "have", "do", "go", "the", "a", "to", "for", "with", "on", "in", "of"];
     var chaseQueue = [], chaseIdx = 0, chaseCurrent = null, chaseSelected = [], chaseHintUsed = false;
     var chaseCombo = 0, chaseWins = 0, chaseLives = CHASE_LIVES;
+    var chaseComboTier = 0;
     var chaseStartTime = 0, chasePhraseDeadline = 0, chasePhraseLimit = 0;
     var chaseInMemorize = false, chaseMemorizeDeadline = 0;
     var chaseTickTimer = null;
@@ -3239,7 +3367,6 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var chaseMeaningEl = document.getElementById("chaseMeaning");
     var chaseSlotsEl = document.getElementById("chaseSlots");
     var chasePoolEl = document.getElementById("chasePool");
-    var chaseSubmitBtn = document.getElementById("chaseSubmitBtn");
     var chaseHintBtn = document.getElementById("chaseHintBtn");
     var chaseResultTitle = document.getElementById("chaseResultTitle");
     var chaseResultKills = document.getElementById("chaseResultKills");
@@ -3274,25 +3401,6 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       void chaseTierToastEl.offsetWidth;
       chaseTierToastEl.classList.remove("hidden");
       chaseTierToastEl.classList.add("show");
-    }
-
-    function playTierUpSting(){
-      var ctx = getCtx();
-      if(!ctx) return;
-      [660, 880].forEach(function(freq, i){
-        setTimeout(function(){
-          var osc = ctx.createOscillator();
-          var gain = ctx.createGain();
-          osc.type = "square";
-          var t0 = ctx.currentTime;
-          osc.frequency.setValueAtTime(freq, t0);
-          gain.gain.setValueAtTime(0.001, t0);
-          gain.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.start(t0); osc.stop(t0 + 0.22);
-        }, i * 120);
-      });
     }
 
     function playMonsterRoar(urgent){
@@ -3381,6 +3489,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         chaseTier = newTier;
         chaseDangerTrackEl.setAttribute("data-tier", String(chaseTier));
         playTierUpSting();
+        playMilestoneClapSfx();
         showChaseTierToast();
       }
       chaseMonsterEl.classList.remove("danger");
@@ -3415,6 +3524,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
           tile.classList.add("used");
           chaseSelected.push({ word: word, id: idx });
           renderChaseSlots();
+          if(chaseSelected.length >= correctWords.length){ checkChaseAnswer(); }
         });
         chasePoolEl.appendChild(tile);
       });
@@ -3452,6 +3562,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function chaseLoseHeart(){
       chaseLives--;
       chaseCombo = 0;
+      chaseComboTier = 0;
       chaseComboEl.classList.add("hidden");
       chaseHeartsEl.classList.remove("pulse");
       void chaseHeartsEl.offsetWidth;
@@ -3474,7 +3585,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function startChase(){
       chaseQueue = buildChasePool();
-      chaseIdx = 0; chaseCombo = 0; chaseWins = 0; chaseLives = CHASE_LIVES; chaseTier = 0;
+      chaseIdx = 0; chaseCombo = 0; chaseWins = 0; chaseLives = CHASE_LIVES; chaseTier = 0; chaseComboTier = 0;
       chaseDangerTrackEl.removeAttribute("data-tier");
       chaseStartTime = performance.now();
       chaseEnded = false;
@@ -3508,6 +3619,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var correctPhrase = chaseCurrent.w.trim().toLowerCase();
       if(userPhrase !== correctPhrase){
         chaseCombo = 0;
+        chaseComboTier = 0;
         chaseComboEl.classList.add("hidden");
         chimeWrong();
         chaseShake();
@@ -3518,13 +3630,16 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       if(chaseCurrentEntry) chaseCurrentEntry.ok = true;
       var mult = chaseComboMultiplier(chaseCombo);
       playComboTone(chaseCombo, 460);
-      var rect = chaseSubmitBtn.getBoundingClientRect();
+      var rect = chaseSlotsEl.getBoundingClientRect();
       createExplosion(rect.left + rect.width / 2, rect.top, 16 + Math.min(chaseCombo * 2, 20), false);
       chaseMonsterEl.classList.remove("recoil");
       void chaseMonsterEl.offsetWidth;
       chaseMonsterEl.classList.add("recoil");
       var monsterRect = chaseMonsterEl.getBoundingClientRect();
       createExplosion(monsterRect.left + monsterRect.width / 2, monsterRect.top + monsterRect.height / 2, 12, false);
+      var comboTier = chaseCombo >= 10 ? 3 : chaseCombo >= 5 ? 2 : chaseCombo >= 3 ? 1 : 0;
+      if(comboTier > chaseComboTier){ playWhistleSfx(); }
+      chaseComboTier = comboTier;
       if(mult > 1){
         chaseComboEl.textContent = "⚡x" + mult;
         chaseComboEl.classList.remove("hidden");
@@ -3565,6 +3680,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
           : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
         if(isNewBest) setChaseBest({ totalTime: totalTime });
         celebrate(true);
+        playClapSfx();
         meta.xp += 40;
         saveMeta(meta);
         bumpTodayProgress();
@@ -3573,6 +3689,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       }else{
         chaseResultTitle.textContent = "💀 Quái vật đã bắt được người đẹp!";
         chaseResultSub.textContent = "Giải cứu được " + chaseWins + "/" + CHASE_WIN_COUNT + " lượt trước khi hết mạng — thử lại nhé!";
+        playTromboneSfx();
       }
       var reviewList = document.getElementById("chaseReviewList");
       reviewList.innerHTML = "";
@@ -3601,7 +3718,6 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
     document.getElementById("chaseBackBtn").addEventListener("click", exitChase);
     document.getElementById("chaseAgainBtn").addEventListener("click", openChaseBriefing);
-    chaseSubmitBtn.addEventListener("click", checkChaseAnswer);
     chaseHintBtn.addEventListener("click", useChaseHint);
     chasePreviewBtn.addEventListener("click", function(){
       if(chaseInMemorize) beginChaseChallenge();
