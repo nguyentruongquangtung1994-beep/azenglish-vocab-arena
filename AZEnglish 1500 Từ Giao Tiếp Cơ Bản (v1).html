@@ -518,14 +518,19 @@
   .race-input.wrong{ animation:shakeX .3s ease; border-color:var(--red-ink); }
   @keyframes shakeX{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
   .race-prompt{ font-size:24px; font-weight:800; text-align:center; margin:14px 0 2px; color:var(--ink); font-family:var(--font-display); }
-  .race-progress-track{ height:10px; border-radius:999px; background:var(--paper-2); margin:4px 0 6px; overflow:hidden; }
-  .race-progress-fill{ height:100%; border-radius:999px; background:var(--green); transition:width .1s linear, background .3s ease; }
-  .race-progress-fill.danger{ background:var(--red); }
-  @keyframes zombieShake{ 0%,100%{transform:translateX(0) scale(1);} 25%{transform:translateX(-4px) scale(1.05);} 75%{transform:translateX(4px) scale(1.05);} }
-  #raceZombieEmoji.danger{ animation:zombieShake .3s ease infinite; }
+  .race-danger-track{ position:relative; height:56px; border-radius:14px; margin:6px 0 10px; overflow:hidden; background:linear-gradient(90deg, var(--green-bg), var(--paper-2) 65%, var(--red-ink) 100%); }
+  .race-zombie{ position:absolute; top:50%; left:2%; transform:translateY(-50%); font-size:38px; line-height:1; transition:left .1s linear; }
+  @keyframes zombieApproach{ 0%,100%{ transform:translateY(-50%) scale(1); } 50%{ transform:translateY(-50%) scale(1.1); } }
+  .race-zombie.danger{ animation:zombieApproach .3s ease infinite; }
+  .race-player{ position:absolute; top:50%; right:8px; transform:translateY(-50%); font-size:30px; line-height:1; }
   @keyframes heartLoss{ 0%{ transform:scale(1.4); } 100%{ transform:scale(1); } }
   #raceHearts.pulse{ animation:heartLoss .3s ease; }
-  @media (prefers-reduced-motion: reduce){ .race-input.wrong{ animation:none; } #raceZombieEmoji.danger{ animation:none; } #raceHearts.pulse{ animation:none; } }
+  .race-review-head{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin:16px 0 8px; }
+  .race-review-list{ display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto; margin-bottom:16px; }
+  .race-review-item{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; background:var(--paper-2); border-radius:10px; padding:8px 12px; font-size:13px; }
+  .race-review-item b{ font-family:var(--font-display); flex:none; }
+  .race-review-item span{ color:var(--ink-soft); text-align:right; }
+  @media (prefers-reduced-motion: reduce){ .race-input.wrong{ animation:none; } .race-zombie.danger{ animation:none; } #raceHearts.pulse{ animation:none; } }
 
   .footer-note{ text-align:center; font-size:11.5px; color:var(--ink-soft); line-height:1.6; }
   .hidden{ display:none !important; }
@@ -908,8 +913,10 @@
         <span class="sprint-combo hidden" id="raceCombo">x1</span>
       </div>
     </div>
-    <div class="race-progress-track"><div class="race-progress-fill" id="raceProgressFill"></div></div>
-    <div style="text-align:center; font-size:72px; margin:6px 0; line-height:1;" id="raceZombieEmoji">🧟</div>
+    <div class="race-danger-track" id="raceDangerTrack">
+      <span class="race-zombie" id="raceZombieEmoji">🧟</span>
+      <span class="race-player">🧑</span>
+    </div>
     <p class="race-prompt" id="racePrompt">take out the trash</p>
     <p style="text-align:center; font-size:13.5px; color:var(--ink-soft); margin:-14px 0 16px;" id="racePromptMeaning">"đổ rác"</p>
     <input type="text" class="race-input" id="raceInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ lại đúng cụm từ ở trên..." />
@@ -923,6 +930,8 @@
       <div class="summary-tile"><b id="raceResultHearts">0</b><span>Mạng còn lại</span></div>
     </div>
     <p class="desc" id="raceResultSub"></p>
+    <div class="race-review-head">📖 Ôn lại các cụm từ vừa gặp</div>
+    <div class="race-review-list" id="raceReviewList"></div>
     <div class="btn-row">
       <button class="btn-ghost" id="raceBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="raceAgainBtn" type="button">Chơi lại →</button>
@@ -2836,6 +2845,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var raceStartTime = 0, racePhraseDeadline = 0, racePhraseLimit = 0;
     var raceTickTimer = null;
     var raceEnded = false;
+    var raceSeenPhrases = [];
+    var RACE_ZOMBIE_MAX_LEFT = 82;
 
     var modeRace = document.getElementById("modeRace");
     var raceBriefing = document.getElementById("raceBriefing");
@@ -2844,7 +2855,6 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var raceIndexText = document.getElementById("raceIndexText");
     var raceHeartsEl = document.getElementById("raceHearts");
     var raceComboEl = document.getElementById("raceCombo");
-    var raceProgressFill = document.getElementById("raceProgressFill");
     var raceZombieEl = document.getElementById("raceZombieEmoji");
     var racePromptEl = document.getElementById("racePrompt");
     var racePromptMeaningEl = document.getElementById("racePromptMeaning");
@@ -2867,6 +2877,25 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function raceComboMultiplier(combo){
       return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
+    }
+
+    function playZombieGroan(urgent){
+      var ctx = getCtx();
+      if(!ctx) return;
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sawtooth";
+      var t0 = ctx.currentTime;
+      var base = urgent ? 130 : 90;
+      var dur = urgent ? 0.35 : 0.5;
+      osc.frequency.setValueAtTime(base, t0);
+      osc.frequency.linearRampToValueAtTime(base * 0.7, t0 + dur * 0.5);
+      osc.frequency.linearRampToValueAtTime(base * 0.85, t0 + dur);
+      gain.gain.setValueAtTime(0.001, t0);
+      gain.gain.exponentialRampToValueAtTime(urgent ? 0.16 : 0.1, t0 + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t0); osc.stop(t0 + dur);
     }
 
     function buildRacePool(){
@@ -2893,6 +2922,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function loadRacePhrase(){
       raceCurrent = nextRacePhrase();
+      raceSeenPhrases.push(raceCurrent);
       racePromptEl.textContent = raceCurrent.w;
       racePromptMeaningEl.textContent = '"' + raceCurrent.m + '"';
       raceInput.value = "";
@@ -2901,7 +2931,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       racePhraseLimit = RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS;
       racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
       raceZombieEl.classList.remove("danger");
-      raceProgressFill.classList.remove("danger");
+      raceZombieEl.style.left = "2%";
+      playZombieGroan(false);
       speak(raceCurrent.w);
     }
 
@@ -2909,10 +2940,12 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       if(raceEnded) return;
       var remain = (racePhraseDeadline - performance.now()) / 1000;
       var pct = Math.max(0, Math.min(100, (remain / racePhraseLimit) * 100));
-      raceProgressFill.style.width = pct + "%";
+      var progressed = 100 - pct;
+      raceZombieEl.style.left = (2 + (progressed / 100) * (RACE_ZOMBIE_MAX_LEFT - 2)) + "%";
       var isDanger = pct < 30;
-      raceProgressFill.classList.toggle("danger", isDanger);
+      var wasDanger = raceZombieEl.classList.contains("danger");
       raceZombieEl.classList.toggle("danger", isDanger);
+      if(isDanger && !wasDanger){ playZombieGroan(true); }
       if(remain <= 0){
         raceLoseHeart();
       }
@@ -2940,6 +2973,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       raceIdx = 0; raceCombo = 0; raceKills = 0; raceLives = RACE_LIVES;
       raceStartTime = performance.now();
       raceEnded = false;
+      raceSeenPhrases = [];
       raceBriefing.classList.add("hidden");
       raceSummary.classList.add("hidden");
       raceCard.classList.remove("hidden");
@@ -3022,6 +3056,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         raceResultTitle.textContent = "💀 Bạn đã bị zombie bắt kịp!";
         raceResultSub.textContent = "Diệt được " + raceKills + "/" + RACE_KILLS_TO_WIN + " zombie trước khi hết mạng — thử lại nhé!";
       }
+      var reviewList = document.getElementById("raceReviewList");
+      reviewList.innerHTML = "";
+      raceSeenPhrases.forEach(function(w){
+        var item = document.createElement("div");
+        item.className = "race-review-item";
+        item.innerHTML = "<b>" + w.w + "</b><span>" + w.m + "</span>";
+        reviewList.appendChild(item);
+      });
       refreshRaceBestUI();
     }
 
