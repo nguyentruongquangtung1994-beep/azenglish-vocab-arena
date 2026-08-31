@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa;
@@ -25,52 +25,56 @@
     --green-bg:#e7f4ec;
     --amber:#a5680a;
     --amber-bg:#faf1de;
-    --lvl-b1:#1e7a4c; --lvl-b1-bg:#e7f4ec;
-    --lvl-b2:#1d6fa5; --lvl-b2-bg:#e6f1f9;
-    --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
+    --lvl-b1:#3d5a80; --lvl-b1-bg:#e8eef5;
+    --lvl-b2:#24325c; --lvl-b2-bg:#e4e7f0;
+    --lvl-c1:#a5793a; --lvl-c1-bg:#f5eedd;
     --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
     --focus: 0 0 0 3px rgba(224,16,43,.28);
-    --globe-op:.9; --globe-fill-op:.05;
-    --font-display:"Lora","Georgia","Iowan Old Style","Palatino Linotype",serif;
+    --cyan:#0891a0; --gold:#a5793a;
+    --ac-op:.3; --ac-grain-op:.025;
+    --font-display:"Bricolage Grotesque","Be Vietnam Pro",-apple-system,"Segoe UI",sans-serif;
     --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+      --paper:#0b0d13; --paper-2:#131826; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#232a3d;
       --red:#ff4d5e; --red-ink:#ff8f98; --green:#5fd394; --green-bg:#173226;
       --amber:#e3ac52; --amber-bg:#332a16;
-      --lvl-b1:#5fd394; --lvl-b1-bg:#173226;
-      --lvl-b2:#6fb8ea; --lvl-b2-bg:#132633;
-      --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
+      --lvl-b1:#7c9cc9; --lvl-b1-bg:#1b2438;
+      --lvl-b2:#9aa9e8; --lvl-b2-bg:#1c2242;
+      --lvl-c1:#c7a05c; --lvl-c1-bg:#332a16;
       --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
       --focus: 0 0 0 3px rgba(255,77,94,.35);
-      --globe-op:1; --globe-fill-op:.07;
+      --cyan:#35d6e0; --gold:#c7a05c;
+      --ac-op:.6; --ac-grain-op:.045;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"]{
-    --paper:#161211; --paper-2:#1f1a18; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#332b28;
+    --paper:#0b0d13; --paper-2:#131826; --ink:#f3ece9; --ink-soft:#b8aca6; --line:#232a3d;
     --red:#ff4d5e; --red-ink:#ff8f98; --green:#5fd394; --green-bg:#173226;
     --amber:#e3ac52; --amber-bg:#332a16;
-    --lvl-b1:#5fd394; --lvl-b1-bg:#173226;
-    --lvl-b2:#6fb8ea; --lvl-b2-bg:#132633;
-    --lvl-c1:#b794f6; --lvl-c1-bg:#241c38;
+    --lvl-b1:#7c9cc9; --lvl-b1-bg:#1b2438;
+    --lvl-b2:#9aa9e8; --lvl-b2-bg:#1c2242;
+    --lvl-c1:#c7a05c; --lvl-c1-bg:#332a16;
     --card-shadow: 0 1px 0 rgba(0,0,0,.2), 0 20px 40px -20px rgba(0,0,0,.6);
     --focus: 0 0 0 3px rgba(255,77,94,.35);
-    --globe-op:1; --globe-fill-op:.07;
+    --cyan:#35d6e0; --gold:#c7a05c;
+    --ac-op:.6; --ac-grain-op:.045;
     color-scheme: dark;
   }
   :root[data-theme="light"]{
     --paper:#fcfbfa; --paper-2:#f2f0ee; --ink:#1a1210; --ink-soft:#5c534f; --line:#e6e1dc;
     --red:#e0102b; --red-ink:#8f0a1c; --green:#1e7a4c; --green-bg:#e7f4ec;
     --amber:#a5680a; --amber-bg:#faf1de;
-    --lvl-b1:#1e7a4c; --lvl-b1-bg:#e7f4ec;
-    --lvl-b2:#1d6fa5; --lvl-b2-bg:#e6f1f9;
-    --lvl-c1:#7c3aed; --lvl-c1-bg:#f1eafe;
+    --lvl-b1:#3d5a80; --lvl-b1-bg:#e8eef5;
+    --lvl-b2:#24325c; --lvl-b2-bg:#e4e7f0;
+    --lvl-c1:#a5793a; --lvl-c1-bg:#f5eedd;
     --card-shadow: 0 1px 0 rgba(26,18,16,.04), 0 12px 28px -18px rgba(26,18,16,.35);
     --focus: 0 0 0 3px rgba(224,16,43,.28);
-    --globe-op:.9; --globe-fill-op:.05;
+    --cyan:#0891a0; --gold:#a5793a;
+    --ac-op:.3; --ac-grain-op:.025;
     color-scheme: light;
   }
 
@@ -86,7 +90,20 @@
     padding: 20px 14px 60px;
     position:relative;
   }
-  #globeCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; width:100%; height:100%; }
+  /* ---- AZ Core background: single light origin + flowing knowledge pathways ---- */
+  #azCoreScene{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  #azCoreScene .ac-glow{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 52% 44% at 85% 86%, rgba(165,121,58,calc(var(--ac-op) * .4)), transparent 62%),
+      radial-gradient(ellipse 32% 28% at 80% 80%, rgba(8,145,160,calc(var(--ac-op) * .3)), transparent 68%),
+      radial-gradient(ellipse 38% 32% at 87% 88%, rgba(224,16,43,calc(var(--ac-op) * .18)), transparent 65%);
+  }
+  #azCoreScene svg{ position:absolute; inset:0; width:100%; height:100%; }
+  #azCoreScene .ac-dot{ position:absolute; border-radius:50%; background:var(--gold); animation:acBreathe 7s ease-in-out infinite; }
+  @keyframes acBreathe{ 0%,100%{ opacity:calc(var(--ac-op) * .5); } 50%{ opacity:calc(var(--ac-op) * 1.1); } }
+  @media (prefers-reduced-motion: reduce){ #azCoreScene .ac-dot{ animation:none; opacity:calc(var(--ac-op) * .7); } }
+  #azCoreScene .ac-grain{ position:absolute; inset:0; opacity:var(--ac-grain-op); mix-blend-mode:overlay; }
   .stack{ position:relative; z-index:1; width:100%; max-width:640px; display:flex; flex-direction:column; gap:16px; }
 
   /* ---- masthead ---- */
@@ -115,6 +132,7 @@
   .music-vol-row{ display:flex; align-items:center; gap:10px; padding:0 2px; margin:-6px 0 2px; }
   .music-vol-row .icon{ font-size:12px; flex:none; opacity:.6; }
   .music-vol-row input[type="range"]{ flex:1; accent-color:var(--red); height:18px; cursor:pointer; }
+  #musicTrackSelect{ flex:none; font-size:11.5px; font-weight:600; padding:4px 6px; border-radius:8px; border:1px solid var(--line); background:var(--paper-2); color:var(--ink); font-family:inherit; max-width:130px; }
   .theme-btn:focus-visible, button:focus-visible, input:focus-visible, .music-btn:focus-visible{ outline:none; box-shadow:var(--focus); }
 
   /* ---- scoreboard ---- */
@@ -135,7 +153,7 @@
     padding:6px 10px; border-radius:99px; border:1px solid var(--line); background:var(--paper-2);
     font-variant-numeric:tabular-nums; white-space:nowrap;
   }
-  .streak-pill.on{ color:var(--red); border-color:var(--red); background:var(--amber-bg); }
+  .streak-pill.on{ color:var(--gold); border-color:var(--gold); background:var(--lvl-c1-bg); }
   @keyframes streakPulse{ 0%{transform:scale(1)} 45%{transform:scale(1.28)} 100%{transform:scale(1)} }
   .streak-pill.pulse, .game-streak.pulse{ animation:streakPulse .4s ease; }
 
@@ -173,15 +191,39 @@
   .new-badge-item .ic{ font-size:22px; }
 
   /* ---- level filter chips ---- */
-  .level-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .level-row{ display:flex; gap:9px; flex-wrap:wrap; }
   .level-chip{
+    display:inline-flex; align-items:center; gap:7px;
     border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft);
-    font-size:13px; font-weight:700; padding:7px 14px; border-radius:99px; cursor:pointer;
+    font-family:var(--font-display); font-size:13.5px; font-weight:600; padding:8px 15px 8px 12px; border-radius:99px; cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, color .15s ease, box-shadow .15s ease, transform .12s ease;
   }
-  .level-chip.active{ border-color:var(--red); color:var(--red); background:var(--paper); }
-  .level-chip .n{ font-variant-numeric:tabular-nums; opacity:.7; font-weight:600; margin-left:4px; }
+  .level-chip:hover{ transform:translateY(-1px); }
+  .level-chip::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--ink-soft); opacity:.4; flex:none; transition:background .15s ease, opacity .15s ease; }
+  .level-chip[data-level="all"]::before{ display:none; }
+  .level-chip[data-level="B1"]::before{ background:var(--lvl-b1); opacity:1; }
+  .level-chip[data-level="B2"]::before{ background:var(--lvl-b2); opacity:1; }
+  .level-chip[data-level="C1"]::before{ background:var(--lvl-c1); opacity:1; }
+  .level-chip.active{ box-shadow:0 6px 16px -12px rgba(0,0,0,.4); transform:translateY(-1px); }
+  .level-chip[data-level="all"].active{ border-color:var(--red); color:var(--red); background:var(--paper); }
+  .level-chip[data-level="B1"].active{ border-color:var(--lvl-b1); color:var(--lvl-b1); background:var(--lvl-b1-bg); }
+  .level-chip[data-level="B2"].active{ border-color:var(--lvl-b2); color:var(--lvl-b2); background:var(--lvl-b2-bg); }
+  .level-chip[data-level="C1"].active{ border-color:var(--lvl-c1); color:var(--lvl-c1); background:var(--lvl-c1-bg); }
+  .level-chip .n{ font-variant-numeric:tabular-nums; opacity:.65; font-weight:600; font-family:var(--font-body); font-size:12px; }
 
   /* ---- level badge + topic ---- */
+  /* ---- topic icon chips ---- */
+  .topic-chip-grid{ display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+  .topic-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    border:1px solid var(--line); background:var(--paper-2); color:var(--ink);
+    font-family:inherit; font-size:12px; font-weight:600; padding:6px 12px 6px 9px; border-radius:99px; cursor:pointer;
+    transition:border-color .12s ease, background .12s ease, color .12s ease, transform .12s ease;
+  }
+  .topic-chip .emoji{ font-size:14px; line-height:1; }
+  .topic-chip:hover{ border-color:var(--gold); transform:translateY(-1px); }
+  .topic-chip.active{ background:var(--gold); border-color:var(--gold); color:#fff; }
+
   .lvl-badge{
     display:inline-flex; align-items:center; font-size:11px; font-weight:800; letter-spacing:.04em;
     padding:3px 9px; border-radius:99px;
@@ -283,8 +325,6 @@
   .next-btn{ transition:transform .12s ease, opacity .12s ease; }
   .next-btn:hover{ opacity:.9; transform:translateY(-1px); }
   .next-btn:active{ transform:translateY(1px); }
-  .mode-btn:not(:disabled):hover{ box-shadow:0 4px 12px -8px rgba(26,18,16,.35); transform:translateY(-1px); }
-  .mode-btn{ transition:transform .12s ease, box-shadow .12s ease; }
   .submit-btn:disabled{ opacity:.45; cursor:default; }
 
   /* ---- on-screen keyboard ---- */
@@ -333,58 +373,31 @@
   .panel{ background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:var(--card-shadow); padding:24px 22px; }
   .panel h2{ font-family: var(--font-display); font-size:19px; margin:0 0 6px; }
   .panel p.desc{ color:var(--ink-soft); font-size:13.5px; line-height:1.55; margin:0 0 18px; }
+  .icon-inline{ display:inline-block; vertical-align:-3px; flex:none; }
+  .home-toggle-btn{ display:inline-flex; align-items:center; gap:5px; }
+  .home-toggle-btn .chev{ transition:transform .18s ease; }
+  .home-toggle-btn[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+  .home-hero{ background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:var(--card-shadow); padding:24px 22px; display:flex; flex-direction:column; gap:14px; }
+  .hero-lead{ font-family:var(--font-display); font-weight:600; font-size:19px; margin:0; text-wrap:balance; }
+  .hero-cta{ width:100%; padding:14px; border-radius:12px; font-size:15.5px; font-weight:700; cursor:pointer; }
+  .home-toggle-btn{ align-self:center; background:none; border:none; color:var(--ink-soft); font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer; padding:4px; }
+  .home-toggle-btn:hover{ color:var(--gold); }
+  .customize-wrap{ display:flex; flex-direction:column; gap:16px; }
+  .size-picker{ display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .size-picker-label{ font-size:12px; font-weight:700; letter-spacing:.03em; color:var(--ink-soft); }
+  .size-btn-row{ display:flex; gap:6px; }
+  .size-btn{ border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); font-family:inherit; font-weight:700; font-size:13px; padding:7px 15px; border-radius:99px; cursor:pointer; font-variant-numeric:tabular-nums; transition:border-color .12s ease, background .12s ease, color .12s ease; }
+  .size-btn:hover{ border-color:var(--gold); color:var(--ink); }
+  .size-btn.active{ background:var(--gold); border-color:var(--gold); color:#fff; }
   .mode-list{ display:flex; flex-direction:column; gap:10px; }
-  .mode-btn{ text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:12px; padding:14px 16px; cursor:pointer; color:var(--ink); font-family:inherit; }
-  .mode-btn:hover{ border-color:var(--red); }
-  .mode-btn b{ display:block; font-size:15px; margin-bottom:2px; }
+  .mode-btn{ text-align:left; border:1px solid var(--line); background:var(--paper-2); border-radius:12px; padding:16px 18px; cursor:pointer; color:var(--ink); font-family:inherit; position:relative; overflow:hidden; transition:border-color .15s ease, box-shadow .15s ease, transform .12s ease; }
+  .mode-btn::before{ content:""; position:absolute; left:18px; right:18px; top:0; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); opacity:0; transition:opacity .15s ease; }
+  .mode-btn:not(:disabled):hover{ border-color:var(--gold); box-shadow:0 10px 24px -18px rgba(165,121,58,.55); transform:translateY(-1px); }
+  .mode-btn:not(:disabled):hover::before{ opacity:.7; }
+  .mode-btn b{ display:block; font-family:var(--font-display); font-weight:600; font-size:16px; margin-bottom:3px; letter-spacing:-.005em; }
   .mode-btn span{ font-size:12.5px; color:var(--ink-soft); }
   .mode-btn .count{ float:right; font-variant-numeric:tabular-nums; font-weight:800; color:var(--red); }
   .mode-btn:disabled{ opacity:.4; cursor:default; }
-  .mode-btn-sprint{ border-color:var(--red); background:linear-gradient(135deg, var(--amber-bg), var(--paper-2)); }
-  .mode-btn-sprint b{ color:var(--red); }
-
-  /* ---- sprint mode ---- */
-  .sprint-head{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:22px; }
-  .sprint-timer-wrap{ flex:1; display:flex; align-items:center; gap:10px; }
-  .sprint-timer-bar{ flex:1; height:10px; border-radius:99px; background:var(--paper-2); border:1px solid var(--line); overflow:hidden; }
-  .sprint-timer-fill{ height:100%; background:var(--red); width:100%; transition:width 1s linear; }
-  @media (prefers-reduced-motion: reduce){ .sprint-timer-fill{ transition:none; } }
-  .sprint-timer-text{ flex:none; font-family:var(--font-display); font-weight:800; font-size:20px; font-variant-numeric:tabular-nums; min-width:28px; text-align:right; }
-  .sprint-score-wrap{ flex:none; display:flex; align-items:center; gap:8px; }
-  .sprint-score{ font-family:var(--font-display); font-weight:800; font-size:26px; color:var(--red); font-variant-numeric:tabular-nums; }
-  .sprint-combo{ font-size:12.5px; font-weight:800; color:#fff; background:var(--red); padding:4px 9px; border-radius:99px; }
-  @keyframes sprintCelebrate{ 0%{ transform:scale(.5); opacity:0; } 60%{ transform:scale(1.18); opacity:1; } 100%{ transform:scale(1); } }
-  .sprint-celebrate{ animation:sprintCelebrate .5s cubic-bezier(.34,1.56,.64,1); display:inline-block; }
-  @media (prefers-reduced-motion: reduce){ .sprint-celebrate{ animation:none; } }
-  .sprint-combo.pulse{ animation:streakPulse .4s ease; }
-  @media (prefers-reduced-motion: reduce){ .sprint-combo.pulse{ animation:none; } }
-  .sprint-question{ text-align:center; margin-bottom:22px; }
-  .sprint-word{ font-family:var(--font-display); font-weight:800; font-size:32px; }
-  .sprint-ipa{ font-size:14px; color:var(--ink-soft); margin-top:4px; }
-  .sprint-options{ display:flex; flex-direction:column; gap:10px; }
-  @keyframes sprintOptIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
-  .sprint-opt{
-    display:flex; align-items:center; gap:12px;
-    text-align:left; border:1.5px solid var(--line); background:var(--paper-2); border-radius:14px;
-    padding:12px 16px; cursor:pointer; color:var(--ink); font-family:inherit; font-size:14.5px; font-weight:600;
-    transition:border-color .1s ease, background .1s ease, transform .1s ease;
-    animation:sprintOptIn .22s ease both;
-  }
-  .sprint-opt:hover{ border-color:var(--red); transform:translateY(-2px); }
-  .sprint-opt:active{ transform:translateY(0) scale(.98); }
-  .sprint-opt:disabled{ cursor:default; }
-  .sprint-opt:disabled:hover{ transform:none; }
-  .sprint-opt-letter{
-    flex:none; width:28px; height:28px; border-radius:8px; background:var(--paper); border:1.5px solid var(--line);
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800;
-    font-size:13px; color:var(--ink-soft); transition:background .1s ease, color .1s ease, border-color .1s ease;
-  }
-  .sprint-opt-text{ flex:1; }
-  .sprint-opt-correct{ border-color:var(--green); background:var(--green-bg); color:var(--green); }
-  .sprint-opt-correct .sprint-opt-letter{ background:var(--green); border-color:var(--green); color:#fff; }
-  .sprint-opt-wrong{ border-color:var(--red-ink); background:var(--red-ink); color:#fff; }
-  .sprint-opt-wrong .sprint-opt-letter{ background:#fff; border-color:#fff; color:var(--red-ink); }
-  @media (prefers-reduced-motion: reduce){ .sprint-opt{ animation:none; } .sprint-opt:hover{ transform:none; } }
 
   .review-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
   .review-card-top{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
@@ -424,7 +437,30 @@
   .motivate-toast .close:hover{ opacity:1; }
 </style>
 
-<canvas id="globeCanvas" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="acGrainFilter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0"/>
+  </filter>
+</svg>
+<div id="azCoreScene" aria-hidden="true">
+  <div class="ac-glow"></div>
+  <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+    <defs><filter id="acGlowLine"><feGaussianBlur stdDeviation="2.2"/></filter></defs>
+    <g fill="none" stroke-width="1" filter="url(#acGlowLine)">
+      <path d="M1360,880 C1300,830 1250,760 1240,670 S1280,500 1360,420" stroke="var(--gold)" opacity="calc(var(--ac-op) * .85)"/>
+      <path d="M1360,880 C1420,840 1460,780 1460,700" stroke="var(--gold)" opacity="calc(var(--ac-op) * .55)"/>
+      <path d="M1360,880 C1300,930 1220,950 1140,930" stroke="var(--red)" opacity="calc(var(--ac-op) * .5)"/>
+      <path d="M1240,670 C1180,640 1120,600 1100,540" stroke="var(--cyan)" opacity="calc(var(--ac-op) * .4)"/>
+    </g>
+    <circle cx="1360" cy="880" r="3" fill="var(--gold)" opacity="var(--ac-op)"/>
+    <circle cx="1360" cy="880" r="15" fill="none" stroke="var(--gold)" stroke-width="1" opacity="calc(var(--ac-op) * .5)"/>
+    <circle cx="1100" cy="540" r="2.5" fill="var(--cyan)" opacity="calc(var(--ac-op) * .85)"/>
+  </svg>
+  <div class="ac-dot" style="left:78%; top:44%; width:2.5px; height:2.5px; animation-delay:1s; background:var(--cyan);"></div>
+  <div class="ac-dot" style="left:87%; top:60%; width:2px; height:2px; animation-delay:3s;"></div>
+  <div class="ac-grain" style="filter:url(#acGrainFilter)"></div>
+</div>
 
 <div class="stack">
 
@@ -442,13 +478,16 @@
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
   <div class="music-vol-row" id="musicVolRow">
+    <select id="musicTrackSelect" aria-label="Chọn bản nhạc nền">
+      <option value="./coffee-on-the-patio-avbe-main-version-21314-01-56.mp3">☕ Quán cà phê</option>
+      <option value="./dagored-wall-of-sound.mp3">🌊 Wall of Sound</option>
+      <option value="./aylex-sunny-day.mp3">☀️ Sunny Day</option>
+    </select>
     <span class="icon">🔈</span>
     <input type="range" id="musicVolSlider" min="0" max="100" value="18" step="1" aria-label="Âm lượng nhạc nền" />
     <span class="icon">🔊</span>
   </div>
-  <audio id="bgMusic" loop preload="none">
-    <source src="./coffee-on-the-patio-avbe-main-version-21314-01-56.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="bgMusic" loop preload="none"></audio>
 
   <div class="scoreboard" id="scoreboard">
     <div class="stat"><b id="statRound">0/0</b><span>Vòng này</span></div>
@@ -468,52 +507,66 @@
       <span class="big">🪲</span>
       <span id="leechBannerText"></span>
     </div>
-    <div class="panel" style="margin-bottom:14px;">
-      <h2>Chọn cấp độ</h2>
-      <p class="desc">2008 từ vựng IELTS, từ giao tiếp thông dụng (B1) đến học thuật nâng cao (C1).</p>
-      <div class="level-row" id="levelRow">
-        <button class="level-chip active" data-level="all" type="button">Tất cả<span class="n" id="cntAll"></span></button>
-        <button class="level-chip" data-level="B1" type="button">B1<span class="n" id="cntB1"></span></button>
-        <button class="level-chip" data-level="B2" type="button">B2<span class="n" id="cntB2"></span></button>
-        <button class="level-chip" data-level="C1" type="button">C1<span class="n" id="cntC1"></span></button>
+    <div class="home-hero" id="homeHero">
+      <p class="hero-lead" id="heroLead">Sẵn sàng ôn từ vựng IELTS hôm nay?</p>
+      <div class="size-picker" role="group" aria-label="Số từ mỗi buổi ôn">
+        <span class="size-picker-label">Số từ mỗi buổi</span>
+        <div class="size-btn-row">
+          <button class="size-btn active" data-size="25" type="button">25</button>
+          <button class="size-btn" data-size="50" type="button">50</button>
+          <button class="size-btn" data-size="100" type="button">100</button>
+        </div>
       </div>
-      <select id="topicSelect" style="width:100%; margin-top:10px; padding:9px 10px; border-radius:10px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); font-size:13px; font-weight:600;">
-        <option value="all">🗂️ Tất cả chủ đề</option>
-      </select>
+      <button class="btn-primary hero-cta" id="heroStartBtn" type="button">Bắt đầu ngay <svg class="icon-inline" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <button class="home-toggle-btn" id="homeToggleBtn" type="button" aria-expanded="false">Tuỳ chỉnh cấp độ, chủ đề &amp; kiểu ôn tập <svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
     </div>
-    <div class="panel">
-      <h2>Chọn buổi luyện</h2>
-      <p class="desc">Ôn xen kẽ 3 kiểu: xem nghĩa, điền vào câu, hoặc nghe và gõ lại — rồi gõ lại từ trí nhớ. Từ gõ sai được ưu tiên ôn lại (lặp lại ngắt quãng).</p>
-      <div class="mode-list">
-        <button class="mode-btn" id="modeDue" type="button">
-          <span class="count" id="dueCount">0</span>
-          <b>Từ đến hạn ôn</b>
-          <span>Ưu tiên từ từng sai hoặc chưa ôn hôm nay (tối đa 40 từ/vòng)</span>
-        </button>
-        <button class="mode-btn" id="modeNew" type="button">
-          <span class="count" id="newCount">0</span>
-          <b>Học 25 từ mới</b>
-          <span>Bốc ngẫu nhiên 25 từ chưa từng học trong cấp độ đã chọn</span>
-        </button>
-        <button class="mode-btn" id="modeMissed" type="button">
-          <span class="count" id="missedCount">0</span>
-          <b>Chỉ ôn từ hay sai</b>
-          <span>Những từ có tỉ lệ sai cao nhất từ trước tới nay</span>
-        </button>
-        <button class="mode-btn mode-btn-sprint" id="modeSprint" type="button">
-          <b>⚡ Đấu trường 60 giây</b>
-          <span>Trả lời càng nhiều càng tốt trong 60 giây. Kỷ lục của bạn: <b id="sprintBestInline">0</b> điểm</span>
-        </button>
+    <div class="customize-wrap hidden" id="customizeWrap">
+      <div class="panel" style="margin-bottom:14px;">
+        <h2>Chọn cấp độ</h2>
+        <p class="desc">2008 từ vựng IELTS, từ giao tiếp thông dụng (B1) đến học thuật nâng cao (C1).</p>
+        <div class="level-row" id="levelRow">
+          <button class="level-chip active" data-level="all" type="button">Tất cả<span class="n" id="cntAll"></span></button>
+          <button class="level-chip" data-level="B1" type="button">B1<span class="n" id="cntB1"></span></button>
+          <button class="level-chip" data-level="B2" type="button">B2<span class="n" id="cntB2"></span></button>
+          <button class="level-chip" data-level="C1" type="button">C1<span class="n" id="cntC1"></span></button>
+        </div>
+        <select id="topicSelect" class="hidden">
+          <option value="all">🗂️ Tất cả chủ đề</option>
+        </select>
+        <div class="topic-chip-grid" id="topicChipGrid">
+          <button class="topic-chip active" data-topic="all" type="button"><span class="emoji">🗂️</span> Tất cả</button>
+        </div>
       </div>
-    </div>
-    <div class="panel" style="margin-bottom:14px;">
-      <h2>🕐 Từ vừa học</h2>
-      <p class="desc">Xem lại nhanh các từ gần đây nhất — không tính điểm, không giới hạn thời gian.</p>
-      <button class="btn-ghost" id="openReviewBtn" type="button" style="width:100%; padding:12px; border-radius:10px; font-weight:700; font-size:14.5px; cursor:pointer;" disabled>Chưa có từ nào để xem lại</button>
-    </div>
-    <div class="panel badges-panel hidden" id="badgesPanel">
-      <h2>Huy hiệu đã đạt</h2>
-      <div class="badge-row" id="badgeRow"></div>
+      <div class="panel">
+        <h2>Chọn buổi luyện</h2>
+        <p class="desc">Ôn xen kẽ 3 kiểu: xem nghĩa, điền vào câu, hoặc nghe và gõ lại — rồi gõ lại từ trí nhớ. Cụm từ được ưu tiên hơn từ đơn lẻ; từ gõ sai được ưu tiên ôn lại (lặp lại ngắt quãng).</p>
+        <div class="mode-list">
+          <button class="mode-btn" id="modeDue" type="button">
+            <span class="count" id="dueCount">0</span>
+            <b>Từ đến hạn ôn</b>
+            <span>Ưu tiên từ từng sai hoặc chưa ôn hôm nay (tối đa <span class="js-size-label">25</span> từ/vòng)</span>
+          </button>
+          <button class="mode-btn" id="modeNew" type="button">
+            <span class="count" id="newCount">0</span>
+            <b>Học <span class="js-size-label">25</span> từ mới</b>
+            <span>Bốc ngẫu nhiên <span class="js-size-label">25</span> từ chưa từng học trong cấp độ đã chọn</span>
+          </button>
+          <button class="mode-btn" id="modeMissed" type="button">
+            <span class="count" id="missedCount">0</span>
+            <b>Chỉ ôn từ hay sai</b>
+            <span>Những từ có tỉ lệ sai cao nhất từ trước tới nay</span>
+          </button>
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:14px;">
+        <h2><svg class="icon-inline" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Từ vừa học</h2>
+        <p class="desc">Xem lại nhanh các từ gần đây nhất — không tính điểm, không giới hạn thời gian.</p>
+        <button class="btn-ghost" id="openReviewBtn" type="button" style="width:100%; padding:12px; border-radius:10px; font-weight:700; font-size:14.5px; cursor:pointer;" disabled>Chưa có từ nào để xem lại</button>
+      </div>
+      <div class="panel badges-panel hidden" id="badgesPanel">
+        <h2>Huy hiệu đã đạt</h2>
+        <div class="badge-row" id="badgeRow"></div>
+      </div>
     </div>
   </section>
 
@@ -525,8 +578,8 @@
         <span class="review-badge hidden" id="reviewBadge">🔁 Ôn lại</span>
       </div>
       <div style="display:flex; gap:6px; flex:none;">
-        <button class="hint-btn" id="exitSessionBtn" type="button">← Màn hình chính</button>
-        <button class="hint-btn" id="openReviewMidBtn" type="button">🕐 Từ vừa qua</button>
+        <button class="hint-btn" id="exitSessionBtn" type="button"><svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Màn hình chính</button>
+        <button class="hint-btn" id="openReviewMidBtn" type="button"><svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Từ vừa qua</button>
       </div>
     </div>
 
@@ -554,7 +607,7 @@
         </div>
         <span class="study-visual" id="studyVisual">✳️</span>
       </div>
-      <button class="next-btn" id="toRecallBtn" type="button">Đã nhớ — gõ lại từ này →</button>
+      <button class="next-btn" id="toRecallBtn" type="button">Đã nhớ — gõ lại từ này <svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
 
     <!-- RECALL PHASE -->
@@ -601,53 +654,18 @@
           </div>
           <span class="study-visual" id="fbVisual">✳️</span>
         </div>
-        <button class="next-btn" id="nextBtn" type="button">Câu tiếp theo →</button>
+        <button class="next-btn" id="nextBtn" type="button">Câu tiếp theo <svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </div>
   </section>
 
   <!-- REVIEW RECENT WORDS SCREEN -->
   <section class="panel hidden" id="reviewPanel">
-    <h2>🕐 Từ vừa học</h2>
+    <h2><svg class="icon-inline" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg> Từ vừa học</h2>
     <p class="desc">Từ mới nhất hiện trước — bấm 🔊 để nghe lại phát âm.</p>
     <div class="review-list-wrap" id="reviewCardList"></div>
     <div class="btn-row" style="margin-top:14px;">
-      <button class="btn-ghost" id="closeReviewBtn" type="button">← Về màn hình chọn</button>
-    </div>
-  </section>
-
-  <canvas id="sprintParticleCanvas" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:250;"></canvas>
-
-  <!-- SPRINT MODE SCREEN -->
-  <section class="card hidden" id="sprintCard">
-    <div class="sprint-head">
-      <div class="sprint-timer-wrap">
-        <div class="sprint-timer-bar"><div class="sprint-timer-fill" id="sprintTimerFill"></div></div>
-        <span class="sprint-timer-text" id="sprintTimerText">60</span>
-      </div>
-      <div class="sprint-score-wrap">
-        <span class="sprint-score" id="sprintScore">0</span>
-        <span class="sprint-combo hidden" id="sprintCombo">x1</span>
-      </div>
-    </div>
-    <div class="sprint-question">
-      <div class="sprint-word" id="sprintWord">word</div>
-      <div class="sprint-ipa" id="sprintIpa"></div>
-    </div>
-    <div class="sprint-options" id="sprintOptions"></div>
-  </section>
-
-  <!-- SPRINT RESULT SCREEN -->
-  <section class="panel hidden" id="sprintSummary">
-    <h2 id="sprintResultTitle">Hết giờ!</h2>
-    <div class="summary-grid">
-      <div class="summary-tile"><b id="sprintResultScore">0</b><span>Điểm đạt được</span></div>
-      <div class="summary-tile"><b id="sprintResultBest">0</b><span>Kỷ lục của bạn</span></div>
-    </div>
-    <p class="desc" id="sprintResultSub"></p>
-    <div class="btn-row">
-      <button class="btn-ghost" id="sprintBackBtn" type="button">← Về màn hình chọn</button>
-      <button class="btn-primary" id="sprintAgainBtn" type="button">Chơi lại →</button>
+      <button class="btn-ghost" id="closeReviewBtn" type="button"><svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Về màn hình chọn</button>
     </div>
   </section>
 
@@ -691,15 +709,16 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     psych:"🧠", work:"💼", general:"✳️", cambridge19:"📘"
   };
 
+  var ICON_ARROW_RIGHT = '<svg class="icon-inline" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  var ICON_CHEV_DOWN = '<svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
   var STORAGE_KEY = "azvocab_v2_ielts1000";
   var DAY = 86400000;
-  var BATCH_NEW = 25;
-  var BATCH_DUE_CAP = 40;
   var EASE_START = 2.3;
   var EASE_MIN = 1.3;
   var MAX_IVL_DAYS = 180;
   var MASTERED_IVL_DAYS = 21;
   var LEECH_THRESHOLD = 4;
+  var DUE_POOL_CAP = 1500;
   var LEGACY_BOX_IVL = [0, 1, 3, 7, 14, 30];
 
   function todayStamp(){ return Math.floor(Date.now() / DAY); }
@@ -854,7 +873,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   }
   function isDue(w){ return state[w.w].due <= todayStamp(); }
   function isNew(w){ return state[w.w].correct === 0 && state[w.w].wrong === 0; }
-  function dueWords(level){ return poolForFilters(level, selectedTopic).filter(isDue); }
+  function dueWords(level){ return poolForFilters(level, selectedTopic).filter(isDue).slice(0, DUE_POOL_CAP); }
   function newWords(level){ return poolForFilters(level, selectedTopic).filter(isNew); }
   function missedWords(level){
     return poolForFilters(level, selectedTopic).filter(function(w){ return state[w.w].wrong > 0; })
@@ -873,6 +892,17 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   var bgMusic = document.getElementById("bgMusic");
   var musicVolRow = document.getElementById("musicVolRow");
   var musicVolSlider = document.getElementById("musicVolSlider");
+  var musicTrackSelect = document.getElementById("musicTrackSelect");
+  var musicTrackPref = null;
+  try{ musicTrackPref = localStorage.getItem(STORAGE_KEY + "_musictrack"); }catch(e){}
+  if(musicTrackPref){ musicTrackSelect.value = musicTrackPref; }
+  bgMusic.src = musicTrackSelect.value;
+  musicTrackSelect.addEventListener("change", function(){
+    var wasPlaying = musicOn && !bgMusic.paused;
+    bgMusic.src = musicTrackSelect.value;
+    try{ localStorage.setItem(STORAGE_KEY + "_musictrack", musicTrackSelect.value); }catch(e){}
+    if(wasPlaying || musicOn){ bgMusic.play().catch(function(){}); }
+  });
   var musicVolPref = null;
   try{ musicVolPref = localStorage.getItem(STORAGE_KEY + "_musicvol"); }catch(e){}
   var musicVolPct = musicVolPref === null ? 18 : Math.max(0, Math.min(100, parseInt(musicVolPref, 10) || 0));
@@ -1019,6 +1049,21 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   var modeDue = document.getElementById("modeDue");
   var modeNew = document.getElementById("modeNew");
   var modeMissed = document.getElementById("modeMissed");
+  var heroLead = document.getElementById("heroLead");
+  var heroStartBtn = document.getElementById("heroStartBtn");
+  var homeToggleBtn = document.getElementById("homeToggleBtn");
+  var customizeWrap = document.getElementById("customizeWrap");
+  homeToggleBtn.addEventListener("click", function(){
+    var willOpen = customizeWrap.classList.contains("hidden");
+    customizeWrap.classList.toggle("hidden", !willOpen);
+    homeToggleBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    homeToggleBtn.innerHTML = (willOpen ? "Ẩn tuỳ chỉnh " : "Tuỳ chỉnh cấp độ, chủ đề &amp; kiểu ôn tập ") + ICON_CHEV_DOWN;
+  });
+  heroStartBtn.addEventListener("click", function(){
+    if(!modeDue.disabled){ modeDue.click(); }
+    else if(!modeNew.disabled){ modeNew.click(); }
+    else if(!modeMissed.disabled){ modeMissed.click(); }
+  });
 
   var sourceChip = document.getElementById("sourceChip");
   var chipEmoji = document.getElementById("chipEmoji");
@@ -1201,6 +1246,9 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     statMastered.textContent = masteredCount(selectedLevel) + "/" + pool.length;
     var due = dueWords(selectedLevel).length;
     statDue.textContent = due;
+    heroLead.textContent = due > 0
+      ? due + " từ đang đến hạn ôn — ôn ngay để không quên!"
+      : "Sẵn sàng học từ mới hôm nay?";
     dueCountEl.textContent = due;
     newCountEl.textContent = newWords(selectedLevel).length;
     missedCountEl.textContent = missedWords(selectedLevel).length;
@@ -1221,7 +1269,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     var n = (state.recentWords || []).length;
     var btn = document.getElementById("openReviewBtn");
     btn.disabled = n === 0;
-    btn.textContent = n === 0 ? "Chưa có từ nào để xem lại" : "Xem " + n + " từ vừa học gần đây →";
+    btn.innerHTML = n === 0 ? "Chưa có từ nào để xem lại" : "Xem " + n + " từ vừa học gần đây " + ICON_ARROW_RIGHT;
   }
 
   function renderReviewCards(){
@@ -1298,6 +1346,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
   });
 
   var topicSelect = document.getElementById("topicSelect");
+  var topicChipGrid = document.getElementById("topicChipGrid");
   (function buildTopicOptions(){
     var counts = {};
     WORDS.forEach(function(w){ counts[w.t] = (counts[w.t] || 0) + 1; });
@@ -1309,11 +1358,27 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
       opt.value = t;
       opt.textContent = (TOPIC_EMOJI[t] || "✳️") + " " + (TOPIC_LABEL_VI[t] || t) + " (" + counts[t] + ")";
       topicSelect.appendChild(opt);
+
+      var chip = document.createElement("button");
+      chip.className = "topic-chip";
+      chip.type = "button";
+      chip.dataset.topic = t;
+      chip.innerHTML = '<span class="emoji">' + (TOPIC_EMOJI[t] || "✳️") + '</span> ' + (TOPIC_LABEL_VI[t] || t);
+      topicChipGrid.appendChild(chip);
     });
   })();
   topicSelect.addEventListener("change", function(){
     selectedTopic = topicSelect.value;
     refreshScoreboard();
+  });
+  topicChipGrid.addEventListener("click", function(e){
+    var chip = e.target.closest(".topic-chip");
+    if(!chip) return;
+    topicSelect.value = chip.dataset.topic;
+    Array.prototype.forEach.call(topicChipGrid.querySelectorAll(".topic-chip"), function(c){
+      c.classList.toggle("active", c === chip);
+    });
+    topicSelect.dispatchEvent(new Event("change"));
   });
 
   refreshScoreboard();
@@ -1662,7 +1727,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     }else{
       setTimeout(function(){ speakReactionVi(fbReaction.textContent); }, 250);
     }
-    nextBtn.textContent = session.queue.length > 0 ? "Câu tiếp theo →" : "Xem kết quả →";
+    nextBtn.innerHTML = (session.queue.length > 0 ? "Câu tiếp theo " : "Xem kết quả ") + ICON_ARROW_RIGHT;
     updateStatsUI();
     document.querySelector(".hint-row").classList.add("hidden");
   }
@@ -1728,255 +1793,31 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     startSession(missed, "missed");
   });
 
-  modeDue.addEventListener("click", function(){ startSession(shuffle(dueWords(selectedLevel)).slice(0, BATCH_DUE_CAP), "due"); });
-  modeNew.addEventListener("click", function(){ startSession(shuffle(newWords(selectedLevel)).slice(0, BATCH_NEW), "new"); });
-  modeMissed.addEventListener("click", function(){ startSession(missedWords(selectedLevel), "missed"); });
-
-  // ---------- sprint mode: 60-second speed challenge ----------
-  (function(){
-    var SPRINT_KEY = STORAGE_KEY + "_sprintbest";
-    var SPRINT_DURATION = 60;
-    var sprintTimer = null, sprintTimeLeft = 0, sprintScore = 0, sprintCombo = 0;
-    var sprintFullPool = [], sprintQueue = [], sprintCurrent = null;
-
-    var modeSprint = document.getElementById("modeSprint");
-    var sprintCard = document.getElementById("sprintCard");
-    var sprintSummary = document.getElementById("sprintSummary");
-    var sprintTimerFill = document.getElementById("sprintTimerFill");
-    var sprintTimerText = document.getElementById("sprintTimerText");
-    var sprintScoreEl = document.getElementById("sprintScore");
-    var sprintComboEl = document.getElementById("sprintCombo");
-    var sprintWordEl = document.getElementById("sprintWord");
-    var sprintIpaEl = document.getElementById("sprintIpa");
-    var sprintOptionsEl = document.getElementById("sprintOptions");
-    var sprintBestInline = document.getElementById("sprintBestInline");
-    var sprintResultTitle = document.getElementById("sprintResultTitle");
-    var sprintResultScore = document.getElementById("sprintResultScore");
-    var sprintResultBest = document.getElementById("sprintResultBest");
-    var sprintResultSub = document.getElementById("sprintResultSub");
-
-    function getSprintBest(){
-      try{ return parseInt(localStorage.getItem(SPRINT_KEY), 10) || 0; }catch(e){ return 0; }
-    }
-    function setSprintBest(v){ try{ localStorage.setItem(SPRINT_KEY, String(v)); }catch(e){} }
-    function refreshSprintBestUI(){ sprintBestInline.textContent = getSprintBest(); }
-    refreshSprintBestUI();
-
-    function comboMultiplier(combo){
-      return combo >= 10 ? 5 : combo >= 6 ? 3 : combo >= 3 ? 2 : 1;
-    }
-
-    function pickDistractors(correctWord, pool, n){
-      var others = pool.filter(function(w){ return w.w !== correctWord.w; });
-      others = shuffle(others);
-      return others.slice(0, n);
-    }
-
-    // ---- particle burst (juice on correct answers / new records) ----
-    var pCanvas = document.getElementById("sprintParticleCanvas");
-    var pctx = pCanvas ? pCanvas.getContext("2d") : null;
-    var particles = [];
-    var particleAnimating = false;
-    function resizeParticleCanvas(){
-      if(!pCanvas) return;
-      pCanvas.width = window.innerWidth;
-      pCanvas.height = window.innerHeight;
-    }
-    function SprintParticle(x, y, big){
-      this.x = x; this.y = y;
-      this.size = Math.random() * (big ? 9 : 6) + (big ? 4 : 3);
-      this.speedX = (Math.random() - 0.5) * (big ? 14 : 9);
-      this.speedY = (Math.random() - 0.5) * (big ? 14 : 9) - 3;
-      this.color = "hsl(" + (Math.random() * 60 + 25) + ",95%,58%)";
-      this.alpha = 1;
-      this.decay = Math.random() * 0.03 + 0.02;
-    }
-    SprintParticle.prototype.update = function(){
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.speedY += 0.25;
-      this.alpha -= this.decay;
-    };
-    SprintParticle.prototype.draw = function(){
-      if(!pctx) return;
-      pctx.save();
-      pctx.globalAlpha = Math.max(0, this.alpha);
-      pctx.fillStyle = this.color;
-      pctx.beginPath();
-      pctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      pctx.fill();
-      pctx.restore();
-    };
-    function animateParticles(){
-      if(!pctx) return;
-      pctx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-      for(var i = particles.length - 1; i >= 0; i--){
-        particles[i].update();
-        particles[i].draw();
-        if(particles[i].alpha <= 0){ particles.splice(i, 1); }
-      }
-      if(particles.length > 0){
-        requestAnimationFrame(animateParticles);
-      }else{
-        particleAnimating = false;
-      }
-    }
-    function createExplosion(x, y, count, big){
-      if(!pctx) return;
-      for(var i = 0; i < count; i++){ particles.push(new SprintParticle(x, y, big)); }
-      if(!particleAnimating){ particleAnimating = true; requestAnimationFrame(animateParticles); }
-    }
-
-    // ---- combo-scaled correct-answer tone (pitch rises as combo builds) ----
-    function playSprintCorrectTone(combo){
-      var ctx = getCtx();
-      if(!ctx) return;
-      var baseFreq = 523.25;
-      var offset = Math.min(combo * 60, 400);
-      var osc = ctx.createOscillator();
-      var gain = ctx.createGain();
-      osc.type = "sine";
-      var t0 = ctx.currentTime;
-      osc.frequency.setValueAtTime(baseFreq + offset, t0);
-      osc.frequency.exponentialRampToValueAtTime((baseFreq + offset) * 1.5, t0 + 0.15);
-      gain.gain.setValueAtTime(0.001, t0);
-      gain.gain.exponentialRampToValueAtTime(0.28, t0 + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25);
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.start(t0); osc.stop(t0 + 0.25);
-    }
-
-    var sprintCorrectBtnRef = null;
-
-    function nextSprintQuestion(){
-      if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
-      sprintCurrent = sprintQueue.pop();
-      sprintWordEl.textContent = sprintCurrent.w;
-      sprintIpaEl.textContent = sprintCurrent.ipa ? "/" + sprintCurrent.ipa + "/" : "";
-      var distractors = pickDistractors(sprintCurrent, sprintFullPool, 3);
-      if(distractors.length < 3){ distractors = pickDistractors(sprintCurrent, WORDS, 3); }
-      var options = shuffle([sprintCurrent].concat(distractors));
-      var letters = ["A", "B", "C", "D"];
-      sprintOptionsEl.innerHTML = "";
-      sprintCorrectBtnRef = null;
-      options.forEach(function(opt, idx){
-        var btn = document.createElement("button");
-        btn.className = "sprint-opt";
-        btn.type = "button";
-        btn.style.animationDelay = (idx * 0.05) + "s";
-        var letterSpan = document.createElement("span");
-        letterSpan.className = "sprint-opt-letter";
-        letterSpan.textContent = letters[idx] || "";
-        var textSpan = document.createElement("span");
-        textSpan.className = "sprint-opt-text";
-        textSpan.textContent = opt.m;
-        btn.appendChild(letterSpan);
-        btn.appendChild(textSpan);
-        if(opt.w === sprintCurrent.w){ sprintCorrectBtnRef = btn; }
-        btn.addEventListener("click", function(){ answerSprint(opt.w === sprintCurrent.w, btn); });
-        sprintOptionsEl.appendChild(btn);
-      });
-      speak(sprintCurrent.w);
-    }
-
-    function answerSprint(correct, btnEl){
-      Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = true; });
-      var rect = btnEl.getBoundingClientRect();
-      var clickX = rect.left + rect.width / 2;
-      var clickY = rect.top + rect.height / 2;
-      if(correct){
-        sprintCombo++;
-        var mult = comboMultiplier(sprintCombo);
-        sprintScore += 10 * mult;
-        btnEl.classList.add("sprint-opt-correct");
-        playSprintCorrectTone(sprintCombo);
-        createExplosion(clickX, clickY, 18 + Math.min(sprintCombo * 2, 20), false);
-        if(mult > 1){
-          sprintComboEl.textContent = "⚡x" + mult;
-          sprintComboEl.classList.remove("hidden");
-          sprintComboEl.classList.remove("pulse");
-          void sprintComboEl.offsetWidth;
-          sprintComboEl.classList.add("pulse");
-        }else{
-          sprintComboEl.classList.add("hidden");
-        }
-      }else{
-        sprintCombo = 0;
-        btnEl.classList.add("sprint-opt-wrong");
-        if(sprintCorrectBtnRef && sprintCorrectBtnRef !== btnEl){ sprintCorrectBtnRef.classList.add("sprint-opt-correct"); }
-        chimeWrong();
-        sprintComboEl.classList.add("hidden");
-      }
-      sprintScoreEl.textContent = sprintScore;
-      setTimeout(function(){
-        if(sprintTimeLeft > 0){
-          Array.prototype.slice.call(sprintOptionsEl.children).forEach(function(b){ b.disabled = false; });
-          nextSprintQuestion();
-        }
-      }, correct ? 350 : 750);
-    }
-
-    function startSprint(){
-      sprintScore = 0; sprintCombo = 0; sprintTimeLeft = SPRINT_DURATION;
-      sprintFullPool = poolForLevel(selectedLevel);
-      sprintQueue = shuffle(sprintFullPool.slice());
-      resizeParticleCanvas();
-      setupPanel.classList.add("hidden");
-      sprintSummary.classList.add("hidden");
-      sprintCard.classList.remove("hidden");
-      sprintScoreEl.textContent = "0";
-      sprintComboEl.classList.add("hidden");
-      sprintTimerText.textContent = sprintTimeLeft;
-      sprintTimerFill.style.width = "100%";
-      nextSprintQuestion();
-      sprintTimer = setInterval(function(){
-        sprintTimeLeft--;
-        sprintTimerText.textContent = Math.max(0, sprintTimeLeft);
-        sprintTimerFill.style.width = Math.max(0, (sprintTimeLeft / SPRINT_DURATION * 100)) + "%";
-        if(sprintTimeLeft <= 0){
-          clearInterval(sprintTimer);
-          endSprint();
-        }
-      }, 1000);
-    }
-
-    function endSprint(){
-      sprintCard.classList.add("hidden");
-      sprintSummary.classList.remove("hidden");
-      var best = getSprintBest();
-      var isNewBest = sprintScore > best;
-      if(isNewBest) setSprintBest(sprintScore);
-      sprintResultScore.textContent = sprintScore;
-      sprintResultBest.textContent = Math.max(best, sprintScore);
-      sprintResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới!" : "Hết giờ!";
-      sprintResultSub.textContent = isNewBest
-        ? "Bạn vừa vượt qua kỷ lục cũ (" + best + " điểm) — chơi lại để nâng kỷ lục cao hơn nữa!"
-        : "Chơi lại để phá kỷ lục " + Math.max(best, sprintScore) + " điểm của chính bạn!";
-      sprintResultTitle.classList.remove("sprint-celebrate");
-      if(isNewBest && sprintScore > 0){
-        void sprintResultTitle.offsetWidth;
-        sprintResultTitle.classList.add("sprint-celebrate");
-        resizeParticleCanvas();
-        createExplosion(window.innerWidth / 2, window.innerHeight * 0.35, 60, true);
-        setTimeout(function(){ createExplosion(window.innerWidth * 0.25, window.innerHeight * 0.3, 30, true); }, 150);
-        setTimeout(function(){ createExplosion(window.innerWidth * 0.75, window.innerHeight * 0.3, 30, true); }, 300);
-        var praise = REACTIONS_CORRECT[Math.floor(Math.random() * REACTIONS_CORRECT.length)];
-        setTimeout(function(){ speakReactionVi(praise); }, 200);
-      }
-      refreshSprintBestUI();
-      markDailyActivity();
-      renderStreakAndXp();
-    }
-
-    modeSprint.addEventListener("click", startSprint);
-    document.getElementById("sprintBackBtn").addEventListener("click", function(){
-      clearInterval(sprintTimer);
-      sprintCard.classList.add("hidden");
-      sprintSummary.classList.add("hidden");
-      setupPanel.classList.remove("hidden");
+  // ---------- session-size picker: 25 / 50 / 100 words per round ----------
+  var SESSION_SIZE = 25;
+  var sizeButtons = document.querySelectorAll(".size-btn");
+  function updateSizeLabels(){
+    Array.prototype.forEach.call(document.querySelectorAll(".js-size-label"), function(el){ el.textContent = SESSION_SIZE; });
+  }
+  Array.prototype.forEach.call(sizeButtons, function(btn){
+    btn.addEventListener("click", function(){
+      SESSION_SIZE = parseInt(btn.dataset.size, 10);
+      Array.prototype.forEach.call(sizeButtons, function(b){ b.classList.toggle("active", b === btn); });
+      updateSizeLabels();
     });
-    document.getElementById("sprintAgainBtn").addEventListener("click", startSprint);
-  })();
+  });
+  updateSizeLabels();
+
+  function isPhrase(w){ return w.w.trim().split(/\s+/).length >= 2; }
+  function phrasePriority(pool){
+    var phrases = shuffle(pool.filter(isPhrase));
+    var singles = shuffle(pool.filter(function(w){ return !isPhrase(w); }));
+    return phrases.concat(singles);
+  }
+
+  modeDue.addEventListener("click", function(){ startSession(phrasePriority(dueWords(selectedLevel)).slice(0, SESSION_SIZE), "due"); });
+  modeNew.addEventListener("click", function(){ startSession(phrasePriority(newWords(selectedLevel)).slice(0, SESSION_SIZE), "new"); });
+  modeMissed.addEventListener("click", function(){ startSession(missedWords(selectedLevel), "missed"); });
 
   // ---------- optional in-tab reminder (Notification API) ----------
   // Only works while this browser tab stays open — there is no server here to
@@ -2033,103 +1874,4 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
       navigator.serviceWorker.register("./sw.js").catch(function(){});
     });
   }
-</script>
-<script>
-  /* Network-globe backdrop, in the spirit of the AZEnglish logo mark:
-     a translucent wireframe sphere built from dots + connecting lines. */
-  (function(){
-    var canvas = document.getElementById("globeCanvas");
-    if(!canvas || !canvas.getContext) return;
-    var ctx = canvas.getContext("2d");
-
-    function fibonacciSphere(n){
-      var pts = [], offset = 2 / n, increment = Math.PI * (3 - Math.sqrt(5));
-      for(var i = 0; i < n; i++){
-        var y = ((i * offset) - 1) + (offset / 2);
-        var r = Math.sqrt(Math.max(0, 1 - y * y));
-        var phi = (i % n) * increment;
-        pts.push({ x: Math.cos(phi) * r, y: y, z: Math.sin(phi) * r });
-      }
-      return pts;
-    }
-    function rotateX(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x, y:p.y*c - p.z*s, z:p.y*s + p.z*c }; }
-    function rotateY(p, a){ var c = Math.cos(a), s = Math.sin(a); return { x:p.x*c - p.z*s, y:p.y, z:p.x*s + p.z*c }; }
-
-    var RAW = fibonacciSphere(130).map(function(p){ return rotateX(rotateY(p, 0.55), -0.28); });
-
-    var EDGES = [];
-    (function buildEdges(){
-      for(var i = 0; i < RAW.length; i++){
-        var dists = [];
-        for(var j = 0; j < RAW.length; j++){
-          if(i === j) continue;
-          var dot = RAW[i].x*RAW[j].x + RAW[i].y*RAW[j].y + RAW[i].z*RAW[j].z;
-          dists.push({ j:j, d: -dot });
-        }
-        dists.sort(function(a,b){ return a.d - b.d; });
-        for(var k = 0; k < 3; k++){
-          var a = i, b = dists[k].j;
-          if(a > b){ var t = a; a = b; b = t; }
-          EDGES.push([a, b]);
-        }
-      }
-    })();
-
-    function draw(){
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var w = window.innerWidth, h = window.innerHeight;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-
-      var cssColor = getComputedStyle(document.documentElement).getPropertyValue("--red").trim() || "#e0102b";
-      var baseOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-op")) || 0.9;
-      var fillOp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--globe-fill-op")) || 0.05;
-
-      var radius = Math.min(w * 0.34, h * 0.34, 340);
-      var cx = w * 0.82, cy = h * 0.02 + radius * 0.55;
-      if(w < 640){ cx = w * 0.62; cy = radius * 0.35; }
-
-      var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-      g.addColorStop(0, cssColor); g.addColorStop(1, "transparent");
-      ctx.globalAlpha = fillOp;
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.fill();
-
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = cssColor;
-      for(var e = 0; e < EDGES.length; e++){
-        var p1 = RAW[EDGES[e][0]], p2 = RAW[EDGES[e][1]];
-        var depth = (p1.z + p2.z) / 2;
-        var op = (0.05 + (depth + 1) / 2 * 0.22) * baseOp;
-        ctx.globalAlpha = op;
-        ctx.beginPath();
-        ctx.moveTo(cx + p1.x * radius, cy + p1.y * radius);
-        ctx.lineTo(cx + p2.x * radius, cy + p2.y * radius);
-        ctx.stroke();
-      }
-
-      ctx.fillStyle = cssColor;
-      for(var i = 0; i < RAW.length; i++){
-        var p = RAW[i];
-        var depth2 = (p.z + 1) / 2;
-        var size = 1.1 + depth2 * 2.1;
-        ctx.globalAlpha = (0.18 + depth2 * 0.45) * baseOp;
-        ctx.beginPath();
-        ctx.arc(cx + p.x * radius, cy + p.y * radius, size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-    }
-
-    draw();
-    var resizeTimer;
-    window.addEventListener("resize", function(){
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(draw, 120);
-    });
-    if(window.MutationObserver){
-      new MutationObserver(draw).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
-    }
-  })();
 </script>
