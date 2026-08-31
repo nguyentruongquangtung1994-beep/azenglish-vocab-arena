@@ -109,10 +109,16 @@
   .hero-sub{ font-size:15.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; max-width:46ch; }
   .hero-proof{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 24px; }
   .hero-proof span{
-    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink-soft);
-    background:var(--paper-2); border:1.5px solid var(--line); border-radius:99px; padding:7px 14px;
+    display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--ink-soft);
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:99px; padding:6px 14px 6px 6px;
     box-shadow:0 2px 0 var(--line);
   }
+  .hp-ic{
+    flex:none; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+  .hp1 .hp-ic{ background:var(--tier1-bg); color:var(--tier1); }
+  .hp2 .hp-ic{ background:var(--tier2-bg); color:var(--tier2); }
+  .hp3 .hp-ic{ background:var(--tier3-bg); color:var(--tier3); }
   .hero-cta{
     display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff;
     font-weight:700; font-family:var(--font-display); font-size:15.5px; padding:13px 26px; border-radius:14px; text-decoration:none;
@@ -130,6 +136,9 @@
     background:radial-gradient(circle at 34% 30%, var(--paper-2), var(--ember-bg) 70%);
   }
   .crest svg{ position:relative; width:200px; height:220px; }
+  .crest-ring{ transform-origin:60px 68px; animation:crestSpin 30s linear infinite; }
+  @keyframes crestSpin{ to{ transform:rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce){ .crest-ring{ animation:none; } }
   .float-word{
     position:absolute; background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px;
     padding:8px 14px; font-family:var(--font-display); font-weight:700; font-size:15px;
@@ -332,9 +341,9 @@
       <h1 class="hero-title">Học từ vựng<br /><span class="accent">vui như chơi game</span></h1>
       <p class="hero-sub">Vừa học — vừa luyện — vừa chinh phục mục tiêu.</p>
       <div class="hero-proof">
-        <span><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> 12.008 từ vựng</span>
-        <span><svg class="micon m-ring" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg> A1 → C1</span>
-        <span><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg> Ôn ngắt quãng</span>
+        <span class="hp1"><span class="hp-ic"><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></span> 10.000+ từ vựng</span>
+        <span class="hp2"><span class="hp-ic"><svg class="micon m-ring" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg></span> A1 → C1</span>
+        <span class="hp3"><span class="hp-ic"><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg></span> Ôn ngắt quãng</span>
       </div>
       <a class="hero-cta" href="#courses">Bắt đầu học ngay
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
@@ -344,7 +353,7 @@
       <div class="crest">
         <svg viewBox="0 0 120 132" fill="none">
           <circle cx="60" cy="62" r="52" fill="var(--red)" opacity=".08"></circle>
-          <circle cx="60" cy="62" r="52" stroke="var(--red)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"></circle>
+          <circle class="crest-ring" cx="60" cy="68" r="58" stroke="var(--red)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"></circle>
 
           <!-- chibi body / sweater -->
           <path d="M28 132C28 100 42 88 60 88C78 88 92 100 92 132Z" fill="var(--red)"></path>
@@ -393,7 +402,7 @@
   <div class="trust-bar" id="trustBar">
     <div class="trust-cell">
       <div class="trust-icon-wrap"><svg class="micon m-sway" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></div>
-      <div><div class="trust-num">12.008 từ vựng</div><div class="trust-cap">4 lộ trình, A1 đến C1</div></div>
+      <div><div class="trust-num">10.000+ từ vựng</div><div class="trust-cap">4 lộ trình, A1 đến C1</div></div>
     </div>
     <div class="trust-cell">
       <div class="trust-icon-wrap"><svg class="micon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle class="m-ring" cx="12" cy="12" r="7"></circle><path d="M9 8.5a3 3 0 0 1 4.2 4.2M12 12v3M12 8v.01"></path></svg></div>
