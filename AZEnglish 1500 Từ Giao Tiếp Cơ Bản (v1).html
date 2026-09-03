@@ -2732,7 +2732,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       dangerTickSource.buffer = dangerTickBuffer;
       dangerTickSource.loop = true;
       dangerTickGain = ctx.createGain();
-      dangerTickGain.gain.value = 0.55;
+      dangerTickGain.gain.value = 0.18;
       dangerTickSource.connect(dangerTickGain);
       dangerTickGain.connect(ctx.destination);
       dangerTickSource.start(0);
@@ -2743,6 +2743,15 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     try{ dangerTickSource.stop(); }catch(e){}
     try{ dangerTickSource.disconnect(); }catch(e){}
     dangerTickSource = null;
+  }
+  function setDangerTickVolume(dangerPct){
+    if(!dangerTickGain) return;
+    var ctx = getCtx();
+    if(!ctx) return;
+    var minVol = 0.18, maxVol = 0.5;
+    var t = Math.max(0, Math.min(1, dangerPct / 100));
+    var vol = minVol + (maxVol - minVol) * t;
+    try{ dangerTickGain.gain.setTargetAtTime(vol, ctx.currentTime, 0.2); }catch(e){}
   }
 
   // ---------- shared pause overlay (used by Sprint, Chase, Race) ----------
@@ -2770,8 +2779,8 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   (function(){
     var SPRINT_KEY = STORAGE_KEY + "_sprintbest";
     var SPRINT_WIN_COUNT = 20;
-    var SPRINT_DRIFT_TIERS = [3.5, 4.6, 10, 15];
-    var SPRINT_BONUS_TIERS = [10, 8, 3.6, 2.4];
+    var SPRINT_DRIFT_TIERS = [3.5, 5, 7, 10];
+    var SPRINT_BONUS_TIERS = [10, 8, 6, 4];
     var SPRINT_WRONG_PENALTY = 8;
     var SPRINT_WITCH_MAX_LEFT = 82;
     var sprintDangerPct = 0, sprintTier = 0, sprintCorrectCount = 0;
@@ -2852,6 +2861,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       sprintWitchEl.style.left = (2 + (sprintDangerPct / 100) * (SPRINT_WITCH_MAX_LEFT - 2)) + "%";
       var isDanger = sprintDangerPct > 70;
       sprintWitchEl.classList.toggle("danger", isDanger);
+      setDangerTickVolume(sprintDangerPct);
     }
 
     function startSprintTicker(){
@@ -3233,7 +3243,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         playMilestoneClapSfx();
         showRaceTierToast();
       }
-      racePhraseLimit = (RACE_BASE_SECONDS + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS) * raceDifficultyFactor();
+      racePhraseLimit = RACE_BASE_SECONDS * raceDifficultyFactor() + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS;
       racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
       raceZombieEl.classList.remove("danger");
       raceZombieEl.style.left = "2%";
@@ -3247,6 +3257,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var pct = Math.max(0, Math.min(100, (remain / racePhraseLimit) * 100));
       var progressed = 100 - pct;
       raceZombieEl.style.left = (2 + (progressed / 100) * (RACE_ZOMBIE_MAX_LEFT - 2)) + "%";
+      setDangerTickVolume(progressed);
       var isDanger = pct < 30;
       var wasDanger = raceZombieEl.classList.contains("danger");
       raceZombieEl.classList.toggle("danger", isDanger);
@@ -3653,7 +3664,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         chasePoolEl.appendChild(tile);
       });
       renderChaseSlots();
-      chasePhraseLimit = (CHASE_BASE_SECONDS + chaseCurrent.w.trim().length * CHASE_PER_CHAR_SECONDS) * chaseDifficultyFactor();
+      chasePhraseLimit = CHASE_BASE_SECONDS * chaseDifficultyFactor() + chaseCurrent.w.trim().length * CHASE_PER_CHAR_SECONDS;
       chasePhraseDeadline = performance.now() + chasePhraseLimit * 1000;
       chaseMonsterEl.classList.remove("danger");
       chaseMonsterEl.style.left = "2%";
@@ -3673,6 +3684,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var pct = Math.max(0, Math.min(100, (remain / chasePhraseLimit) * 100));
       var progressed = 100 - pct;
       chaseMonsterEl.style.left = (2 + (progressed / 100) * (CHASE_MONSTER_MAX_LEFT - 2)) + "%";
+      setDangerTickVolume(progressed);
       var isDanger = pct < 30;
       var wasDanger = chaseMonsterEl.classList.contains("danger");
       chaseMonsterEl.classList.toggle("danger", isDanger);
