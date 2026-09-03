@@ -1097,9 +1097,6 @@
       </div>
       <div id="chaseSlots" style="min-height:52px; border:2px dashed var(--line); border-radius:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; padding:10px; margin-bottom:16px; transition:border-color .2s ease;"></div>
       <div id="chasePool" style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px;"></div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-ghost" id="chaseHintBtn" type="button" style="flex:1; padding:14px 16px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">💡 Gợi ý</button>
-      </div>
     </div>
   </section>
 
@@ -2497,6 +2494,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
   var pctx = pCanvas ? pCanvas.getContext("2d") : null;
   var particles = [];
   var particleAnimating = false;
+  var celebrateTimers = [];
   function resizeParticleCanvas(){
     if(!pCanvas) return;
     pCanvas.width = window.innerWidth;
@@ -2603,14 +2601,22 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     var bursts = big ? 5 : 3;
     for(var i = 0; i < bursts; i++){
       (function(i){
-        setTimeout(function(){
+        var timerId = setTimeout(function(){
           var x = w * (0.2 + Math.random() * 0.6);
           var y = h * (0.15 + Math.random() * 0.35);
           createExplosion(x, y, big ? 40 : 26, true);
         }, i * 180);
+        celebrateTimers.push(timerId);
       })(i);
     }
     playFanfare(big);
+  }
+  function stopCelebration(){
+    celebrateTimers.forEach(function(id){ clearTimeout(id); });
+    celebrateTimers = [];
+    particles = [];
+    if(pctx && pCanvas){ pctx.clearRect(0, 0, pCanvas.width, pCanvas.height); }
+    particleAnimating = false;
   }
 
   // ---------- mystery reward: variable-ratio bonus XP on win (used by Sprint, Race, Chase) ----------
@@ -3091,6 +3097,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     });
     document.getElementById("sprintBriefingStartBtn").addEventListener("click", startSprint);
     function exitSprint(){
+      stopCelebration();
       sprintEnded = true;
       clearInterval(sprintTimer);
       stopDangerTick();
@@ -3120,6 +3127,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     var RACE_BASE_SECONDS = 3;
     var RACE_PER_CHAR_SECONDS = 0.4;
     var RACE_DIFFICULTY_TIERS = [0.85, 0.65, 0.30, 0.20];
+    var RACE_CHAR_DIFFICULTY_TIERS = [1.0, 0.85, 0.7, 0.55];
     var raceQueue = [], raceIdx = 0, raceCurrent = null, raceCombo = 0, raceKills = 0, raceLives = RACE_LIVES;
     var raceComboTier = 0;
     var raceStartTime = 0, racePhraseDeadline = 0, racePhraseLimit = 0;
@@ -3239,7 +3247,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
         playMilestoneClapSfx();
         showRaceTierToast();
       }
-      racePhraseLimit = RACE_BASE_SECONDS * raceDifficultyFactor() + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS;
+      racePhraseLimit = RACE_BASE_SECONDS * raceDifficultyFactor() + raceCurrent.w.trim().length * RACE_PER_CHAR_SECONDS * RACE_CHAR_DIFFICULTY_TIERS[raceTierFor(raceKills)];
       racePhraseDeadline = performance.now() + racePhraseLimit * 1000;
       raceZombieEl.classList.remove("danger");
       raceZombieEl.style.left = "2%";
@@ -3412,6 +3420,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     });
     document.getElementById("raceBriefingStartBtn").addEventListener("click", startRace);
     function exitRace(){
+      stopCelebration();
       raceEnded = true;
       clearInterval(raceTickTimer);
       stopDangerTick();
@@ -3446,11 +3455,12 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     var CHASE_BASE_SECONDS = 6;
     var CHASE_PER_CHAR_SECONDS = 0.5;
     var CHASE_DIFFICULTY_TIERS = [0.85, 0.65, 0.30, 0.20];
+    var CHASE_CHAR_DIFFICULTY_TIERS = [1.0, 0.85, 0.7, 0.55];
     var CHASE_ROUND_SIZE = 20;
     var chaseTier = 0;
     var CHASE_MEMORIZE_SECONDS = 3.5;
     var chaseFillerWords = ["take", "make", "get", "have", "do", "go", "the", "a", "to", "for", "with", "on", "in", "of"];
-    var chaseQueue = [], chaseIdx = 0, chaseCurrent = null, chaseSelected = [], chaseHintUsed = false;
+    var chaseQueue = [], chaseIdx = 0, chaseCurrent = null, chaseSelected = [];
     var chaseCombo = 0, chaseWins = 0, chaseLives = CHASE_LIVES;
     var chaseComboTier = 0;
     var chaseStartTime = 0, chasePhraseDeadline = 0, chasePhraseLimit = 0;
@@ -3483,7 +3493,6 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     var chaseMeaningEl = document.getElementById("chaseMeaning");
     var chaseSlotsEl = document.getElementById("chaseSlots");
     var chasePoolEl = document.getElementById("chasePool");
-    var chaseHintBtn = document.getElementById("chaseHintBtn");
     var chaseResultTitle = document.getElementById("chaseResultTitle");
     var chaseResultKills = document.getElementById("chaseResultKills");
     var chaseResultHearts = document.getElementById("chaseResultHearts");
@@ -3541,7 +3550,17 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     function buildChasePool(){
       var phrases = poolForLevel(selectedLevel).filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
       if(phrases.length < CHASE_WIN_COUNT) phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
-      return shuffle(phrases.slice());
+      var sorted = phrases.slice().sort(function(a, b){
+        var da = a.w.trim().split(/\s+/).length * 20 + a.w.length;
+        var db = b.w.trim().split(/\s+/).length * 20 + b.w.length;
+        return da - db;
+      });
+      var bandSize = Math.max(1, Math.ceil(sorted.length / 4));
+      var out = [];
+      for(var i = 0; i < sorted.length; i += bandSize){
+        out = out.concat(shuffle(sorted.slice(i, i + bandSize)));
+      }
+      return out;
     }
 
     function nextChasePhrase(){
@@ -3602,7 +3621,6 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       chaseCurrentEntry = { word: chaseCurrent, ok: false };
       chaseSeenPhrases.push(chaseCurrentEntry);
       chaseSelected = [];
-      chaseHintUsed = false;
       chaseIndexText.textContent = chaseWins + "/" + CHASE_WIN_COUNT;
       renderChaseDots();
       var newTier = chaseTierFor(chaseWins);
@@ -3660,7 +3678,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
         chasePoolEl.appendChild(tile);
       });
       renderChaseSlots();
-      chasePhraseLimit = CHASE_BASE_SECONDS * chaseDifficultyFactor() + chaseCurrent.w.trim().length * CHASE_PER_CHAR_SECONDS;
+      chasePhraseLimit = CHASE_BASE_SECONDS * chaseDifficultyFactor() + chaseCurrent.w.trim().length * CHASE_PER_CHAR_SECONDS * CHASE_CHAR_DIFFICULTY_TIERS[chaseTierFor(chaseWins)];
       chasePhraseDeadline = performance.now() + chasePhraseLimit * 1000;
       chaseMonsterEl.classList.remove("danger");
       chaseMonsterEl.style.left = "2%";
@@ -3735,20 +3753,6 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       chaseTickTimer = setInterval(chaseTick, 100);
     }
 
-    function useChaseHint(){
-      var correctWords = chaseCurrent.w.trim().split(/\s+/);
-      var emptyPositions = [];
-      chaseSelected.forEach(function(sel, idx){ if(!sel) emptyPositions.push(idx); });
-      if(emptyPositions.length === 0) return;
-      var targetIdx = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
-      var neededWord = correctWords[targetIdx];
-      var poolTiles = Array.prototype.slice.call(chasePoolEl.children);
-      var match = poolTiles.filter(function(t){ return !t.classList.contains("used") && t.textContent === neededWord; })[0];
-      if(!match) return;
-      chaseHintUsed = true;
-      match.click();
-    }
-
     function checkChaseAnswer(){
       if(chaseSelected.length === 0 || chaseSelected.some(function(s){ return !s; })) return;
       var userPhrase = chaseSelected.map(function(s){ return s.word; }).join(" ").toLowerCase();
@@ -3785,7 +3789,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       }else{
         chaseComboEl.classList.add("hidden");
       }
-      var xpGain = chaseHintUsed ? 15 : 25;
+      var xpGain = 25;
       meta.xp += xpGain;
       saveMeta(meta);
       renderStreakAndXp();
@@ -3855,6 +3859,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     });
     document.getElementById("chaseBriefingStartBtn").addEventListener("click", startChase);
     function exitChase(){
+      stopCelebration();
       chaseEnded = true;
       clearInterval(chaseTickTimer);
       stopDangerTick();
@@ -3864,7 +3869,6 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     }
     document.getElementById("chaseBackBtn").addEventListener("click", exitChase);
     document.getElementById("chaseAgainBtn").addEventListener("click", openChaseBriefing);
-    chaseHintBtn.addEventListener("click", useChaseHint);
     chasePreviewBtn.addEventListener("click", function(){
       if(chaseInMemorize) beginChaseChallenge();
     });
