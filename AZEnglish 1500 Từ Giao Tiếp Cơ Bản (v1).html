@@ -555,6 +555,7 @@
   .chase-princess.danger{ animation:princessFear .25s ease infinite; }
   @media (prefers-reduced-motion: reduce){ .chase-monster, .chase-princess, .chase-monster.danger, .chase-princess.danger, .chase-monster.recoil, .chase-danger-track{ animation:none; transition:none; } }
   #chaseChallenge .chunk-tile.placed{ background:var(--red-bg); border-color:var(--red); color:var(--red); box-shadow:0 3px 0 var(--red); }
+  .chunk-tile.placeholder{ background:transparent; border:1.5px dashed var(--line); color:var(--ink-soft); box-shadow:none; cursor:default; }
   #chaseDots .chunk-dot.done, #chaseDots .chunk-dot.current{ background:var(--red); }
   .chase-preview-label{ font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--red); text-align:center; margin-bottom:10px; }
   .chase-preview-word{ text-align:center; font-size:26px; }
@@ -611,6 +612,15 @@
   .summary-tile{ background:var(--paper-2); border:1px solid var(--line); border-radius:12px; padding:14px; text-align:center; }
   .summary-tile b{ display:block; font-size:26px; font-variant-numeric:tabular-nums; font-weight:800; }
   .summary-tile span{ font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.07em; }
+  .mystery-reward{
+    margin-bottom:14px; padding:12px 14px; border-radius:12px;
+    background:var(--amber-bg); border:1.5px dashed var(--amber); text-align:center;
+    font-weight:700; font-size:14px; color:var(--amber);
+  }
+  .mystery-reward.hidden{ display:none !important; }
+  @keyframes mysteryPop{ 0%{ transform:scale(.5) rotate(-8deg); opacity:0; } 60%{ transform:scale(1.15) rotate(4deg); opacity:1; } 100%{ transform:scale(1) rotate(0deg); opacity:1; } }
+  .mystery-reward.show{ animation:mysteryPop .5s cubic-bezier(.34,1.56,.64,1); }
+  @media (prefers-reduced-motion: reduce){ .mystery-reward.show{ animation:none; } }
   .review-list{ display:flex; flex-wrap:wrap; gap:7px; margin:0 0 20px; padding:0; list-style:none; }
   .review-list li{ font-size:13px; font-weight:600; background:var(--amber-bg); color:var(--amber); padding:5px 10px; border-radius:99px; }
   .btn-row{ display:flex; gap:10px; }
@@ -1050,6 +1060,7 @@
       <div class="summary-tile"><b id="raceResultHearts">0</b><span>Mạng còn lại</span></div>
     </div>
     <p class="desc" id="raceResultSub"></p>
+    <div class="mystery-reward hidden" id="raceMysteryReward"></div>
     <div class="race-review-head">📖 Ôn lại các cụm từ vừa gặp</div>
     <div class="race-review-list" id="raceReviewList"></div>
     <div class="btn-row">
@@ -1117,6 +1128,7 @@
       <div class="summary-tile"><b id="chaseResultHearts">0</b><span>Mạng còn lại</span></div>
     </div>
     <p class="desc" id="chaseResultSub"></p>
+    <div class="mystery-reward hidden" id="chaseMysteryReward"></div>
     <div class="race-review-head">📖 Ôn lại các cụm từ vừa gặp</div>
     <div class="race-review-list" id="chaseReviewList"></div>
     <div class="btn-row">
@@ -1168,6 +1180,7 @@
       <div class="summary-tile"><b id="sprintResultBest">--</b><span>Kỷ lục hoàn thành</span></div>
     </div>
     <p class="desc" id="sprintResultSub"></p>
+    <div class="mystery-reward hidden" id="sprintMysteryReward"></div>
     <div class="btn-row">
       <button class="btn-ghost" id="sprintBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="sprintAgainBtn" type="button">Chơi lại →</button>
@@ -2035,7 +2048,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   var currentPhase = "study";
   var currentRecallMode = "meaning";
   var hintUsedThisWord = false;
-  var hintLetterCount = 0;
+  var hintRevealedPositions = [];
 
   function shuffle(arr){
     var a = arr.slice();
@@ -2197,7 +2210,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     renderLetterboxes("");
     hintReveal.textContent = "";
     hintUsedThisWord = false;
-    hintLetterCount = 0;
+    hintRevealedPositions = [];
     document.querySelector(".hint-row").classList.remove("hidden");
     studyPhase.classList.add("hidden");
     recallPhase.classList.remove("hidden");
@@ -2212,11 +2225,21 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   hintFirst.addEventListener("click", function(){
     var word = currentWord();
     hintUsedThisWord = true;
-    var maxLen = word.w.length;
-    if(hintLetterCount < maxLen){ hintLetterCount++; }
-    var revealed = word.w.slice(0, hintLetterCount).toUpperCase();
-    var masked = new Array(maxLen - hintLetterCount + 1).join("_");
-    hintReveal.innerHTML = "Gợi ý: <b>" + revealed + masked + "</b> (" + maxLen + " chữ cái)";
+    var chars = word.w.split("");
+    var maxLen = chars.length;
+    var remaining = [];
+    for(var i = 0; i < maxLen; i++){
+      if(chars[i] !== " " && hintRevealedPositions.indexOf(i) === -1) remaining.push(i);
+    }
+    if(remaining.length > 0){
+      var pick = remaining[Math.floor(Math.random() * remaining.length)];
+      hintRevealedPositions.push(pick);
+    }
+    var displayChars = chars.map(function(ch, idx){
+      if(ch === " ") return " ";
+      return hintRevealedPositions.indexOf(idx) !== -1 ? ch.toUpperCase() : "_";
+    });
+    hintReveal.innerHTML = "Gợi ý: <b>" + displayChars.join("") + "</b> (" + maxLen + " chữ cái)";
   });
 
   var gameProgressFill = document.getElementById("gameProgressFill");
@@ -2617,6 +2640,26 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     playFanfare(big);
   }
 
+  // ---------- mystery reward: variable-ratio bonus XP on win (used by Sprint, Race, Chase) ----------
+  function rollMysteryReward(){
+    var roll = Math.random();
+    if(roll < 0.55) return 0;
+    if(roll < 0.85) return 10 + Math.floor(Math.random() * 11);
+    if(roll < 0.97) return 25 + Math.floor(Math.random() * 16);
+    return 50 + Math.floor(Math.random() * 31);
+  }
+  function showMysteryReward(el, bonusXp){
+    if(!el) return;
+    if(bonusXp <= 0){ el.classList.add("hidden"); return; }
+    var label = bonusXp >= 50 ? "🎉 Phần thưởng CỰC HIẾM!" : bonusXp >= 25 ? "🎁 Phần thưởng bất ngờ!" : "✨ Thêm chút quà nhỏ!";
+    el.textContent = label + " +" + bonusXp + " XP";
+    el.classList.remove("hidden");
+    el.classList.remove("show");
+    void el.offsetWidth;
+    el.classList.add("show");
+    playWhistleSfx();
+  }
+
   function playTierUpSting(){
     var ctx = getCtx();
     if(!ctx) return;
@@ -2663,6 +2706,44 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   function playClapSfx(){ playSfx("./mixkit-ending-show-audience-clapping-478.wav", 0.55); }
   function playMilestoneClapSfx(){ playSfx("./mixkit-ending-show-audience-clapping-478.wav", 0.4, 1200); }
   function playTromboneSfx(){ playSfx("./mixkit-sad-game-over-trombone-471.wav", 0.5); }
+  var dangerTickBuffer = null;
+  var dangerTickBufferPromise = null;
+  var dangerTickSource = null;
+  var dangerTickGain = null;
+  function loadDangerTickBuffer(ctx){
+    if(dangerTickBuffer || dangerTickBufferPromise) return dangerTickBufferPromise;
+    dangerTickBufferPromise = fetch("./dragon-studio-slow-cinematic-clock-ticking-405471.mp3")
+      .then(function(res){ return res.arrayBuffer(); })
+      .then(function(buf){ return ctx.decodeAudioData(buf); })
+      .then(function(decoded){ dangerTickBuffer = decoded; return decoded; })
+      .catch(function(){ return null; });
+    return dangerTickBufferPromise;
+  }
+  function startDangerTick(){
+    var ctx = getCtx();
+    if(!ctx) return;
+    if(dangerTickSource) return;
+    if(!dangerTickBuffer){
+      loadDangerTickBuffer(ctx).then(function(buf){ if(buf) startDangerTick(); });
+      return;
+    }
+    try{
+      dangerTickSource = ctx.createBufferSource();
+      dangerTickSource.buffer = dangerTickBuffer;
+      dangerTickSource.loop = true;
+      dangerTickGain = ctx.createGain();
+      dangerTickGain.gain.value = 0.55;
+      dangerTickSource.connect(dangerTickGain);
+      dangerTickGain.connect(ctx.destination);
+      dangerTickSource.start(0);
+    }catch(e){}
+  }
+  function stopDangerTick(){
+    if(!dangerTickSource) return;
+    try{ dangerTickSource.stop(); }catch(e){}
+    try{ dangerTickSource.disconnect(); }catch(e){}
+    dangerTickSource = null;
+  }
 
   // ---------- shared pause overlay (used by Sprint, Chase, Race) ----------
   var pauseOverlayEl = document.getElementById("pauseOverlay");
@@ -2775,12 +2856,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function startSprintTicker(){
       clearInterval(sprintTimer);
+      startDangerTick();
       sprintTimer = setInterval(function(){
         var drift = SPRINT_DRIFT_TIERS[sprintTier];
         sprintDangerPct = Math.min(100, sprintDangerPct + drift * 0.1);
         renderSprintDanger();
         if(sprintDangerPct >= 100){
           clearInterval(sprintTimer);
+          stopDangerTick();
           endSprint(false);
         }
       }, 100);
@@ -2929,6 +3012,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function startSprint(){
+      startDangerTick();
       sprintCombo = 0; sprintCorrectCount = 0; sprintDangerPct = 0; sprintTier = 0;
       sprintDangerTrackEl.removeAttribute("data-tier");
       sprintFlameTier = 0;
@@ -2950,6 +3034,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function endSprint(won){
       sprintEnded = true;
       clearInterval(sprintTimer);
+      stopDangerTick();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.remove("hidden");
       sprintResultScore.textContent = sprintCorrectCount + "/" + SPRINT_WIN_COUNT;
@@ -2959,8 +3044,11 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         var isNewBest = !best || totalTime < best.totalTime;
         sprintResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Bạch Tuyết đã trốn thoát!" : "🎉 Bạch Tuyết đã trốn thoát!";
         sprintResultSub.textContent = isNewBest
-          ? "Bạn vừa trả lời đúng 20 câu trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          ? "Bạn vừa trả lời đúng " + SPRINT_WIN_COUNT + " câu trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
           : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(!isNewBest && best && totalTime <= best.totalTime * 1.15){
+          sprintResultSub.textContent += " Suýt phá kỷ lục rồi — thử lại xem sao?";
+        }
         if(isNewBest) setSprintBest({ totalTime: totalTime });
         sprintResultBest.textContent = (isNewBest ? totalTime : best.totalTime).toFixed(1) + "s";
         sprintResultTitle.classList.remove("sprint-celebrate");
@@ -2971,13 +3059,18 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         var praise = REACTIONS_CORRECT[Math.floor(Math.random() * REACTIONS_CORRECT.length)];
         setTimeout(function(){ speakReactionVi(praise); }, 200);
         meta.xp += 40;
+        var sprintBonusXp = rollMysteryReward();
+        if(sprintBonusXp > 0) meta.xp += sprintBonusXp;
+        showMysteryReward(document.getElementById("sprintMysteryReward"), sprintBonusXp);
         saveMeta(meta);
         bumpTodayProgress();
       }else{
         sprintResultTitle.textContent = "🧙‍♀️ Phù thủy đã bắt kịp Bạch Tuyết!";
-        sprintResultSub.textContent = "Trả lời đúng " + sprintCorrectCount + "/" + SPRINT_WIN_COUNT + " câu trước khi bị bắt kịp — thử lại nhé!";
+        var sprintCloseMsg = sprintCorrectCount >= SPRINT_WIN_COUNT * 0.7 ? " Chỉ còn " + (SPRINT_WIN_COUNT - sprintCorrectCount) + " câu nữa thôi — thử lại ngay!" : "";
+        sprintResultSub.textContent = "Trả lời đúng " + sprintCorrectCount + "/" + SPRINT_WIN_COUNT + " câu trước khi bị bắt kịp — thử lại nhé!" + sprintCloseMsg;
         var best2 = getSprintBest();
         sprintResultBest.textContent = best2 ? best2.totalTime.toFixed(1) + "s" : "--";
+        document.getElementById("sprintMysteryReward").classList.add("hidden");
         playTromboneSfx();
       }
       refreshSprintBestUI();
@@ -2994,6 +3087,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function exitSprint(){
       sprintEnded = true;
       clearInterval(sprintTimer);
+      stopDangerTick();
       sprintCard.classList.add("hidden");
       sprintSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
@@ -3002,6 +3096,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     document.getElementById("sprintAgainBtn").addEventListener("click", openSprintBriefing);
     document.getElementById("sprintPauseBtn").addEventListener("click", function(){
       clearInterval(sprintTimer);
+      stopDangerTick();
       sprintPauseStart = performance.now();
       openPause(function(){
         sprintStartTime += (performance.now() - sprintPauseStart);
@@ -3181,6 +3276,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function startRace(){
+      startDangerTick();
       raceQueue = buildRacePool();
       raceIdx = 0; raceCombo = 0; raceKills = 0; raceLives = RACE_LIVES; raceTier = 0; raceComboTier = 0;
       raceDangerTrackEl.removeAttribute("data-tier");
@@ -3197,6 +3293,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       raceInput.disabled = false;
       raceInput.focus();
       if(raceTickTimer) clearInterval(raceTickTimer);
+      startDangerTick();
       raceTickTimer = setInterval(raceTick, 100);
     }
 
@@ -3254,6 +3351,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function endRace(won){
       raceEnded = true;
       clearInterval(raceTickTimer);
+      stopDangerTick();
       raceCard.classList.add("hidden");
       raceSummary.classList.remove("hidden");
       raceResultKills.textContent = raceKills;
@@ -3264,20 +3362,28 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         var isNewBest = !best || totalTime < best.totalTime;
         raceResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Zombie đã bị tiêu diệt!" : "🧟 Zombie đã bị tiêu diệt!";
         raceResultSub.textContent = isNewBest
-          ? "Bạn vừa diệt 20 zombie trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          ? "Bạn vừa diệt " + RACE_KILLS_TO_WIN + " zombie trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
           : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(!isNewBest && best && totalTime <= best.totalTime * 1.15){
+          raceResultSub.textContent += " Suýt phá kỷ lục rồi — thử lại xem sao?";
+        }
         if(isNewBest) setRaceBest({ totalTime: totalTime });
         celebrate(true);
         playClapSfx();
         var xpGain = 40;
         meta.xp += xpGain;
+        var raceBonusXp = rollMysteryReward();
+        if(raceBonusXp > 0) meta.xp += raceBonusXp;
+        showMysteryReward(document.getElementById("raceMysteryReward"), raceBonusXp);
         saveMeta(meta);
         bumpTodayProgress();
         markDailyActivity();
         renderStreakAndXp();
       }else{
         raceResultTitle.textContent = "💀 Bạn đã bị zombie bắt kịp!";
-        raceResultSub.textContent = "Diệt được " + raceKills + "/" + RACE_KILLS_TO_WIN + " zombie trước khi hết mạng — thử lại nhé!";
+        var raceCloseMsg = raceKills >= RACE_KILLS_TO_WIN * 0.7 ? " Chỉ còn " + (RACE_KILLS_TO_WIN - raceKills) + " từ nữa thôi — thử lại ngay!" : "";
+        raceResultSub.textContent = "Diệt được " + raceKills + "/" + RACE_KILLS_TO_WIN + " zombie trước khi hết mạng — thử lại nhé!" + raceCloseMsg;
+        document.getElementById("raceMysteryReward").classList.add("hidden");
         playTromboneSfx();
       }
       var reviewList = document.getElementById("raceReviewList");
@@ -3301,6 +3407,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function exitRace(){
       raceEnded = true;
       clearInterval(raceTickTimer);
+      stopDangerTick();
       raceCard.classList.add("hidden");
       raceSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
@@ -3309,6 +3416,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     document.getElementById("raceAgainBtn").addEventListener("click", openRaceBriefing);
     document.getElementById("racePauseBtn").addEventListener("click", function(){
       clearInterval(raceTickTimer);
+      stopDangerTick();
       raceInput.disabled = true;
       racePauseStart = performance.now();
       openPause(function(){
@@ -3317,6 +3425,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         raceStartTime += pausedMs;
         raceInput.disabled = false;
         raceInput.focus();
+        startDangerTick();
         raceTickTimer = setInterval(raceTick, 100);
       }, exitRace);
     });
@@ -3461,17 +3570,22 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
 
     function renderChaseSlots(){
       chaseSlotsEl.innerHTML = "";
-      chaseSelected.forEach(function(sel){
+      chaseSelected.forEach(function(sel, slotIdx){
         var tile = document.createElement("div");
-        tile.className = "chunk-tile placed";
-        tile.textContent = sel.word;
-        tile.addEventListener("click", function(){
-          playTickSound();
-          chaseSelected = chaseSelected.filter(function(s){ return s.id !== sel.id; });
-          var poolTile = chasePoolEl.querySelector('[data-id="' + sel.id + '"]');
-          if(poolTile) poolTile.classList.remove("used");
-          renderChaseSlots();
-        });
+        if(sel){
+          tile.className = "chunk-tile placed";
+          tile.textContent = sel.word;
+          tile.addEventListener("click", function(){
+            playTickSound();
+            chaseSelected[slotIdx] = null;
+            var poolTile = chasePoolEl.querySelector('[data-id="' + sel.id + '"]');
+            if(poolTile) poolTile.classList.remove("used");
+            renderChaseSlots();
+          });
+        }else{
+          tile.className = "chunk-tile placeholder";
+          tile.textContent = "___";
+        }
         chaseSlotsEl.appendChild(tile);
       });
     }
@@ -3513,6 +3627,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var correctWords = chaseCurrent.w.trim().split(/\s+/);
       var filler = pickChaseFiller(correctWords);
       var tiles = shuffle(correctWords.concat([filler]));
+      chaseSelected = new Array(correctWords.length).fill(null);
       tiles.forEach(function(word, idx){
         var tile = document.createElement("div");
         tile.className = "chunk-tile";
@@ -3520,11 +3635,20 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         tile.setAttribute("data-id", idx);
         tile.addEventListener("click", function(){
           if(tile.classList.contains("used")) return;
+          var targetIdx = -1;
+          for(var i = 0; i < correctWords.length; i++){
+            if(correctWords[i] === word && !chaseSelected[i]){ targetIdx = i; break; }
+          }
+          if(targetIdx === -1){
+            chimeWrong();
+            chaseShake();
+            return;
+          }
           playTickSound();
           tile.classList.add("used");
-          chaseSelected.push({ word: word, id: idx });
+          chaseSelected[targetIdx] = { word: word, id: idx };
           renderChaseSlots();
-          if(chaseSelected.length >= correctWords.length){ checkChaseAnswer(); }
+          if(chaseSelected.every(function(s){ return s; })){ checkChaseAnswer(); }
         });
         chasePoolEl.appendChild(tile);
       });
@@ -3584,6 +3708,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function startChase(){
+      startDangerTick();
       chaseQueue = buildChasePool();
       chaseIdx = 0; chaseCombo = 0; chaseWins = 0; chaseLives = CHASE_LIVES; chaseTier = 0; chaseComboTier = 0;
       chaseDangerTrackEl.removeAttribute("data-tier");
@@ -3598,14 +3723,17 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       resizeParticleCanvas();
       loadChasePhrase();
       if(chaseTickTimer) clearInterval(chaseTickTimer);
+      startDangerTick();
       chaseTickTimer = setInterval(chaseTick, 100);
     }
 
     function useChaseHint(){
       var correctWords = chaseCurrent.w.trim().split(/\s+/);
-      var nextIndex = chaseSelected.length;
-      if(nextIndex >= correctWords.length) return;
-      var neededWord = correctWords[nextIndex];
+      var emptyPositions = [];
+      chaseSelected.forEach(function(sel, idx){ if(!sel) emptyPositions.push(idx); });
+      if(emptyPositions.length === 0) return;
+      var targetIdx = emptyPositions[Math.floor(Math.random() * emptyPositions.length)];
+      var neededWord = correctWords[targetIdx];
       var poolTiles = Array.prototype.slice.call(chasePoolEl.children);
       var match = poolTiles.filter(function(t){ return !t.classList.contains("used") && t.textContent === neededWord; })[0];
       if(!match) return;
@@ -3614,7 +3742,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     function checkChaseAnswer(){
-      if(chaseSelected.length === 0) return;
+      if(chaseSelected.length === 0 || chaseSelected.some(function(s){ return !s; })) return;
       var userPhrase = chaseSelected.map(function(s){ return s.word; }).join(" ").toLowerCase();
       var correctPhrase = chaseCurrent.w.trim().toLowerCase();
       if(userPhrase !== correctPhrase){
@@ -3666,6 +3794,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function endChase(won){
       chaseEnded = true;
       clearInterval(chaseTickTimer);
+      stopDangerTick();
       chaseCard.classList.add("hidden");
       chaseSummary.classList.remove("hidden");
       chaseResultKills.textContent = chaseWins;
@@ -3676,19 +3805,27 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         var isNewBest = !best || totalTime < best.totalTime;
         chaseResultTitle.textContent = isNewBest ? "🎉 Kỷ lục mới! Người đẹp đã được giải cứu!" : "👸 Người đẹp đã được giải cứu!";
         chaseResultSub.textContent = isNewBest
-          ? "Bạn vừa ghép đúng 20 cụm từ trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
+          ? "Bạn vừa ghép đúng " + CHASE_WIN_COUNT + " cụm từ trong " + totalTime.toFixed(1) + "s — kỷ lục mới!"
           : "Hoàn thành trong " + totalTime.toFixed(1) + "s. Kỷ lục hiện tại: " + best.totalTime.toFixed(1) + "s.";
+        if(!isNewBest && best && totalTime <= best.totalTime * 1.15){
+          chaseResultSub.textContent += " Suýt phá kỷ lục rồi — thử lại xem sao?";
+        }
         if(isNewBest) setChaseBest({ totalTime: totalTime });
         celebrate(true);
         playClapSfx();
         meta.xp += 40;
+        var chaseBonusXp = rollMysteryReward();
+        if(chaseBonusXp > 0) meta.xp += chaseBonusXp;
+        showMysteryReward(document.getElementById("chaseMysteryReward"), chaseBonusXp);
         saveMeta(meta);
         bumpTodayProgress();
         markDailyActivity();
         renderStreakAndXp();
       }else{
         chaseResultTitle.textContent = "💀 Quái vật đã bắt được người đẹp!";
-        chaseResultSub.textContent = "Giải cứu được " + chaseWins + "/" + CHASE_WIN_COUNT + " lượt trước khi hết mạng — thử lại nhé!";
+        var chaseCloseMsg = chaseWins >= CHASE_WIN_COUNT * 0.7 ? " Chỉ còn " + (CHASE_WIN_COUNT - chaseWins) + " cụm nữa thôi — thử lại ngay!" : "";
+        chaseResultSub.textContent = "Giải cứu được " + chaseWins + "/" + CHASE_WIN_COUNT + " lượt trước khi hết mạng — thử lại nhé!" + chaseCloseMsg;
+        document.getElementById("chaseMysteryReward").classList.add("hidden");
         playTromboneSfx();
       }
       var reviewList = document.getElementById("chaseReviewList");
@@ -3712,6 +3849,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     function exitChase(){
       chaseEnded = true;
       clearInterval(chaseTickTimer);
+      stopDangerTick();
       chaseCard.classList.add("hidden");
       chaseSummary.classList.add("hidden");
       setupPanel.classList.remove("hidden");
@@ -3724,12 +3862,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     });
     document.getElementById("chasePauseBtn").addEventListener("click", function(){
       clearInterval(chaseTickTimer);
+      stopDangerTick();
       chasePauseStart = performance.now();
       openPause(function(){
         var pausedMs = performance.now() - chasePauseStart;
         chaseMemorizeDeadline += pausedMs;
         chasePhraseDeadline += pausedMs;
         chaseStartTime += pausedMs;
+        startDangerTick();
         chaseTickTimer = setInterval(chaseTick, 100);
       }, exitChase);
     });
