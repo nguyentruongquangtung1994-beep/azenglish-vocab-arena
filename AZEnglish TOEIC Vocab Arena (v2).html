@@ -1028,6 +1028,40 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
   }
   function chimeCorrect(){ playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
   function chimeWrong(){ playTone(170, 0.28, "sawtooth", 0); }
+  function playKeyClick(isBackspace){
+    var ctx = getCtx();
+    if(!ctx) return;
+    try{
+      var t0 = ctx.currentTime;
+      var dur = 0.018;
+      var bufSize = Math.max(1, Math.floor(ctx.sampleRate * dur));
+      var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      var data = buf.getChannelData(0);
+      for(var i = 0; i < bufSize; i++){ data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 3); }
+      var noiseSrc = ctx.createBufferSource();
+      noiseSrc.buffer = buf;
+      var noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = "bandpass";
+      noiseFilter.frequency.value = (isBackspace ? 1700 : 3000) + Math.random() * 300;
+      noiseFilter.Q.value = 1.1;
+      var noiseGain = ctx.createGain();
+      noiseGain.gain.value = 0.1;
+      noiseSrc.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noiseSrc.start(t0);
+      var osc = ctx.createOscillator();
+      osc.type = "triangle";
+      osc.frequency.value = isBackspace ? 380 : 560;
+      var oscGain = ctx.createGain();
+      oscGain.gain.setValueAtTime(0.07, t0);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, t0 + (isBackspace ? 0.05 : 0.02));
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.06);
+    }catch(e){}
+  }
 
   // ---------- elements ----------
   var setupPanel = document.getElementById("setupPanel");
@@ -1198,6 +1232,9 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
     var val = answerInput.value;
     if(val.length > lastInputValue.length){
       flashKey(val[val.length - 1]);
+      playKeyClick(false);
+    }else if(val.length < lastInputValue.length){
+      playKeyClick(true);
     }
     lastInputValue = val;
     renderLetterboxes(val);

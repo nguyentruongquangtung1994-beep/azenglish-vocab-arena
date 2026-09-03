@@ -1181,6 +1181,8 @@
     </div>
     <p class="desc" id="sprintResultSub"></p>
     <div class="mystery-reward hidden" id="sprintMysteryReward"></div>
+    <div class="race-review-head">📖 Ôn lại các từ vừa gặp</div>
+    <div class="race-review-list" id="sprintReviewList"></div>
     <div class="btn-row">
       <button class="btn-ghost" id="sprintBackBtn" type="button">← Về màn hình chọn</button>
       <button class="btn-primary" id="sprintAgainBtn" type="button">Chơi lại →</button>
@@ -1605,6 +1607,42 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   }
   function chimeCorrect(){ playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
   function chimeWrong(){ playTone(170, 0.28, "sawtooth", 0); }
+  function playKeyClick(isBackspace){
+    var ctx = getCtx();
+    if(!ctx) return;
+    try{
+      var t0 = ctx.currentTime;
+      // noise "tap" texture, bandpass-shaped like a plastic key click
+      var dur = 0.018;
+      var bufSize = Math.max(1, Math.floor(ctx.sampleRate * dur));
+      var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      var data = buf.getChannelData(0);
+      for(var i = 0; i < bufSize; i++){ data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 3); }
+      var noiseSrc = ctx.createBufferSource();
+      noiseSrc.buffer = buf;
+      var noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = "bandpass";
+      noiseFilter.frequency.value = (isBackspace ? 1700 : 3000) + Math.random() * 300;
+      noiseFilter.Q.value = 1.1;
+      var noiseGain = ctx.createGain();
+      noiseGain.gain.value = 0.1;
+      noiseSrc.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noiseSrc.start(t0);
+      // short tonal "tock" body, lower/duller for backspace
+      var osc = ctx.createOscillator();
+      osc.type = "triangle";
+      osc.frequency.value = isBackspace ? 380 : 560;
+      var oscGain = ctx.createGain();
+      oscGain.gain.setValueAtTime(0.07, t0);
+      oscGain.gain.exponentialRampToValueAtTime(0.0001, t0 + (isBackspace ? 0.05 : 0.02));
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + 0.06);
+    }catch(e){}
+  }
 
   // ---------- elements ----------
   var setupPanel = document.getElementById("setupPanel");
@@ -1761,6 +1799,9 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var val = answerInput.value;
     if(val.length > lastInputValue.length){
       flashKey(val[val.length - 1]);
+      playKeyClick(false);
+    }else if(val.length < lastInputValue.length){
+      playKeyClick(true);
     }
     lastInputValue = val;
     renderLetterboxes(val);
@@ -2880,10 +2921,14 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     }
 
     var sprintCorrectBtnRef = null;
+    var sprintSeenWords = [];
+    var sprintCurrentEntry = null;
 
     function nextSprintQuestion(){
       if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
       sprintCurrent = sprintQueue.pop();
+      sprintCurrentEntry = { word: sprintCurrent, ok: false };
+      sprintSeenWords.push(sprintCurrentEntry);
       sprintIndexText.textContent = sprintCorrectCount + "/" + SPRINT_WIN_COUNT;
       var newTier = sprintTierFor(sprintCorrectCount);
       if(newTier > sprintTier){
@@ -2927,6 +2972,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       var clickX = rect.left + rect.width / 2;
       var clickY = rect.top + rect.height / 2;
       if(correct){
+        if(sprintCurrentEntry) sprintCurrentEntry.ok = true;
         sprintCombo++;
         sprintCorrectCount++;
         var mult = comboMultiplier(sprintCombo);
@@ -2989,18 +3035,26 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       }, correct ? 350 : 750);
     }
 
+    function biasTowardPhrases(list){
+      var phrases = list.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
+      var singles = list.filter(function(w){ return w.w.trim().split(/\s+/).length < 2; });
+      if(phrases.length === 0) return list;
+      var singleCap = Math.ceil(phrases.length * 0.25);
+      return phrases.concat(shuffle(singles).slice(0, singleCap));
+    }
+
     function buildSprintPool(){
       var full = poolForLevel(selectedLevel);
       var weak = missedWords(selectedLevel);
-      if(weak.length >= 8) return weak;
       var seen = {};
       weak.forEach(function(w){ seen[w.w] = true; });
-      var due = dueWords(selectedLevel).filter(function(w){ return !seen[w.w]; });
+      var dueAll = dueWords(selectedLevel).filter(function(w){ return !seen[w.w]; });
+      var due = biasTowardPhrases(dueAll);
       due.forEach(function(w){ seen[w.w] = true; });
       var combined = weak.concat(due);
-      if(combined.length >= 8) return combined;
       var rest = full.filter(function(w){ return !seen[w.w]; });
-      return combined.concat(shuffle(rest));
+      var biasedRest = biasTowardPhrases(rest);
+      return combined.concat(shuffle(biasedRest));
     }
 
     function openSprintBriefing(){
@@ -3027,6 +3081,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
       sprintDangerTrackEl.removeAttribute("data-tier");
       sprintFlameTier = 0;
       sprintEnded = false;
+      sprintSeenWords = [];
       sprintStartTime = performance.now();
       updateSprintFlame(0);
       sprintQueue = shuffle(sprintFullPool.slice());
@@ -3083,6 +3138,15 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
         document.getElementById("sprintMysteryReward").classList.add("hidden");
         playTromboneSfx();
       }
+      var sprintReviewListEl = document.getElementById("sprintReviewList");
+      sprintReviewListEl.innerHTML = "";
+      sprintSeenWords.forEach(function(entry){
+        var w = entry.word;
+        var item = document.createElement("div");
+        item.className = "race-review-item" + (entry.ok ? "" : " missed");
+        item.innerHTML = "<b>" + (entry.ok ? "\u2705 " : "\u274c ") + w.w + "</b><span>" + w.m + "</span>";
+        sprintReviewListEl.appendChild(item);
+      });
       refreshSprintBestUI();
       markDailyActivity();
       renderStreakAndXp();
