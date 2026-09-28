@@ -2,591 +2,304 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>AZEnglish Vocab Arena</title>
+<meta name="description" content="Kiểm tra vốn từ tiếng Anh trong 2 phút và học từ vựng Giao tiếp, TOEIC, IELTS, Chuyên ngành mỗi ngày 15 phút cùng AZEnglish." />
 <link rel="icon" href="./icon-192.png" />
+<link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 <meta name="theme-color" content="#e0102b" />
+<meta property="og:title" content="AZEnglish Vocab Arena — Bạn biết bao nhiêu từ tiếng Anh?" />
+<meta property="og:description" content="10 câu · 2 phút · biết ngay trình độ từ vựng và lộ trình học phù hợp." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fffaf3; --paper-2:#fffdf9; --paper-3:#fdf3e4; --ink:#241a12; --ink-soft:#6b5c50; --ink-faint:#9a8b7c; --line:#f0e3cf; --line-strong:#e4d3b6;
-    --red:#e0102b; --red-ink:#8f0a1c;
+    --red:#e0102b; --red-ink:#8f0a1c; --red-bg:#fde6e8;
     --ember:#c47f0e; --ember-bg:#fbedd2;
-    --tier1:#1e7a4c; --tier1-bg:#e3f5ea;
-    --tier2:#1d6fa5; --tier2-bg:#e2f1fb;
-    --tier3:#7c3aed; --tier3-bg:#efe6fe;
-    --tier4:#c47f0e; --tier4-bg:#fbedd2;
-    --shadow: 0 1px 2px rgba(36,26,18,.05);
-    --shadow-lift: 0 14px 28px -14px rgba(36,26,18,.24);
+    --ok:#1e7a4c; --ok-bg:#e3f5ea; --bad:#c2410c; --bad-bg:#fdeadf;
     --shadow-card: 0 18px 36px -20px rgba(36,26,18,.3);
     --font-display:"Baloo 2","Be Vietnam Pro",-apple-system,sans-serif;
     --font-body:"Be Vietnam Pro",-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --tabbar-h:0px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --paper:#241a16; --paper-2:#2d2119; --paper-3:#33251c; --ink:#fbeee2; --ink-soft:#cbb6a6; --ink-faint:#9a8676; --line:#4a382c; --line-strong:#5a4436;
-      --red:#ff5a68; --red-ink:#ff8f98;
+      --red:#ff5a68; --red-ink:#b3202f; --red-bg:#3d1c1f;
       --ember:#f0a83d; --ember-bg:#3a2a15;
-      --tier1:#5fd394; --tier1-bg:#1a3327;
-      --tier2:#6fb8ea; --tier2-bg:#152a3a;
-      --tier3:#c3a2fb; --tier3-bg:#2c2140;
-      --tier4:#f0a83d; --tier4-bg:#3a2a15;
-      --shadow: 0 1px 2px rgba(0,0,0,.3);
-      --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.55);
+      --ok:#5fd394; --ok-bg:#1a3327; --bad:#ff9a6b; --bad-bg:#3b2117;
       --shadow-card: 0 20px 40px -20px rgba(0,0,0,.6);
     }
   }
   :root[data-theme="dark"]{
     --paper:#241a16; --paper-2:#2d2119; --paper-3:#33251c; --ink:#fbeee2; --ink-soft:#cbb6a6; --ink-faint:#9a8676; --line:#4a382c; --line-strong:#5a4436;
-    --red:#ff5a68; --red-ink:#ff8f98;
+    --red:#ff5a68; --red-ink:#b3202f; --red-bg:#3d1c1f;
     --ember:#f0a83d; --ember-bg:#3a2a15;
-    --tier1:#5fd394; --tier1-bg:#1a3327;
-    --tier2:#6fb8ea; --tier2-bg:#152a3a;
-    --tier3:#c3a2fb; --tier3-bg:#2c2140;
-    --tier4:#f0a83d; --tier4-bg:#3a2a15;
-    --shadow: 0 1px 2px rgba(0,0,0,.3);
-    --shadow-lift: 0 18px 32px -16px rgba(0,0,0,.55);
+    --ok:#5fd394; --ok-bg:#1a3327; --bad:#ff9a6b; --bad-bg:#3b2117;
     --shadow-card: 0 20px 40px -20px rgba(0,0,0,.6);
   }
 
   *{ box-sizing:border-box; }
   html{ -webkit-font-smoothing:antialiased; scroll-behavior:smooth; }
-  body{
-    position:relative; margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
-    font-family:var(--font-body);
-  }
-  .ambient{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
-  .blob{ position:absolute; border-radius:50%; filter:blur(70px); }
-  .blob--a{ width:440px; height:440px; top:-130px; right:-70px; background:var(--red); opacity:.08; }
-  .blob--b{ width:380px; height:380px; bottom:-150px; left:-110px; background:var(--tier1); opacity:.08; }
+  body{ margin:0; min-height:100vh; background:var(--paper); color:var(--ink); font-family:var(--font-body); padding-bottom:var(--tabbar-h); }
   a{ color:inherit; }
-  .page{ position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 20px 64px; }
+  button{ font-family:inherit; }
+  .page{ max-width:980px; margin:0 auto; padding:0 16px 48px; }
 
-  /* ---- top nav ---- */
-  .topnav{
-    display:flex; align-items:center; gap:22px; padding:16px 0; margin-bottom:8px;
-    border-bottom:1.5px solid var(--line);
-  }
-  .brand{ display:flex; align-items:center; gap:10px; flex:none; }
-  .mark{
-    flex:none; width:42px; height:42px; border-radius:14px; background:var(--red); color:#fff;
-    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;
-    font-family:var(--font-display);
-    box-shadow:0 3px 0 var(--red-ink);
-  }
-  .brand-text{ font-family:var(--font-display); font-weight:800; font-size:16px; line-height:1.2; letter-spacing:.01em; }
-  .brand-text span{ display:block; font-family:var(--font-body); font-weight:600; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); }
-  .nav-links{ flex:1; display:flex; gap:6px; }
-  .nav-link{
-    display:flex; align-items:center; gap:6px; font-size:14px; font-weight:600; padding:8px 12px; border-radius:12px;
-    text-decoration:none; color:var(--ink-soft);
-  }
-  .nav-link.active{ color:var(--red); background:color-mix(in srgb, var(--red) 10%, transparent); }
-  .nav-link.disabled{ opacity:.4; cursor:not-allowed; }
-  .nav-stat{
-    flex:none; display:flex; align-items:center; gap:8px; border:1.5px solid var(--line); background:var(--paper-2); border-radius:99px;
-    padding:6px 14px 6px 12px; font-size:12.5px; color:var(--ink-soft);
-  }
-  .nav-stat b{ font-family:var(--font-display); font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums; }
+  /* ---- header ---- */
+  .topnav{ display:flex; align-items:center; gap:12px; padding:14px 0; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .mark{ flex:none; width:40px; height:40px; border-radius:13px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font:800 15px var(--font-display); box-shadow:0 3px 0 var(--red-ink); }
+  .brand-text{ font:800 16px/1.15 var(--font-display); }
+  .brand-text span{ display:block; font:600 10px var(--font-body); letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); }
+  .nav-links{ flex:1; display:flex; justify-content:center; gap:4px; }
+  .nav-link{ font-size:14px; font-weight:600; padding:8px 12px; border-radius:12px; text-decoration:none; color:var(--ink-soft); background:none; border:0; cursor:pointer; }
+  .nav-link:hover{ color:var(--red); }
+  .streak-chip{ display:none; align-items:center; gap:6px; border:1.5px solid var(--line); background:var(--paper-2); border-radius:99px; padding:6px 12px; font-size:13px; font-weight:700; }
+  .streak-chip.on{ display:inline-flex; }
+  .theme-btn{ flex:none; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); width:38px; height:38px; border-radius:12px; cursor:pointer; font-size:16px; }
+  .spacer{ flex:1; }
+  @media (min-width:761px){ .spacer{ display:none; } }
   @media (max-width:760px){ .nav-links{ display:none; } }
-  .theme-btn{
-    flex:none; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink);
-    width:36px; height:36px; border-radius:11px; cursor:pointer; font-size:15px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .theme-btn:focus-visible{ outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--red) 28%, transparent); }
 
   /* ---- hero ---- */
-  .hero{ display:flex; align-items:center; gap:36px; padding:44px 0 36px; }
+  .hero{ display:flex; align-items:center; gap:32px; padding:36px 0 40px; }
   .hero-copy{ flex:1; min-width:0; }
-  .hero-title{
-    font-family:var(--font-display); font-weight:800; font-size:clamp(32px,5.2vw,50px);
-    line-height:1.08; margin:0 0 14px; text-wrap:balance;
-  }
+  .hero-title{ font:800 clamp(34px,6vw,52px)/1.06 var(--font-display); margin:0 0 12px; text-wrap:balance; }
   .hero-title .accent{ color:var(--red); }
-  .hero-sub{ font-size:15.5px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; max-width:46ch; }
-  .hero-proof{ display:flex; flex-wrap:wrap; gap:10px; margin:0 0 24px; }
-  .hero-proof > span{
-    display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700; color:var(--ink-soft);
-    background:var(--paper-2); border:1.5px solid var(--line); border-radius:99px; padding:6px 14px 6px 6px;
-    box-shadow:0 2px 0 var(--line);
+  .hero-sub{ font-size:16px; line-height:1.55; color:var(--ink-soft); margin:0 0 26px; max-width:40ch; }
+  .btn-main{
+    display:flex; align-items:center; justify-content:center; gap:10px; width:100%; max-width:420px; min-height:62px;
+    background:var(--red); color:#fff; border:0; border-radius:18px; padding:14px 22px; cursor:pointer; text-decoration:none;
+    font:700 18px var(--font-display); box-shadow:0 6px 0 var(--red-ink); transition:transform .12s ease, box-shadow .12s ease;
   }
-  .hp-ic{
-    flex:none; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  }
-  .hp1 .hp-ic{ background:var(--tier1-bg); color:var(--tier1); }
-  .hp2 .hp-ic{ background:var(--tier2-bg); color:var(--tier2); }
-  .hp3 .hp-ic{ background:var(--tier3-bg); color:var(--tier3); }
-  .hero-cta{
-    display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff;
-    font-weight:700; font-family:var(--font-display); font-size:15.5px; padding:13px 26px; border-radius:14px; text-decoration:none;
-    box-shadow:0 5px 0 var(--red-ink);
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .hero-cta:hover{ transform:translateY(-2px); box-shadow:0 7px 0 var(--red-ink); }
-  @media (prefers-reduced-motion: reduce){ .hero-cta{ transition:none; } }
-  .hero-art{ flex:none; position:relative; width:300px; height:300px; }
-  .crest{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  }
-  .crest::before{
-    content:""; position:absolute; width:230px; height:230px; border-radius:50%;
-    background:radial-gradient(circle at 34% 30%, var(--paper-2), var(--ember-bg) 70%);
-  }
-  .crest svg{ position:relative; width:200px; height:220px; }
-  .crest-ring{ transform-origin:60px 68px; animation:crestSpin 30s linear infinite; }
-  @keyframes crestSpin{ to{ transform:rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce){ .crest-ring{ animation:none; } }
-  .float-word{
-    position:absolute; background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px;
-    padding:8px 14px; font-family:var(--font-display); font-weight:700; font-size:15px;
-    box-shadow:var(--shadow-card); text-align:center; line-height:1.3;
-    animation:bob 4.5s ease-in-out infinite;
-  }
+  .btn-main:hover{ transform:translateY(-2px); box-shadow:0 8px 0 var(--red-ink); }
+  .btn-main:active{ transform:translateY(4px); box-shadow:0 2px 0 var(--red-ink); }
+  .btn-main small{ display:block; font:600 12.5px var(--font-body); opacity:.85; }
+  .btn-main .lbl{ text-align:left; line-height:1.2; }
+  .hero-alt{ display:inline-block; margin-top:16px; font-size:14px; font-weight:600; color:var(--ink-soft); background:none; border:0; padding:4px 0; cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+  .hero-alt:hover{ color:var(--red); }
+  .hero-note{ margin-top:18px; font-size:13px; color:var(--ink-faint); }
+  .hero-art{ flex:none; position:relative; width:280px; height:280px; }
+  .hero-bubble{ position:absolute; inset:30px; border-radius:50%; background:radial-gradient(circle at 34% 30%, var(--paper-2), var(--ember-bg) 72%); display:flex; align-items:center; justify-content:center; font-size:96px; }
+  .float-word{ position:absolute; background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px; padding:8px 14px; font:700 15px/1.3 var(--font-display); box-shadow:var(--shadow-card); text-align:center; animation:bob 4.5s ease-in-out infinite; }
+  .float-word span{ display:block; font:600 10px var(--font-body); text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); }
+  .fw1{ top:0; left:-6px; --r:-6deg; } .fw2{ top:40px; right:-16px; --r:6deg; animation-delay:.8s; } .fw3{ bottom:10px; left:6px; --r:4deg; animation-delay:1.6s; }
   @keyframes bob{ 0%,100%{ transform:translateY(0) rotate(var(--r,0deg)); } 50%{ transform:translateY(-8px) rotate(var(--r,0deg)); } }
-  @media (prefers-reduced-motion: reduce){ .float-word{ animation:none; } }
-  .float-word span{ display:block; font-family:var(--font-body); font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); }
-  .fw1{ top:2px; left:-4px; --r:-7deg; animation-delay:0s; }
-  .fw2{ top:36px; right:-18px; --r:6deg; animation-delay:.7s; }
-  .fw3{ bottom:40px; left:-24px; --r:5deg; animation-delay:1.4s; }
-  .fw4{ bottom:4px; right:-8px; --r:-5deg; animation-delay:2.1s; }
-  @media (max-width:760px){ .hero{ flex-direction:column; } .hero-art{ width:260px; height:260px; } }
-
-  /* ---- animated line-icon system (replaces emoji everywhere) ---- */
-  .micon{ flex:none; overflow:visible; }
-  @keyframes iconPulseRing{ 0%{ opacity:.7; transform:scale(.75); } 70%{ opacity:0; transform:scale(1.35); } 100%{ opacity:0; transform:scale(1.35); } }
-  @keyframes iconBlink{ 0%,60%,100%{ opacity:1; } 30%{ opacity:.25; } }
-  @keyframes iconBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2.5px); } }
-  @keyframes iconGrowBar{ 0%,100%{ transform:scaleY(.55); } 50%{ transform:scaleY(1); } }
-  @keyframes iconSway{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(6deg); } }
-  @keyframes iconSpin{ to{ transform:rotate(360deg); } }
-  .m-ring{ transform-origin:center; animation:iconPulseRing 2.6s ease-out infinite; }
-  .m-blink{ animation:iconBlink 2.4s ease-in-out infinite; }
-  .m-bounce{ transform-origin:center; animation:iconBounce 2.2s ease-in-out infinite; }
-  .m-bar{ transform-origin:bottom; animation:iconGrowBar 1.8s ease-in-out infinite; }
-  .m-sway{ transform-origin:12px 4px; animation:iconSway 2.4s ease-in-out infinite; }
-  .m-spin{ transform-origin:center; animation:iconSpin 3.5s linear infinite; }
-  @media (prefers-reduced-motion: reduce){
-    .m-ring, .m-blink, .m-bounce, .m-bar, .m-sway, .m-spin{ animation:none; }
-  }
-
-  /* ---- trust strip (shown to first-time visitors instead of an all-zero stats bar) ---- */
-  .trust-bar{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:34px;
-  }
-  .trust-bar.hidden{ display:none; }
-  .trust-cell{
-    background:var(--paper-2); border:1.5px solid var(--line); border-radius:18px; padding:18px 16px;
-    display:flex; gap:12px; align-items:flex-start;
-    box-shadow:0 2px 0 var(--line);
-  }
-  .trust-icon-wrap{
-    flex:none; width:38px; height:38px; border-radius:12px; background:var(--tier1-bg);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .trust-cell:nth-child(2) .trust-icon-wrap{ background:var(--tier2-bg); }
-  .trust-cell:nth-child(3) .trust-icon-wrap{ background:var(--tier3-bg); }
-  .trust-num{ font-family:var(--font-display); font-weight:800; font-size:18px; line-height:1.2; }
-  .trust-cap{ font-size:12px; color:var(--ink-faint); line-height:1.4; }
-  @media (max-width:700px){ .trust-bar{ grid-template-columns:1fr; } }
-
-  /* ---- how it works: stepping-stone journey ---- */
-  .journey{ position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:40px; }
-  .journey-path{ position:absolute; top:24px; left:6%; right:6%; height:0; border-top:3px dashed var(--line-strong); z-index:0; }
-  .how-step{
-    position:relative; z-index:1; display:flex; gap:14px; align-items:flex-start;
-    background:var(--paper-2); border:1.5px solid var(--line); border-radius:18px; padding:18px;
-    box-shadow:0 2px 0 var(--line);
-  }
-  .how-num{
-    flex:none; width:32px; height:32px; border-radius:50%; background:var(--red); color:#fff;
-    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:14px;
-    box-shadow:0 3px 0 var(--red-ink);
-  }
-  .how-step:nth-child(2) .how-num{ background:var(--ember); box-shadow:0 3px 0 color-mix(in srgb, var(--ember) 70%, black); }
-  .how-step:nth-child(3) .how-num{ background:var(--tier1); box-shadow:0 3px 0 color-mix(in srgb, var(--tier1) 70%, black); }
-  .how-title{ font-weight:700; font-size:13.5px; margin-bottom:2px; }
-  @media (max-width:760px){ .journey{ grid-template-columns:1fr; } .journey-path{ display:none; } }
-
-  /* ---- stats bar ---- */
-  .stats-bar{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:34px;
-  }
-  .stats-bar.hidden{ display:none; }
-  .stat-cell{
-    background:var(--paper-2); border:1.5px solid var(--line); border-radius:18px;
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    padding:18px 8px; text-align:center;
-    box-shadow:0 2px 0 var(--line);
-  }
-  .stat-icon-wrap{
-    width:38px; height:38px; border-radius:12px; background:var(--ember-bg);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .stat-cell:nth-child(2) .stat-icon-wrap{ background:var(--tier1-bg); }
-  .stat-cell:nth-child(3) .stat-icon-wrap{ background:var(--tier2-bg); }
-  .stat-cell:nth-child(4) .stat-icon-wrap{ background:var(--tier3-bg); }
-  .stat-cell svg{ width:20px; height:20px; }
-  .stat-num{ font-family:var(--font-display); font-weight:800; font-size:24px; font-variant-numeric:tabular-nums; }
-  .stat-cap{ font-size:11.5px; color:var(--ink-faint); }
+  @media (prefers-reduced-motion: reduce){ .float-word{ animation:none; } .btn-main{ transition:none; } }
+  @media (max-width:760px){ .hero{ padding:20px 0 32px; } .hero-art{ display:none; } }
 
   /* ---- course cards ---- */
-  .section-title{ font-family:var(--font-display); font-weight:700; font-size:21px; margin:0 0 16px; }
-  .cards{ display:flex; flex-direction:column; gap:16px; margin-bottom:40px; }
+  .section-title{ font:700 21px var(--font-display); margin:0 0 14px; scroll-margin-top:16px; }
+  .cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:36px; }
+  @media (max-width:640px){ .cards{ grid-template-columns:1fr; } }
   .card{
-    display:flex; align-items:stretch; gap:18px; background:var(--paper-2);
-    border:1.5px solid var(--line); border-radius:22px; padding:22px; text-decoration:none; color:inherit;
-    box-shadow:0 2px 0 var(--line);
-    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+    display:flex; align-items:center; gap:14px; background:var(--paper-2); border:1.5px solid var(--line); border-radius:20px; padding:16px;
+    text-decoration:none; color:inherit; box-shadow:0 2px 0 var(--line); transition:border-color .15s ease, transform .15s ease;
   }
-  @media (prefers-reduced-motion: reduce){ .card{ transition:none; } }
-  .card:hover{ border-color:var(--tier); transform:translateY(-3px); box-shadow:var(--shadow-lift); }
-  .card.t1{ --tier:var(--tier1); --tier-bg:var(--tier1-bg); }
-  .card.t2{ --tier:var(--tier2); --tier-bg:var(--tier2-bg); }
-  .card.t3{ --tier:var(--tier3); --tier-bg:var(--tier3-bg); }
-  .card.t4{ --tier:var(--tier4); --tier-bg:var(--tier4-bg); }
-  .card-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
-  .badge{
-    align-self:flex-start; padding:4px 11px; border-radius:99px; background:var(--tier-bg); color:var(--tier);
-    font-family:var(--font-body); font-weight:700; font-size:11.5px;
-  }
-  .card-title{ font-family:var(--font-display); font-weight:700; font-size:19px; line-height:1.2; }
-  .card-stats{ font-size:12.5px; font-weight:700; color:var(--tier); }
-  .card-desc{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); }
-  .progress-row{ display:flex; flex-direction:column; gap:5px; margin-top:4px; }
-  .progress-track{ height:7px; border-radius:99px; background:var(--line); overflow:hidden; }
-  .progress-fill{ height:100%; width:0%; border-radius:99px; background:var(--tier); transition:width .4s ease; }
-  @media (prefers-reduced-motion: reduce){ .progress-fill{ transition:none; } }
-  .progress-meta{ display:flex; justify-content:space-between; font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
-  .cta{
-    align-self:flex-start; margin-top:2px; display:inline-flex; align-items:center; gap:6px;
-    font-size:13px; font-weight:700; padding:9px 16px; border-radius:99px;
-    border:1.5px solid var(--tier); color:var(--tier); background:var(--paper-2);
-    transition:background .15s ease, color .15s ease;
-  }
-  @media (prefers-reduced-motion: reduce){ .cta{ transition:none; } }
-  .card:hover .cta{ background:var(--tier); color:var(--paper-2); }
-  .card-icon{
-    flex:none; width:110px; border-radius:16px; background:var(--tier-bg);
-    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
-  }
-  .card-icon::before{
-    content:""; position:absolute; width:130px; height:130px; border-radius:50%;
-    background:radial-gradient(circle, color-mix(in srgb, var(--tier) 30%, transparent), transparent 70%);
-  }
-  .card-icon svg{ position:relative; width:64px; height:64px; }
-  .recommend-tag{
-    align-self:flex-start; display:inline-flex; align-items:center; gap:5px; margin-bottom:2px;
-    font-size:11px; font-weight:700; color:var(--red); background:color-mix(in srgb, var(--red) 10%, transparent);
-    border-radius:99px; padding:3px 10px;
-  }
-  @media (max-width:560px){ .card{ flex-direction:column-reverse; } .card-icon{ width:100%; height:80px; } }
+  .card:hover{ border-color:var(--red); transform:translateY(-2px); }
+  .card.rec{ border-color:var(--red); box-shadow:0 0 0 3px var(--red-bg); }
+  .card-emoji{ flex:none; width:56px; height:56px; border-radius:16px; background:var(--paper-3); display:flex; align-items:center; justify-content:center; font-size:30px; }
+  .card-main{ flex:1; min-width:0; }
+  .card-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .card-title{ font:700 17px/1.25 var(--font-display); }
+  .lvl{ font-size:11px; font-weight:700; color:var(--ink-soft); background:var(--paper-3); border-radius:99px; padding:2px 9px; }
+  .rec-tag{ display:none; font-size:11px; font-weight:700; color:var(--red); background:var(--red-bg); border-radius:99px; padding:2px 9px; }
+  .card.rec .rec-tag{ display:inline-block; }
+  .card-stats{ font-size:12.5px; color:var(--ink-faint); margin:3px 0 8px; }
+  .progress-track{ height:6px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .progress-fill{ height:100%; width:0; border-radius:99px; background:var(--red); transition:width .4s ease; }
+  .progress-meta{ font-size:11px; color:var(--ink-faint); margin-top:4px; font-variant-numeric:tabular-nums; }
+  .card-go{ flex:none; font-size:20px; color:var(--ink-faint); }
 
-  /* ---- feature strip ---- */
-  .features{
-    display:flex; flex-wrap:wrap; gap:22px; align-items:center; justify-content:space-between;
-    border-top:1.5px solid var(--line); padding-top:30px;
-  }
-  .feature-list{ display:flex; flex-wrap:wrap; gap:26px; flex:1; min-width:0; }
-  .feature{ display:flex; align-items:center; gap:10px; min-width:180px; }
-  .feature-icon{
-    flex:none; width:38px; height:38px; border-radius:12px; background:var(--tier1-bg); color:var(--tier1);
-    display:flex; align-items:center; justify-content:center; font-size:18px;
-  }
-  .feature-icon.b{ background:var(--tier2-bg); color:var(--tier2); }
-  .feature-icon.c{ background:var(--tier3-bg); color:var(--tier3); }
-  .feature-icon.d{ background:var(--ember-bg); color:var(--ember); }
-  .feature-title{ font-weight:700; font-size:13.5px; }
+  .footer-note{ text-align:center; font-size:12px; color:var(--ink-faint); line-height:1.6; margin-top:8px; }
 
-  /* ---- quick nav (program directory) ---- */
-  .quicknav{ display:flex; flex-wrap:wrap; gap:8px; margin:-8px 0 28px; }
-  .quicknav-chip{
-    display:inline-flex; align-items:center; font-family:var(--font-body); font-weight:700; font-size:12.5px;
-    color:var(--ink-soft); background:var(--paper-2); border:1.5px solid var(--line); border-radius:99px;
-    padding:7px 14px; text-decoration:none; transition:border-color .12s ease, color .12s ease;
+  /* ---- bottom tab bar (mobile) ---- */
+  .tabbar{ display:none; }
+  @media (max-width:760px){
+    :root{ --tabbar-h:calc(64px + env(safe-area-inset-bottom)); }
+    .tabbar{
+      display:grid; grid-template-columns:repeat(4,1fr); position:fixed; left:0; right:0; bottom:0; z-index:50;
+      height:var(--tabbar-h); padding-bottom:env(safe-area-inset-bottom);
+      background:color-mix(in srgb, var(--paper-2) 94%, transparent); backdrop-filter:blur(10px); border-top:1.5px solid var(--line);
+    }
+    .tab{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:11px; font-weight:600; color:var(--ink-soft); text-decoration:none; background:none; border:0; cursor:pointer; }
+    .tab .ti{ font-size:21px; line-height:1; }
+    .tab.active{ color:var(--red); }
   }
-  .quicknav-chip:hover{ border-color:var(--red); color:var(--red); }
 
+  /* ---- placement test overlay ---- */
+  .pt{ position:fixed; inset:0; z-index:100; background:var(--paper); display:none; flex-direction:column; }
+  .pt.open{ display:flex; }
+  .pt-head{ display:flex; align-items:center; gap:12px; padding:14px 16px; max-width:640px; width:100%; margin:0 auto; }
+  .pt-close{ flex:none; width:40px; height:40px; border-radius:12px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft); font-size:18px; cursor:pointer; }
+  .pt-bar{ flex:1; height:10px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .pt-bar i{ display:block; height:100%; width:0; background:var(--red); border-radius:99px; transition:width .3s ease; }
+  .pt-count{ flex:none; font-size:12.5px; font-weight:700; color:var(--ink-faint); min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
+  .pt-body{ flex:1; overflow-y:auto; }
+  .pt-inner{ max-width:640px; margin:0 auto; padding:12px 16px 32px; }
+  .pt-kicker{ font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--red); margin:8px 0 6px; }
+  .pt-q{ font:700 clamp(22px,4.6vw,28px)/1.3 var(--font-display); margin:0 0 6px; }
+  .pt-q .blank{ display:inline-block; min-width:70px; border-bottom:3px solid var(--red); }
+  .pt-hint{ font-size:14px; color:var(--ink-soft); margin:0 0 20px; }
+  .opts{ display:grid; gap:10px; }
+  .opts.two{ grid-template-columns:1fr 1fr; }
+  .opt{
+    display:flex; align-items:center; gap:12px; width:100%; min-height:58px; text-align:left; cursor:pointer;
+    background:var(--paper-2); color:var(--ink); border:2px solid var(--line); border-radius:16px; padding:12px 16px;
+    font:600 16px var(--font-body); box-shadow:0 3px 0 var(--line); transition:border-color .12s ease, transform .08s ease;
+  }
+  .opt:hover{ border-color:var(--line-strong); }
+  .opt:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--line); }
+  .opt .oe{ font-size:22px; flex:none; }
+  .opt.picked{ border-color:var(--red); background:var(--red-bg); }
+  .opt.dunno{ min-height:48px; justify-content:center; color:var(--ink-faint); font-size:14px; border-style:dashed; box-shadow:none; }
+  .opt:disabled{ cursor:default; }
+
+  .form-grid{ display:grid; gap:14px; }
+  .field label{ display:block; font-size:13.5px; font-weight:700; margin-bottom:6px; }
+  .field label em{ font-style:normal; font-weight:500; color:var(--ink-faint); }
+  .field input{
+    width:100%; min-height:54px; border-radius:14px; border:2px solid var(--line); background:var(--paper-2); color:var(--ink);
+    padding:12px 14px; font:500 16px var(--font-body);
+  }
+  .field input:focus{ outline:none; border-color:var(--red); }
+  .field.err input{ border-color:var(--bad); }
+  .field .msg{ display:none; font-size:12.5px; color:var(--bad); margin-top:5px; }
+  .field.err .msg{ display:block; }
+  .privacy{ font-size:12px; line-height:1.55; color:var(--ink-faint); margin:4px 0 0; }
+  .teaser{ display:flex; align-items:center; gap:14px; background:var(--paper-2); border:1.5px solid var(--line); border-radius:18px; padding:14px 16px; margin-bottom:20px; }
+  .teaser b{ font:800 30px var(--font-display); color:var(--red); }
+  .teaser .locked{ font-size:13.5px; color:var(--ink-soft); line-height:1.45; }
+
+  .result-lvl{ display:flex; align-items:center; gap:16px; margin:6px 0 16px; }
+  .lvl-big{ flex:none; width:92px; height:92px; border-radius:26px; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font:800 36px var(--font-display); box-shadow:0 6px 0 var(--red-ink); }
+  .result-lvl h3{ font:800 24px/1.2 var(--font-display); margin:0 0 4px; }
+  .result-lvl p{ margin:0; font-size:14px; color:var(--ink-soft); line-height:1.5; }
+  .result-stats{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:18px; }
+  .rs{ background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px; padding:12px 14px; }
+  .rs b{ display:block; font:800 22px var(--font-display); }
+  .rs span{ font-size:12px; color:var(--ink-faint); }
+  .rec-box{ background:var(--paper-2); border:2px solid var(--red); border-radius:20px; padding:16px; margin-bottom:16px; }
+  .rec-box .k{ font-size:12px; font-weight:700; color:var(--red); text-transform:uppercase; letter-spacing:.06em; }
+  .rec-box h4{ font:800 20px var(--font-display); margin:4px 0 4px; }
+  .rec-box p{ margin:0 0 14px; font-size:14px; color:var(--ink-soft); line-height:1.5; }
+  .review-list{ font-size:13.5px; color:var(--ink-soft); line-height:1.7; margin:0 0 8px; padding-left:18px; }
+  .review-list b{ color:var(--ink); }
+  .pt-fade{ animation:ptIn .22s ease; }
+  @keyframes ptIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .pt-fade{ animation:none; } .pt-bar i{ transition:none; } }
 </style>
 </head>
 <body>
 
-<div class="ambient" aria-hidden="true"><div class="blob blob--a"></div><div class="blob blob--b"></div></div>
-
 <div class="page" id="top">
 
   <header class="topnav">
-    <div class="brand">
+    <a class="brand" href="#top">
       <div class="mark">AZ</div>
       <div class="brand-text">AZEnglish<span>Vocab Arena</span></div>
-    </div>
+    </a>
     <nav class="nav-links">
-      <a class="nav-link active" href="#top"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"></path><path d="M6 10v9h12v-9"></path></svg> Trang chủ</a>
-      <a class="nav-link" href="#courses"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg> Chương trình</a>
-      <a class="nav-link" href="#grammar"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> Ngữ pháp</a>
-      <span class="nav-link disabled" title="Sắp ra mắt"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"></path><path d="M8 6H5a1 1 0 0 0-1 1c0 2.5 1.8 4 4 4M16 6h3a1 1 0 0 1 1 1c0 2.5-1.8 4-4 4"></path><path d="M12 13v4M9 20h6"></path></svg> Thành tích</span>
-      <span class="nav-link disabled" title="Sắp ra mắt"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-7"></path></svg> Bảng xếp hạng</span>
+      <a class="nav-link" href="#courses">Lộ trình</a>
+      <button class="nav-link" type="button" data-open-test>Kiểm tra trình độ</button>
+      <a class="nav-link" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html">Ngữ pháp</a>
     </nav>
-    <div class="nav-stat">
-      <svg class="micon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--ember)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg>
-      <b id="navStreak">0</b> chuỗi dài nhất
-    </div>
+    <div class="spacer"></div>
+    <span class="streak-chip" id="streakChip">🔥 <span id="streakText">Ngày 1</span></span>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
 
   <section class="hero">
     <div class="hero-copy">
-      <h1 class="hero-title">Học từ vựng<br /><span class="accent">vui như chơi game</span></h1>
-      <p class="hero-sub">Vừa học — vừa luyện — vừa chinh phục mục tiêu.</p>
-      <div class="hero-proof">
-        <span class="hp1"><span class="hp-ic"><svg class="micon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></span> 10.000+ từ vựng</span>
-        <span class="hp2"><span class="hp-ic"><svg class="micon m-ring" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg></span> A1 → C1</span>
-        <span class="hp3"><span class="hp-ic"><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg></span> Ôn ngắt quãng</span>
-      </div>
-      <a class="hero-cta" href="#courses">Bắt đầu học ngay
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      <h1 class="hero-title" id="heroTitle">Bạn biết bao nhiêu<br /><span class="accent">từ tiếng Anh?</span></h1>
+      <p class="hero-sub" id="heroSub">10 câu · 2 phút — biết ngay trình độ từ vựng và lộ trình học vừa sức. Sau đó mỗi ngày chỉ 15 phút.</p>
+      <a class="btn-main" id="heroBtn" href="#" role="button">
+        <span style="font-size:24px">🎯</span>
+        <span class="lbl">Kiểm tra trình độ ngay<small>Miễn phí · không cần tài khoản</small></span>
       </a>
+      <div><button class="hero-alt" id="heroAlt" type="button">Bỏ qua, học ngay từ vựng giao tiếp →</button></div>
     </div>
-    <div class="hero-art">
-      <div class="crest">
-        <svg viewBox="0 0 120 132" fill="none">
-          <circle cx="60" cy="62" r="52" fill="var(--red)" opacity=".08"></circle>
-          <circle class="crest-ring" cx="60" cy="68" r="58" stroke="var(--red)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"></circle>
-
-          <!-- chibi body / sweater -->
-          <path d="M28 132C28 100 42 88 60 88C78 88 92 100 92 132Z" fill="var(--red)"></path>
-          <path d="M49 90c4 6 18 6 22 0" stroke="var(--red-ink)" stroke-width="2" stroke-linecap="round" fill="none"></path>
-
-          <!-- arms -->
-          <path d="M41 98c-7 5-10 13-8 21" stroke="var(--red)" stroke-width="10" stroke-linecap="round" fill="none"></path>
-          <path d="M79 98c7 5 10 13 8 21" stroke="var(--red)" stroke-width="10" stroke-linecap="round" fill="none"></path>
-
-          <!-- head -->
-          <circle cx="60" cy="60" r="30" fill="#FFD9B0"></circle>
-          <path d="M31 58a29 29 0 0 1 58 0c-6-7-14-10-22-8-4 1-8 1-14 0-8-2-16 1-22 8z" fill="#3E2A1F"></path>
-          <circle class="micon m-blink" cx="50" cy="62" r="3" fill="#2B1810"></circle>
-          <circle class="micon m-blink" cx="70" cy="62" r="3" fill="#2B1810" style="animation-delay:.5s"></circle>
-          <ellipse cx="48" cy="70" rx="5" ry="3" fill="var(--red)" opacity=".4"></ellipse>
-          <ellipse cx="72" cy="70" rx="5" ry="3" fill="var(--red)" opacity=".4"></ellipse>
-          <path d="M54 74q6 6 12 0" stroke="#2B1810" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
-
-          <!-- open book -->
-          <g class="micon m-bounce">
-            <line x1="60" y1="107" x2="60" y2="129" stroke="var(--red)" stroke-width="2"></line>
-            <path d="M60 107 36 112v22l24-5z" fill="#FFF8EC" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"></path>
-            <path d="M60 107 84 112v22l-24-5z" fill="#FFF8EC" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"></path>
-            <path d="M42 116h11M42 121h9M67 116h11M69 121h9" stroke="#C9B79C" stroke-width="1.6" stroke-linecap="round"></path>
-          </g>
-
-          <!-- sparkle -->
-          <path class="micon m-sway" d="M86 30l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="var(--ember)"></path>
-        </svg>
-      </div>
-      <div class="float-word fw1">happy<span>adjective</span></div>
-      <div class="float-word fw2">family<span>noun</span></div>
-      <div class="float-word fw3">colorful<span>adjective</span></div>
-      <div class="float-word fw4">friend<span>noun</span></div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-bubble">🧑‍🎓</div>
+      <div class="float-word fw1">sustainable<span>IELTS · C1</span></div>
+      <div class="float-word fw2">deadline<span>TOEIC · B1</span></div>
+      <div class="float-word fw3">take into account<span>cụm từ</span></div>
     </div>
   </section>
 
-  <nav class="quicknav" aria-label="Danh mục chương trình">
-    <a href="#c-giaotiep" class="quicknav-chip">Giao Tiếp Căn Bản</a>
-    <a href="#c-toeic" class="quicknav-chip">TOEIC</a>
-    <a href="#c-ielts" class="quicknav-chip">IELTS</a>
-    <a href="#c-chuyennganh" class="quicknav-chip">Chuyên Ngành</a>
-    <a href="#grammar" class="quicknav-chip">Ngữ Pháp</a>
-  </nav>
-
-  <div class="trust-bar" id="trustBar">
-    <div class="trust-cell">
-      <div class="trust-icon-wrap"><svg class="micon m-sway" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg></div>
-      <div><div class="trust-num">10.000+ từ vựng</div><div class="trust-cap">4 lộ trình, A1 đến C1</div></div>
-    </div>
-    <div class="trust-cell">
-      <div class="trust-icon-wrap"><svg class="micon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle class="m-ring" cx="12" cy="12" r="7"></circle><path d="M9 8.5a3 3 0 0 1 4.2 4.2M12 12v3M12 8v.01"></path></svg></div>
-      <div><div class="trust-num">Nhớ lâu hơn</div><div class="trust-cap">Ôn theo trí nhớ ngắt quãng</div></div>
-    </div>
-    <div class="trust-cell">
-      <div class="trust-icon-wrap"><svg class="micon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"></rect><circle class="m-blink" cx="12" cy="18" r="1" fill="var(--tier3)" stroke="none"></circle></svg></div>
-      <div><div class="trust-num">Học mọi lúc</div><div class="trust-cap">Không cần tài khoản</div></div>
-    </div>
-  </div>
-
-  <div class="stats-bar hidden" id="statsBar">
-    <div class="stat-cell">
-      <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--ember)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5.5 5.5 0 0 1 6 14C6 8 12 6 12 2Z"></path></svg></div>
-      <span class="stat-num" id="statStreak">0</span>
-      <span class="stat-cap">Chuỗi dài nhất</span>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H13v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H11v16h7.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg></div>
-      <span class="stat-num" id="statMastered">0</span>
-      <span class="stat-cap">Từ đã thuộc</span>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6Z"></path></svg></div>
-      <span class="stat-num" id="statXP">0</span>
-      <span class="stat-cap">Tổng XP</span>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-icon-wrap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--tier3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="var(--tier3)"></circle></svg></div>
-      <span class="stat-num" id="statBadges">0</span>
-      <span class="stat-cap">Huy hiệu đạt được</span>
-    </div>
-  </div>
-
-  <h2 class="section-title">Học hiệu quả trong 3 bước</h2>
-  <div class="journey">
-    <div class="journey-path"></div>
-    <div class="how-step">
-      <div class="how-num">1</div>
-      <div><div class="how-title">Chọn lộ trình phù hợp</div></div>
-    </div>
-    <div class="how-step">
-      <div class="how-num">2</div>
-      <div><div class="how-title">Học 15–20 phút mỗi ngày</div></div>
-    </div>
-    <div class="how-step">
-      <div class="how-num">3</div>
-      <div><div class="how-title">Theo dõi tiến độ, nhận huy hiệu</div></div>
-    </div>
-  </div>
-
-  <h2 class="section-title" id="courses">Chọn chương trình học</h2>
+  <h2 class="section-title" id="courses">Lộ trình học</h2>
   <div class="cards">
-
-    <a class="card t1" id="c-giaotiep" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="2968">
+    <a class="card" data-course="giaotiep" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="2968">
+      <div class="card-emoji">💬</div>
       <div class="card-main">
-        <span class="recommend-tag">✨ Gợi ý cho người mới bắt đầu</span>
-        <span class="badge">A1–B1</span>
-        <div class="card-title">3000 Từ Giao Tiếp Căn Bản</div>
+        <div class="card-top"><span class="card-title">Giao Tiếp Căn Bản</span><span class="lvl">A1–B1</span><span class="rec-tag">Gợi ý cho bạn</span></div>
         <div class="card-stats">2968 từ · 30 chủ đề đời sống</div>
-        <div class="card-desc">Nền tảng từ vựng dùng hằng ngày.</div>
-        <div class="progress-row">
-          <div class="progress-track"><div class="progress-fill"></div></div>
-          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
-        </div>
-        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-meta">Chưa bắt đầu</div>
       </div>
-      <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M32 4c8 6 12 16 12 28 0 8-3 15-6 19l-6 7-6-7c-3-4-6-11-6-19 0-12 4-22 12-28Z" fill="var(--tier1)"></path>
-          <circle cx="32" cy="26" r="6" fill="var(--paper-2)"></circle>
-          <path d="M22 50l-6 10M42 50l6 10" stroke="var(--tier1)" stroke-width="3.5" stroke-linecap="round"></path>
-        </svg>
-      </div>
+      <span class="card-go">›</span>
     </a>
-
-    <a class="card t2" id="c-toeic" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html" data-storage-key="azvocab_v2_toeic_a2b2" data-total="2500">
+    <a class="card" data-course="toeic" href="./AZEnglish%20TOEIC%20Vocab%20Arena%20(v2).html" data-storage-key="azvocab_v2_toeic_a2b2" data-total="2500">
+      <div class="card-emoji">💼</div>
       <div class="card-main">
-        <span class="badge">A2–B2</span>
-        <div class="card-title">TOEIC Vocab Arena</div>
-        <div class="card-stats">2500 từ · 20 chủ đề thương mại – văn phòng</div>
-        <div class="card-desc">Trọng tâm từ vựng Part 7, sát đề thi thật.</div>
-        <div class="progress-row">
-          <div class="progress-track"><div class="progress-fill"></div></div>
-          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
-        </div>
-        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        <div class="card-top"><span class="card-title">TOEIC</span><span class="lvl">A2–B2</span><span class="rec-tag">Gợi ý cho bạn</span></div>
+        <div class="card-stats">2500 từ · văn phòng, thương mại, Part 7</div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-meta">Chưa bắt đầu</div>
       </div>
-      <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <rect x="14" y="10" width="36" height="48" rx="4" fill="var(--paper-2)" stroke="var(--tier2)" stroke-width="3"></rect>
-          <rect x="24" y="4" width="16" height="10" rx="3" fill="var(--tier2)"></rect>
-          <path d="M22 26l4 4 8-8M22 38l4 4 8-8" stroke="var(--tier2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </div>
+      <span class="card-go">›</span>
     </a>
-
-    <a class="card t3" id="c-ielts" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html" data-storage-key="azvocab_v2_ielts1000" data-total="2008">
+    <a class="card" data-course="ielts" href="./AZEnglish%20Vocab%20Arena%20-%201000%20tu%CC%9B%CC%80%20IELTS%20B1-C1%20(v2).html" data-storage-key="azvocab_v2_ielts1000" data-total="3011">
+      <div class="card-emoji">🎓</div>
       <div class="card-main">
-        <span class="badge">B1–C1</span>
-        <div class="card-title">Vocab Arena IELTS</div>
-        <div class="card-stats">2008 từ · chủ đề IELTS phổ biến</div>
-        <div class="card-desc">Mở rộng vốn từ học thuật, luyện IELTS band cao.</div>
-        <div class="progress-row">
-          <div class="progress-track"><div class="progress-fill"></div></div>
-          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
-        </div>
-        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        <div class="card-top"><span class="card-title">IELTS</span><span class="lvl">B1–C1</span><span class="rec-tag">Gợi ý cho bạn</span></div>
+        <div class="card-stats">3011 từ &amp; cụm từ · 20 chủ đề thi</div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-meta">Chưa bắt đầu</div>
       </div>
-      <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M32 6 12 14v6c0 12 8 20 20 24 12-4 20-12 20-24v-6Z" fill="var(--tier3)"></path>
-          <path d="M25 30l5 5 10-11" stroke="var(--paper-2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
-          <rect x="18" y="46" width="28" height="6" rx="2" fill="var(--tier3)"></rect>
-          <rect x="21" y="53" width="22" height="5" rx="2" fill="var(--tier3)" opacity=".6"></rect>
-        </svg>
-      </div>
+      <span class="card-go">›</span>
     </a>
-
-    <a class="card t4" id="c-chuyennganh" href="./AZEnglish%20Career%20Vocab%20Arena%20(v1).html" data-storage-key="azvocab_v1_career9" data-total="4500">
+    <a class="card" data-course="career" href="./AZEnglish%20Career%20Vocab%20Arena%20(v1).html" data-storage-key="azvocab_v1_career9" data-total="4500">
+      <div class="card-emoji">🛠️</div>
       <div class="card-main">
-        <span class="badge">A2–C1</span>
-        <div class="card-title">Từ Vựng Chuyên Ngành</div>
-        <div class="card-stats">4500 từ · 9 khối ngành đào tạo</div>
-        <div class="card-desc">Đúng chuyên môn bạn theo đuổi, từ CNTT đến Y tế, Du lịch, Kỹ thuật...</div>
-        <div class="progress-row">
-          <div class="progress-track"><div class="progress-fill"></div></div>
-          <div class="progress-meta"><span class="progress-count">—</span><span class="progress-pct">0%</span></div>
-        </div>
-        <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        <div class="card-top"><span class="card-title">Chuyên Ngành</span><span class="lvl">A2–C1</span><span class="rec-tag">Gợi ý cho bạn</span></div>
+        <div class="card-stats">4500 từ · 9 khối ngành: CNTT, Y tế, Du lịch…</div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-meta">Chưa bắt đầu</div>
       </div>
-      <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M24 16V12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="var(--tier4)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
-          <rect x="8" y="16" width="48" height="34" rx="5" fill="var(--tier4)"></rect>
-          <path d="M8 30h48" stroke="var(--paper-2)" stroke-width="3"></path>
-          <rect x="26" y="26" width="12" height="9" rx="2" fill="var(--paper-2)"></rect>
-        </svg>
-      </div>
+      <span class="card-go">›</span>
     </a>
-
+    <a class="card" data-course="grammar" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html">
+      <div class="card-emoji">📖</div>
+      <div class="card-main">
+        <div class="card-top"><span class="card-title">Ngữ Pháp</span><span class="lvl">Song ngữ</span></div>
+        <div class="card-stats">46 chủ điểm · ví dụ &amp; lỗi hay gặp</div>
+      </div>
+      <span class="card-go">›</span>
+    </a>
   </div>
 
-  <h2 class="section-title" id="grammar">Ngữ pháp</h2>
+  <p class="footer-note">© AZEnglish · Tiến độ học lưu trên thiết bị này.</p>
+</div>
 
-  <a class="card t3" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html">
-    <div class="card-main">
-      <span class="badge">Song ngữ Việt–Anh</span>
-      <div class="card-title">Ngữ Pháp AZEnglish</div>
-      <div class="card-stats">46 chủ điểm · 7 nhóm</div>
-      <div class="card-desc">Từ Thì cơ bản đến Câu điều kiện, Mệnh đề quan hệ, Cấu trúc đặc biệt — tra cứu nhanh, có ví dụ và lỗi hay gặp.</div>
-      <span class="cta">Khám phá ngữ pháp <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-    </div>
-    <div class="card-icon">
-      <svg viewBox="0 0 64 64" fill="none">
-        <path d="M32 10c-6-4-14-4-20 0v38c6-4 14-4 20 0" stroke="var(--tier3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M32 10c6-4 14-4 20 0v38c-6-4-14-4-20 0" stroke="var(--tier3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M32 10v38" stroke="var(--tier3)" stroke-width="3"></path>
-      </svg>
-    </div>
-  </a>
+<nav class="tabbar" aria-label="Điều hướng">
+  <a class="tab active" href="#top"><span class="ti">🏠</span>Học</a>
+  <a class="tab" href="#courses"><span class="ti">📚</span>Lộ trình</a>
+  <button class="tab" type="button" data-open-test><span class="ti">🎯</span>Kiểm tra</button>
+  <a class="tab" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html"><span class="ti">📖</span>Ngữ pháp</a>
+</nav>
 
-
-  <div class="features">
-    <div class="feature-list">
-      <div class="feature">
-        <div class="feature-icon"><svg class="micon m-ring" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r="0.9" fill="currentColor"></circle></svg></div>
-        <div class="feature-title">Học đúng trọng tâm</div>
-      </div>
-      <div class="feature">
-        <div class="feature-icon b"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="10" rx="5"></rect><circle class="m-blink" cx="8" cy="13" r="1.3" fill="currentColor" stroke="none"></circle><circle class="m-blink" cx="16" cy="13" r="1.3" fill="currentColor" stroke="none" style="animation-delay:.6s"></circle></svg></div>
-        <div class="feature-title">Học như chơi game</div>
-      </div>
-      <div class="feature">
-        <div class="feature-icon c"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"></path><rect class="m-bar" x="7" y="12" width="3" height="8" fill="currentColor" stroke="none" style="animation-delay:0s"></rect><rect class="m-bar" x="12" y="9" width="3" height="11" fill="currentColor" stroke="none" style="animation-delay:.3s"></rect><rect class="m-bar" x="17" y="6" width="3" height="14" fill="currentColor" stroke="none" style="animation-delay:.6s"></rect></svg></div>
-        <div class="feature-title">Theo dõi tiến độ</div>
-      </div>
-      <div class="feature">
-        <div class="feature-icon d"><svg class="micon" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="1.5"></rect><path class="m-bounce" d="M2 9h20M12 9v12M12 9c-1.5-4-6-4-6-1s3 1 6 1Zm0 0c1.5-4 6-4 6-1s-3 1-6 1Z"></path></svg></div>
-        <div class="feature-title">Huy hiệu thành tích</div>
-      </div>
-    </div>
+<!-- ============ Placement test ============ -->
+<div class="pt" id="pt" role="dialog" aria-modal="true" aria-label="Kiểm tra trình độ từ vựng">
+  <div class="pt-head">
+    <button class="pt-close" id="ptClose" type="button" aria-label="Đóng">✕</button>
+    <div class="pt-bar"><i id="ptBar"></i></div>
+    <span class="pt-count" id="ptCount"></span>
   </div>
-
+  <div class="pt-body"><div class="pt-inner" id="ptInner"></div></div>
 </div>
 
 <script>
@@ -599,98 +312,312 @@
     var saved = null;
     try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
     applyTheme(saved);
-    var themeBtn = document.getElementById("themeBtn");
-    if(themeBtn){
-      themeBtn.addEventListener("click", function(){
-        var current = document.documentElement.getAttribute("data-theme");
-        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        var next;
-        if(!current){ next = prefersDark ? "light" : "dark"; }
-        else if(current === "dark"){ next = "light"; }
-        else{ next = "dark"; }
-        applyTheme(next);
-        try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
-      });
-    }
+    document.getElementById("themeBtn").addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme");
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var next = !current ? (prefersDark ? "light" : "dark") : (current === "dark" ? "light" : "dark");
+      applyTheme(next);
+      try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+    });
   })();
 </script>
 
 <script>
   (function(){
+    // Lead webhook: dùng chung deployment Apps Script với TOEIC Trainer, định tuyến theo `source`
+    // sang tab "AZ Vocab Arena Leads" (xem google-apps-script-lead-capture.gs trong thư mục này).
+    var LEAD_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzD1v2aekzEeyMBQ-2uD-2TRHBN9xX0__V6aAU5YZ4BFhlO4D9WEZtXr7CcwM4Gc2j1/exec";
+    var LEAD_SOURCE = "AZ-Vocab-Arena";
+    var LEADS_KEY = "az_vocab_leads";
+    var PROFILE_KEY = "az_vocab_profile";
+    var LAST_KEY = "az_vocab_last_course";
     var MASTERED_IVL_DAYS = 21;
-    var STORAGE_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000", "azvocab_v1_career9"];
 
-    function masteredCountFromState(raw){
-      if(!raw) return 0;
-      var state;
-      try{ state = JSON.parse(raw); }catch(e){ return 0; }
-      var count = 0;
-      for(var k in state){
-        if(k === "recentWords") continue;
-        if(!Object.prototype.hasOwnProperty.call(state, k)) continue;
-        var w = state[k];
-        if(w && typeof w.ivl === "number" && w.ivl >= MASTERED_IVL_DAYS) count++;
-      }
-      return count;
-    }
-    function readMeta(storageKey){
-      try{
-        var raw = localStorage.getItem(storageKey + "_meta");
-        if(!raw) return { dayStreak:0, xp:0, badges:[] };
-        var m = JSON.parse(raw);
-        return { dayStreak: m.dayStreak || 0, xp: m.xp || 0, badges: m.badges || [] };
-      }catch(e){ return { dayStreak:0, xp:0, badges:[] }; }
-    }
+    function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+    function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+    function lsJSON(k){ try{ return JSON.parse(lsGet(k) || "null"); }catch(e){ return null; } }
 
-    var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
-    var totalMastered = 0, maxStreak = 0, totalXP = 0, totalBadges = 0;
-
-    cards.forEach(function(card){
-      var key = card.getAttribute("data-storage-key");
-      var total = parseInt(card.getAttribute("data-total"), 10) || 0;
-      var raw = null;
-      try{ raw = localStorage.getItem(key); }catch(e){}
-      var mastered = masteredCountFromState(raw);
-      var meta = readMeta(key);
-
-      totalMastered += mastered;
-      totalXP += meta.xp;
-      totalBadges += (meta.badges || []).length;
-      if(meta.dayStreak > maxStreak) maxStreak = meta.dayStreak;
-
-      var pct = total > 0 ? Math.min(100, Math.round((mastered / total) * 100)) : 0;
-      var fill = card.querySelector(".progress-fill");
-      var countEl = card.querySelector(".progress-count");
-      var pctEl = card.querySelector(".progress-pct");
-      var cta = card.querySelector(".cta");
-
-      if(fill) fill.style.width = pct + "%";
-      if(mastered > 0){
-        if(countEl) countEl.textContent = mastered.toLocaleString("vi-VN") + " / " + total.toLocaleString("vi-VN") + " từ";
-        if(pctEl) pctEl.textContent = pct + "%";
-        if(cta) cta.firstChild.textContent = "Tiếp tục học ";
-      } else {
-        if(countEl) countEl.textContent = "Chưa bắt đầu";
-        if(pctEl) pctEl.textContent = "0%";
-      }
+    var COURSES = {};
+    Array.prototype.forEach.call(document.querySelectorAll(".card[data-course]"), function(card){
+      COURSES[card.getAttribute("data-course")] = {
+        el: card,
+        name: card.querySelector(".card-title").textContent,
+        emoji: card.querySelector(".card-emoji").textContent,
+        url: card.getAttribute("href"),
+        key: card.getAttribute("data-storage-key"),
+        total: parseInt(card.getAttribute("data-total"), 10) || 0
+      };
     });
+    var COURSE_BLURB = {
+      giaotiep: "Nền tảng từ vựng dùng hằng ngày — học chắc phần này trước, mọi mục tiêu khác sẽ nhanh hơn.",
+      toeic: "Từ vựng văn phòng – thương mại xuất hiện dày đặc trong Part 5, 6, 7.",
+      ielts: "Từ và cụm từ học thuật theo 20 chủ đề hay ra thi, giúp Writing & Speaking lên band.",
+      career: "Từ vựng đúng ngành bạn học và làm: CNTT, Y tế, Du lịch, Kỹ thuật…"
+    };
 
-    document.getElementById("statStreak").textContent = maxStreak.toLocaleString("vi-VN");
-    document.getElementById("statMastered").textContent = totalMastered.toLocaleString("vi-VN");
-    document.getElementById("statXP").textContent = totalXP.toLocaleString("vi-VN");
-    document.getElementById("statBadges").textContent = totalBadges.toLocaleString("vi-VN");
-    document.getElementById("navStreak").textContent = maxStreak.toLocaleString("vi-VN");
-
-    var hasProgress = totalMastered > 0 || maxStreak > 0 || totalXP > 0 || totalBadges > 0;
-    var statsBar = document.getElementById("statsBar");
-    var trustBar = document.getElementById("trustBar");
-    if(hasProgress){
-      if(statsBar) statsBar.classList.remove("hidden");
-      if(trustBar) trustBar.classList.add("hidden");
-    } else {
-      if(statsBar) statsBar.classList.add("hidden");
-      if(trustBar) trustBar.classList.remove("hidden");
+    /* ---------- progress on cards ---------- */
+    function courseProgress(key){
+      var mastered = 0, meta = { dayStreak:0 };
+      var st = lsJSON(key);
+      if(st){ for(var k in st){ if(k !== "recentWords" && st[k] && typeof st[k].ivl === "number" && st[k].ivl >= MASTERED_IVL_DAYS) mastered++; } }
+      var m = lsJSON(key + "_meta"); if(m) meta = m;
+      return { mastered: mastered, started: !!st && Object.keys(st).length > 0, streak: meta.dayStreak || 0 };
     }
+    var maxStreak = 0, bestStarted = null, bestCount = -1;
+    Object.keys(COURSES).forEach(function(id){
+      var c = COURSES[id]; if(!c.key) return;
+      var p = courseProgress(c.key);
+      c.progress = p;
+      if(p.streak > maxStreak) maxStreak = p.streak;
+      if(p.started && p.mastered > bestCount){ bestCount = p.mastered; bestStarted = id; }
+      var pct = c.total ? Math.min(100, Math.round(p.mastered / c.total * 100)) : 0;
+      c.el.querySelector(".progress-fill").style.width = pct + "%";
+      c.el.querySelector(".progress-meta").textContent = p.started
+        ? p.mastered.toLocaleString("vi-VN") + " / " + c.total.toLocaleString("vi-VN") + " từ đã thuộc · " + pct + "%"
+        : "Chưa bắt đầu";
+    });
+    if(maxStreak > 0){
+      document.getElementById("streakChip").classList.add("on");
+      document.getElementById("streakText").textContent = "Ngày " + maxStreak;
+    }
+
+    /* ---------- one-tap hero ---------- */
+    var profile = lsJSON(PROFILE_KEY);
+    var last = lsGet(LAST_KEY);
+    if(!COURSES[last] || last === "grammar") last = null;
+    var heroCourse = last || bestStarted || (profile && profile.rec) || null;
+
+    Array.prototype.forEach.call(document.querySelectorAll(".card[data-course]"), function(card){
+      card.addEventListener("click", function(){ lsSet(LAST_KEY, card.getAttribute("data-course")); });
+    });
+    if(profile && COURSES[profile.rec]) COURSES[profile.rec].el.classList.add("rec");
+
+    var heroBtn = document.getElementById("heroBtn");
+    var heroAlt = document.getElementById("heroAlt");
+    if(heroCourse){
+      var hc = COURSES[heroCourse];
+      var isResume = heroCourse === last || heroCourse === bestStarted;
+      document.getElementById("heroTitle").innerHTML = isResume
+        ? 'Chào mừng trở lại!<br /><span class="accent">Học tiếp nhé 👋</span>'
+        : 'Lộ trình của bạn<br /><span class="accent">đã sẵn sàng 🎯</span>';
+      document.getElementById("heroSub").textContent = isResume
+        ? "15 phút hôm nay là đủ để giữ nhịp. Bấm một lần là vào học."
+        : "Dựa trên bài kiểm tra, bạn nên bắt đầu với lộ trình " + hc.name + (profile && profile.level ? " (trình độ " + profile.level + ")" : "") + ".";
+      heroBtn.href = hc.url;
+      heroBtn.innerHTML = '<span style="font-size:24px">▶</span><span class="lbl">' + (isResume ? "Học tiếp: " : "Bắt đầu: ") + hc.name +
+        '<small>' + (hc.progress && hc.progress.started ? hc.progress.mastered.toLocaleString("vi-VN") + " từ đã thuộc" : "Bài đầu tiên · 15 phút") + '</small></span>';
+      heroBtn.addEventListener("click", function(){ lsSet(LAST_KEY, heroCourse); });
+      heroAlt.textContent = profile ? "Làm lại bài kiểm tra trình độ" : "Kiểm tra trình độ từ vựng (2 phút)";
+      heroAlt.addEventListener("click", openTest);
+    } else {
+      heroBtn.addEventListener("click", function(e){ e.preventDefault(); openTest(); });
+      heroAlt.addEventListener("click", function(){ lsSet(LAST_KEY, "giaotiep"); location.href = COURSES.giaotiep.url; });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("[data-open-test]"), function(b){ b.addEventListener("click", openTest); });
+
+    /* ---------- placement test ---------- */
+    var NEEDS = [
+      { id:"goal", q:"Bạn học từ vựng để làm gì?", opts:[
+        ["giaotiep","💬","Giao tiếp hằng ngày"], ["toeic","💼","Thi TOEIC / đi làm"], ["ielts","🎓","Thi IELTS / du học"],
+        ["career","🛠️","Tiếng Anh chuyên ngành"], ["school","🏫","Học tốt tiếng Anh ở trường"] ] },
+      { id:"role", q:"Bạn đang là…", opts:[
+        ["hs","🎒","Học sinh (THCS – THPT)"], ["sv","📚","Sinh viên"], ["dilam","🧑‍💻","Người đi làm"], ["phuhuynh","👨‍👩‍👧","Phụ huynh tìm cho con"] ] },
+      { id:"time", q:"Mỗi ngày bạn dành được bao lâu?", opts:[
+        ["5","⏱️","5 phút"], ["15","⏰","10 – 15 phút"], ["30","📅","20 – 30 phút"], ["45","🚀","Trên 30 phút"] ] },
+      { id:"az", q:"Bạn có đang học tại AZEnglish không?", opts:[
+        ["dang-hoc","✅","Đang học"], ["da-hoc","🕘","Đã từng học"], ["chua","👋","Chưa, lần đầu biết"] ] }
+    ];
+    // 10 câu tăng dần A1 → C1 (2 câu mỗi bậc). Đáp án đúng luôn là phương án đầu tiên — sẽ được xáo khi hiển thị.
+    var QUIZ = [
+      { lvl:"A1", q:'She is my best ___. We sit next to each other in class.', o:["friend","kitchen","weather","money"] },
+      { lvl:"A1", q:'"hungry" nghĩa là gì?', o:["đói","buồn ngủ","vui vẻ","lạnh"] },
+      { lvl:"A2", q:'I’d like to ___ a table for four at 7 p.m.', o:["book","write","take","open"] },
+      { lvl:"A2", q:'"borrow" nghĩa là gì?', o:["mượn","trả lại","mua","đánh mất"] },
+      { lvl:"B1", q:'The meeting has been ___ until next Monday because the manager is ill.', o:["postponed","prevented","pretended","proposed"] },
+      { lvl:"B1", q:'"reliable" nghĩa là gì?', o:["đáng tin cậy","dễ thay đổi","đắt đỏ","nổi tiếng"] },
+      { lvl:"B2", q:'The new policy had a significant ___ on small businesses.', o:["impact","effort","access","attempt"] },
+      { lvl:"B2", q:'"deteriorate" nghĩa là gì?', o:["trở nên tồi tệ hơn","cải thiện dần","giữ nguyên","tăng tốc"] },
+      { lvl:"C1", q:'Her argument was so ___ that nobody could find a flaw in it.', o:["compelling","tentative","ambiguous","superficial"] },
+      { lvl:"C1", q:'"exacerbate" nghĩa là gì?', o:["làm trầm trọng thêm","làm dịu đi","phớt lờ","trì hoãn"] }
+    ];
+    var LEVEL_INFO = {
+      A1: { name:"Mới bắt đầu", vocab:"~500 từ", desc:"Bạn biết các từ quen thuộc nhất. Xây nền từ vựng đời sống là bước nhanh nhất để tiến bộ." },
+      A2: { name:"Sơ cấp", vocab:"~1.000 – 1.500 từ", desc:"Bạn hiểu câu đơn giản hằng ngày. Cần mở rộng từ theo chủ đề để nói và đọc tự tin hơn." },
+      B1: { name:"Trung cấp", vocab:"~2.000 – 3.000 từ", desc:"Bạn xử lý được hầu hết tình huống quen thuộc. Bước tiếp theo là từ vựng theo mục tiêu thi/công việc." },
+      B2: { name:"Trung cao cấp", vocab:"~4.000 – 5.000 từ", desc:"Vốn từ khá tốt. Tập trung vào cụm từ (collocation) và từ học thuật để bứt band." },
+      C1: { name:"Cao cấp", vocab:"6.000+ từ", desc:"Vốn từ rất tốt! Hãy luyện độ chính xác và cách dùng từ học thuật nâng cao." }
+    };
+
+    var ptEl = document.getElementById("pt"), inner = document.getElementById("ptInner");
+    var barEl = document.getElementById("ptBar"), countEl = document.getElementById("ptCount");
+    var TOTAL_STEPS = NEEDS.length + QUIZ.length + 1;
+    var state;
+
+    function openTest(e){
+      if(e && e.preventDefault) e.preventDefault();
+      state = { step:0, needs:{}, answers:[] };
+      ptEl.classList.add("open"); document.body.style.overflow = "hidden";
+      render();
+    }
+    function closeTest(){ ptEl.classList.remove("open"); document.body.style.overflow = ""; }
+    document.getElementById("ptClose").addEventListener("click", closeTest);
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ptEl.classList.contains("open")) closeTest(); });
+
+    function shuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
+    function setBar(n, label){ barEl.style.width = Math.round(n / TOTAL_STEPS * 100) + "%"; countEl.textContent = label || ""; }
+
+    function render(){
+      var s = state.step;
+      inner.innerHTML = "";
+      var box = document.createElement("div"); box.className = "pt-fade";
+      if(s < NEEDS.length) renderNeed(box, NEEDS[s], s);
+      else if(s < NEEDS.length + QUIZ.length) renderQuiz(box, s - NEEDS.length);
+      else if(s === NEEDS.length + QUIZ.length) renderForm(box);
+      else renderResult(box);
+      inner.appendChild(box);
+      document.querySelector(".pt-body").scrollTop = 0;
+    }
+
+    function renderNeed(box, n, i){
+      setBar(i, "");
+      box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (i + 1) + '/' + NEEDS.length + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">Chọn một đáp án.</p><div class="opts"></div>';
+      var opts = box.querySelector(".opts");
+      n.opts.forEach(function(o){
+        var b = document.createElement("button"); b.type = "button"; b.className = "opt";
+        b.innerHTML = '<span class="oe">' + o[1] + '</span>' + o[2];
+        b.addEventListener("click", function(){
+          b.classList.add("picked"); disableAll(opts);
+          state.needs[n.id] = o[0]; state.needs[n.id + "Label"] = o[2];
+          setTimeout(next, 220);
+        });
+        opts.appendChild(b);
+      });
+    }
+
+    function renderQuiz(box, qi){
+      var item = QUIZ[qi];
+      setBar(NEEDS.length + qi, (qi + 1) + "/" + QUIZ.length);
+      var qHtml = esc(item.q).replace("___", '<span class="blank">&nbsp;</span>');
+      box.innerHTML = '<div class="pt-kicker">Từ vựng · câu ' + (qi + 1) + '/' + QUIZ.length + '</div><h2 class="pt-q">' + qHtml + '</h2>' +
+        '<p class="pt-hint">' + (item.q.indexOf("___") >= 0 ? "Chọn từ đúng để điền vào chỗ trống." : "Chọn nghĩa đúng.") + '</p><div class="opts two"></div><div class="opts" style="margin-top:10px"></div>';
+      var grids = box.querySelectorAll(".opts");
+      shuffle(item.o).forEach(function(txt){
+        var b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.textContent = txt;
+        b.addEventListener("click", function(){ answer(qi, txt === item.o[0], txt, b, grids); });
+        grids[0].appendChild(b);
+      });
+      var d = document.createElement("button"); d.type = "button"; d.className = "opt dunno"; d.textContent = "🤔 Mình chưa biết từ này";
+      d.addEventListener("click", function(){ answer(qi, false, "(chưa biết)", d, grids); });
+      grids[1].appendChild(d);
+    }
+    function answer(qi, ok, picked, btn, grids){
+      btn.classList.add("picked");
+      Array.prototype.forEach.call(grids, disableAll);
+      state.answers[qi] = { ok: ok, picked: picked };
+      setTimeout(next, 220);
+    }
+    function disableAll(container){ Array.prototype.forEach.call(container.querySelectorAll("button"), function(b){ b.disabled = true; }); }
+    function next(){ state.step++; render(); }
+
+    function score(){
+      var correct = 0, byLvl = {};
+      state.answers.forEach(function(a, i){ if(a && a.ok){ correct++; byLvl[QUIZ[i].lvl] = (byLvl[QUIZ[i].lvl] || 0) + 1; } });
+      // Bậc cao nhất mà người học đúng ≥ 1/2 câu của bậc đó và cả các bậc dưới — tránh "đoán trúng" câu khó nhảy cóc.
+      var order = ["A1","A2","B1","B2","C1"], level = "A1";
+      for(var i = 0; i < order.length; i++){
+        var got = byLvl[order[i]] || 0;
+        if(got === 2 || (got === 1 && i > 0 && (byLvl[order[i - 1]] || 0) === 2)) level = order[i]; else break;
+      }
+      return { correct: correct, level: level };
+    }
+    function recommend(goal, level){
+      var low = level === "A1" || level === "A2";
+      if(goal === "ielts") return low ? "giaotiep" : "ielts";
+      if(goal === "toeic") return level === "A1" ? "giaotiep" : "toeic";
+      if(goal === "career") return level === "A1" ? "giaotiep" : "career";
+      if(goal === "school") return (level === "B2" || level === "C1") ? "ielts" : "giaotiep";
+      return (level === "B2" || level === "C1") ? "ielts" : "giaotiep";
+    }
+
+    function renderForm(box){
+      setBar(TOTAL_STEPS - 1, "");
+      var sc = score();
+      box.innerHTML =
+        '<div class="pt-kicker">Hoàn thành 🎉</div><h2 class="pt-q">Kết quả của bạn đã sẵn sàng!</h2>' +
+        '<p class="pt-hint">Để lại thông tin để xem trình độ, vốn từ ước tính và lộ trình học phù hợp.</p>' +
+        '<div class="teaser"><b>' + sc.correct + '/10</b><div class="locked">câu đúng · 🔒 trình độ &amp; lộ trình gợi ý sẽ hiện sau khi bạn điền thông tin</div></div>' +
+        '<form class="form-grid" id="leadForm" novalidate>' +
+          '<div class="field" id="fName"><label for="ldName">Họ và tên</label><input id="ldName" autocomplete="name" placeholder="Nguyễn Văn A" /><div class="msg">Vui lòng nhập họ tên.</div></div>' +
+          '<div class="field" id="fPhone"><label for="ldPhone">Số điện thoại (Zalo)</label><input id="ldPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx" /><div class="msg">Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).</div></div>' +
+          '<div class="field" id="fEmail"><label for="ldEmail">Email <em>(không bắt buộc)</em></label><input id="ldEmail" type="email" inputmode="email" autocomplete="email" placeholder="ban@gmail.com" /><div class="msg">Email chưa đúng định dạng.</div></div>' +
+          '<button class="btn-main" type="submit" style="max-width:none"><span class="lbl">Xem kết quả của tôi →</span></button>' +
+          '<p class="privacy">🔒 Thông tin chỉ dùng để AZEnglish gửi kết quả và tư vấn lộ trình học qua Zalo. Không chia sẻ cho bên thứ ba.</p>' +
+        '</form>';
+      if(profile){
+        box.querySelector("#ldName").value = profile.name || "";
+        box.querySelector("#ldPhone").value = profile.phone || "";
+        box.querySelector("#ldEmail").value = profile.email || "";
+      }
+      box.querySelector("#leadForm").addEventListener("submit", function(e){ e.preventDefault(); submitLead(box, sc); });
+    }
+
+    function submitLead(box, sc){
+      var name = box.querySelector("#ldName").value.trim();
+      var phoneRaw = box.querySelector("#ldPhone").value.trim();
+      var phone = phoneRaw.replace(/[\s.\-()]/g, "").replace(/^\+?84/, "0");
+      var email = box.querySelector("#ldEmail").value.trim();
+      var okName = name.length >= 2, okPhone = /^0\d{9}$/.test(phone), okEmail = !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      box.querySelector("#fName").classList.toggle("err", !okName);
+      box.querySelector("#fPhone").classList.toggle("err", !okPhone);
+      box.querySelector("#fEmail").classList.toggle("err", !okEmail);
+      if(!(okName && okPhone && okEmail)) return;
+
+      var rec = recommend(state.needs.goal, sc.level);
+      var params = new URLSearchParams(location.search);
+      var lead = {
+        source: LEAD_SOURCE,
+        name: name, phone: phone, email: email,
+        goal: state.needs.goalLabel, role: state.needs.roleLabel, dailyTime: state.needs.timeLabel, azStudent: state.needs.azLabel,
+        score: sc.correct + "/10", level: sc.level, recommended: COURSES[rec].name,
+        answers: state.answers.map(function(a, i){ return (i + 1) + (a.ok ? "✓" : "✗"); }).join(" "),
+        utm_source: params.get("utm_source") || "", utm_medium: params.get("utm_medium") || "", utm_campaign: params.get("utm_campaign") || "",
+        referrer: document.referrer || "", submittedAt: new Date().toISOString()
+      };
+      var leads = lsJSON(LEADS_KEY) || []; leads.push(lead); lsSet(LEADS_KEY, JSON.stringify(leads));
+      profile = { name:name, phone:phone, email:email, level:sc.level, correct:sc.correct, goal:state.needs.goal, rec:rec, at:lead.submittedAt };
+      lsSet(PROFILE_KEY, JSON.stringify(profile));
+      try{
+        fetch(LEAD_WEBHOOK_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(lead) }).catch(function(){});
+      }catch(err){}
+      state.result = { sc: sc, rec: rec };
+      next();
+    }
+
+    function renderResult(box){
+      setBar(TOTAL_STEPS, "");
+      var sc = state.result.sc, rec = COURSES[state.result.rec], info = LEVEL_INFO[sc.level];
+      var goalNote = "";
+      if(state.needs.goal === "ielts" && state.result.rec === "giaotiep") goalNote = " Với mục tiêu IELTS, bạn nên vững 3000 từ nền tảng trước rồi chuyển sang lộ trình IELTS.";
+      if(state.needs.goal === "toeic" && state.result.rec === "giaotiep") goalNote = " Với mục tiêu TOEIC, học chắc từ nền tảng trước sẽ giúp bạn đọc Part 7 nhanh hơn.";
+      if(state.needs.goal === "giaotiep" && state.result.rec === "ielts") goalNote = " Từ giao tiếp cơ bản đã khá dễ với bạn — lộ trình IELTS giúp bạn diễn đạt tự nhiên và sâu hơn.";
+      var wrong = [];
+      state.answers.forEach(function(a, i){ if(!a.ok) wrong.push(QUIZ[i]); });
+      var reviewHtml = wrong.length ? '<div class="pt-kicker" style="margin-top:4px">Từ bạn cần ôn</div><ul class="review-list">' +
+        wrong.slice(0, 5).map(function(w){ var isMeaning = w.q.indexOf("___") < 0; return "<li><b>" + esc(isMeaning ? w.q.match(/"([^"]+)"/)[1] : w.o[0]) + "</b>" + (isMeaning ? " — " + esc(w.o[0]) : " — " + esc(w.q.replace("___", w.o[0]))) + "</li>"; }).join("") + "</ul>" : "";
+      box.innerHTML =
+        '<div class="pt-kicker">Kết quả kiểm tra</div>' +
+        '<div class="result-lvl"><div class="lvl-big">' + sc.level + '</div><div><h3>' + info.name + '</h3><p>' + info.desc + '</p></div></div>' +
+        '<div class="result-stats"><div class="rs"><b>' + sc.correct + '/10</b><span>câu đúng</span></div><div class="rs"><b>' + info.vocab + '</b><span>vốn từ ước tính</span></div></div>' +
+        '<div class="rec-box"><div class="k">Lộ trình gợi ý cho bạn</div><h4>' + rec.emoji + ' ' + rec.name + '</h4><p>' + COURSE_BLURB[state.result.rec] + goalNote + '</p>' +
+          '<a class="btn-main" style="max-width:none" id="goRec" href="' + rec.url + '"><span class="lbl">Bắt đầu học ngay →<small>Bài đầu tiên · 15 phút</small></span></a></div>' +
+        reviewHtml +
+        '<button class="hero-alt" type="button" id="seeAll">Xem tất cả lộ trình</button>';
+      box.querySelector("#goRec").addEventListener("click", function(){ lsSet(LAST_KEY, state.result.rec); });
+      box.querySelector("#seeAll").addEventListener("click", function(){ closeTest(); location.hash = "courses"; location.reload(); });
+    }
+
+    if(/[?&]test=1/.test(location.search) || location.hash === "#kiem-tra") openTest();
   })();
 </script>
 
