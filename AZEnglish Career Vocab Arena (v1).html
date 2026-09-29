@@ -712,6 +712,9 @@
 <div class="stack">
 
   <header class="masthead">
+<script>window.AZ_COURSE={id:"career",key:"azvocab_v1_career9",name:"Từ Vựng Chuyên Ngành"};</script>
+<script src="./az-core.js" defer></script>
+
 <script>/* Cổng test đầu vào: chưa làm test thì quay về trang chủ */try{var _p=JSON.parse(localStorage.getItem("az_vocab_profile")||"null");if(!(_p&&_p.phone)){location.replace("./?test=1");}}catch(e){}</script>
 
     <a class="mark" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
@@ -782,10 +785,10 @@
       <div class="size-picker">
         <span class="size-picker-label">Số từ mỗi buổi</span>
         <div class="size-chip-row" id="sizeChipRow">
-          <button class="size-chip" data-size="25" type="button">25</button>
+          <button class="size-chip" data-size="15" type="button">15</button>
+          <button class="size-chip" data-size="20" type="button">20</button>
           <button class="size-chip" data-size="30" type="button">30</button>
-          <button class="size-chip" data-size="50" type="button">50</button>
-          <button class="size-chip" data-size="100" type="button">100 🔥</button>
+          <button class="size-chip" data-size="50" type="button">50 🔥</button>
         </div>
       </div>
       <button class="home-cta" id="homeCtaBtn" type="button">
@@ -1477,7 +1480,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
   musicVolSlider.value = String(musicVolPct);
   var musicPref = null;
   try{ musicPref = localStorage.getItem(STORAGE_KEY + "_music"); }catch(e){}
-  var musicOn = musicPref === null ? true : musicPref === "on";
+  var musicOn = musicPref === "on"; // mặc định tắt nhạc nền
   musicBtn.classList.toggle("active", musicOn);
   musicBtn.addEventListener("click", function(){
     musicOn = !musicOn;

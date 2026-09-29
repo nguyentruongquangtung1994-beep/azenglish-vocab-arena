@@ -465,6 +465,9 @@
 <div class="stack">
 
   <header class="masthead">
+<script>window.AZ_COURSE={id:"toeic",key:"azvocab_v2_toeic_a2b2",name:"TOEIC Vocab Arena"};</script>
+<script src="./az-core.js" defer></script>
+
 <script>/* Cổng test đầu vào: chưa làm test thì quay về trang chủ */try{var _p=JSON.parse(localStorage.getItem("az_vocab_profile")||"null");if(!(_p&&_p.phone)){location.replace("./?test=1");}}catch(e){}</script>
 
     <a class="mark" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
@@ -514,9 +517,10 @@
       <div class="size-picker" role="group" aria-label="Số từ mỗi buổi ôn">
         <span class="size-picker-label">Số từ mỗi buổi</span>
         <div class="size-btn-row">
-          <button class="size-btn active" data-size="25" type="button">25</button>
+          <button class="size-btn" data-size="15" type="button">15</button>
+          <button class="size-btn active" data-size="20" type="button">20</button>
+          <button class="size-btn" data-size="30" type="button">30</button>
           <button class="size-btn" data-size="50" type="button">50</button>
-          <button class="size-btn" data-size="100" type="button">100</button>
         </div>
       </div>
       <button class="btn-primary hero-cta" id="heroStartBtn" type="button">Bắt đầu ngay <svg class="icon-inline" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
@@ -915,7 +919,7 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
   musicVolSlider.value = String(musicVolPct);
   var musicPref = null;
   try{ musicPref = localStorage.getItem(STORAGE_KEY + "_music"); }catch(e){}
-  var musicOn = musicPref === null ? true : musicPref === "on";
+  var musicOn = musicPref === "on"; // mặc định tắt nhạc nền
   musicBtn.classList.toggle("active", musicOn);
   musicBtn.addEventListener("click", function(){
     musicOn = !musicOn;
@@ -1836,7 +1840,7 @@ var WORDS = [{"w":"stationery","p":"n","m":"văn phòng phẩm","lvl":"A2","t":"
   });
 
   // ---------- session-size picker: 25 / 50 / 100 words per round ----------
-  var SESSION_SIZE = 25;
+  var SESSION_SIZE = 20;
   var sizeButtons = document.querySelectorAll(".size-btn");
   function updateSizeLabels(){
     Array.prototype.forEach.call(document.querySelectorAll(".js-size-label"), function(el){ el.textContent = SESSION_SIZE; });
