@@ -438,6 +438,52 @@
   @keyframes ptIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
   @media (prefers-reduced-motion: reduce){ .pt-fade{ animation:none; } .pt-bar i{ transition:none; } .hero-cta2{ transition:none; } }
 
+  /* ================= Đợt 3: đồng hồ, tư vấn chuyên gia, hồ sơ ================= */
+  .qtimer{ display:flex; align-items:center; gap:10px; margin:0 0 14px; }
+  .qtimer .tt{ flex:1; height:6px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .qtimer .tt i{ display:block; height:100%; width:100%; background:var(--ember); border-radius:99px; transition:width 1s linear; }
+  .qtimer.low .tt i{ background:var(--bad); }
+  .qtimer b{ flex:none; font:700 13px var(--font-body); color:var(--ink-soft); min-width:44px; text-align:right; font-variant-numeric:tabular-nums; }
+  .qtimer.low b{ color:var(--bad); }
+  .skills.four{ grid-template-columns:repeat(4,1fr); }
+  @media (max-width:520px){ .skills.four{ grid-template-columns:repeat(2,1fr); } }
+  .report{ margin-top:6px; }
+  .rp-sec{ background:var(--paper-2); border:1.5px solid var(--line); border-radius:18px; padding:16px; margin-bottom:12px; }
+  .rp-sec h4{ display:flex; align-items:center; gap:8px; font:800 17px var(--font-display); margin:0 0 8px; }
+  .rp-sec p{ margin:0 0 8px; font-size:14px; line-height:1.6; color:var(--ink-soft); }
+  .rp-sec p b, .rp-sec li b{ color:var(--ink); }
+  .rp-sec ul{ margin:0; padding-left:18px; font-size:14px; line-height:1.65; color:var(--ink-soft); }
+  .rp-item{ border-top:1px dashed var(--line); padding-top:10px; margin-top:10px; }
+  .rp-item:first-of-type{ border-top:0; padding-top:0; margin-top:0; }
+  .rp-tag{ display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:99px; margin-right:6px; }
+  .rp-tag.ok{ background:color-mix(in srgb, var(--ok) 16%, transparent); color:var(--ok); }
+  .rp-tag.bad{ background:color-mix(in srgb, var(--bad) 16%, transparent); color:var(--bad); }
+  .rp-ex{ font-size:13px; background:var(--paper-3); border-radius:10px; padding:8px 10px; margin:6px 0 4px; color:var(--ink-soft); }
+  .rp-ex b{ color:var(--ok); }
+  .phase{ position:relative; padding:0 0 14px 22px; border-left:2px solid var(--line); margin-left:6px; }
+  .phase:last-child{ padding-bottom:0; }
+  .phase::before{ content:""; position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--red); }
+  .phase .ph-t{ font:800 15px var(--font-display); margin:0 0 2px; }
+  .phase .ph-s{ font-size:12.5px; font-weight:700; color:var(--red); margin-bottom:4px; }
+  .proj{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0 4px; }
+  .proj div{ text-align:center; background:var(--paper-3); border-radius:12px; padding:8px 4px; }
+  .proj b{ display:block; font:800 20px var(--font-display); color:var(--red); }
+  .proj span{ font-size:11.5px; color:var(--ink-faint); }
+  .career-box{ border:2px dashed var(--ember); }
+  /* hồ sơ cá nhân */
+  .hist{ width:100%; border-collapse:collapse; font-size:13px; }
+  .hist th, .hist td{ padding:8px 6px; text-align:center; border-bottom:1px solid var(--line); }
+  .hist th{ font-size:11.5px; color:var(--ink-faint); font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+  .hist td.lv{ font:800 15px var(--font-display); color:var(--red); }
+  .cmp{ display:grid; gap:8px; margin-top:10px; }
+  .cmp-row{ display:grid; grid-template-columns:78px 1fr 1fr; gap:8px; align-items:center; font-size:12.5px; }
+  .cmp-bar{ height:10px; border-radius:99px; background:var(--line); overflow:hidden; }
+  .cmp-bar i{ display:block; height:100%; border-radius:99px; background:var(--ink-faint); }
+  .cmp-bar.now i{ background:var(--red); }
+  .cmp-legend{ display:flex; gap:14px; font-size:12px; color:var(--ink-faint); margin-top:6px; }
+  .cmp-legend span::before{ content:""; display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; background:var(--ink-faint); vertical-align:-1px; }
+  .cmp-legend span.now::before{ background:var(--red); }
+
 </style>
 </head>
 <body>
@@ -475,7 +521,7 @@
         <span class="hp3"><span class="hp-ic"><svg class="micon m-spin" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg></span> Ôn ngắt quãng</span>
       </div>
       <div class="hero-actions">
-        <a class="hero-cta" id="heroCta" href="#" role="button"><span class="lbl">🎯 Kiểm tra trình độ — 3 phút<small>15 câu Nghe · Đọc · Ngữ pháp · miễn phí</small></span></a>
+        <a class="hero-cta" id="heroCta" href="#" role="button"><span class="lbl">🎯 Kiểm tra trình độ — 10 phút<small>20 câu Nghe · Đọc · Ngữ pháp · Từ vựng · miễn phí</small></span></a>
         <a class="hero-cta2" id="heroCta2" href="#">⚡ Học ngay</a>
       </div>
     </div>
@@ -668,6 +714,13 @@
   <div class="pt-body"><div class="pt-inner" id="ptInner"></div></div>
 </div>
 
+<div class="pt" id="pf" role="dialog" aria-modal="true" aria-label="Hồ sơ của tôi">
+  <div class="pt-head">
+    <button class="pt-close" id="pfClose" type="button" aria-label="Đóng">✕</button>
+    <div style="flex:1;font:700 15px var(--font-display)">Hồ sơ & lộ trình của tôi</div>
+  </div>
+  <div class="pt-body"><div class="pt-inner" id="pfInner"></div></div>
+</div>
 <script>
   (function(){
     // Lead webhook: deployment Apps Script dùng chung ("TOEIC LEADS"), định tuyến theo source → tab "AZ Vocab Arena Leads".
@@ -676,14 +729,17 @@
     var CONTACT_PHONE = "0971882096";
     var LEADS_KEY = "az_vocab_leads";
     var PROFILE_KEY = "az_vocab_profile";
+    var TESTS_KEY = "az_vocab_tests";
     var LAST_KEY = "az_vocab_last_course";
     var MASTERED_IVL_DAYS = 21;
+    var AUDIO_DIR = "./audio/placement/";
 
     function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
     function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
     function lsJSON(k){ try{ return JSON.parse(lsGet(k) || "null"); }catch(e){ return null; } }
     function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
     function shuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function fmtDate(iso){ var d = new Date(iso); return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear(); }
 
     /* ---------- lộ trình (thẻ) + tiến độ ---------- */
     var COURSES = {};
@@ -696,12 +752,12 @@
       };
       card.addEventListener("click", function(){ lsSet(LAST_KEY, card.getAttribute("data-course")); });
     });
-    var COURSE_EMOJI = { giaotiep:"💬", toeic:"💼", ielts:"🎓", career:"🛠️" };
+    var COURSE_EMOJI = { giaotiep:"💬", toeic:"💼", ielts:"🎓", career:"🛠️", grammar:"📖" };
     var COURSE_BLURB = {
       giaotiep: "Nền tảng từ vựng dùng hằng ngày theo 30 chủ đề đời sống — học chắc phần này thì nghe, đọc, nói đều tiến nhanh.",
       toeic: "Từ vựng văn phòng – thương mại xuất hiện dày đặc trong đề TOEIC, luyện theo 20 chủ đề.",
       ielts: "3000+ từ & cụm từ học thuật theo 20 chủ đề hay ra thi, giúp diễn đạt tự nhiên và sâu hơn.",
-      career: "Từ vựng đúng ngành bạn học và làm: CNTT, Y tế, Du lịch, Kỹ thuật…"
+      career: "Từ vựng đúng ngành bạn học và làm, kèm tình huống giao tiếp công việc."
     };
 
     var maxStreak = 0, bestStarted = null, bestCount = -1;
@@ -716,7 +772,7 @@
       var pct = c.total ? Math.min(100, Math.round(mastered / c.total * 100)) : 0;
       var fill = c.el.querySelector(".progress-fill"), cnt = c.el.querySelector(".progress-count"), pe = c.el.querySelector(".progress-pct"), cta = c.el.querySelector(".cta");
       if(fill) fill.style.width = pct + "%";
-      if(cnt) cnt.textContent = started ? mastered.toLocaleString("vi-VN") + " / " + c.total.toLocaleString("vi-VN") + " từ" : "Chưa bắt đầu";
+      if(cnt) cnt.textContent = started ? mastered.toLocaleString("vi-VN") + " từ đã thuộc" : "Chưa bắt đầu";
       if(pe) pe.textContent = pct + "%";
       if(started && cta) cta.firstChild.textContent = "Tiếp tục học ";
     });
@@ -733,31 +789,30 @@
       if(!profile) return;
       chip.classList.add("on");
       chip.innerHTML = "👤 " + esc((profile.name || "").split(" ").pop()) + (profile.level ? " · <b>" + profile.level + "</b>" : "");
-      var recTag = document.querySelector(".recommend-tag");
+      var recTag = document.querySelector(".recommend-tag:not(.rec-mine)");
       if(recTag) recTag.style.display = "none";
       Object.keys(COURSES).forEach(function(id){ COURSES[id].el.classList.toggle("is-rec", id === profile.rec); });
+      Array.prototype.forEach.call(document.querySelectorAll(".rec-mine"), function(n){ n.remove(); });
       if(COURSES[profile.rec]){
-        var badge = COURSES[profile.rec].el.querySelector(".card-main");
-        if(badge && !badge.querySelector(".rec-mine")){
-          var t = document.createElement("span"); t.className = "recommend-tag rec-mine"; t.textContent = "🎯 Gợi ý cho bạn (" + profile.level + ")";
-          badge.insertBefore(t, badge.firstChild);
-        }
+        var main = COURSES[profile.rec].el.querySelector(".card-main");
+        var t = document.createElement("span"); t.className = "recommend-tag rec-mine"; t.textContent = "🎯 Gợi ý cho bạn (" + profile.level + ")";
+        main.insertBefore(t, main.firstChild);
       }
     }
     paintProfile();
-    chip.addEventListener("click", openTest);
+    chip.addEventListener("click", openProfile);
 
     var heroCta = document.getElementById("heroCta"), heroCta2 = document.getElementById("heroCta2");
     var resumeId = last || bestStarted;
     var goId = resumeId || (profile && profile.rec) || "giaotiep";
     if(resumeId || profile){
-      var c = COURSES[goId];
-      heroCta.href = c.url;
-      heroCta.innerHTML = '<span class="lbl">' + (resumeId ? "▶ Học tiếp: " : "▶ Bắt đầu: ") + c.name +
-        '<small>' + (c.started ? c.mastered.toLocaleString("vi-VN") + " từ đã thuộc · 15 phút hôm nay" : "Lộ trình gợi ý cho bạn · 15 phút") + '</small></span>';
+      var c0 = COURSES[goId];
+      heroCta.href = c0.url;
+      heroCta.innerHTML = '<span class="lbl">' + (resumeId ? "▶ Học tiếp: " : "▶ Bắt đầu: ") + c0.name +
+        '<small>' + (c0.started ? c0.mastered.toLocaleString("vi-VN") + " từ đã thuộc · 15 phút hôm nay" : "Lộ trình gợi ý cho bạn · 15 phút") + '</small></span>';
       heroCta.addEventListener("click", function(){ lsSet(LAST_KEY, goId); });
-      heroCta2.innerHTML = profile ? "🎯 Làm lại bài test" : "🎯 Kiểm tra trình độ";
-      heroCta2.addEventListener("click", openTest);
+      heroCta2.innerHTML = profile ? "📋 Hồ sơ & lộ trình của tôi" : "🎯 Kiểm tra trình độ";
+      heroCta2.addEventListener("click", function(e){ e.preventDefault(); profile ? openProfile() : openTest(); });
     } else {
       heroCta.addEventListener("click", function(e){ e.preventDefault(); openTest(); });
       heroCta2.href = COURSES.giaotiep.url;
@@ -768,13 +823,13 @@
     /* ---------- ngân hàng câu hỏi ---------- */
     var LEVELS = ["A1.1", "A2.1", "B1.1", "B1.2", "C1"];
     var LEVEL_INFO = {
-      "A1.1": { name:"Khởi đầu", vocab:"~500 từ", desc:"Bạn nhận biết được từ và câu rất quen thuộc. Xây nền từ vựng đời sống là bước nhanh nhất để tiến bộ." },
-      "A2.1": { name:"Sơ cấp", vocab:"~1.000 – 1.500 từ", desc:"Bạn hiểu câu đơn giản trong tình huống hằng ngày. Cần mở rộng từ theo chủ đề để nghe – đọc tự tin hơn." },
-      "B1.1": { name:"Trung cấp 1", vocab:"~2.000 – 2.500 từ", desc:"Bạn xử lý được hầu hết tình huống quen thuộc. Bước tiếp theo là từ vựng theo mục tiêu học tập, công việc." },
-      "B1.2": { name:"Trung cấp 2", vocab:"~3.000 – 4.000 từ", desc:"Vốn từ khá vững. Tập trung vào cụm từ (collocation) và từ học thuật để diễn đạt chính xác hơn." },
-      "C1":   { name:"Cao cấp", vocab:"6.000+ từ", desc:"Rất tốt! Bạn hiểu được văn bản và lời nói phức tạp. Hãy luyện cách dùng từ học thuật nâng cao." }
+      "A1.1": { name:"Khởi đầu", vocab:"~500 từ", desc:"Bạn đang ở vạch xuất phát — và tin vui là ai giỏi tiếng Anh bây giờ cũng từng đứng đúng chỗ này! Từ quen thuộc bạn đã nắm, giờ chỉ cần thêm “nhiên liệu” từ vựng là xe chạy bon bon 🚗." },
+      "A2.1": { name:"Sơ cấp", vocab:"~1.000 – 1.500 từ", desc:"Bạn đã “sống sót” ổn trong các tình huống hằng ngày: gọi món, hỏi đường, chào hỏi — không bị lạc giữa phố Tây là được rồi 😄. Giờ là lúc nạp thêm từ theo chủ đề để nói dài hơn một câu." },
+      "B1.1": { name:"Trung cấp 1", vocab:"~2.000 – 2.500 từ", desc:"Bạn đã qua giai đoạn “yes, no, thank you” từ lâu! Hầu hết tình huống quen thuộc bạn đều xoay xở được, chỉ còn thiếu vốn từ “xịn” hơn để nói chuyện có chiều sâu." },
+      "B1.2": { name:"Trung cấp 2", vocab:"~3.000 – 4.000 từ", desc:"Khá lắm đó! Bạn đã chạm tay vào tiếng Anh học thuật. Giờ là màn “đánh bóng”: dùng cụm từ tự nhiên như người bản xứ thay vì dịch từng chữ." },
+      "C1":   { name:"Cao cấp", vocab:"6.000+ từ", desc:"Wow, trình này thì đọc báo nước ngoài, xem phim không phụ đề cũng “chill” rồi 😎. Việc còn lại là mài giũa độ chính xác và dùng từ sang hơn nữa." }
     };
-    // s: G ngữ pháp · R đọc · L nghe. l: 0..4 (A1.1 → C1). Đáp án đúng luôn ở o[0] — sẽ được xáo khi hiển thị.
+    // s: G ngữ pháp · R đọc · L nghe · V từ vựng. l: 0..4 (A1.1 → C1). Đáp án đúng luôn ở o[0] — được xáo khi hiển thị.
     var BANK = [
       {s:"G",l:0,q:"She ___ a teacher.",o:["is","are","am","be"]},
       {s:"G",l:0,q:"I have two ___.",o:["cats","cat","cates","a cat"]},
@@ -797,6 +852,27 @@
       {s:"G",l:4,q:"The proposal, ___ merits were obvious, was nevertheless rejected.",o:["whose","which","that","its"]},
       {s:"G",l:4,q:"It is essential that every applicant ___ the form in person.",o:["submit","submits","submitted","will submit"]},
 
+      {s:"V",l:0,q:"\"doctor\" nghĩa là gì?",o:["bác sĩ","giáo viên","tài xế","nông dân"]},
+      {s:"V",l:0,q:"The opposite of \"big\" is…",o:["small","tall","long","old"]},
+      {s:"V",l:0,q:"\"kitchen\" nghĩa là gì?",o:["nhà bếp","phòng ngủ","phòng khách","phòng tắm"]},
+      {s:"V",l:0,q:"I'm thirsty. Can I have some ___?",o:["water","bread","chairs","shoes"]},
+      {s:"V",l:1,q:"We need to ___ a decision soon.",o:["make","do","take","have"]},
+      {s:"V",l:1,q:"\"expensive\" nghĩa là gì?",o:["đắt","rẻ","mới","cũ"]},
+      {s:"V",l:1,q:"She's very ___; she always helps other people.",o:["kind","angry","lazy","rude"]},
+      {s:"V",l:1,q:"\"journey\" nghĩa là gì?",o:["chuyến đi","bữa tiệc","công việc","cuộc họp"]},
+      {s:"V",l:2,q:"The company plans to ___ fifty new staff this year.",o:["recruit","retire","refuse","remove"]},
+      {s:"V",l:2,q:"Air pollution has a serious ___ on our health.",o:["effect","affect","effort","offer"]},
+      {s:"V",l:2,q:"\"reduce\" nghĩa là gì?",o:["giảm","tăng","giữ nguyên","chia đôi"]},
+      {s:"V",l:2,q:"A word closest in meaning to \"reliable\" is…",o:["dependable","careless","expensive","famous"]},
+      {s:"V",l:3,q:"The government must ___ measures to tackle crime.",o:["take","make","do","give"]},
+      {s:"V",l:3,q:"\"sustainable\" nghĩa là gì?",o:["bền vững","tạm thời","đắt đỏ","hiện đại"]},
+      {s:"V",l:3,q:"Her success was largely ___ to hard work.",o:["attributable","responsible","available","capable"]},
+      {s:"V",l:3,q:"\"reluctant\" nghĩa là gì?",o:["miễn cưỡng","háo hức","tự tin","bất cẩn"]},
+      {s:"V",l:4,q:"The new findings ___ doubt on the earlier theory.",o:["cast","throw","put","drop"]},
+      {s:"V",l:4,q:"\"meticulous\" nghĩa là gì?",o:["tỉ mỉ, kỹ lưỡng","cẩu thả","nhanh nhẹn","ồn ào"]},
+      {s:"V",l:4,q:"The new law is likely to have ___ consequences for small firms.",o:["far-reaching","far-fetched","far-away","far-sighted"]},
+      {s:"V",l:4,q:"\"ubiquitous\" nghĩa là gì?",o:["có mặt khắp nơi","hiếm gặp","lỗi thời","nguy hiểm"]},
+
       {s:"R",l:0,p:"Hi, I'm Lan. I am 12 years old. I live in Da Nang with my parents and my little brother.",q:"Lan lives with…",o:["her parents and her brother","her friends","her grandparents","her sister only"]},
       {s:"R",l:0,p:"The shop opens at 8 a.m. and closes at 6 p.m. It is closed on Sundays.",q:"When is the shop closed?",o:["On Sundays","On Saturdays","At 8 a.m.","Every evening at 5 p.m."]},
       {s:"R",l:0,p:"My favourite food is pho. I eat it for breakfast three times a week.",q:"How often does the writer eat pho?",o:["Three times a week","Every day","Once a week","Only on Sundays"]},
@@ -818,33 +894,100 @@
       {s:"R",l:4,p:"The author concedes that social media can foster a sense of community, but maintains that such connections are often shallow and rarely replace face-to-face relationships.",q:"What is the author's overall position?",o:["Online connections are no substitute for real ones","Social media has no benefits at all","Online communities are stronger than real ones","People now live too far apart to meet"]},
       {s:"R",l:4,p:"Far from being a sign of laziness, daydreaming may play a vital role in creativity, allowing the brain to make unexpected connections between unrelated ideas.",q:"According to the text, daydreaming…",o:["may help people think creatively","shows a lack of discipline","should be avoided at work","prevents the brain from resting"]},
 
-      {s:"L",l:0,a:"Hello, my name is David. I am from Australia.",q:"Where is David from?",o:["Australia","Austria","America","England"]},
-      {s:"L",l:0,a:"The bus leaves at half past seven.",q:"What time does the bus leave?",o:["7:30","7:15","6:30","8:30"]},
-      {s:"L",l:0,a:"Can I have two coffees and one orange juice, please?",q:"What does the speaker order?",o:["Two coffees and one orange juice","One coffee and two orange juices","Two teas and one orange juice","Three coffees"]},
-      {s:"L",l:0,a:"My sister's birthday is on the fifth of May.",q:"When is the birthday?",o:["5 May","15 May","5 March","25 May"]},
-      {s:"L",l:1,a:"Sorry, I can't meet you at three. How about four thirty, at the café near the station?",q:"Where and when will they meet?",o:["4:30, at a café near the station","3:00, at the station","4:30, at the station","3:00, at a café"]},
-      {s:"L",l:1,a:"The weather tomorrow will be cloudy in the morning, with heavy rain in the afternoon.",q:"What will the afternoon be like?",o:["Rainy","Sunny","Cloudy but dry","Windy"]},
-      {s:"L",l:1,a:"To get to the post office, go straight ahead, then take the second turning on the left.",q:"Where should you turn?",o:["The second street on the left","The first street on the left","The second street on the right","You don't need to turn"]},
-      {s:"L",l:1,a:"I'd like to return this jacket. It's too small, and I'd prefer my money back rather than a different size.",q:"What does the customer want?",o:["A refund","A bigger size","A different colour","To exchange it for shoes"]},
-      {s:"L",l:2,a:"Due to a technical problem, the nine fifteen train to Hai Phong has been cancelled. Passengers should take the ten o'clock service instead.",q:"What should passengers do?",o:["Take the 10:00 train","Wait for the 9:15 train","Take a bus","Go to another station"]},
-      {s:"L",l:2,a:"I was going to study medicine, but after volunteering at a school last summer, I realised teaching is what I really want to do.",q:"What does the speaker want to do now?",o:["Become a teacher","Study medicine","Work in a hospital","Volunteer abroad"]},
-      {s:"L",l:2,a:"The course is free, but you'll need to bring your own laptop, and places are limited to twenty people, so register early.",q:"What must participants bring?",o:["A laptop","Money for the course","A registration form","A friend"]},
-      {s:"L",l:2,a:"Honestly, the film was a bit too long, but the acting was brilliant, so I'd still recommend it.",q:"What is the speaker's opinion of the film?",o:["Positive overall, despite its length","Too long to recommend","Badly acted","Short and boring"]},
-      {s:"L",l:3,a:"While the city has invested heavily in new roads, traffic has actually got worse, because better roads simply encourage more people to drive.",q:"Why has traffic got worse?",o:["New roads encourage more driving","The city stopped building roads","Public transport became more expensive","Fewer people use cars"]},
-      {s:"L",l:3,a:"The survey was supposed to finish in March, but because so few people responded, we've had to extend it until the end of May.",q:"Why was the survey extended?",o:["Not enough people responded","The questions were changed","The team was too small","It started late"]},
-      {s:"L",l:3,a:"I'm not against homework as such. My concern is that young children are given so much that they have no time left to play.",q:"What is the speaker's main concern?",o:["The amount of homework for young children","Homework should be banned completely","Children play too much","Teachers give too little homework"]},
-      {s:"L",l:3,a:"Please note that the lecture originally scheduled for Room 5 has been moved to the main hall, as more students have signed up than expected.",q:"Why has the lecture moved?",o:["More students registered than expected","Room 5 is being repaired","The lecturer asked for a bigger screen","The time has changed"]},
-      {s:"L",l:4,a:"Admittedly, the findings are preliminary, and the sample was small, so it would be premature to draw any firm conclusions at this stage.",q:"What is the speaker suggesting?",o:["The results should be treated with caution","The findings are conclusive","The sample was too large","The research should be stopped"]},
-      {s:"L",l:4,a:"What struck me was not so much the scale of the project as the way the local community had been involved from the very outset.",q:"What impressed the speaker most?",o:["How the community took part from the start","The size of the project","The cost of the project","How quickly it was finished"]},
-      {s:"L",l:4,a:"Had the company responded to customer complaints sooner, it could arguably have avoided the damage to its reputation.",q:"What does the speaker imply?",o:["The company reacted too slowly","The company responded immediately","Customers did not complain","The company's reputation improved"]},
-      {s:"L",l:4,a:"The novel's appeal lies less in its plot, which is fairly conventional, than in the subtlety with which the characters are drawn.",q:"What makes the novel appealing, according to the speaker?",o:["Its subtly drawn characters","Its unusual plot","Its length","Its happy ending"]}
+      {s:"L",l:0,f:"L0-1",a:"Hello, my name is David. I am from Australia.",q:"Where is David from?",o:["Australia","Austria","America","England"]},
+      {s:"L",l:0,f:"L0-2",a:"The bus leaves at half past seven.",q:"What time does the bus leave?",o:["7:30","7:15","6:30","8:30"]},
+      {s:"L",l:0,f:"L0-3",a:"Can I have two coffees and one orange juice, please?",q:"What does the speaker order?",o:["Two coffees and one orange juice","One coffee and two orange juices","Two teas and one orange juice","Three coffees"]},
+      {s:"L",l:0,f:"L0-4",a:"My sister's birthday is on the fifth of May.",q:"When is the birthday?",o:["5 May","15 May","5 March","25 May"]},
+      {s:"L",l:1,f:"L1-1",a:"Sorry, I can't meet you at three. How about four thirty, at the café near the station?",q:"Where and when will they meet?",o:["4:30, at a café near the station","3:00, at the station","4:30, at the station","3:00, at a café"]},
+      {s:"L",l:1,f:"L1-2",a:"The weather tomorrow will be cloudy in the morning, with heavy rain in the afternoon.",q:"What will the afternoon be like?",o:["Rainy","Sunny","Cloudy but dry","Windy"]},
+      {s:"L",l:1,f:"L1-3",a:"To get to the post office, go straight ahead, then take the second turning on the left.",q:"Where should you turn?",o:["The second street on the left","The first street on the left","The second street on the right","You don't need to turn"]},
+      {s:"L",l:1,f:"L1-4",a:"I'd like to return this jacket. It's too small, and I'd prefer my money back rather than a different size.",q:"What does the customer want?",o:["A refund","A bigger size","A different colour","To exchange it for shoes"]},
+      {s:"L",l:2,f:"L2-1",a:"Due to a technical problem, the nine fifteen train to Hai Phong has been cancelled. Passengers should take the ten o'clock service instead.",q:"What should passengers do?",o:["Take the 10:00 train","Wait for the 9:15 train","Take a bus","Go to another station"]},
+      {s:"L",l:2,f:"L2-2",a:"I was going to study medicine, but after volunteering at a school last summer, I realised teaching is what I really want to do.",q:"What does the speaker want to do now?",o:["Become a teacher","Study medicine","Work in a hospital","Volunteer abroad"]},
+      {s:"L",l:2,f:"L2-3",a:"The course is free, but you'll need to bring your own laptop, and places are limited to twenty people, so register early.",q:"What must participants bring?",o:["A laptop","Money for the course","A registration form","A friend"]},
+      {s:"L",l:2,f:"L2-4",a:"Honestly, the film was a bit too long, but the acting was brilliant, so I'd still recommend it.",q:"What is the speaker's opinion of the film?",o:["Positive overall, despite its length","Too long to recommend","Badly acted","Short and boring"]},
+      {s:"L",l:3,f:"L3-1",a:"While the city has invested heavily in new roads, traffic has actually got worse, because better roads simply encourage more people to drive.",q:"Why has traffic got worse?",o:["New roads encourage more driving","The city stopped building roads","Public transport became more expensive","Fewer people use cars"]},
+      {s:"L",l:3,f:"L3-2",a:"The survey was supposed to finish in March, but because so few people responded, we've had to extend it until the end of May.",q:"Why was the survey extended?",o:["Not enough people responded","The questions were changed","The team was too small","It started late"]},
+      {s:"L",l:3,f:"L3-3",a:"I'm not against homework as such. My concern is that young children are given so much that they have no time left to play.",q:"What is the speaker's main concern?",o:["The amount of homework for young children","Homework should be banned completely","Children play too much","Teachers give too little homework"]},
+      {s:"L",l:3,f:"L3-4",a:"Please note that the lecture originally scheduled for Room 5 has been moved to the main hall, as more students have signed up than expected.",q:"Why has the lecture moved?",o:["More students registered than expected","Room 5 is being repaired","The lecturer asked for a bigger screen","The time has changed"]},
+      {s:"L",l:4,f:"L4-1",a:"Admittedly, the findings are preliminary, and the sample was small, so it would be premature to draw any firm conclusions at this stage.",q:"What is the speaker suggesting?",o:["The results should be treated with caution","The findings are conclusive","The sample was too large","The research should be stopped"]},
+      {s:"L",l:4,f:"L4-2",a:"What struck me was not so much the scale of the project as the way the local community had been involved from the very outset.",q:"What impressed the speaker most?",o:["How the community took part from the start","The size of the project","The cost of the project","How quickly it was finished"]},
+      {s:"L",l:4,f:"L4-3",a:"Had the company responded to customer complaints sooner, it could arguably have avoided the damage to its reputation.",q:"What does the speaker imply?",o:["The company reacted too slowly","The company responded immediately","Customers did not complain","The company's reputation improved"]},
+      {s:"L",l:4,f:"L4-4",a:"The novel's appeal lies less in its plot, which is fairly conventional, than in the subtlety with which the characters are drawn.",q:"What makes the novel appealing, according to the speaker?",o:["Its subtly drawn characters","Its unusual plot","Its length","Its happy ending"]}
     ];
-    var SKILL = { G:{ name:"Ngữ pháp", emoji:"✍️" }, R:{ name:"Đọc hiểu", emoji:"📖" }, L:{ name:"Nghe", emoji:"🎧" } };
-    var ORDER = ["G","R","L","G","R","L","G","R","L","G","R","L","G","R","L"]; // 15 câu, 5 câu mỗi kỹ năng
+
+    // Giao tiếp chuyên ngành: 9 khối ngành × 5 câu (4 tình huống + 1 câu nghe).
+    var INDUSTRIES = [
+      ["it","💻","Công nghệ thông tin & Kỹ thuật số"], ["business","📈","Kinh tế – Kinh doanh – Tài chính"], ["tourism","🏨","Du lịch – Nhà hàng – Khách sạn"],
+      ["engineering","⚙️","Kỹ thuật – Cơ khí – Ô tô – Điện"], ["marine","⚓","Kinh tế biển – Hàng hải – Thủy sản"], ["foodtech","🧪","Công nghệ thực phẩm – Sinh học – Môi trường"],
+      ["health","🩺","Y tế – Dược – Điều dưỡng"], ["education","🏫","Giáo dục – Ngoại ngữ – Xã hội"], ["arts","🎨","Nghệ thuật – Truyền thông – Thiết kế"]
+    ];
+    var CAREER = {
+      it:[
+        {q:"A colleague is stuck on a problem. How do you offer help politely?",o:["Would you like me to take a look at it?","You must fix it now.","It is not my problem.","Give me your computer."]},
+        {q:"In a stand-up meeting, how do you report a delay?",o:["I'm running behind on the login feature; I'll need one more day.","The login is die.","I no finish yesterday.","Login feature is finish tomorrow maybe yes."]},
+        {q:"\"Could you push your changes before the demo?\" — \"push\" here means…",o:["upload the code to the shared repository","press the computer harder","delete the old version","call the client"]},
+        {q:"A client reports a bug. Which reply is most professional?",o:["Thanks for flagging this. We're investigating and will update you within 24 hours.","This is not a bug, it's your fault.","OK.","We know. Everyone has this problem."]},
+        {f:"C-it",a:"Hi team, quick update. The server will be down for maintenance from ten to eleven tonight, so please save your work before ten.",q:"What should the team do?",o:["Save their work before 10 p.m.","Restart the server at 11 p.m.","Work late tonight","Stop using email"]}],
+      business:[
+        {q:"How do you start a formal email to a client you have never met?",o:["Dear Mr. Smith,","Hey buddy!","Yo Smith,","Hi dear friend,"]},
+        {q:"Which sentence politely asks about a late payment?",o:["Could you kindly confirm when the payment will be made?","Pay me now.","Where is my money?","You forgot to pay, again."]},
+        {q:"\"Our revenue increased by 15% year-on-year.\" This means…",o:["income grew 15% compared with the same period last year","costs rose 15% this year","profit fell by 15%","sales will grow 15% next year"]},
+        {q:"In a negotiation, how do you reject an offer politely?",o:["I appreciate the offer, but I'm afraid it doesn't quite meet our budget.","No. Bad offer.","That's a stupid price.","We don't like you."]},
+        {f:"C-business",a:"Good morning. I'm calling to reschedule our meeting. Would Thursday at two p.m. work for you instead of Wednesday?",q:"What does the caller want?",o:["To move the meeting to Thursday at 2 p.m.","To cancel the meeting completely","To meet on Wednesday at 2 p.m.","To change the meeting location"]}],
+      tourism:[
+        {q:"A guest arrives at the hotel. What do you say first?",o:["Good evening, welcome to our hotel. How may I help you?","What do you want?","Wait there.","Name?"]},
+        {q:"A customer asks for the bill. You say:",o:["Certainly, I'll bring it right away.","No bill now.","Go to the counter yourself.","Why so fast?"]},
+        {q:"A guest complains that the room is noisy. The best response is:",o:["I'm sorry to hear that. Let me see if we can move you to a quieter room.","All rooms are noisy.","Close the window.","That's not our problem."]},
+        {q:"\"The tour package is all-inclusive.\" This means…",o:["meals, transport and activities are included in the price","the tour is only for groups","guests pay for everything separately","the tour visits all countries"]},
+        {f:"C-tourism",a:"Excuse me, I booked a table for two at seven, but we're running about twenty minutes late. Could you hold it for us?",q:"What does the customer ask?",o:["To keep their table until they arrive, about 20 minutes late","To cancel their booking","To book a table for 20 people","To change the booking to 2 p.m."]}],
+      engineering:[
+        {q:"Which sentence gives a clear safety instruction?",o:["Please wear your safety helmet at all times.","Helmet is nice.","Maybe you like a helmet.","I have a helmet at home."]},
+        {q:"How do you report a machine problem to your supervisor?",o:["The motor is overheating, so I've switched it off for inspection.","Machine is hot hot.","I don't know, it's broken maybe.","I'm going home."]},
+        {q:"\"Please tighten the bolts to the specified torque.\" The worker should…",o:["tighten the bolts to the exact force stated","remove all the bolts","paint the bolts","buy new bolts"]},
+        {q:"Which is the clearest way to describe a procedure?",o:["First, disconnect the power; then remove the cover and check the fuse.","Power cover fuse check.","You do something with the fuse.","Check it all at once, whatever."]},
+        {f:"C-engineering",a:"Attention, please. The production line will stop at three o'clock for a safety check. All staff should leave the area until further notice.",q:"What will happen at three o'clock?",o:["The line will stop for a safety check","A new machine will arrive","Staff will have a meeting","The factory will close for the day"]}],
+      marine:[
+        {q:"Which phrase asks a ship for its position on the radio?",o:["What is your position?","Where you go?","Tell me place.","You are where now?"]},
+        {q:"\"The vessel is due to berth at 0600.\" This means the ship…",o:["is expected to dock at 6 a.m.","left the port at 6 a.m.","will sink at 6 a.m.","has 600 passengers"]},
+        {q:"How do you describe the quality of your catch to a buyer?",o:["The fish were caught this morning and kept on ice, so they're very fresh.","Fish good.","Fresh maybe.","You check yourself."]},
+        {q:"Which sentence correctly warns about the weather?",o:["A storm is forecast tonight; all small boats should remain in port.","Storm come, boat go.","Weather is bad, whatever.","Maybe rain, maybe no."]},
+        {f:"C-marine",a:"This is the harbour master. Due to strong winds, the port will be closed to all vessels until tomorrow morning.",q:"Why is the port closing?",o:["Because of strong winds","Because of a ship accident","Because it is a holiday","Because of engine problems"]}],
+      foodtech:[
+        {q:"Which sentence states a hygiene rule?",o:["Wash your hands before entering the production area.","Hands are clean maybe.","You can eat in the lab.","Don't worry about gloves."]},
+        {q:"\"Store below 5°C.\" This instruction means…",o:["keep it cold, at under 5 degrees","heat it to 5 degrees","store it for 5 days","use 5 grams"]},
+        {q:"How do you report a lab test result?",o:["The sample tested negative for bacteria.","Bacteria no have.","The test is maybe good.","I think it's fine, no test."]},
+        {q:"Which sentence best explains an environmental benefit?",o:["Recycling wastewater reduces both costs and pollution.","Water is recycle, good.","Pollution is not important.","We use more water to save water."]},
+        {f:"C-foodtech",a:"Before we launch the new yogurt, we need to finish the shelf-life test. So far, the samples have stayed fresh for eighteen days.",q:"What is the result so far?",o:["The samples have stayed fresh for 18 days","The product has already launched","The samples went bad after 8 days","The test has been cancelled"]}],
+      health:[
+        {q:"How do you greet a patient?",o:["Good morning. How are you feeling today?","What's wrong with you?","Sit down and wait.","You look terrible."]},
+        {q:"Which question asks a patient about pain?",o:["Can you show me where it hurts and tell me how bad it is?","Pain yes or no?","Why you have pain?","Stop complaining."]},
+        {q:"\"Take one tablet twice a day after meals.\" The patient should…",o:["take 2 tablets a day, after eating","take 1 tablet every 2 days","take 2 tablets before meals","take 1 tablet only when in pain"]},
+        {q:"Which sentence best reassures a worried patient?",o:["I understand this is worrying; let me explain what will happen step by step.","Don't be silly.","It's nothing, go home.","Many people die from this."]},
+        {f:"C-health",a:"Mrs. Lee, your blood test results are normal, but I'd like you to come back in two weeks so we can check your blood pressure again.",q:"Why must Mrs. Lee come back?",o:["To check her blood pressure again","To repeat the blood test","To collect medicine","Because the results were abnormal"]}],
+      education:[
+        {q:"How do you give a clear classroom instruction?",o:["Please open your books to page 20.","Book, page, go.","Open something.","You know what to do."]},
+        {q:"Which is the best way to praise a student?",o:["Great job! Your answer shows you really understood the text.","Not bad for you.","Finally, correct.","Good, but others are better."]},
+        {q:"How do you raise a problem with a parent politely?",o:["I'd like to discuss some concerns about Minh's homework.","Your child is lazy.","Minh is a problem.","You must fix your son."]},
+        {q:"\"The lesson aims to scaffold students' learning.\" Here \"scaffold\" means…",o:["give step-by-step support that is gradually removed","build a stage in the classroom","test students at the end","punish students for mistakes"]},
+        {f:"C-education",a:"Good afternoon, parents. The school trip has been moved from Friday to next Monday because of the weather. Students should still bring a packed lunch.",q:"What has changed?",o:["The trip date, from Friday to Monday","The trip destination","Students no longer need lunch","The trip is cancelled"]}],
+      arts:[
+        {q:"How do you ask for feedback on your design?",o:["What do you think of this design?","You like, yes?","Design good?","Tell me it's good."]},
+        {q:"A client asks for changes. What do you reply?",o:["Sure, I'll revise the colours and send you a new version tomorrow.","No, it's perfect.","Do it yourself.","Why you change?"]},
+        {q:"\"Can you make the logo pop more?\" The client wants the logo to be…",o:["more eye-catching","smaller","deleted","black and white only"]},
+        {q:"Which sentence best pitches a campaign idea?",o:["Our campaign targets Gen Z through short, authentic videos that feel personal rather than promotional.","We make video. Young people like.","It's a good idea, trust me.","Campaign is campaign."]},
+        {f:"C-arts",a:"We loved the first draft, but the deadline has moved forward. Could you send the final version by Wednesday instead of Friday?",q:"What is the new request?",o:["Send the final version by Wednesday","Start a new draft","Extend the deadline to Friday","Change the design completely"]}]
+    };
+
+    var SKILL = { L:{ name:"Nghe", emoji:"🎧" }, R:{ name:"Đọc hiểu", emoji:"📖" }, G:{ name:"Ngữ pháp", emoji:"✍️" }, V:{ name:"Từ vựng", emoji:"🔤" }, C:{ name:"Chuyên ngành", emoji:"💼" } };
+    var ORDER = ["V","G","R","L","V","G","R","L","V","G","R","L","V","G","R","L","V","G","R","L"]; // 20 câu cố định, 5 câu mỗi kỹ năng
+    var CORE_SECONDS = 600, CAREER_SECONDS = 150; // 10 phút cho bài chính, 2 phút 30 cho phần chuyên ngành
+    var RATE = [0.85, 0.9, 0.95, 1, 1];       // tốc độ phát theo bậc (tối đa 1.0)
     var NEEDS = [
       { id:"goal", q:"Bạn học tiếng Anh để làm gì?", opts:[
         ["giaotiep","💬","Giao tiếp hằng ngày"], ["toeic","💼","Thi TOEIC / đi làm"], ["ielts","🎓","Thi IELTS / du học"],
         ["career","🛠️","Tiếng Anh chuyên ngành"], ["school","🏫","Học tốt tiếng Anh ở trường"] ] },
+      { id:"industry", q:"Bạn học / làm trong khối ngành nào?", onlyIf:function(n){ return n.goal === "career"; }, opts: INDUSTRIES },
       { id:"role", q:"Bạn đang là…", opts:[
         ["hs","🎒","Học sinh (THCS – THPT)"], ["sv","📚","Sinh viên"], ["dilam","🧑‍💻","Người đi làm"], ["phuhuynh","👨‍👩‍👧","Phụ huynh làm thử cho con"] ] },
       { id:"time", q:"Mỗi ngày bạn dành được bao lâu?", opts:[
@@ -852,40 +995,53 @@
       { id:"az", q:"Bạn có đang học tại AZEnglish không?", opts:[
         ["dang-hoc","✅","Đang học"], ["da-hoc","🕘","Đã từng học"], ["chua","👋","Chưa, lần đầu biết"] ] }
     ];
-    var TOTAL_STEPS = NEEDS.length + ORDER.length + 1;
 
     var ptEl = document.getElementById("pt"), inner = document.getElementById("ptInner");
     var barEl = document.getElementById("ptBar"), countEl = document.getElementById("ptCount");
-    var state;
+    var state, timerId = null, audioEl = null;
 
+    function steps(){ // danh sách bước của lượt test hiện tại
+      var list = [];
+      NEEDS.forEach(function(n){ if(!n.onlyIf || n.onlyIf(state.needs)) list.push({ t:"need", n:n }); });
+      ORDER.forEach(function(s, i){ list.push({ t:"core", s:s, i:i }); });
+      if(state.needs.goal === "career" && CAREER[state.needs.industry]) CAREER[state.needs.industry].forEach(function(it, i){ list.push({ t:"career", i:i }); });
+      list.push({ t:"form" }); list.push({ t:"result" });
+      return list;
+    }
     function openTest(e){
       if(e && e.preventDefault) e.preventDefault();
-      state = { step:0, needs:{}, level:1, used:{}, answers:[] };
+      closeProfile();
+      state = { step:0, needs:{}, level:1, used:{}, answers:[], career:[], timeouts:0, deadline:{} };
       ptEl.classList.add("open"); document.body.style.overflow = "hidden";
       render();
     }
-    function closeTest(){ stopAudio(); ptEl.classList.remove("open"); document.body.style.overflow = ""; }
+    function stopAll(){ if(timerId){ clearInterval(timerId); timerId = null; } if(audioEl){ try{ audioEl.pause(); }catch(e){} audioEl = null; } try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
+    function closeTest(){ stopAll(); ptEl.classList.remove("open"); document.body.style.overflow = ""; }
     document.getElementById("ptClose").addEventListener("click", closeTest);
-    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && ptEl.classList.contains("open")) closeTest(); });
-    function setBar(n, label){ barEl.style.width = Math.round(n / TOTAL_STEPS * 100) + "%"; countEl.textContent = label || ""; }
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape"){ if(ptEl.classList.contains("open")) closeTest(); closeProfile(); } });
     function disableAll(c){ Array.prototype.forEach.call(c.querySelectorAll("button"), function(b){ b.disabled = true; }); }
     function next(){ state.step++; render(); }
 
     function render(){
-      stopAudio();
-      var s = state.step, box = document.createElement("div");
+      stopAll();
+      var list = steps(), st = list[state.step], box = document.createElement("div");
+      var qTotal = list.filter(function(x){ return x.t === "core" || x.t === "career"; }).length;
+      var qDone = list.slice(0, state.step).filter(function(x){ return x.t === "core" || x.t === "career"; }).length;
+      barEl.style.width = Math.round(state.step / (list.length - 1) * 100) + "%";
+      countEl.textContent = (st.t === "core" || st.t === "career") ? (qDone + 1) + "/" + qTotal : "";
       box.className = "pt-fade"; inner.innerHTML = "";
-      if(s < NEEDS.length) renderNeed(box, NEEDS[s], s);
-      else if(s < NEEDS.length + ORDER.length) renderQuestion(box, s - NEEDS.length);
-      else if(s === NEEDS.length + ORDER.length) renderForm(box);
-      else renderResult(box);
+      if(st.t === "need") renderNeed(box, st.n);
+      else if(st.t === "core") renderQuestion(box, pickItem(st.s, state.level), qDone + 1, qTotal, "core");
+      else if(st.t === "career"){ var it = CAREER[state.needs.industry][st.i]; it.s = "C"; it.l = it.f ? 2 : 2; renderQuestion(box, it, qDone + 1, qTotal, "career"); }
+      else if(st.t === "form") renderForm(box);
+      else renderResult(box, state.result);
       inner.appendChild(box);
       document.querySelector(".pt-body").scrollTop = 0;
     }
 
-    function renderNeed(box, n, i){
-      setBar(i, "");
-      box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (i + 1) + '/' + NEEDS.length + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">Chọn một đáp án.</p><div class="opts"></div>';
+    function renderNeed(box, n){
+      var idx = NEEDS.filter(function(x){ return !x.onlyIf || x.onlyIf(state.needs); }).indexOf(n);
+      box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (idx + 1) + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">Chọn một đáp án.</p><div class="opts"></div>';
       var opts = box.querySelector(".opts");
       n.opts.forEach(function(o){
         var b = document.createElement("button"); b.type = "button"; b.className = "opt";
@@ -893,13 +1049,18 @@
         b.addEventListener("click", function(){
           b.classList.add("picked"); disableAll(opts);
           state.needs[n.id] = o[0]; state.needs[n.id + "Label"] = o[2];
+          if(n.id === "goal" || n.id === "role"){ // điểm xuất phát theo hồ sơ: IELTS/đi làm bắt đầu cao hơn
+            var g = state.needs.goal, r = state.needs.role;
+            state.level = (g === "ielts") ? 2 : (r === "hs" || r === "phuhuynh") ? 1 : (g === "toeic" || r === "dilam" || r === "sv") ? 1 : 1;
+            if(g === "ielts" && r !== "hs") state.level = 2;
+          }
           setTimeout(next, 200);
         });
         opts.appendChild(b);
       });
     }
 
-    // Thích ứng: đúng → lên 1 bậc, sai → xuống 1 bậc; chọn câu chưa dùng cùng kỹ năng, gần bậc hiện tại nhất.
+    // Thích ứng: đúng → lên 1 bậc, sai/hết giờ → xuống 1 bậc; chọn câu chưa dùng cùng kỹ năng, gần bậc hiện tại nhất.
     function pickItem(skill, level){
       for(var d = 0; d < 5; d++){
         var cands = [level + d, level - d].filter(function(l, idx, arr){ return l >= 0 && l <= 4 && arr.indexOf(l) === idx; });
@@ -911,99 +1072,121 @@
       return null;
     }
 
-    function renderQuestion(box, qi){
-      var item = pickItem(ORDER[qi], state.level);
-      state.current = item;
-      setBar(NEEDS.length + qi, (qi + 1) + "/" + ORDER.length);
+    function renderQuestion(box, item, num, total, kind){
+      state.current = { item:item, kind:kind };
       var sk = SKILL[item.s];
       var qHtml = esc(item.q).replace("___", '<span class="blank">&nbsp;</span>');
-      var html = '<div class="pt-kicker">Câu ' + (qi + 1) + '/' + ORDER.length + ' <span class="skill-tag">' + sk.emoji + ' ' + sk.name + '</span></div>';
-      if(item.s === "L"){
-        html += '<button type="button" class="listen-btn" id="listenBtn"><span class="li">🔊</span><span>Bấm để nghe</span></button><p class="listen-note" id="listenNote">Được nghe tối đa 2 lần</p>';
-      }
+      var part = kind === "career" ? "career" : "core", full = part === "career" ? CAREER_SECONDS : CORE_SECONDS;
+      if(!state.deadline[part]) state.deadline[part] = Date.now() + full * 1000;
+      var html = '<div class="pt-kicker">Câu ' + num + '/' + total + ' <span class="skill-tag">' + sk.emoji + ' ' + sk.name + '</span></div>' +
+        '<div class="qtimer" id="qTimer"><div class="tt"><i id="qTimerBar"></i></div><b id="qTimerNum"></b></div>';
+      if(item.a) html += '<button type="button" class="listen-btn" id="listenBtn"><span class="li">🔊</span><span>Bấm để nghe</span></button><p class="listen-note" id="listenNote">Được nghe tối đa 2 lần</p>';
       if(item.p) html += '<div class="passage">' + esc(item.p) + '</div>';
       html += '<h2 class="pt-q">' + qHtml + '</h2>';
-      html += '<p class="pt-hint">' + (item.s === "G" ? "Chọn đáp án đúng để điền vào chỗ trống." : "Chọn câu trả lời đúng.") + '</p>';
+      html += '<p class="pt-hint">' + (item.q.indexOf("___") >= 0 ? "Chọn đáp án đúng để điền vào chỗ trống." : "Chọn câu trả lời đúng.") + '</p>';
       var longOpts = item.o.some(function(o){ return o.length > 22; });
       html += '<div class="opts two' + (longOpts ? ' long' : '') + '"></div><div class="opts" style="margin-top:10px"></div>';
       box.innerHTML = html;
       var grids = box.querySelectorAll(".opts");
       shuffle(item.o).forEach(function(txt){
         var b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.textContent = txt;
-        b.addEventListener("click", function(){ answer(qi, txt === item.o[0], b, grids); });
+        b.addEventListener("click", function(){ answer(txt === item.o[0], txt, b, grids); });
         grids[0].appendChild(b);
       });
       var d = document.createElement("button"); d.type = "button"; d.className = "opt dunno"; d.textContent = "🤔 Mình chưa chắc, bỏ qua";
-      d.addEventListener("click", function(){ answer(qi, false, d, grids); });
+      d.addEventListener("click", function(){ answer(false, "(bỏ qua)", d, grids); });
       grids[1].appendChild(d);
-      if(item.s === "L") setupListen(box, item);
+      if(item.a) setupListen(box, item);
+      startTimer(box, part, full, grids);
+    }
+
+    function startTimer(box, part, full, grids){
+      var bar = box.querySelector("#qTimerBar"), num = box.querySelector("#qTimerNum"), wrap = box.querySelector("#qTimer");
+      function tick(){
+        var left = Math.max(0, Math.round((state.deadline[part] - Date.now()) / 1000));
+        bar.style.width = (left / full * 100) + "%";
+        num.textContent = "⏱ " + Math.floor(left / 60) + ":" + ("0" + left % 60).slice(-2);
+        if(left <= 60) wrap.classList.add("low");
+        if(left <= 0){ clearInterval(timerId); timerId = null; timeUp(part); }
+      }
+      tick(); timerId = setInterval(tick, 1000);
+    }
+    // Hết giờ: các câu còn lại của phần đó tính là chưa làm (sai), chuyển sang phần tiếp theo.
+    function timeUp(part){
+      stopAll(); state.current = null;
+      var list = steps(), kind = part === "career" ? "career" : "core";
+      var remaining = list.slice(state.step).filter(function(x){ return x.t === kind; }).length;
+      state.timeouts += remaining;
+      state.step += remaining;
+      inner.innerHTML = '<div class="pt-fade"><div class="pt-kicker">⏰ Hết giờ</div><h2 class="pt-q">' + (kind === "core" ? "Reng reng! Hết 10 phút rồi ⏰" : "Reng reng! Hết giờ phần chuyên ngành ⏰") + '</h2><p class="pt-hint">' + remaining + ' câu chưa kịp làm sẽ tính là chưa đúng. Không sao, mình cùng xem kết quả nhé…</p></div>';
+      setTimeout(render, 1600);
     }
 
     var plays = 0;
-    function stopAudio(){ try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
     function setupListen(box, item){
       plays = 0;
       var btn = box.querySelector("#listenBtn"), note = box.querySelector("#listenNote");
-      if(!("speechSynthesis" in window)){
-        btn.disabled = true; btn.querySelector("span:last-child").textContent = "Thiết bị không phát được âm thanh";
-        note.innerHTML = "Đọc lời thoại thay thế: <i>“" + esc(item.a) + "”</i>";
-        return;
-      }
       btn.addEventListener("click", function(){
         if(plays >= 2) return;
         plays++;
-        stopAudio();
-        var u = new SpeechSynthesisUtterance(item.a);
-        var voices = speechSynthesis.getVoices().filter(function(v){ return /^en[-_](GB|US|AU)/i.test(v.lang); });
-        var pref = voices.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0] || voices[0];
-        if(pref) u.voice = pref;
-        u.lang = pref ? pref.lang : "en-GB";
-        u.rate = [0.8, 0.85, 0.9, 0.95, 1][item.l];
-        speechSynthesis.speak(u);
+        if(audioEl){ try{ audioEl.pause(); }catch(e){} }
+        audioEl = new Audio(AUDIO_DIR + item.f + ".mp3");
+        audioEl.playbackRate = item.s === "C" ? 1 : RATE[item.l];
+        audioEl.play().catch(function(){ speakFallback(item); });
+        audioEl.onerror = function(){ speakFallback(item); };
         note.textContent = plays >= 2 ? "Đã nghe 2/2 lần" : "Đã nghe " + plays + "/2 lần — bấm lần nữa để nghe lại";
         if(plays >= 2) btn.disabled = true;
       });
     }
+    function speakFallback(item){ // dự phòng khi không tải được file mp3
+      try{
+        var u = new SpeechSynthesisUtterance(item.a); u.lang = "en-US"; u.rate = item.s === "C" ? 1 : RATE[item.l];
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      }catch(e){}
+    }
 
-    function answer(qi, ok, btn, grids){
-      btn.classList.add("picked");
+    function answer(ok, picked, btn, grids){
+      if(!state.current) return;
+      stopAll();
+      if(btn) btn.classList.add("picked");
       Array.prototype.forEach.call(grids, disableAll);
-      var it = state.current;
-      state.answers.push({ s: it.s, l: it.l, ok: ok });
-      state.level = Math.max(0, Math.min(4, state.level + (ok ? 1 : -1)));
+      var it = state.current.item, rec = { s: it.s, l: it.l, ok: ok, q: it.q, p: it.p, a: it.a, correct: it.o[0], picked: picked };
+      if(state.current.kind === "career") state.career.push(rec);
+      else { state.answers.push(rec); state.level = Math.max(0, Math.min(4, state.level + (ok ? 1 : -1))); }
+      state.current = null;
       setTimeout(next, 220);
     }
 
     function score(){
-      var a = state.answers, correct = 0, bySkill = { G:0, R:0, L:0 };
+      var a = state.answers, correct = 0, bySkill = { V:0, G:0, R:0, L:0 };
       a.forEach(function(x){ if(x.ok){ correct++; bySkill[x.s]++; } });
-      // Năng lực ≈ trung bình (bậc câu ± 0,5 theo đúng/sai) của 10 câu cuối — bậc hội tụ của thang thích ứng.
       var tail = a.slice(-10), sum = 0;
-      tail.forEach(function(x){ sum += x.l + (x.ok ? 0.5 : -0.5); });
-      var ability = Math.max(0, Math.min(4, Math.round(sum / tail.length)));
-      return { correct: correct, bySkill: bySkill, level: LEVELS[ability], idx: ability };
+      // Câu đúng ở bậc l → năng lực ≥ l; câu sai ở bậc l → năng lực < l. Làm tròn thận trọng (cần ~60% đúng ở bậc đó).
+      tail.forEach(function(x){ sum += x.ok ? x.l : x.l - 1; });
+      var ability = Math.max(0, Math.min(4, Math.floor(sum / tail.length + 0.4)));
+      var careerScore = state.career.filter(function(x){ return x.ok; }).length;
+      return { correct: correct, total: ORDER.length, bySkill: bySkill, level: LEVELS[ability], idx: ability,
+               career: state.career.length ? { ind: state.needs.industry, score: careerScore, total: state.career.length } : null };
     }
     function recommend(goal, idx){
-      if(idx <= 1) return "giaotiep";                                  // A1.1, A2.1 → nền tảng
+      if(idx <= 1) return "giaotiep";
       if(goal === "ielts") return idx >= 3 ? "ielts" : "giaotiep";
       if(goal === "toeic") return "toeic";
       if(goal === "career") return "career";
-      if(goal === "school") return idx >= 3 ? "ielts" : "giaotiep";
       return idx >= 3 ? "ielts" : "giaotiep";
     }
 
     function renderForm(box){
-      setBar(TOTAL_STEPS - 1, "");
-      var sc = score();
+      var sc = score(); state.sc = sc;
       box.innerHTML =
-        '<div class="pt-kicker">Hoàn thành 🎉</div><h2 class="pt-q">Kết quả của bạn đã sẵn sàng!</h2>' +
-        '<p class="pt-hint">Tạo hồ sơ học (không cần mật khẩu) để xem trình độ, điểm từng kỹ năng và lộ trình học phù hợp. Lần sau vào học, máy sẽ nhớ bạn.</p>' +
-        '<div class="teaser"><b>' + sc.correct + '/15</b><div class="locked">câu đúng · 🔒 trình độ &amp; lộ trình sẽ hiện sau khi tạo hồ sơ</div></div>' +
+        '<div class="pt-kicker">Hoàn thành 🎉</div><h2 class="pt-q">Xong rồi, giỏi quá! Kết quả đang chờ bạn 🎁</h2>' +
+        '<p class="pt-hint">Tạo hồ sơ học (không cần mật khẩu) để xem trình độ, phân tích điểm mạnh – điểm yếu và lộ trình 6 tháng dành riêng cho bạn.</p>' +
+        '<div class="teaser"><b>' + sc.correct + '/' + sc.total + '</b><div class="locked">câu đúng · 🔒 bản tư vấn cá nhân sẽ hiện sau khi tạo hồ sơ</div></div>' +
         '<form class="form-grid" id="leadForm" novalidate>' +
           '<div class="field" id="fName"><label for="ldName">Họ và tên</label><input id="ldName" autocomplete="name" placeholder="Nguyễn Văn A" /><div class="msg">Vui lòng nhập họ tên.</div></div>' +
           '<div class="field" id="fPhone"><label for="ldPhone">Số điện thoại (Zalo)</label><input id="ldPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx" /><div class="msg">Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).</div></div>' +
           '<div class="field" id="fEmail"><label for="ldEmail">Email <em>(không bắt buộc)</em></label><input id="ldEmail" type="email" inputmode="email" autocomplete="email" placeholder="ban@gmail.com" /><div class="msg">Email chưa đúng định dạng.</div></div>' +
-          '<button class="hero-cta btn-full" type="submit"><span class="lbl">Xem kết quả của tôi →</span></button>' +
+          '<button class="hero-cta btn-full" type="submit"><span class="lbl">Xem bản tư vấn của tôi →</span></button>' +
           '<p class="privacy">🔒 Thông tin chỉ dùng để AZEnglish gửi kết quả và tư vấn lộ trình học miễn phí. Không chia sẻ cho bên thứ ba.</p>' +
         '</form>';
       if(profile){
@@ -1025,48 +1208,187 @@
       if(!(okName && okPhone && okEmail)) return;
 
       var rec = recommend(state.needs.goal, sc.idx);
+      var test = {
+        at: new Date().toISOString(), level: sc.level, idx: sc.idx, correct: sc.correct, total: sc.total, bySkill: sc.bySkill,
+        goal: state.needs.goal, goalLabel: state.needs.goalLabel, role: state.needs.role, roleLabel: state.needs.roleLabel,
+        time: state.needs.time, timeLabel: state.needs.timeLabel, industry: state.needs.industry || "", career: sc.career, rec: rec,
+        wrong: state.answers.filter(function(x){ return !x.ok; }).map(function(x){ return { s:x.s, l:x.l, q:x.q, p:x.p, a:x.a, correct:x.correct, picked:x.picked }; }),
+        careerWrong: state.career.filter(function(x){ return !x.ok; }).map(function(x){ return { q:x.q, correct:x.correct }; }),
+        timeouts: state.timeouts
+      };
+      var tests = lsJSON(TESTS_KEY) || []; tests.push(test); lsSet(TESTS_KEY, JSON.stringify(tests));
+      profile = { name:name, phone:phone, email:email, level:sc.level, correct:sc.correct, goal:state.needs.goal, rec:rec, at:test.at };
+      lsSet(PROFILE_KEY, JSON.stringify(profile));
+
       var params = new URLSearchParams(location.search);
+      var indName = (INDUSTRIES.filter(function(x){ return x[0] === test.industry; })[0] || [,,""])[2];
       var lead = {
         source: LEAD_SOURCE, name: name, phone: phone, email: email,
-        goal: state.needs.goalLabel, role: state.needs.roleLabel, dailyTime: state.needs.timeLabel, azStudent: state.needs.azLabel,
-        score: sc.correct + "/15", level: sc.level, recommended: COURSES[rec].name,
-        listening: sc.bySkill.L + "/5", reading: sc.bySkill.R + "/5", grammar: sc.bySkill.G + "/5",
+        goal: test.goalLabel, role: test.roleLabel, dailyTime: test.timeLabel, azStudent: state.needs.azLabel,
+        score: sc.correct + "/" + sc.total, level: sc.level, recommended: COURSES[rec].name,
+        listening: sc.bySkill.L + "/5", reading: sc.bySkill.R + "/5", grammar: sc.bySkill.G + "/5", vocab: sc.bySkill.V + "/5",
+        industry: indName, career: sc.career ? sc.career.score + "/" + sc.career.total : "", timeouts: state.timeouts,
         answers: state.answers.map(function(x, i){ return (i + 1) + x.s + LEVELS[x.l] + (x.ok ? "✓" : "✗"); }).join(" "),
         utm_source: params.get("utm_source") || "", utm_medium: params.get("utm_medium") || "", utm_campaign: params.get("utm_campaign") || "",
-        referrer: document.referrer || "", submittedAt: new Date().toISOString()
+        referrer: document.referrer || "", submittedAt: test.at
       };
       var leads = lsJSON(LEADS_KEY) || []; leads.push(lead); lsSet(LEADS_KEY, JSON.stringify(leads));
-      profile = { name:name, phone:phone, email:email, level:sc.level, correct:sc.correct, goal:state.needs.goal, rec:rec, at:lead.submittedAt };
-      lsSet(PROFILE_KEY, JSON.stringify(profile));
       try{ fetch(LEAD_WEBHOOK_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(lead) }).catch(function(){}); }catch(err){}
-      state.result = { sc: sc, rec: rec };
+      state.result = test;
       paintProfile();
       next();
     }
 
-    function renderResult(box){
-      setBar(TOTAL_STEPS, "");
-      var sc = state.result.sc, recId = state.result.rec, rec = COURSES[recId], info = LEVEL_INFO[sc.level];
-      var note = "";
-      if(state.needs.goal === "ielts" && recId === "giaotiep") note = " Với mục tiêu IELTS, bạn nên vững từ vựng nền tảng trước rồi chuyển sang lộ trình IELTS.";
-      if(state.needs.goal === "toeic" && recId === "giaotiep") note = " Với mục tiêu TOEIC, học chắc từ nền tảng trước sẽ giúp bạn đọc hiểu nhanh hơn.";
-      if(state.needs.goal === "career" && recId === "giaotiep") note = " Học chắc từ nền tảng trước, sau đó chuyển sang từ vựng chuyên ngành.";
+    /* ---------- bản tư vấn chuyên gia (mẫu theo tổ hợp trình độ × kỹ năng × mục tiêu × thời gian) ---------- */
+    var GRAMMAR_FOCUS = [
+      "động từ to be, thì hiện tại đơn, danh từ số nhiều, mạo từ a/an/the",
+      "thì quá khứ đơn, hiện tại tiếp diễn, so sánh hơn – so sánh nhất, much/many",
+      "hiện tại hoàn thành, câu điều kiện loại 1, câu bị động, câu tường thuật",
+      "quá khứ hoàn thành, câu điều kiện loại 2–3, mệnh đề quan hệ, used to / be used to",
+      "đảo ngữ, câu giả định, mệnh đề rút gọn, cấu trúc nhấn mạnh"
+    ];
+    var STRENGTH = {
+      L: "Đôi tai của bạn khá “thính” đó! Bạn bắt được ý chính khi nghe — lợi thế cực lớn để học từ qua phát âm và hội thoại 🎧.",
+      R: "Đọc hiểu là “sân nhà” của bạn: nắm được ý chính lẫn chi tiết, không dễ bị câu chữ đánh lừa 📚.",
+      G: "Ngữ pháp chắc tay ghê! Bạn chọn đúng thì, đúng cấu trúc — viết và nói ra câu nào là “chuẩn chỉnh” câu đó ✅.",
+      V: "Kho từ vựng của bạn “nặng ký” hơn mặt bằng chung. Tận dụng ngay để học thêm cụm từ (collocation) cho câu nói tự nhiên hơn nhé 💎."
+    };
+    var WEAK = {
+      L: { d:"Người bản xứ nói nhanh một chút là tai bạn bắt đầu “lag” 😅 — chuyện rất bình thường, luyện đúng cách là lên nhanh thôi.",
+           a:["Gặp từ mới trong app là bấm 🔊 nghe rồi nhại theo (shadowing) — hơi “quê” lúc đầu nhưng hiệu quả bất ngờ.", "Mỗi ngày dành 5 phút nghe tin ngắn tốc độ chậm (VOA Learning English): lần 1 nghe ý chính, lần 2 “săn” chi tiết.", "Để ý số, giờ, ngày tháng khi nghe — đây là “bẫy” kinh điển, ai cũng từng dính."] },
+      R: { d:"Bạn hơi dễ “sa bẫy” những đáp án lặp lại y chang từ trong bài 🪤. Đề thi thích chơi trò này lắm đó!",
+           a:["Mỗi ngày đọc 1 đoạn ngắn, đọc xong tự tóm tắt ý chính bằng 1 câu tiếng Việt trước khi xem câu hỏi.", "Học theo cụm từ đồng nghĩa (paraphrase) — đề thi hiếm khi “bê nguyên” từ trong bài vào đáp án.", "Săn các từ nối như however, although, because… — chúng là “biển chỉ đường” của cả đoạn văn."] },
+      G: { d:"Thì và cấu trúc câu đôi lúc còn “đá nhau” một chút 🤹. Không sao, ngữ pháp là thứ luyện là thấm!",
+           a:["Ưu tiên “xử đẹp” các chủ điểm: {focus}.", "Mỗi tuần chinh phục 2 chủ điểm ở mục Ngữ pháp AZEnglish, nhớ làm hết phần “lỗi hay gặp”.", "Học từ mới nào thì “tiện tay” đặt 1 câu dùng đúng ngữ pháp vừa học — một mũi tên trúng hai đích."] },
+      V: { d:"Vốn từ đang hơi “mỏng ví” 💸 nên gặp câu khó là bị khoá ngay từ vựng. Tin vui: đây lại là phần dễ cải thiện nhất!",
+           a:["Mỗi ngày nạp {wpd} từ mới bằng ôn ngắt quãng trong app — ôn đúng hạn quan trọng hơn học thật nhiều rồi quên.", "Học theo cụm (make a decision, take measures…) thay vì từng từ lẻ loi.", "Cuối tuần tự “kiểm tra bài cũ” 1 chủ đề, từ nào sai cho vào danh sách “truy nã” để ôn lại."] }
+    };
+    var ROLE_NOTE = {
+      hs: "Mẹo cho học sinh: 15 phút sau giờ học mỗi ngày “ăn đứt” 2 tiếng học dồn cuối tuần. Đều đặn mới là siêu năng lực 🦸.",
+      sv: "Sinh viên thì nên “bắt tay” ngay với từ vựng ngành học và chuẩn đầu ra từ bây giờ — năm cuối sẽ cảm ơn bạn đó 🎓.",
+      dilam: "Người đi làm bận rộn? Tranh thủ giờ nghỉ trưa hoặc lúc chờ thang máy, ưu tiên từ vựng dùng được ngay ở công ty ☕.",
+      phuhuynh: "Kết quả này là của con nha phụ huynh! Ngồi học cùng con 15 phút mỗi tối vừa giữ nhịp, vừa có thêm “bạn học” đáng yêu 👨‍👩‍👧."
+    };
+    var GOAL_NOTE = {
+      giaotiep: "mục tiêu giao tiếp tự tin", toeic: "mục tiêu TOEIC / tiếng Anh công sở", ielts: "mục tiêu IELTS / du học",
+      career: "mục tiêu tiếng Anh chuyên ngành", school: "mục tiêu học tốt tiếng Anh ở trường"
+    };
+    var WPD = { "5":5, "15":10, "30":20, "45":30 };
+    var GAIN6 = { "5":0.5, "15":1, "30":1.5, "45":2 };
+
+    function coursePlan(t){
+      var first = t.rec, second;
+      if(first === "giaotiep") second = t.goal === "toeic" ? "toeic" : t.goal === "ielts" ? "ielts" : t.goal === "career" ? "career" : (t.idx >= 2 ? "ielts" : "giaotiep");
+      else second = first;
+      return [first, first, second];
+    }
+    function buildReport(t){
+      var info = LEVEL_INFO[t.level], wpd = WPD[t.time] || 10, gain = GAIN6[t.time] || 1;
+      function lvAt(x){ return x >= 4.9 ? "C1+" : LEVELS[Math.min(4, Math.floor(x + 0.01))]; }
+      var lv3 = lvAt(t.idx + gain / 2), lv6 = lvAt(t.idx + gain);
+      var words6 = wpd * 150;
+      var skillsArr = ["L","R","G","V"].map(function(k){ return { k:k, v:t.bySkill[k] }; });
+      var strong = skillsArr.filter(function(x){ return x.v >= 4; });
+      if(!strong.length){ var mx = Math.max.apply(null, skillsArr.map(function(x){ return x.v; })); strong = skillsArr.filter(function(x){ return x.v === mx && mx > 0; }).slice(0, 1); }
+      var weak = skillsArr.filter(function(x){ return x.v <= 3 && strong.indexOf(x) < 0; }).sort(function(a, b){ return a.v - b.v; });
+      var plan = coursePlan(t);
+      var html = '<div class="report">';
+
+      // 1. Tổng quan
+      html += '<div class="rp-sec"><h4>🧭 Chân dung tiếng Anh của bạn</h4><p>Bạn đang ở trình độ <b>' + t.level + ' – ' + info.name + '</b> (vốn từ ước tính ' + info.vocab + '). ' + info.desc + '</p>' +
+        (lv6 === t.level
+          ? '<p>Với <b>' + GOAL_NOTE[t.goal] + '</b> và <b>' + t.timeLabel + '/ngày</b>, 6 tháng tới bạn sẽ đóng cọc thật vững ở <b>' + t.level + '</b>. Còn nếu “mạnh tay” lên <b>15–30 phút/ngày</b> thì <b>' + lvAt(t.idx + 1.5) + '</b> đang vẫy gọi sau 6 tháng đó 👋.</p>'
+          : '<p>Với <b>' + GOAL_NOTE[t.goal] + '</b> và <b>' + t.timeLabel + '/ngày</b>, cứ bám sát lộ trình bên dưới là ' + (lv3 === t.level ? 'bạn sẽ đóng chắc <b>' + lv3 + '</b> trong 3 tháng đầu rồi “lên đời” <b>' + lv6 + '</b> sau 6 tháng 🚀.</p>' : 'bạn có thể “lên đời” <b>' + lv3 + '</b> sau 3 tháng và <b>' + lv6 + '</b> sau 6 tháng 🚀.</p>')) +
+        (ROLE_NOTE[t.role] ? '<p>' + ROLE_NOTE[t.role] + '</p>' : '') +
+        (t.timeouts >= 3 ? '<p>⏱️ Đồng hồ đã “ăn” mất ' + t.timeouts + ' câu của bạn! Phản xạ đọc – nghe còn hơi chậm, luyện thêm vài bài bấm giờ là quen tay ngay.</p>' : '') + '</div>';
+
+      // 2. Điểm mạnh
+      html += '<div class="rp-sec"><h4>💪 Điểm sáng của bạn</h4>' + (strong.length ? strong.map(function(x){
+        return '<div class="rp-item"><span class="rp-tag ok">' + SKILL[x.k].emoji + ' ' + SKILL[x.k].name + ' ' + x.v + '/5</span><p style="margin-top:6px">' + STRENGTH[x.k] + '</p></div>';
+      }).join("") : '<p>Chưa có kỹ năng nào “bứt phá” — nhưng đó lại là lợi thế: mình xây nền đồng đều ngay từ đầu, không lệch chân nào hết 🏗️.</p>') + '</div>';
+
+      // 3. Cần cải thiện
+      html += '<div class="rp-sec"><h4>🎯 Chỗ cần “nâng cấp”</h4>' + (weak.length ? weak.map(function(x){
+        var w = WEAK[x.k], ex = (t.wrong || []).filter(function(y){ return y.s === x.k; })[0];
+        var exHtml = ex ? '<div class="rp-ex">Câu “lỡ tay” trong bài: ' + esc(ex.q.replace("___", "…")) + ' → đáp án chuẩn: <b>' + esc(ex.correct) + '</b></div>' : "";
+        return '<div class="rp-item"><span class="rp-tag bad">' + SKILL[x.k].emoji + ' ' + SKILL[x.k].name + ' ' + x.v + '/5</span><p style="margin-top:6px">' + w.d + '</p>' + exHtml +
+          '<ul>' + w.a.map(function(s){ return '<li>' + s.replace("{focus}", "<b>" + GRAMMAR_FOCUS[t.idx] + "</b>").replace("{wpd}", "<b>" + wpd + "</b>") + '</li>'; }).join("") + '</ul></div>';
+      }).join("") : '<p>Các kỹ năng đều “ngon” như nhau, không có điểm yếu rõ rệt 👏. Thử thách tiếp theo: từ vựng học thuật và luyện đề bấm giờ để lên level.</p>') + '</div>';
+
+      // 4. Chuyên ngành
+      if(t.career){
+        var ind = INDUSTRIES.filter(function(x){ return x[0] === t.career.ind; })[0];
+        var cs = t.career.score, cl = cs >= 5 ? "Dân chuyên rồi đó! 🏆" : cs >= 3 ? "Khá ổn — thêm chút từ chuyên sâu là “pro” ngay" : "Cần “khởi động” lại tiếng Anh công việc";
+        html += '<div class="rp-sec career-box"><h4>' + ind[1] + ' Giao tiếp chuyên ngành: ' + cs + '/' + t.career.total + '</h4><p><b>' + cl + '</b> trong khối ngành ' + ind[2] + '.</p>' +
+          ((t.careerWrong || []).length ? '<div class="rp-ex">Tình huống cần “luyện công”: ' + esc(t.careerWrong[0].q) + ' → <b>' + esc(t.careerWrong[0].correct) + '</b></div>' : '') +
+          '<ul><li>Học lộ trình <b>Từ Vựng Chuyên Ngành</b>, chọn chủ đề khối ' + ind[2] + '.</li><li>Mỗi tuần “bỏ túi” 3 mẫu câu công việc: viết email, báo cáo, xử lý khách khó tính 😅.</li></ul></div>';
+      }
+
+      // 5. Lộ trình 6 tháng
+      var focusSkill = weak.length ? SKILL[weak[0].k].name.toLowerCase() : "tốc độ và độ chính xác";
+      var phases = [
+        { t:"Tháng 1 – 2 · Khởi động 🏃", s: COURSE_EMOJI[plan[0]] + " " + COURSES[plan[0]].name,
+          b:"Học <b>" + wpd + " từ/ngày</b> (~" + (wpd * 50).toLocaleString("vi-VN") + " từ sau 2 tháng). Ưu tiên kỹ năng <b>" + focusSkill + "</b>. Ngữ pháp: " + GRAMMAR_FOCUS[t.idx] + "." },
+        { t:"Tháng 3 – 4 · Tăng tốc 🚀", s: COURSE_EMOJI[plan[1]] + " " + COURSES[plan[1]].name + " + 📖 Ngữ pháp",
+          b:"Ôn từ “đến hạn” trước rồi mới học từ mới — não sẽ cảm ơn bạn. Chuyển sang học theo cụm từ. <b>Cuối tháng 3: làm lại bài test</b> để xem mình đã “lột xác” ra sao (mục tiêu " + lv3 + ")." },
+        { t:"Tháng 5 – 6 · Về đích 🏁", s: COURSE_EMOJI[plan[2]] + " " + COURSES[plan[2]].name,
+          b:"Luyện đọc – nghe bấm giờ, lôi từ đã học ra viết và nói cho “nóng máy”. <b>Cuối tháng 6: làm lại bài test</b> — đích đến " + lv6 + " với ~" + words6.toLocaleString("vi-VN") + " từ trong túi 🎒." }
+      ];
+      html += '<div class="rp-sec"><h4>🗓️ Lộ trình 6 tháng “độ” riêng cho bạn</h4>' +
+        '<div class="proj"><div><b>' + t.level + '</b><span>Hiện tại</span></div><div><b>' + lv3 + '</b><span>Sau 3 tháng</span></div><div><b>' + lv6 + '</b><span>Sau 6 tháng</span></div></div>' +
+        phases.map(function(p){ return '<div class="phase"><div class="ph-t">' + p.t + '</div><div class="ph-s">' + p.s + '</div><p>' + p.b + '</p></div>'; }).join("") +
+        '<p style="font-size:12.5px;color:var(--ink-faint)">Dự kiến dựa trên ' + t.timeLabel + '/ngày, 6 ngày/tuần (Chủ nhật cho não nghỉ xả hơi 😴). Học nhiều hơn → tiến nhanh hơn.</p></div>';
+      return html + '</div>';
+    }
+
+    function renderResult(box, t){
+      var rec = COURSES[t.rec], info = LEVEL_INFO[t.level];
       box.innerHTML =
         '<div class="pt-kicker">Kết quả bài test đầu vào</div>' +
-        '<div class="result-lvl"><div class="lvl-big">' + sc.level + '</div><div><h3>' + info.name + ' · ' + info.vocab + '</h3><p>' + info.desc + '</p></div></div>' +
-        '<div class="skills">' + ["L","R","G"].map(function(k){ return '<div class="sk"><div class="se">' + SKILL[k].emoji + '</div><b>' + sc.bySkill[k] + '/5</b><span>' + SKILL[k].name + '</span></div>'; }).join("") + '</div>' +
-        '<div class="rec-box"><div class="k">Lộ trình học miễn phí gợi ý cho bạn</div><h4>' + COURSE_EMOJI[recId] + ' ' + rec.name + '</h4><p>' + COURSE_BLURB[recId] + note + '</p>' +
+        '<div class="result-lvl"><div class="lvl-big">' + t.level + '</div><div><h3>' + info.name + ' · ' + info.vocab + '</h3><p>' + t.correct + '/' + t.total + ' câu đúng' + (t.career ? ' · Chuyên ngành ' + t.career.score + '/' + t.career.total : '') + '</p></div></div>' +
+        '<div class="skills four">' + ["L","R","G","V"].map(function(k){ return '<div class="sk"><div class="se">' + SKILL[k].emoji + '</div><b>' + t.bySkill[k] + '/5</b><span>' + SKILL[k].name + '</span></div>'; }).join("") + '</div>' +
+        '<div class="rec-box"><div class="k">Lộ trình miễn phí dành riêng cho bạn</div><h4>' + COURSE_EMOJI[t.rec] + ' ' + rec.name + '</h4><p>' + COURSE_BLURB[t.rec] + '</p>' +
           '<a class="hero-cta btn-full" id="goRec" href="' + rec.url + '"><span class="lbl">▶ Học ngay<small>Bài đầu tiên · 15 phút</small></span></a></div>' +
+        buildReport(t) +
         '<div class="consult">' +
           '<a class="hero-cta2" href="https://zalo.me/' + CONTACT_PHONE + '" target="_blank" rel="noopener">💬 Zalo tư vấn</a>' +
           '<a class="hero-cta2" href="tel:' + CONTACT_PHONE + '">📞 0971 882 096</a>' +
         '</div>' +
-        '<button class="text-btn" type="button" id="seeAll">Xem tất cả lộ trình</button>';
-      box.querySelector("#goRec").addEventListener("click", function(){ lsSet(LAST_KEY, recId); });
-      box.querySelector("#seeAll").addEventListener("click", function(){ closeTest(); location.hash = "courses"; location.reload(); });
+        '<p class="privacy">📋 Bản tư vấn này được lưu trong <b>Hồ sơ của tôi</b> (chip 👤 góc trên) để bạn so sánh sau mỗi lần làm lại test.</p>';
+      box.querySelector("#goRec").addEventListener("click", function(){ lsSet(LAST_KEY, t.rec); });
+    }
+
+    /* ---------- Hồ sơ của tôi: bản tư vấn mới nhất + lịch sử để so sánh ---------- */
+    var pfEl = document.getElementById("pf"), pfInner = document.getElementById("pfInner");
+    function closeProfile(){ if(pfEl){ pfEl.classList.remove("open"); document.body.style.overflow = ""; } }
+    document.getElementById("pfClose").addEventListener("click", closeProfile);
+    function openProfile(e){
+      if(e && e.preventDefault) e.preventDefault();
+      var tests = lsJSON(TESTS_KEY) || [];
+      if(!tests.length){ openTest(); return; }
+      var lastT = tests[tests.length - 1], firstT = tests[0];
+      var html = '<div class="pt-kicker">Hồ sơ của tôi</div><h2 class="pt-q">👤 ' + esc(profile ? profile.name : "") + '</h2>' +
+        '<p class="pt-hint">Lần test gần nhất: ' + fmtDate(lastT.at) + ' · ' + tests.length + ' lần test</p>';
+      html += '<div class="rp-sec"><h4>📊 Lịch sử kết quả</h4><table class="hist"><thead><tr><th>Ngày</th><th>Trình độ</th><th>🎧</th><th>📖</th><th>✍️</th><th>🔤</th><th>💼</th></tr></thead><tbody>' +
+        tests.slice().reverse().map(function(t){ return '<tr><td>' + fmtDate(t.at) + '</td><td class="lv">' + t.level + '</td><td>' + t.bySkill.L + '</td><td>' + t.bySkill.R + '</td><td>' + t.bySkill.G + '</td><td>' + t.bySkill.V + '</td><td>' + (t.career ? t.career.score + '/' + t.career.total : '–') + '</td></tr>'; }).join("") +
+        '</tbody></table>';
+      if(tests.length > 1){
+        html += '<div class="cmp">' + ["L","R","G","V"].map(function(k){
+          return '<div class="cmp-row"><span>' + SKILL[k].emoji + ' ' + SKILL[k].name + '</span><div class="cmp-bar"><i style="width:' + (firstT.bySkill[k] / 5 * 100) + '%"></i></div><div class="cmp-bar now"><i style="width:' + (lastT.bySkill[k] / 5 * 100) + '%"></i></div></div>';
+        }).join("") + '</div><div class="cmp-legend"><span>Lần đầu (' + fmtDate(firstT.at) + ')</span><span class="now">Gần nhất</span></div>';
+      } else {
+        html += '<p style="margin-top:10px">Làm lại bài test sau 1–3 tháng học để thấy mình tiến bộ bao nhiêu.</p>';
+      }
+      html += '</div>' + buildReport(lastT) +
+        '<button class="hero-cta btn-full" type="button" id="pfRetest"><span class="lbl">🎯 Làm lại bài test để so sánh</span></button>' +
+        '<div class="consult" style="margin-top:12px"><a class="hero-cta2" href="https://zalo.me/' + CONTACT_PHONE + '" target="_blank" rel="noopener">💬 Zalo tư vấn</a><a class="hero-cta2" href="tel:' + CONTACT_PHONE + '">📞 0971 882 096</a></div>';
+      pfInner.innerHTML = '<div class="pt-fade">' + html + '</div>';
+      pfInner.querySelector("#pfRetest").addEventListener("click", openTest);
+      pfEl.classList.add("open"); document.body.style.overflow = "hidden";
     }
 
     if(/[?&]test=1/.test(location.search) || location.hash === "#kiem-tra") openTest();
+    if(location.hash === "#ho-so") openProfile();
   })();
 </script>
 
