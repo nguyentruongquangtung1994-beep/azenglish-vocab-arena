@@ -277,6 +277,35 @@
     background:radial-gradient(circle, color-mix(in srgb, var(--tier) 30%, transparent), transparent 70%);
   }
   .card-icon svg{ position:relative; width:64px; height:64px; }
+  /* ---- icon thẻ khoá học: mỗi icon một chuyển động riêng ---- */
+  .ci *{ transform-box:view-box; }
+  .ci .tw{ transform-box:fill-box; transform-origin:center; animation:ciTwinkle 2.4s ease-in-out infinite; }
+  .ci .d2{ animation-delay:.8s; } .ci .d3{ animation-delay:1.6s; }
+  @keyframes ciTwinkle{ 0%,100%{ opacity:.2; transform:scale(.6); } 50%{ opacity:1; transform:scale(1.15); } }
+  .ci-rocket .rk{ transform-origin:32px 32px; animation:ciHover 2.6s ease-in-out infinite; }
+  .ci-rocket .rk-fire{ transform-origin:32px 50px; animation:ciFire .22s ease-in-out infinite alternate; }
+  @keyframes ciHover{ 0%,100%{ transform:translateY(2px) rotate(-3deg); } 50%{ transform:translateY(-4px) rotate(3deg); } }
+  @keyframes ciFire{ from{ transform:scale(.8,.75); opacity:.8; } to{ transform:scale(1.1,1.2); opacity:1; } }
+  .ci-clip .cb{ transform-origin:32px 58px; animation:ciWobble 3.6s ease-in-out infinite; }
+  .ci .tk{ stroke-dasharray:1; stroke-dashoffset:1; animation:ciDraw 3.6s ease infinite; }
+  .ci-clip .tk.d2{ animation-delay:.5s; }
+  @keyframes ciDraw{ 0%,8%{ stroke-dashoffset:1; } 22%,82%{ stroke-dashoffset:0; } 92%,100%{ stroke-dashoffset:1; } }
+  @keyframes ciWobble{ 0%,100%{ transform:rotate(0); } 30%{ transform:rotate(-4deg); } 45%{ transform:rotate(3deg); } 60%{ transform:rotate(0); } }
+  .ci-shield .sh{ transform-origin:32px 26px; animation:ciPulse 3s ease-in-out infinite; }
+  .ci-shield .sh-shine{ animation:ciShine 3s ease-in-out infinite; }
+  .ci-shield .tk{ animation-duration:3s; }
+  @keyframes ciShine{ 0%,35%{ transform:skewX(-20deg) translateX(0); } 70%,100%{ transform:skewX(-20deg) translateX(84px); } }
+  @keyframes ciPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.06); } }
+  .ci-case .bc{ transform-origin:32px 6px; animation:ciSwing 2.4s ease-in-out infinite; }
+  .ci-case .bc-lock{ animation:ciLock 2.4s ease-in-out infinite; }
+  @keyframes ciSwing{ 0%,100%{ transform:rotate(-6deg); } 50%{ transform:rotate(6deg); } }
+  @keyframes ciLock{ 0%,40%,100%{ opacity:1; } 50%{ opacity:.45; } }
+  .ci-book .pg{ transform-origin:32px 30px; animation:ciFlip 3.4s cubic-bezier(.5,0,.3,1) infinite; }
+  .ci-book .pg.d2{ animation-delay:.35s; }
+  @keyframes ciFlip{ 0%,30%{ transform:scaleX(1); } 60%,100%{ transform:scaleX(-1); } }
+  .card:hover .ci *{ animation-duration:1s; }
+  .card:hover .ci-rocket .rk-fire{ animation-duration:.1s; }
+  @media (prefers-reduced-motion: reduce){ .ci *{ animation:none !important; } .ci .tk{ stroke-dashoffset:0; } }
   .recommend-tag{
     align-self:flex-start; display:inline-flex; align-items:center; gap:5px; margin-bottom:2px;
     font-size:11px; font-weight:700; color:var(--red); background:color-mix(in srgb, var(--red) 10%, transparent);
@@ -594,10 +623,16 @@
         <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
       <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M32 4c8 6 12 16 12 28 0 8-3 15-6 19l-6 7-6-7c-3-4-6-11-6-19 0-12 4-22 12-28Z" fill="var(--tier1)"></path>
-          <circle cx="32" cy="26" r="6" fill="var(--paper-2)"></circle>
-          <path d="M22 50l-6 10M42 50l6 10" stroke="var(--tier1)" stroke-width="3.5" stroke-linecap="round"></path>
+        <svg viewBox="0 0 64 64" fill="none" class="ci ci-rocket">
+          <circle class="tw" cx="9" cy="14" r="1.8" fill="var(--tier1)"></circle>
+          <circle class="tw d2" cx="55" cy="10" r="1.5" fill="var(--tier1)"></circle>
+          <circle class="tw d3" cx="53" cy="40" r="1.3" fill="var(--tier1)"></circle>
+          <g class="rk">
+            <path class="rk-fire" d="M32 50c4 4 5 8 0 13c-5-5-4-9 0-13Z" fill="var(--ember)"></path>
+            <path d="M32 4c8 6 12 16 12 28 0 8-3 15-6 19l-6 7-6-7c-3-4-6-11-6-19 0-12 4-22 12-28Z" fill="var(--tier1)"></path>
+            <circle cx="32" cy="26" r="6" fill="var(--paper-2)"></circle>
+            <path d="M22 50l-6 10M42 50l6 10" stroke="var(--tier1)" stroke-width="3.5" stroke-linecap="round"></path>
+          </g>
         </svg>
       </div>
     </a>
@@ -615,10 +650,14 @@
         <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
       <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <rect x="14" y="10" width="36" height="48" rx="4" fill="var(--paper-2)" stroke="var(--tier2)" stroke-width="3"></rect>
-          <rect x="24" y="4" width="16" height="10" rx="3" fill="var(--tier2)"></rect>
-          <path d="M22 26l4 4 8-8M22 38l4 4 8-8" stroke="var(--tier2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+        <svg viewBox="0 0 64 64" fill="none" class="ci ci-clip">
+          <g class="cb">
+            <rect x="14" y="10" width="36" height="48" rx="4" fill="var(--paper-2)" stroke="var(--tier2)" stroke-width="3"></rect>
+            <rect x="24" y="4" width="16" height="10" rx="3" fill="var(--tier2)"></rect>
+            <path d="M38 27h5M38 39h5M22 50h20" stroke="var(--tier2)" stroke-width="2.4" stroke-linecap="round" opacity=".35"></path>
+            <path class="tk" pathLength="1" d="M22 26l4 4 8-8" stroke="var(--tier2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path class="tk d2" pathLength="1" d="M22 38l4 4 8-8" stroke="var(--tier2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
         </svg>
       </div>
     </a>
@@ -636,9 +675,13 @@
         <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
       <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
+        <svg viewBox="0 0 64 64" fill="none" class="ci ci-shield">
+          <defs><clipPath id="ciShieldClip"><path d="M32 6 12 14v6c0 12 8 20 20 24 12-4 20-12 20-24v-6Z"></path></clipPath></defs>
+          <g class="sh">
           <path d="M32 6 12 14v6c0 12 8 20 20 24 12-4 20-12 20-24v-6Z" fill="var(--tier3)"></path>
-          <path d="M25 30l5 5 10-11" stroke="var(--paper-2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <g clip-path="url(#ciShieldClip)"><rect class="sh-shine" x="-8" y="0" width="10" height="50" fill="#fff" opacity=".45"></rect></g>
+          <path class="tk" pathLength="1" d="M25 30l5 5 10-11" stroke="var(--paper-2)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
           <rect x="18" y="46" width="28" height="6" rx="2" fill="var(--tier3)"></rect>
           <rect x="21" y="53" width="22" height="5" rx="2" fill="var(--tier3)" opacity=".6"></rect>
         </svg>
@@ -658,11 +701,15 @@
         <span class="cta">Bắt đầu học <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
       </div>
       <div class="card-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <path d="M24 16V12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="var(--tier4)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
-          <rect x="8" y="16" width="48" height="34" rx="5" fill="var(--tier4)"></rect>
-          <path d="M8 30h48" stroke="var(--paper-2)" stroke-width="3"></path>
-          <rect x="26" y="26" width="12" height="9" rx="2" fill="var(--paper-2)"></rect>
+        <svg viewBox="0 0 64 64" fill="none" class="ci ci-case">
+          <path class="tw" d="M55 4l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="var(--tier4)"></path>
+          <path class="tw d2" d="M7 52l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z" fill="var(--tier4)"></path>
+          <g class="bc">
+            <path d="M24 16V12a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v4" stroke="var(--tier4)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect x="8" y="16" width="48" height="34" rx="5" fill="var(--tier4)"></rect>
+            <path d="M8 30h48" stroke="var(--paper-2)" stroke-width="3"></path>
+            <rect class="bc-lock" x="26" y="26" width="12" height="9" rx="2" fill="var(--paper-2)"></rect>
+          </g>
         </svg>
       </div>
     </a>
@@ -676,9 +723,12 @@
       <span class="cta">Khám phá ngữ pháp <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
     </div>
     <div class="card-icon">
-      <svg viewBox="0 0 64 64" fill="none">
+      <svg viewBox="0 0 64 64" fill="none" class="ci ci-book">
         <path d="M32 10c-6-4-14-4-20 0v38c6-4 14-4 20 0" stroke="var(--tier3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
         <path d="M32 10c6-4 14-4 20 0v38c-6-4-14-4-20 0" stroke="var(--tier3)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M17 20h10M17 27h8M17 34h9M37 20h10M39 27h8M38 34h9" stroke="var(--tier3)" stroke-width="2" stroke-linecap="round" opacity=".4"></path>
+        <path class="pg" d="M32 10c6-4 14-4 20 0v38c-6-4-14-4-20 0Z" fill="var(--tier-bg)" stroke="var(--tier3)" stroke-width="2.4" stroke-linejoin="round"></path>
+        <path class="pg d2" d="M32 10c6-4 14-4 20 0v38c-6-4-14-4-20 0Z" fill="var(--tier-bg)" stroke="var(--tier3)" stroke-width="2.4" stroke-linejoin="round"></path>
         <path d="M32 10v38" stroke="var(--tier3)" stroke-width="3"></path>
       </svg>
     </div>
