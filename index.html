@@ -484,6 +484,16 @@
   .cmp-legend span::before{ content:""; display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; background:var(--ink-faint); vertical-align:-1px; }
   .cmp-legend span.now::before{ background:var(--red); }
 
+  [hidden]{ display:none !important; }
+  /* Cổng test: chưa làm test thì thẻ lộ trình bị khoá */
+  .gate-note{ margin:12px 0 0; font-size:13.5px; color:var(--ink-soft); }
+  .card{ position:relative; }
+  .card.locked .card-main, .card.locked .card-icon{ opacity:.55; filter:saturate(.6); }
+  .card.locked::after{
+    content:"🔒 Làm test để mở khoá"; position:absolute; top:12px; right:12px; z-index:2;
+    font:700 11.5px var(--font-body); color:var(--ink); background:var(--paper-2);
+    border:1.5px solid var(--line-strong); border-radius:99px; padding:4px 10px;
+  }
 </style>
 </head>
 <body>
@@ -524,6 +534,7 @@
         <a class="hero-cta" id="heroCta" href="#" role="button"><span class="lbl">🎯 Kiểm tra trình độ — 10 phút<small>20 câu Nghe · Đọc · Ngữ pháp · Từ vựng · miễn phí</small></span></a>
         <a class="hero-cta2" id="heroCta2" href="#">⚡ Học ngay</a>
       </div>
+      <p class="gate-note" id="gateNote">🔓 Làm bài test 10 phút để mở khoá lộ trình học miễn phí dành riêng cho bạn.</p>
     </div>
     <div class="hero-art">
       <div class="crest">
@@ -750,7 +761,10 @@
         key: card.getAttribute("data-storage-key"),
         total: parseInt(card.getAttribute("data-total"), 10) || 0
       };
-      card.addEventListener("click", function(){ lsSet(LAST_KEY, card.getAttribute("data-course")); });
+      card.addEventListener("click", function(e){
+        if(!hasProfile()){ e.preventDefault(); openTest(); return; } // chưa test → phải làm test trước khi học
+        lsSet(LAST_KEY, card.getAttribute("data-course"));
+      });
     });
     var COURSE_EMOJI = { giaotiep:"💬", toeic:"💼", ielts:"🎓", career:"🛠️", grammar:"📖" };
     var COURSE_BLURB = {
@@ -785,6 +799,11 @@
     var profile = lsJSON(PROFILE_KEY);
     var last = lsGet(LAST_KEY); if(!COURSES[last] || !COURSES[last].key) last = null;
     var chip = document.getElementById("profileChip");
+    function hasProfile(){ return !!(profile && profile.phone); }
+    function paintLock(){
+      Array.prototype.forEach.call(document.querySelectorAll(".card[data-course]"), function(c){ c.classList.toggle("locked", !hasProfile()); });
+      var note = document.getElementById("gateNote"); if(note) note.hidden = hasProfile();
+    }
     function paintProfile(){
       if(!profile) return;
       chip.classList.add("on");
@@ -800,23 +819,23 @@
       }
     }
     paintProfile();
+    paintLock();
     chip.addEventListener("click", openProfile);
 
     var heroCta = document.getElementById("heroCta"), heroCta2 = document.getElementById("heroCta2");
     var resumeId = last || bestStarted;
-    var goId = resumeId || (profile && profile.rec) || "giaotiep";
-    if(resumeId || profile){
-      var c0 = COURSES[goId];
+    if(hasProfile()){
+      var goId = resumeId || profile.rec || "giaotiep", c0 = COURSES[goId];
       heroCta.href = c0.url;
       heroCta.innerHTML = '<span class="lbl">' + (resumeId ? "▶ Học tiếp: " : "▶ Bắt đầu: ") + c0.name +
         '<small>' + (c0.started ? c0.mastered.toLocaleString("vi-VN") + " từ đã thuộc · 15 phút hôm nay" : "Lộ trình gợi ý cho bạn · 15 phút") + '</small></span>';
       heroCta.addEventListener("click", function(){ lsSet(LAST_KEY, goId); });
-      heroCta2.innerHTML = profile ? "📋 Hồ sơ & lộ trình của tôi" : "🎯 Kiểm tra trình độ";
-      heroCta2.addEventListener("click", function(e){ e.preventDefault(); profile ? openProfile() : openTest(); });
+      heroCta2.innerHTML = "📋 Hồ sơ & lộ trình của tôi";
+      heroCta2.addEventListener("click", function(e){ e.preventDefault(); openProfile(); });
     } else {
+      // Chưa làm test: mọi đường vào học đều đi qua bài test đầu vào.
       heroCta.addEventListener("click", function(e){ e.preventDefault(); openTest(); });
-      heroCta2.href = COURSES.giaotiep.url;
-      heroCta2.addEventListener("click", function(){ lsSet(LAST_KEY, "giaotiep"); });
+      heroCta2.hidden = true;
     }
     Array.prototype.forEach.call(document.querySelectorAll("[data-open-test]"), function(b){ b.addEventListener("click", openTest); });
 
@@ -1236,6 +1255,7 @@
       try{ fetch(LEAD_WEBHOOK_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(lead) }).catch(function(){}); }catch(err){}
       state.result = test;
       paintProfile();
+      paintLock();
       next();
     }
 
