@@ -150,7 +150,7 @@
   + '@media(max-width:520px){.eyebrow{display:none}.masthead{gap:8px}.masthead{flex-wrap:wrap;row-gap:10px}.masthead-text{min-width:0;flex:1 1 calc(100% - 64px)}.title{font-size:19px!important;line-height:1.2!important}.masthead>.mark~*:not(.masthead-text){flex:0 0 auto}}';
 
   function injectCss(){
-    var s = document.createElement("style"); s.textContent = CSS + (COURSE ? SKIN : ""); document.head.appendChild(s);
+    var s = document.createElement("style"); s.textContent = CSS + (COURSE ? SKIN + LION_CSS : ""); document.head.appendChild(s);
   }
 
   /* ---------- modal chung ---------- */
@@ -412,11 +412,11 @@
         say(c.w);
         var after = body.querySelector(".azq-after");
         if(ok){
-          right++; combo++;
+          right++; combo++; azfx("ok");
           after.innerHTML = '<p class="azm-note" style="text-align:center;margin:4px 0 8px">✅ Chuẩn! Bạn nhớ từ này thế nào?</p><div class="azq-rate"><button type="button" data-r="again">😵 Chưa biết<small>ôn lại sau 10 phút</small></button><button type="button" data-r="hard">🤔 Chưa chắc<small>ôn lại sớm</small></button><button type="button" data-r="easy">😎 Dễ<small>giãn lịch ôn</small></button></div>';
           after.addEventListener("click", function(e){ var b = e.target.closest("[data-r]"); if(b){ rate(c, b.dataset.r); i++; next(); } });
         } else {
-          combo = 0; rate(c, "again");
+          combo = 0; rate(c, "again"); azfx("bad");
           after.innerHTML = '<p class="azm-note" style="text-align:center;margin:4px 0 8px">' + (btn ? "❌ Chưa đúng" : "⏰ Hết giờ") + ' — đáp án: <b>' + esc(c.w) + '</b>. Từ này sẽ quay lại sau 10 phút.</p><button class="azm-primary" type="button">Tiếp tục →</button>';
           after.querySelector("button").addEventListener("click", function(){ i++; next(); });
         }
@@ -425,6 +425,7 @@
       openModal("🎮 Ôn từ của tôi", body);
     }
     function finish(){
+      if(pool.length) azfx("done");
       var body = el('<div style="text-align:center"><div style="font-size:54px">🎉</div><p style="font:800 22px var(--font-display);margin:6px 0">Đúng ' + right + '/' + pool.length + ' từ</p><p class="azm-note">Lịch ôn đã được cập nhật theo độ nhớ của bạn. (Từ tự nhập không tính điểm xếp hạng.)</p><div class="azm-grid2" style="margin-top:14px"><button class="azm-ghost" type="button" data-a="list">✍️ Từ của tôi</button><button class="azm-primary" type="button" data-a="again">Ôn tiếp</button></div></div>');
       body.querySelector('[data-a="list"]').addEventListener("click", openMine);
       body.querySelector('[data-a="again"]').addEventListener("click", startReview);
@@ -440,6 +441,182 @@
     else if(r === "hard"){ c.ivl = Math.max(1, Math.round((c.ivl || 0) * 1.2)); c.ease = Math.max(1.3, (c.ease || 2.5) - 0.15); c.reps = (c.reps || 0) + 1; c.due = now + c.ivl * DAY; }
     else { c.ivl = c.ivl ? Math.round(c.ivl * (c.ease || 2.5) * 1.3) : 3; c.ease = (c.ease || 2.5) + 0.1; c.reps = (c.reps || 0) + 1; c.due = now + c.ivl * DAY; }
     saveMine(all);
+  }
+
+  /* ---------- Linh vật sư tử AZ: phản ứng theo đúng / sai / combo / xong buổi ---------- */
+  var LION_CSS = ''
+  + '.azl{position:fixed;right:max(8px,env(safe-area-inset-right,0px));bottom:0;z-index:75;width:86px;pointer-events:none}'
+  + '.azl-body{pointer-events:auto;display:block;width:100%;padding:0;margin:0;border:0;background:none;cursor:pointer;transform:translateY(40%);transition:transform .45s cubic-bezier(.34,1.56,.64,1);-webkit-tap-highlight-color:transparent}'
+  + '.azl.enter .azl-body{transform:translateY(105%)}.azl.up .azl-body{transform:translateY(12%)}'
+  + '.azl-move{position:relative;display:block;transform-origin:50% 100%}'
+  + '.azl-rig{position:relative;display:block;transform-origin:50% 100%;filter:drop-shadow(0 6px 12px rgba(0,0,0,.3));animation:azlBreath 3.4s ease-in-out infinite}'
+  + '.azl-rig img{display:block;width:100%;height:auto}.azl-rig .tl,.azl-hd{position:absolute;left:0;top:0;width:100%;height:100%}'
+  + '.azl-rig .tl{transform-origin:30.65% 75.38%;animation:azlTail 1.8s ease-in-out infinite}'
+  + '.azl-hd{transform-origin:51.08% 43.27%;animation:azlHead 4.6s ease-in-out infinite}.azl-hd img{position:absolute;inset:0}'
+  + '.azl-lid{position:absolute;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#FFDDB8,#F6C99C);border-bottom:2px solid #4A2A22;transform:scaleY(0);transform-origin:50% 0;animation:azlBlink 4.2s infinite}'
+  + '.azl-lid.l{left:36.84%;top:24.62%;width:13.00%;height:7.31%}.azl-lid.r{left:61.30%;top:21.15%;width:10.53%;height:7.69%;animation-delay:.03s}'
+  + '.azl.happy .azl-rig .tl{animation-duration:.45s}.azl.sad .azl-hd{animation:azlHeadSad 1.4s ease forwards}.azl.nod .azl-hd{animation:azlNod .5s ease 2}'
+  + '.azl.zz .azl-lid{animation:none;transform:scaleY(1)}.azl.zz .azl-rig .tl{animation-duration:4s}.azl.zz .azl-hd{animation:azlHeadSleep 2.6s ease-in-out infinite}'
+  + '@keyframes azlTail{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(11deg)}}'
+  + '@keyframes azlHead{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.5deg)}}'
+  + '@keyframes azlHeadSad{0%{transform:none}30%,100%{transform:rotate(-7deg) translateY(2px)}}'
+  + '@keyframes azlHeadSleep{0%,100%{transform:rotate(-5deg) translateY(3px)}50%{transform:rotate(-7deg) translateY(5px)}}'
+  + '@keyframes azlNod{0%,100%{transform:none}50%{transform:rotate(3deg) translateY(4px)}}'
+  + '@keyframes azlBlink{0%,90%,100%{transform:scaleY(0)}94%,96%{transform:scaleY(1)}}'
+  + '.azl-shades{position:absolute;left:53%;top:29%;font-size:30px;line-height:1;transform:translate(-50%,-260%);opacity:0;transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .2s}'
+  + '.azl.cool .azl-shades{transform:translate(-50%,-50%) rotate(-4deg);opacity:1}'
+  + '.azl-bub{position:absolute;z-index:3;right:4px;bottom:92px;width:max-content;max-width:min(230px,70vw);background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:16px 16px 4px 16px;padding:8px 12px;font:700 13.5px/1.35 var(--font-body,system-ui);box-shadow:0 8px 22px rgba(0,0,0,.22);transform-origin:90% 100%;animation:azlBub .35s cubic-bezier(.34,1.56,.64,1);transition:bottom .45s}'
+  + '.azl.up .azl-bub{bottom:128px}'
+  + '.azl-fx{position:absolute;z-index:1;left:50%;top:10px;width:0;height:0}.azl-body{position:relative;z-index:2}'
+  + '.azl-p{position:absolute;left:0;top:0;font-size:20px;line-height:1;pointer-events:none;animation:azlPop .95s ease-out forwards}'
+  + '.azl-move.hop{animation:azlHop .62s ease}.azl-move.tilt{animation:azlTilt .9s ease}.azl-move.spin{animation:azlSpin 1.1s cubic-bezier(.3,1.3,.5,1)}.azl-move.wig{animation:azlWig .6s ease}.azl-move.doze{animation:azlDoze 2.6s ease-in-out infinite}'
+  + '@keyframes azlBreath{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.035)}}'
+  + '@keyframes azlHop{0%{transform:none}30%{transform:translateY(-24px) rotate(-5deg)}55%{transform:translateY(0) scale(1.07,.93)}75%{transform:translateY(-8px)}100%{transform:none}}'
+  + '@keyframes azlTilt{0%{transform:none}15%{transform:rotate(-10deg)}25%{transform:rotate(-7deg)}35%{transform:rotate(-10deg)}75%{transform:rotate(-10deg)}100%{transform:none}}'
+  + '@keyframes azlSpin{0%{transform:none}45%{transform:translateY(-46px) rotateY(180deg)}80%{transform:translateY(0) rotateY(360deg) scale(1.06,.94)}100%{transform:rotateY(360deg)}}'
+  + '@keyframes azlWig{0%,100%{transform:none}20%{transform:rotate(7deg)}40%{transform:rotate(-7deg)}60%{transform:rotate(5deg)}80%{transform:rotate(-3deg)}}'
+  + '@keyframes azlDoze{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(2px)}}'
+  + '@keyframes azlBub{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}'
+  + '@keyframes azlPop{0%{transform:translate(-50%,0) scale(.3);opacity:1}70%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),var(--dy)) scale(1.1) rotate(var(--r));opacity:0}}'
+  + '.azl-conf{position:fixed;inset:0;pointer-events:none;z-index:10050;overflow:hidden}'
+  + '.azl-conf i{position:absolute;top:-16px;width:9px;height:14px;border-radius:2px;animation:azlFall linear forwards}'
+  + '@keyframes azlFall{to{transform:translate(var(--dx),108vh) rotate(var(--r))}}'
+  + '.azl.play,.azl.play .azl-body{pointer-events:none}.azl.play .azl-body{transform:translateY(104%)}.azl.play.up .azl-body{transform:translateY(45%)}.azl.play .azl-bub{bottom:12px}.azl.play.up .azl-bub{bottom:84px}'
+  + '@media(min-width:720px){.azl{width:104px;right:18px}.azl-bub{bottom:110px}.azl.up .azl-bub{bottom:152px}}'
+  + '@media(max-width:560px){body{padding-bottom:70px}}'
+  + '@media(prefers-reduced-motion:reduce){.azl-move,.azl-rig,.azl-rig .tl,.azl-hd,.azl-lid,.azl-p,.azl-conf{animation:none!important}.azl-body{transition:none}}';
+
+  var LION = {
+    hi:   ["Chào {n}! Học vài từ cùng mình nhé 🦁", "{n} tới rồi! Hôm nay mình chiến tiếp nha 💪", "Sẵn sàng chưa {n}? Gầm lên nào! 🦁"],
+    ok:   ["Chuẩn luôn! ✨", "Giỏi quá 👏", "Đúng rồi!", "Nhớ dai ghê!", "Quá đỉnh!", "Chính xác 🎯"],
+    c3:   ["Combo 3! Đang vào guồng 🔥"],
+    c5:   ["Combo 5! Ngầu chưa 😎"],
+    c10:  ["Combo 10!! Không ai cản nổi 🦁🔥"],
+    c20:  ["Combo 20?! Cho mình xin chữ ký với 🤩"],
+    bad:  ["Không sao, lần sau nhớ nhé!", "Sai là để nhớ lâu hơn 💪", "Suýt đúng rồi đó!", "Từ này hơi khó, mình ôn lại sau nha"],
+    bad3: ["Thở sâu một nhịp nào 🍵 Chậm mà chắc!"],
+    done: ["Xong buổi rồi! Tự hào về {n} quá 🎉", "Hoàn thành! Nay {n} ngầu thật sự 🦁", "Xuất sắc! Mai gặp lại nhé 👋"],
+    lose: ["Ván này chưa thắng, ván sau gỡ nhé! 💪"],
+    tap:  ["Rrrr… gầm nhẹ thôi 🦁", "Học tiếp đi, mình canh cho!", "Mỗi ngày 20 từ, một năm hơn 7.000 từ đó!", "Bấm mình hoài là mình ngại á 😳", "Mình là sư tử AZ, không phải mèo đâu nha 😤"],
+    wake: ["Ngáp… {n} quay lại rồi! Mình tưởng {n} quên mình luôn 😴"]
+  };
+  var lionEl, lionMove, lionBub, lionFx, lionRun = 0, lionMiss = 0, bubT = 0, upT = 0;
+  function callName(){
+    var t = String(profile && profile.name || "").trim().split(/\s+/).filter(Boolean);
+    if(!t.length) return "bạn";
+    return t.length >= 3 ? t.slice(-2).join(" ") : t[t.length - 1];
+  }
+  function pickOne(a){ return a[Math.floor(Math.random() * a.length)]; }
+  function lionSay(list, ms){
+    if(!lionEl) return;
+    if(lionBub) lionBub.remove();
+    lionBub = el('<div class="azl-bub"></div>');
+    lionBub.textContent = pickOne(list).replace(/\{n\}/g, callName());
+    lionEl.insertBefore(lionBub, lionEl.firstChild);
+    clearTimeout(bubT);
+    var b = lionBub;
+    bubT = setTimeout(function(){ if(b.parentNode) b.remove(); }, ms || 2600);
+  }
+  function lionAnim(cls){
+    if(!lionMove) return;
+    lionMove.classList.remove("hop", "tilt", "spin", "wig", "doze");
+    void lionMove.offsetWidth;
+    if(cls) lionMove.classList.add(cls);
+  }
+  var moodT = 0;
+  function mood(m, ms){
+    if(!lionEl) return;
+    lionEl.classList.remove("happy", "sad", "nod", "zz"); void lionEl.offsetWidth;
+    lionEl.classList.add(m); clearTimeout(moodT);
+    moodT = setTimeout(function(){ lionEl.classList.remove(m); }, ms);
+  }
+  function lionUp(ms){
+    if(!lionEl) return;
+    lionEl.classList.add("up"); clearTimeout(upT);
+    upT = setTimeout(function(){ lionEl.classList.remove("up"); }, ms || 1400);
+  }
+  function burst(chars, n){
+    if(!lionFx) return;
+    for(var i = 0; i < n; i++){
+      var p = el('<span class="azl-p"></span>');
+      p.textContent = chars[i % chars.length];
+      var ang = -Math.PI / 2 + (Math.random() - .5) * 2.2, dist = 40 + Math.random() * 38;
+      p.style.setProperty("--dx", Math.round(Math.cos(ang) * dist) + "px");
+      p.style.setProperty("--dy", Math.round(Math.sin(ang) * dist) + "px");
+      p.style.setProperty("--r", Math.round((Math.random() - .5) * 90) + "deg");
+      p.style.animationDelay = (i * 40) + "ms";
+      lionFx.appendChild(p);
+      (function(x){ setTimeout(function(){ x.remove(); }, 1300); })(p);
+    }
+  }
+  function confetti(){
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var box = el('<div class="azl-conf" aria-hidden="true"></div>');
+    var cols = ["#E5484D", "#F2B53A", "#FFF4E2", "#2B2224", "#FF8A65"];
+    for(var i = 0; i < 70; i++){
+      var c = document.createElement("i");
+      c.style.left = (Math.random() * 100) + "vw";
+      c.style.background = cols[i % cols.length];
+      c.style.setProperty("--dx", Math.round((Math.random() - .5) * 160) + "px");
+      c.style.setProperty("--r", Math.round(360 + Math.random() * 720) + "deg");
+      c.style.animationDuration = (1.8 + Math.random() * 1.6) + "s";
+      c.style.animationDelay = (Math.random() * .5) + "s";
+      box.appendChild(c);
+    }
+    document.body.appendChild(box);
+    setTimeout(function(){ box.remove(); }, 4200);
+  }
+  // Trang học gọi azfx("ok" | "bad" | "done" | "lose") từ các hàm âm thanh sẵn có
+  function azfx(type){
+    if(!lionEl) return;
+    if(type === "ok"){
+      lionRun++; lionMiss = 0;
+      lionAnim("hop"); mood("happy", 1600); burst(["✨", "⭐", "💫"], 3); if(quiet()) lionUp(900);
+      if(lionRun >= 5) lionEl.classList.add("cool");
+      var c = lionRun === 3 ? LION.c3 : lionRun === 5 ? LION.c5 : lionRun === 10 ? LION.c10 : lionRun === 20 ? LION.c20 : null;
+      if(c){ lionUp(1800); lionSay(c); burst(["🔥", "🔥", "✨"], 5); }
+      else if(!quiet() && Math.random() < .3){ lionUp(); lionSay(LION.ok, 1600); }
+    } else if(type === "bad"){
+      lionRun = 0; lionMiss++;
+      lionEl.classList.remove("cool");
+      lionAnim("tilt"); mood("sad", 1800); burst(["💦"], 2); if(quiet()) lionUp(1100);
+      if(lionMiss >= 3){ lionMiss = 0; lionUp(2400); lionSay(LION.bad3, 2800); }
+      else if(!quiet() && Math.random() < .55){ lionUp(2000); lionSay(LION.bad, 2400); }
+    } else if(type === "done"){
+      lionRun = 0; lionMiss = 0; lionEl.classList.remove("cool");
+      lionUp(3400); lionAnim("spin"); mood("happy", 3600); burst(["🎉", "⭐", "🎊", "✨"], 8); confetti();
+      lionSay(LION.done, 3600);
+    } else if(type === "lose"){
+      lionRun = 0; lionEl.classList.remove("cool");
+      lionUp(2400); lionAnim("tilt"); mood("sad", 2600); lionSay(LION.lose, 2800);
+    }
+  }
+  window.azfx = azfx;
+  function quiet(){ return lionEl.classList.contains("play"); }
+  // Đang chơi trên điện thoại: thụt xuống, không che bàn phím ảo, bấm xuyên qua được
+  function watchPlay(){
+    var sp = document.getElementById("setupPanel");
+    if(!sp) return;
+    setInterval(function(){ lionEl.classList.toggle("play", sp.offsetParent === null && innerWidth < 720); }, 700);
+  }
+  function mountLion(){
+    lionEl = el('<div class="azl enter"><div class="azl-fx" aria-hidden="true"></div><button class="azl-body" type="button" aria-label="Linh vật sư tử AZ"><span class="azl-move"><span class="azl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="azl-hd"><img src="./lion-head.webp" alt=""><i class="azl-lid l"></i><i class="azl-lid r"></i><span class="azl-shades" aria-hidden="true">🕶️</span></span></span></span></button></div>');
+    lionMove = lionEl.querySelector(".azl-move"); lionFx = lionEl.querySelector(".azl-fx");
+    lionEl.querySelector(".azl-body").addEventListener("click", function(){ lionAnim("wig"); mood("nod", 1100); burst(["❤️"], 2); lionUp(1600); lionSay(LION.tap, 2200); });
+    document.body.appendChild(lionEl);
+    watchPlay();
+    var today = todayNum(), last = +(lsGet("az_core_seen") || 0), hiDay = +(lsGet("az_core_hi") || 0);
+    lsSet("az_core_seen", String(today));
+    setTimeout(function(){
+      lionEl.classList.remove("enter");
+      if(last && today - last >= 3){
+        lionAnim("doze"); mood("zz", 2200); burst(["💤", "💤"], 2);
+        setTimeout(function(){ lionAnim("hop"); lionUp(2600); lionSay(LION.wake, 3200); }, 2200);
+      } else if(hiDay !== today){
+        lsSet("az_core_hi", String(today));
+        setTimeout(function(){ lionAnim("hop"); lionUp(2400); lionSay(LION.hi, 3000); }, 500);
+      }
+    }, 700);
   }
 
   /* ---------- gắn vào trang ---------- */
@@ -459,6 +636,7 @@
       function syncMusic(){ document.documentElement.classList.toggle("azc-music", !!(mb && mb.classList.contains("active"))); }
       if(mb){ mb.addEventListener("click", function(){ setTimeout(syncMusic, 0); }); syncMusic(); }
       autoSetup();
+      mountLion();
     }
     mountStrip();
     window.AZCore = { openBoard:openBoard, openNotebook:COURSE ? openNotebook : null, openMine:openMine };

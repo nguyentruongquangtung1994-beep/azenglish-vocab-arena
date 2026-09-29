@@ -1029,8 +1029,8 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     osc.start(t0);
     osc.stop(t0 + duration + 0.02);
   }
-  function chimeCorrect(){ playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
-  function chimeWrong(){ playTone(170, 0.28, "sawtooth", 0); }
+  function chimeCorrect(){ window.azfx&&azfx("ok"); playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
+  function chimeWrong(){ window.azfx&&azfx("bad"); playTone(170, 0.28, "sawtooth", 0); }
   function playKeyClick(isBackspace){
     var ctx = getCtx();
     if(!ctx) return;
@@ -1783,7 +1783,7 @@ var WORDS = [{"w":"remarkable","p":"adj","m":"đáng chú ý, phi thường","lv
     }
   });
 
-  function finishSession(){
+  function finishSession(){ window.azfx&&azfx("done");
     gameCard.classList.add("hidden");
     summaryPanel.classList.remove("hidden");
     var missed = Object.keys(session.wrongIds);

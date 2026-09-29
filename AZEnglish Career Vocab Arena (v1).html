@@ -1593,8 +1593,8 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     osc.start(t0);
     osc.stop(t0 + duration + 0.02);
   }
-  function chimeCorrect(){ playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
-  function chimeWrong(){ playTone(170, 0.28, "sawtooth", 0); }
+  function chimeCorrect(){ window.azfx&&azfx("ok"); playTone(660, 0.12, "sine", 0); playTone(880, 0.16, "sine", 0.1); }
+  function chimeWrong(){ window.azfx&&azfx("bad"); playTone(170, 0.28, "sawtooth", 0); }
   function playKeyClick(isBackspace){
     var ctx = getCtx();
     if(!ctx) return;
@@ -2390,7 +2390,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     }
   });
 
-  function finishSession(){
+  function finishSession(){ window.azfx&&azfx("done");
     gameCard.classList.add("hidden");
     summaryPanel.classList.remove("hidden");
     var missed = Object.keys(session.wrongIds);
@@ -2558,7 +2558,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     for(var i = 0; i < count; i++){ particles.push(new SprintParticle(x, y, big)); }
     if(!particleAnimating){ particleAnimating = true; requestAnimationFrame(animateParticles); }
   }
-  function playComboTone(combo, baseFreq){
+  function playComboTone(combo, baseFreq){ window.azfx&&azfx("ok");
     var ctx = getCtx();
     if(!ctx) return;
     baseFreq = baseFreq || 523.25;
@@ -3048,7 +3048,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       startSprintTicker();
     }
 
-    function endSprint(won){
+    function endSprint(won){ window.azfx&&azfx(won?"done":"lose");
       sprintEnded = true;
       clearInterval(sprintTimer);
       stopDangerTick();
@@ -3377,7 +3377,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       }
     });
 
-    function endRace(won){
+    function endRace(won){ window.azfx&&azfx(won?"done":"lose");
       raceEnded = true;
       clearInterval(raceTickTimer);
       stopDangerTick();
@@ -3817,7 +3817,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
       }
     }
 
-    function endChase(won){
+    function endChase(won){ window.azfx&&azfx(won?"done":"lose");
       chaseEnded = true;
       clearInterval(chaseTickTimer);
       stopDangerTick();
