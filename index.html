@@ -555,6 +555,25 @@
   .hf-done b{ font:800 20px var(--font-display); color:var(--ink); } .hf-done p{ margin:0 0 4px; font-size:14px; color:var(--ink-soft); }
   @keyframes hfUp{ from{ transform:translate(-50%,100%); } } @keyframes hlPop2{ from{ transform:scale(.8); opacity:0; } }
   @media (prefers-reduced-motion:reduce){ .hl-rig,.hl-rig .tl,.hl-hd,.hl-lid,.hl-bub,.hf-sheet,.hf-done img{ animation:none !important; } }
+
+  /* ===== Lumina dẫn vào lộ trình ===== */
+  .li-ov{ position:fixed; inset:0; z-index:500; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(20,12,8,.62); backdrop-filter:blur(6px);
+    opacity:0; transition:opacity .25s ease; cursor:pointer; }
+  .li-ov[hidden]{ display:none; }
+  .li-ov.on{ opacity:1; }
+  .li-card{ position:relative; display:flex; flex-direction:column; align-items:center; gap:10px; max-width:360px; text-align:center; }
+  .li-lumi{ width:170px; transform:translateY(60px) scale(.6); opacity:0; transition:transform .55s cubic-bezier(.34,1.56,.64,1), opacity .3s ease; }
+  .li-ov.on .li-lumi{ transform:none; opacity:1; }
+  .li-ov.talking .li-lumi .hl-hd{ animation:liTalk .28s ease-in-out infinite alternate; }
+  .li-bub{ order:-1; margin:0; padding:12px 16px; border-radius:20px 20px 20px 6px; background:var(--paper-2); color:var(--ink); box-shadow:0 14px 30px rgba(0,0,0,.25);
+    font:700 17px/1.4 var(--font-body); transform:scale(.4); opacity:0; transition:transform .45s cubic-bezier(.34,1.56,.64,1) .25s, opacity .25s ease .25s; }
+  .li-bub b{ color:var(--red); font-family:var(--font-display); }
+  .li-ov.on .li-bub{ transform:none; opacity:1; }
+  .li-go{ margin:4px 0 0; color:#fff; font:700 15px var(--font-display); } .li-go b{ color:#ffd27a; }
+  .li-tap{ margin:0; color:rgba(255,255,255,.7); font:600 12.5px var(--font-body); animation:liBlink 1.4s ease-in-out infinite; }
+  @keyframes liTalk{ from{ transform:rotate(-3deg); } to{ transform:rotate(4deg) translateY(2px); } }
+  @keyframes liBlink{ 50%{ opacity:.35; } }
+  @media (prefers-reduced-motion:reduce){ .li-ov,.li-lumi,.li-bub{ transition:none; } .li-tap,.li-ov.talking .li-lumi .hl-hd{ animation:none; } }
   @media (prefers-reduced-motion: reduce){ .pt-fade{ animation:none; } .pt-bar i{ transition:none; } .hero-cta2{ transition:none; } }
 
   /* ================= Đợt 3: đồng hồ, tư vấn chuyên gia, hồ sơ ================= */
@@ -1640,6 +1659,73 @@
       try{ fetch(FB_API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).catch(function(){}); }catch(e){}
       $("hfForm").hidden = true; $("hfDone").hidden = false; $("hfDoneText").textContent = DONE[mood] || "Lumina đọc liền, hứa sửa… trước khi bạn kịp quên 😎";
     });
+  })();
+</script>
+
+<div class="li-ov" id="liOv" hidden role="dialog" aria-label="Lumina dẫn bạn vào học">
+  <div class="li-card">
+    <p class="li-bub" id="liBub"></p>
+    <div class="li-lumi"><span class="hl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hl-hd"><img src="./lion-head.webp" alt=""><i class="hl-lid l"></i><i class="hl-lid r"></i></span></span></div>
+    <p class="li-go" id="liGo">Đang vào <b id="liCourse"></b>…</p>
+    <p class="li-tap">Chạm để vào học ngay</p>
+  </div>
+</div>
+<script>
+  (function(){
+    var LINES = {
+      first:"Từ từ là từ bỏ hả? Học lẹ đi ní!", ghost:"Ủa, còn sống hả? Tưởng bạn ghost luôn cả tiếng Anh rồi.",
+      streak:"Giữ chuỗi giỏi vậy, sao giữ người yêu không nổi?", slow:"Học như wifi quán cà phê: có sóng, mà không lên.",
+      broken:"Đứt chuỗi… hèn chi đứt đường tình duyên.", praise:"Học vầy thì IELTS phải xin chữ ký bạn."
+    };
+    function ls(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+    function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+    function norm(u){ try{ return decodeURIComponent(String(u).split("#")[0].split("?")[0].split("/").pop()).normalize("NFC"); }catch(e){ return ""; } }
+    var MAP = {};
+    Array.prototype.forEach.call(document.querySelectorAll(".card[data-course]"), function(c){
+      if(c.getAttribute("data-course") === "grammar") return;
+      MAP[norm(c.getAttribute("href"))] = { key:c.getAttribute("data-storage-key"), name:(c.querySelector(".card-title") || c).textContent.trim() };
+    });
+    function pick(key){
+      var today = Math.floor(Date.now() / 864e5), meta = {};
+      try{ meta = JSON.parse(ls(key + "_meta") || "{}") || {}; }catch(e){}
+      var met = ls("az_lumina_met"), day = ls("az_lumina_day"), streak = meta.dayStreak || 0;
+      var away = typeof meta.lastActiveDay === "number" && meta.lastActiveDay >= 0 ? today - meta.lastActiveDay : 0;
+      if(!met) return "first";
+      if(String(day) !== String(today)){
+        if(away >= 3) return "ghost";
+        if(streak > 0 && away <= 1) return "streak";
+        if(streak > 0 && away === 2) return "broken";
+        return "slow";
+      }
+      if(meta.todayKey === today && (meta.todayCount || 0) >= 20) return "praise";
+      var pool = ["first", "slow"]; if(streak > 0 && away <= 1) pool.push("streak");
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+    var ov = document.getElementById("liOv"), busy = false;
+    document.body.appendChild(ov);
+    document.addEventListener("click", function(e){
+      if(busy || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest("a[href]"); if(!a || a.target === "_blank") return;
+      var c = MAP[norm(a.getAttribute("href"))]; if(!c) return;
+      e.preventDefault(); busy = true;
+      var href = a.href, id = pick(c.key), gone = false, audio = null;
+      function go(){ if(gone) return; gone = true; try{ if(audio) audio.pause(); }catch(err){} location.href = href; }
+      document.getElementById("liBub").innerHTML = "<b>Lumina:</b> " + LINES[id];
+      document.getElementById("liCourse").textContent = c.name;
+      ov.hidden = false; void ov.offsetWidth; ov.classList.add("on");
+      lsSet("az_lumina_met", "1"); lsSet("az_lumina_day", String(Math.floor(Date.now() / 864e5)));
+      try{ sessionStorage.setItem("az_lumina_intro", String(Date.now())); }catch(err){}
+      try{
+        audio = new Audio("./lumina-" + id + ".mp3");
+        audio.addEventListener("playing", function(){ ov.classList.add("talking"); });
+        audio.addEventListener("ended", function(){ setTimeout(go, 350); });
+        audio.addEventListener("error", function(){ setTimeout(go, 1800); });
+        var p = audio.play(); if(p && p.catch) p.catch(function(){ setTimeout(go, 1800); });
+      }catch(err){ setTimeout(go, 1800); }
+      setTimeout(go, 7500); // an toàn: không bao giờ kẹt ở màn chào
+      ov.addEventListener("click", go);
+    });
+    window.addEventListener("pageshow", function(e){ if(e.persisted){ busy = false; ov.hidden = true; ov.classList.remove("on", "talking"); } });
   })();
 </script>
 </body>

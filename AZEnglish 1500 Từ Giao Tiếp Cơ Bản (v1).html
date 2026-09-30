@@ -3333,6 +3333,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
   var luminaKind = null, luminaLine = null, luminaAudio = null, luminaHold = false, luminaPlayed = false;
   (function(){
     var today = todayStamp(), met = null, day = null;
+    try{ var introAt = +sessionStorage.getItem("az_lumina_intro") || 0; if(introAt && Date.now() - introAt < 20000){ sessionStorage.removeItem("az_lumina_intro"); return; } }catch(e){}
     try{ met = localStorage.getItem("az_lumina_met"); day = localStorage.getItem("az_lumina_day"); }catch(e){}
     var away = meta.lastActiveDay >= 0 ? today - meta.lastActiveDay : 0;
     if(!met) luminaKind = "first";                                  // lần đầu vào web
