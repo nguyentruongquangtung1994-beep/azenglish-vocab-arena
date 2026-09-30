@@ -1134,6 +1134,12 @@
   .q-fb-done b{ font:800 20px var(--font-display); color:var(--ink); }
   .q-fb-done p{ margin:0 0 4px; font-size:14px; color:var(--ink-soft); }
   #qFbForm[hidden]{ display:none; }
+
+  .q-after{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; margin:0 0 14px; padding:10px 12px; border-radius:14px; background:var(--red-bg);
+    font:600 14px var(--font-body); color:var(--ink); animation:qPop .45s cubic-bezier(.34,1.56,.64,1); }
+  .q-after[hidden]{ display:none; }
+  .q-after .xp{ padding:3px 10px; border-radius:99px; background:color-mix(in srgb, var(--ember) 18%, transparent); color:var(--ember); font:800 15px var(--font-display); }
+  .q-after b{ color:var(--red); }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -1323,7 +1329,6 @@
         <p class="q-note" id="qJourneyNote"></p>
         <span class="q-hide"><span id="journeyStageIcon"></span><span id="journeyStageLabel"></span><span id="journeyNextLabel"></span></span>
       </div>
-      <div class="q-rank" id="qRankSlot"></div>
     </section>
 
     <!-- ③ YOUR ARENA — phần lõi của sản phẩm -->
@@ -3587,6 +3592,34 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
     });
   })();
 
+  // ================= Kết quả buổi: +XP và hạng tuần =================
+  (function(){
+    var xpStart = meta.xp;
+    var wasHome = true;
+    setInterval(function(){ var home = setupPanel.offsetParent !== null; if(wasHome && !home) xpStart = meta.xp; wasHome = home; }, 300);
+    ["summaryPanel", "sprintSummary", "raceSummary", "chaseSummary"].forEach(function(id){
+      var panel = document.getElementById(id); if(!panel) return;
+      var line = document.createElement("p"); line.className = "q-after"; line.hidden = true;
+      var h = panel.querySelector("h2"); (h && h.nextSibling) ? panel.insertBefore(line, h.nextSibling) : panel.appendChild(line);
+      new MutationObserver(function(){
+        if(panel.classList.contains("hidden")){ line.hidden = true; return; }
+        if(!line.hidden) return;
+        var gain = Math.max(0, meta.xp - xpStart);
+        line.innerHTML = (gain ? '<b class="xp">⚡ +' + gain + ' XP</b>' : '') + '<span class="rk">🏆 Đang xem hạng tuần…</span>';
+        line.hidden = false;
+        if(!window.AZCore || !AZCore.fetchBoard){ line.querySelector(".rk").remove(); return; }
+        try{ AZCore.syncXp(); }catch(e){}
+        setTimeout(function(){
+          AZCore.fetchBoard(function(d){
+            var me = d && d.week && d.week.me, rk = line.querySelector(".rk"); if(!rk) return;
+            rk.innerHTML = me ? '🏆 Bạn đang <b>hạng ' + me.rank + '</b> tuần này' : (d ? '🏆 Học thêm chút là có tên trên bảng tuần!' : '');
+          });
+        }, 2500);
+        setTimeout(function(){ var rk = line.querySelector(".rk"); if(rk && /Đang xem/.test(rk.textContent)) rk.remove(); }, 15000);
+      }).observe(panel, { attributes:true, attributeFilter:["class"] });
+    });
+  })();
+
   renderQuest();
   var qWasHome = true;
   setInterval(function(){
@@ -3603,6 +3636,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
   // Dời các khối do az-core chèn vào: bảng xếp hạng → gọn trong phần Tiến bộ; ghi chú bài test → 1 dòng ngắn
   window.addEventListener("load", function(){
     var strip = document.querySelector(".azc-strip"), slot = document.getElementById("qRankSlot");
+    if(strip && !slot) strip.remove();
     if(strip && slot){
       slot.appendChild(strip);
       var drawRank = function(){

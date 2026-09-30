@@ -708,6 +708,8 @@
       mountLion();
     }
     mountStrip();
-    window.AZCore = { openBoard:openBoard, openNotebook:COURSE ? openNotebook : null, openMine:openMine };
+    window.AZCore = { openBoard:openBoard, openNotebook:COURSE ? openNotebook : null, openMine:openMine,
+      fetchBoard:function(cb){ try{ sessionStorage.removeItem("az_core_lb"); }catch(e){} fetchBoard(cb); },
+      syncXp:function(){ trackXp(); flushXp(false); } };
   });
 })();

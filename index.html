@@ -494,6 +494,20 @@
   .nc-say p{ margin:0; padding:10px 14px; border-radius:4px 16px 16px 16px; background:var(--paper-2); border:1.5px solid var(--line); font:600 14.5px/1.4 var(--font-body); color:var(--ink); }
   .nc-say p b{ color:var(--red); }
   @keyframes ncIn{ from{ opacity:0; transform:translateY(10px); } }
+  .ti-wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:14px; padding:8px 0 10px; }
+  .ti-bub{ position:relative; max-width:440px; margin:0; padding:14px 18px; border-radius:22px; background:var(--red-bg); color:var(--ink); font:700 clamp(17px,4.2vw,20px)/1.45 var(--font-display, inherit);
+    animation:ncIn .5s cubic-bezier(.34,1.56,.64,1) .15s both; }
+  .ti-bub b{ color:var(--red); }
+  .ti-bub::after{ content:""; position:absolute; left:50%; bottom:-10px; width:20px; height:20px; background:var(--red-bg); transform:translateX(-50%) rotate(45deg); border-radius:4px; }
+  .ti-lumi{ width:150px; animation:ncIn .6s cubic-bezier(.34,1.56,.64,1) both; }
+  .ti-list{ list-style:none; margin:0; padding:0; display:grid; gap:8px; width:100%; max-width:420px; text-align:left; }
+  .ti-list li{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:14px; background:var(--paper-2); border:1.5px solid var(--line); font-size:14.5px; color:var(--ink-soft);
+    animation:ncIn .4s cubic-bezier(.22,1,.36,1) both; }
+  .ti-list li:nth-child(1){ animation-delay:.3s; } .ti-list li:nth-child(2){ animation-delay:.4s; } .ti-list li:nth-child(3){ animation-delay:.5s; }
+  .ti-list li i{ font-style:normal; font-size:22px; } .ti-list li b{ color:var(--ink); }
+  .ti-go{ width:100%; max-width:420px; min-height:58px; border:0; border-radius:18px; background:var(--red); color:#fff; font:800 18px var(--font-display, inherit); cursor:pointer;
+    box-shadow:0 5px 0 var(--red-ink); transition:transform .15s ease; animation:ncIn .4s cubic-bezier(.22,1,.36,1) .6s both; }
+  .ti-go:hover{ transform:translateY(-2px); } .ti-go:active{ transform:translateY(3px); box-shadow:0 2px 0 var(--red-ink); }
   @media (prefers-reduced-motion:reduce){ .opt.nc-card,.nc-say,.pt-bar i::after{ animation:none !important; transition:none !important; } }
 
   /* ===== Lumina ở trang chủ ===== */
@@ -1199,7 +1213,7 @@
     var state, timerId = null, audioEl = null;
 
     function steps(){ // danh sách bước của lượt test hiện tại
-      var list = [];
+      var list = [{ t:"intro" }];
       NEEDS.forEach(function(n){ if(!n.onlyIf || n.onlyIf(state.needs)) list.push({ t:"need", n:n }); });
       ORDER.forEach(function(s, i){ list.push({ t:"core", s:s, i:i }); });
       if(state.needs.goal === "career" && CAREER[state.needs.industry]) CAREER[state.needs.industry].forEach(function(it, i){ list.push({ t:"career", i:i }); });
@@ -1228,7 +1242,8 @@
       barEl.style.width = Math.round(state.step / (list.length - 1) * 100) + "%";
       countEl.textContent = (st.t === "core" || st.t === "career") ? (qDone + 1) + "/" + qTotal : "";
       var cheer = document.getElementById("ptCheer"), pr = qTotal ? qDone / qTotal : 0;
-      if(cheer) cheer.textContent = st.t === "need" ? "🔥 Khởi động nhẹ, chưa có gì khó đâu"
+      if(cheer) cheer.textContent = st.t === "intro" ? "👋 Chào mừng bạn đến với bài test"
+        : st.t === "need" ? "🔥 Khởi động nhẹ, chưa có gì khó đâu"
         : st.t === "form" ? "🎉 Xong rồi! Để lại tên để Lumina gửi kết quả"
         : st.t === "result" ? "🏁 Về đích! Lumina tự hào về bạn"
         : pr < .25 ? "💪 Bắt đầu rồi nè, làm tới đâu chắc tới đó"
@@ -1236,7 +1251,8 @@
         : pr < .75 ? "🚀 Qua nửa chặng rồi, đừng quay xe!"
         : "🏆 Sắp về đích, ráng thêm chút xíu!";
       box.className = "pt-fade"; inner.innerHTML = "";
-      if(st.t === "need") renderNeed(box, st.n);
+      if(st.t === "intro") renderIntro(box);
+      else if(st.t === "need") renderNeed(box, st.n);
       else if(st.t === "core") renderQuestion(box, pickItem(st.s, state.level), qDone + 1, qTotal, "core");
       else if(st.t === "career"){ var it = CAREER[state.needs.industry][st.i]; it.s = "C"; it.l = it.f ? 2 : 2; renderQuestion(box, it, qDone + 1, qTotal, "career"); }
       else if(st.t === "form") renderForm(box);
@@ -1245,11 +1261,21 @@
       document.querySelector(".pt-body").scrollTop = 0;
     }
 
+    function renderIntro(box){
+      box.innerHTML = '<div class="ti-wrap">' +
+        '<p class="ti-bub"><b>Lumina:</b> Chỉ 10 phút làm test, Lumina soạn lộ trình chuẩn như nhan sắc của bạn dị đó! 😎</p>' +
+        '<div class="ti-lumi" aria-hidden="true"><span class="hl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hl-hd"><img src="./lion-head.webp" alt=""><i class="hl-lid l"></i><i class="hl-lid r"></i></span></span></div>' +
+        '<ul class="ti-list"><li><i>📝</i><span><b>20 câu</b> Nghe · Đọc · Ngữ pháp · Từ vựng</span></li>' +
+        '<li><i>⚡</i><span><b>Có kết quả ngay</b> khi làm xong</span></li>' +
+        '<li><i>🎁</i><span><b>Nhận lộ trình học miễn phí</b> hợp trình độ của bạn</span></li></ul>' +
+        '<button type="button" class="ti-go">Vô test thôi! →</button></div>';
+      box.querySelector(".ti-go").addEventListener("click", next);
+    }
     function renderNeed(box, n){
       var idx = NEEDS.filter(function(x){ return !x.onlyIf || x.onlyIf(state.needs); }).indexOf(n);
       var fun = n.opts[0] && n.opts[0][3];
       box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (idx + 1) + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">' + (n.hint || "Chọn một đáp án.") + '</p>' +
-        '<div class="opts' + (fun ? ' nc-grid' : '') + '"></div>' + (fun ? '<div class="nc-say" aria-live="polite"></div>' : '');
+        '<div class="opts' + (fun ? ' nc-grid' : '') + '"></div>' ;
       var opts = box.querySelector(".opts"), say = box.querySelector(".nc-say");
       n.opts.forEach(function(o, oi){
         var b = document.createElement("button"); b.type = "button"; b.className = "opt" + (fun ? " nc-card" : "");
@@ -1257,14 +1283,14 @@
         else b.innerHTML = '<span class="oe">' + o[1] + '</span>' + o[2];
         b.addEventListener("click", function(){
           b.classList.add("picked"); disableAll(opts); opts.classList.add("chosen");
-          if(say && o[4]){ say.innerHTML = '<img src="./lion-head.webp" alt="" width="40" height="40"><p><b>Lumina:</b> ' + o[4] + '</p>'; say.classList.add("on"); }
+
           state.needs[n.id] = o[0]; state.needs[n.id + "Label"] = o[2];
           if(n.id === "goal" || n.id === "role"){ // điểm xuất phát theo hồ sơ: IELTS/đi làm bắt đầu cao hơn
             var g = state.needs.goal, r = state.needs.role;
             state.level = (g === "ielts") ? 2 : (r === "hs" || r === "phuhuynh") ? 1 : (g === "toeic" || r === "dilam" || r === "sv") ? 1 : 1;
             if(g === "ielts" && r !== "hs") state.level = 2;
           }
-          setTimeout(next, say && o[4] ? 1500 : 200);
+          setTimeout(next, 350);
         });
         opts.appendChild(b);
       });
