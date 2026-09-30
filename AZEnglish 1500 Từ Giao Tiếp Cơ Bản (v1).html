@@ -1094,6 +1094,41 @@
   .q-arena.locked .q-reco,.q-arena.locked .q-game{ opacity:.45; cursor:not-allowed; filter:grayscale(.6); }
   .q-arena.locked .q-game:hover{ transform:none; }
   @media (prefers-reduced-motion:reduce){ .q-hello,.q-srs-row,.q-srs-sheet,.q-srs.has .q-srs-n{ animation:none !important; } }
+
+  /* ================= Góp ý ================= */
+  .q-fb{ width:100%; display:flex; align-items:center; gap:12px; margin:4px 0 22px; padding:12px 14px; border-radius:18px; cursor:pointer; text-align:left;
+    background:transparent; border:1.5px dashed var(--line); color:var(--ink); font-family:var(--font-body); transition:border-color .15s ease, transform .15s ease; }
+  .q-fb:hover{ border-color:var(--red); transform:translateY(-2px); }
+  .q-fb img{ width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:50% 20%; background:var(--red-bg); flex:none; transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .q-fb:hover img{ transform:rotate(-10deg) scale(1.08); }
+  .q-fb-t{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+  .q-fb-t b{ font:800 15px var(--font-display); }
+  .q-fb-t span{ font-size:12.5px; color:var(--ink-soft); }
+  .q-fb-go{ font-size:20px; }
+  .q-fb-lead{ margin:0 0 12px; font-size:14px; color:var(--ink-soft); }
+  .q-fb-moods{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+  .q-fb-moods button{ display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 2px; border-radius:14px; border:1.5px solid var(--line); background:var(--paper-2);
+    color:var(--ink-soft); font:700 11.5px var(--font-body); cursor:pointer; transition:transform .2s cubic-bezier(.34,1.56,.64,1), border-color .15s ease; }
+  .q-fb-moods button i{ font-style:normal; font-size:26px; line-height:1; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+  .q-fb-moods button:hover i{ transform:scale(1.2) rotate(-8deg); }
+  .q-fb-moods button.on{ border-color:var(--red); background:var(--red-bg); color:var(--ink); transform:translateY(-3px); }
+  .q-fb-moods button.on i{ transform:scale(1.25); }
+  .q-fb-reply{ min-height:20px; margin:10px 0 12px; font:700 14px/1.4 var(--font-body); color:var(--red); }
+  .q-fb-reply.pop{ animation:qPop .35s cubic-bezier(.34,1.56,.64,1); }
+  .q-fb-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .q-fb-tags button{ padding:7px 11px; border-radius:99px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); font:600 12.5px var(--font-body); cursor:pointer; }
+  .q-fb-tags button.on{ border-color:var(--red); background:var(--red-bg); }
+  .q-fb-text{ width:100%; box-sizing:border-box; border-radius:14px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); padding:10px 12px; font:500 15px var(--font-body); resize:vertical; }
+  .q-fb-text:focus{ outline:none; border-color:var(--red); }
+  .q-fb-send{ width:100%; min-height:52px; margin-top:12px; border:0; border-radius:16px; background:var(--red); color:#fff; font:800 16px var(--font-display); cursor:pointer; box-shadow:0 5px 0 var(--red-ink); }
+  .q-fb-send:disabled{ opacity:.45; cursor:default; box-shadow:none; }
+  .q-fb-send:not(:disabled):active{ transform:translateY(3px); box-shadow:0 2px 0 var(--red-ink); }
+  .q-fb-done{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; padding:8px 0 4px; }
+  .q-fb-done[hidden]{ display:none; }
+  .q-fb-done img{ width:84px; height:84px; border-radius:50%; object-fit:cover; object-position:50% 20%; background:var(--red-bg); animation:azlHop .7s ease; }
+  .q-fb-done b{ font:800 20px var(--font-display); color:var(--ink); }
+  .q-fb-done p{ margin:0 0 4px; font-size:14px; color:var(--ink-soft); }
+  #qFbForm[hidden]{ display:none; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -1324,6 +1359,40 @@
       <div class="q-chips" id="qRecent"></div>
       <button class="q-link" id="openReviewBtn" type="button" disabled>Chưa có từ nào để xem lại</button>
     </section>
+
+    <!-- Góp ý cho Lumina -->
+    <button class="q-fb" id="qFbBtn" type="button" aria-haspopup="dialog">
+      <img src="./lion-head.webp" alt="" width="44" height="44">
+      <span class="q-fb-t"><b>Có gì chưa ưng? Mắng Lumina đi</b><span>Góp ý 30 giây, Lumina sửa liền</span></span>
+      <span class="q-fb-go" aria-hidden="true">✍️</span>
+    </button>
+    <div class="q-sheet-bg" id="qFbBg" hidden></div>
+    <div class="q-srs-sheet q-fb-sheet" id="qFbSheet" role="dialog" aria-modal="true" aria-labelledby="qFbTitle" hidden>
+      <div class="q-sheet-head"><h3 id="qFbTitle">Góp ý cho Lumina</h3><button class="q-sheet-x" id="qFbClose" type="button" aria-label="Đóng">✕</button></div>
+      <div id="qFbForm">
+        <p class="q-fb-lead">Chê nhẹ thôi kẻo Lumina khóc 🥲 Bạn thấy app hôm nay sao?</p>
+        <div class="q-fb-moods" role="radiogroup" aria-label="Cảm nhận">
+          <button type="button" data-m="1" role="radio" aria-checked="false"><i>😤</i>Bực mình</button>
+          <button type="button" data-m="2" role="radio" aria-checked="false"><i>😕</i>Hơi chán</button>
+          <button type="button" data-m="3" role="radio" aria-checked="false"><i>😐</i>Tàm tạm</button>
+          <button type="button" data-m="4" role="radio" aria-checked="false"><i>😊</i>Được đó</button>
+          <button type="button" data-m="5" role="radio" aria-checked="false"><i>😍</i>Mê luôn</button>
+        </div>
+        <p class="q-fb-reply" id="qFbReply" aria-live="polite"></p>
+        <div class="q-fb-tags" id="qFbTags">
+          <button type="button">🐞 Bị lỗi / đơ</button><button type="button">🥵 Game khó quá</button><button type="button">😴 Game dễ quá</button>
+          <button type="button">🦁 Lumina hỗn quá</button><button type="button">📚 Muốn thêm từ / chủ đề</button><button type="button">💡 Có ý tưởng hay</button>
+        </div>
+        <textarea id="qFbText" class="q-fb-text" rows="3" maxlength="600" placeholder="Nói thẳng đi, Lumina chịu được… chắc vậy."></textarea>
+        <button class="q-fb-send" id="qFbSend" type="button" disabled>Gửi cho Lumina</button>
+      </div>
+      <div class="q-fb-done" id="qFbDone" hidden>
+        <img src="./lion-head.webp" alt="" width="84" height="84">
+        <b>Đã nhận! Cảm ơn bạn nha</b>
+        <p id="qFbDoneText">Lumina đọc liền, hứa sửa… trước khi bạn kịp quên 😎</p>
+        <button class="q-fb-send" id="qFbOk" type="button">Quay lại học</button>
+      </div>
+    </div>
     <div class="panel badges-panel hidden" id="badgesPanel">
       <h2>Huy hiệu đã đạt</h2>
       <div class="badge-row" id="badgeRow"></div>
@@ -3459,6 +3528,63 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     var line = HELLO[Math.floor(Math.random() * HELLO.length)].replace(/\{n\}/g, name).replace(/\{buổi\}/g, buoi);
     var el = document.getElementById("qHello");
     el.innerHTML = '<b>Lumina</b> ' + line.replace(new RegExp("(" + name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")"), "<em>$1</em>") + '<i class="q-wave" aria-hidden="true"><b></b><b></b><b></b></i>';
+  })();
+
+  // ================= Góp ý cho Lumina =================
+  (function(){
+    var FB_API = "https://script.google.com/macros/s/AKfycbzD1v2aekzEeyMBQ-2uD-2TRHBN9xX0__V6aAU5YZ4BFhlO4D9WEZtXr7CcwM4Gc2j1/exec";
+    var REPLY = {
+      1:"Ui, ai làm bạn giận? Kể Lumina nghe, Lumina xử liền!",
+      2:"Chán hả? Nói Lumina biết chỗ nào buồn ngủ nhất đi.",
+      3:"Tàm tạm là còn cứu được! Góp ý chút cho Lumina lên đời nha.",
+      4:"Được đó hả? Vậy là sắp thành “mê luôn” rồi, thêm xíu nữa thôi!",
+      5:"Thương ghê! Lumina đỏ mặt rồi nè 🥰"
+    };
+    var DONE = {
+      1:"Lumina ghi hết vô sổ rồi, sửa xong sẽ báo bạn đầu tiên 🫡",
+      5:"Lumina in góp ý này ra dán đầu giường luôn 😍"
+    };
+    var sheet = document.getElementById("qFbSheet"), bg = document.getElementById("qFbBg");
+    document.body.appendChild(bg); document.body.appendChild(sheet);
+    var mood = 0, tags = [];
+    function open(){ sheet.hidden = false; bg.hidden = false; document.documentElement.classList.add("q-lock"); }
+    function close(){ sheet.hidden = true; bg.hidden = true; document.documentElement.classList.remove("q-lock"); }
+    function reset(){
+      mood = 0; tags = [];
+      document.getElementById("qFbForm").hidden = false; document.getElementById("qFbDone").hidden = true;
+      document.getElementById("qFbText").value = ""; document.getElementById("qFbReply").textContent = "";
+      Array.prototype.forEach.call(sheet.querySelectorAll(".q-fb-moods button, .q-fb-tags button"), function(b){ b.classList.remove("on"); b.setAttribute("aria-checked", "false"); });
+      sync();
+    }
+    function sync(){ document.getElementById("qFbSend").disabled = !(mood || tags.length || document.getElementById("qFbText").value.trim()); }
+    document.getElementById("qFbBtn").addEventListener("click", function(){ reset(); open(); });
+    document.getElementById("qFbClose").addEventListener("click", close);
+    document.getElementById("qFbOk").addEventListener("click", close);
+    bg.addEventListener("click", close);
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !sheet.hidden) close(); });
+    sheet.querySelector(".q-fb-moods").addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return;
+      mood = +b.dataset.m;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x === b); x.setAttribute("aria-checked", x === b ? "true" : "false"); });
+      var r = document.getElementById("qFbReply"); r.textContent = REPLY[mood]; r.classList.remove("pop"); void r.offsetWidth; r.classList.add("pop");
+      sync();
+    });
+    document.getElementById("qFbTags").addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return;
+      b.classList.toggle("on");
+      tags = Array.prototype.filter.call(this.children, function(x){ return x.classList.contains("on"); }).map(function(x){ return x.textContent; });
+      sync();
+    });
+    document.getElementById("qFbText").addEventListener("input", sync);
+    document.getElementById("qFbSend").addEventListener("click", function(){
+      var p = {}; try{ p = JSON.parse(localStorage.getItem("az_vocab_profile") || "{}") || {}; }catch(e){}
+      var body = JSON.stringify({ source:"AZ-Vocab-Feedback", course:(window.AZ_COURSE && AZ_COURSE.name) || "", mood:mood, tags:tags.join(", "),
+        text:document.getElementById("qFbText").value.trim(), name:p.name || "", phone:p.phone || "", xp:meta.xp, streak:meta.dayStreak,
+        page:location.pathname.split("/").pop(), ua:navigator.userAgent.slice(0, 160) });
+      try{ fetch(FB_API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).catch(function(){}); }catch(e){}
+      document.getElementById("qFbForm").hidden = true; document.getElementById("qFbDone").hidden = false;
+      document.getElementById("qFbDoneText").textContent = DONE[mood] || "Lumina đọc liền, hứa sửa… trước khi bạn kịp quên 😎";
+    });
   })();
 
   renderQuest();

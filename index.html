@@ -465,6 +465,36 @@
   .text-btn{ background:none; border:0; padding:6px 0; cursor:pointer; font:600 14px var(--font-body); color:var(--ink-soft); text-decoration:underline; text-underline-offset:3px; }
   .pt-fade{ animation:ptIn .22s ease; }
   @keyframes ptIn{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+
+  /* ===== Onboarding Gen Z ===== */
+  .pt-bar{ height:14px; background:var(--paper-3, #fdf3e4); box-shadow:inset 0 1px 2px rgba(0,0,0,.08); }
+  .pt-bar i{ background:linear-gradient(90deg, var(--red), #ff7a1a); position:relative; transition:width .5s cubic-bezier(.22,1,.36,1); }
+  .pt-bar i::after{ content:""; position:absolute; inset:0; background:repeating-linear-gradient(-45deg, rgba(255,255,255,.22) 0 8px, transparent 8px 16px); animation:ptStripe .8s linear infinite; }
+  @keyframes ptStripe{ to{ background-position:22px 0; } }
+  .pt-cheer{ max-width:660px; width:100%; margin:-6px auto 0; padding:0 16px 4px; box-sizing:border-box; font:700 13px var(--font-body); color:var(--red); }
+  .pt-cheer:empty{ display:none; }
+  .nc-grid{ grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:420px){ .nc-grid{ grid-template-columns:1fr; } }
+  .opt.nc-card{ position:relative; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:10px; min-height:104px; padding:16px;
+    font:700 15px/1.35 var(--font-display, inherit); transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease, border-color .15s ease, opacity .2s ease, background .15s ease;
+    animation:ncIn .4s cubic-bezier(.22,1,.36,1) both; animation-delay:calc(var(--i) * 60ms); }
+  @media (max-width:420px){ .opt.nc-card{ min-height:0; flex-direction:row; align-items:center; } }
+  .nc-grid .opt.nc-card:last-child:nth-child(odd){ grid-column:1/-1; flex-direction:row; align-items:center; min-height:72px; }
+  .opt.nc-card .oe{ font-size:30px; line-height:1; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+  .opt.nc-card:hover:not(:disabled){ transform:translateY(-4px); border-color:var(--red); box-shadow:0 10px 22px rgba(224,16,43,.14), 0 3px 0 var(--line); }
+  .opt.nc-card:hover:not(:disabled) .oe{ transform:scale(1.15) rotate(-8deg); }
+  .opt.nc-card:active:not(:disabled){ transform:scale(.97); }
+  .opt.nc-card .nc-ok{ position:absolute; top:10px; right:10px; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:var(--red); color:#fff; font-size:13px; transform:scale(0); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .opt.nc-card.picked{ border-color:var(--red); background:var(--red-bg); box-shadow:0 0 0 3px rgba(224,16,43,.15), 0 3px 0 var(--red); transform:translateY(-2px); }
+  .opt.nc-card.picked .nc-ok{ transform:scale(1); }
+  .nc-grid.chosen .opt.nc-card:not(.picked){ opacity:.4; }
+  .nc-say{ display:flex; align-items:center; gap:10px; margin-top:14px; min-height:52px; opacity:0; transform:translateY(8px); transition:opacity .25s ease, transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .nc-say.on{ opacity:1; transform:none; }
+  .nc-say img{ width:40px; height:40px; border-radius:50%; object-fit:cover; object-position:50% 20%; background:var(--red-bg); flex:none; }
+  .nc-say p{ margin:0; padding:10px 14px; border-radius:4px 16px 16px 16px; background:var(--paper-2); border:1.5px solid var(--line); font:600 14.5px/1.4 var(--font-body); color:var(--ink); }
+  .nc-say p b{ color:var(--red); }
+  @keyframes ncIn{ from{ opacity:0; transform:translateY(10px); } }
+  @media (prefers-reduced-motion:reduce){ .opt.nc-card,.nc-say,.pt-bar i::after{ animation:none !important; transition:none !important; } }
   @media (prefers-reduced-motion: reduce){ .pt-fade{ animation:none; } .pt-bar i{ transition:none; } .hero-cta2{ transition:none; } }
 
   /* ================= Đợt 3: đồng hồ, tư vấn chuyên gia, hồ sơ ================= */
@@ -772,6 +802,7 @@
     <div class="pt-bar"><i id="ptBar"></i></div>
     <span class="pt-count" id="ptCount"></span>
   </div>
+  <p class="pt-cheer" id="ptCheer" aria-live="polite"></p>
   <div class="pt-body"><div class="pt-inner" id="ptInner"></div></div>
 </div>
 
@@ -1053,16 +1084,27 @@
     var CORE_SECONDS = 600, CAREER_SECONDS = 150; // 10 phút cho bài chính, 2 phút 30 cho phần chuyên ngành
     var RATE = [0.85, 0.9, 0.95, 1, 1];       // tốc độ phát theo bậc (tối đa 1.0)
     var NEEDS = [
-      { id:"goal", q:"Bạn học tiếng Anh để làm gì?", opts:[
-        ["giaotiep","💬","Giao tiếp hằng ngày"], ["toeic","💼","Thi TOEIC / đi làm"], ["ielts","🎓","Thi IELTS / du học"],
-        ["career","🛠️","Tiếng Anh chuyên ngành"], ["school","🏫","Học tốt tiếng Anh ở trường"] ] },
+      { id:"goal", q:"Chữa lành hay chữa ngọng tiếng Anh đây bạn hiền?", hint:"Chọn 1 thôi, tham quá là không học nổi đâu 😏", opts:[
+        ["giaotiep","💬","Giao tiếp hằng ngày","Bắn tiếng Anh như gió để đi “tám” với Tây","Tây nói nhanh lắm đó, Lumina tập cho bạn bắt sóng!"],
+        ["toeic","💼","Thi TOEIC / đi làm","Cày TOEIC để đi làm gánh team, kiếm tiền nuôi thân","Gánh team thì phải khoẻ từ vựng trước nha sếp!"],
+        ["ielts","🎓","Thi IELTS / du học","Lấy IELTS flex với đời, đổi đời đi du học","Flex thì flex, nhưng phải có band trước đã nha!"],
+        ["career","🛠️","Tiếng Anh chuyên ngành","Pro chuyên ngành để không bị sếp “gài” trap","Hết cảnh gật gù cho qua trong cuộc họp rồi nhé!"],
+        ["school","🏫","Học tốt tiếng Anh ở trường","Cứu rỗi điểm số, trả nợ môn êm đẹp","Yên tâm, Lumina không mách phụ huynh đâu 🤫"] ] },
       { id:"industry", q:"Bạn học / làm trong khối ngành nào?", onlyIf:function(n){ return n.goal === "career"; }, opts: INDUSTRIES },
-      { id:"role", q:"Bạn đang là…", opts:[
-        ["hs","🎒","Học sinh (THCS – THPT)"], ["sv","📚","Sinh viên"], ["dilam","🧑‍💻","Người đi làm"], ["phuhuynh","👨‍👩‍👧","Phụ huynh làm thử cho con"] ] },
-      { id:"time", q:"Mỗi ngày bạn dành được bao lâu?", opts:[
-        ["5","⏱️","5 phút"], ["15","⏰","10 – 15 phút"], ["30","📅","20 – 30 phút"], ["45","🚀","Trên 30 phút"] ] },
-      { id:"az", q:"Bạn có đang học tại AZEnglish không?", opts:[
-        ["dang-hoc","✅","Đang học"], ["da-hoc","🕘","Đã từng học"], ["chua","👋","Chưa, lần đầu biết"] ] }
+      { id:"role", q:"Khai mau, bạn đang ở “level” nào của cuộc đời?", hint:"Lumina hỏi để xếp bài cho vừa sức thôi 😇", opts:[
+        ["hs","🎒","Học sinh (THCS – THPT)","Học sinh: sáng đi học, tối cày bài","Trẻ vậy mà biết lo, Lumina nể thiệt!"],
+        ["sv","📚","Sinh viên","Sinh viên: deadline dí sát nút","Deadline dí mình thì mình dí lại bằng từ vựng!"],
+        ["dilam","🧑‍💻","Người đi làm","Người đi làm: bận mà vẫn muốn giỏi","Bận mà vẫn học, mai mốt sếp phải nể!"],
+        ["phuhuynh","👨‍👩‍👧","Phụ huynh làm thử cho con","Phụ huynh làm thử giùm con","Làm giỏi quá là con áp lực đó nha 😆"] ] },
+      { id:"time", q:"Mỗi ngày bạn “hy sinh” được bao nhiêu phút cho tiếng Anh?", hint:"Nói thật nha, Lumina không phạt đâu.", opts:[
+        ["5","⏱️","5 phút","5 phút: vừa đủ lướt một cái reel","5 phút mỗi ngày, một năm cũng ra cả kho từ!"],
+        ["15","⏰","10 – 15 phút","10 – 15 phút: bằng một ly trà sữa","Uống trà sữa xong là học xong, quá hợp lý!"],
+        ["30","📅","20 – 30 phút","20 – 30 phút: nghiêm túc rồi đó","Chăm vầy chắc sắp flex được rồi!"],
+        ["45","🚀","Trên 30 phút","Trên 30 phút: cày như trâu","Trâu vậy thì Lumina phải chạy theo mệt nghỉ!"] ] },
+      { id:"az", q:"Bạn với AZEnglish quen nhau chưa?", hint:"Câu cuối rồi, sắp vô test thiệt nè!", opts:[
+        ["dang-hoc","✅","Đang học","Đang học: người nhà cả","Người nhà! Vô test lẹ cho thầy cô coi nè."],
+        ["da-hoc","🕘","Đã từng học","Từng học: tình cũ quay về","Tình cũ không rủ cũng tới, Lumina vui xỉu!"],
+        ["chua","👋","Chưa, lần đầu biết","Chưa, lần đầu gặp nhau","Hân hạnh! Lumina hứa không cắn đâu 🦁"] ] }
     ];
 
     var ptEl = document.getElementById("pt"), inner = document.getElementById("ptInner");
@@ -1098,6 +1140,14 @@
       var qDone = list.slice(0, state.step).filter(function(x){ return x.t === "core" || x.t === "career"; }).length;
       barEl.style.width = Math.round(state.step / (list.length - 1) * 100) + "%";
       countEl.textContent = (st.t === "core" || st.t === "career") ? (qDone + 1) + "/" + qTotal : "";
+      var cheer = document.getElementById("ptCheer"), pr = qTotal ? qDone / qTotal : 0;
+      if(cheer) cheer.textContent = st.t === "need" ? "🔥 Khởi động nhẹ, chưa có gì khó đâu"
+        : st.t === "form" ? "🎉 Xong rồi! Để lại tên để Lumina gửi kết quả"
+        : st.t === "result" ? "🏁 Về đích! Lumina tự hào về bạn"
+        : pr < .25 ? "💪 Bắt đầu rồi nè, làm tới đâu chắc tới đó"
+        : pr < .5 ? "⚡ Đang vào guồng, giữ phong độ nha!"
+        : pr < .75 ? "🚀 Qua nửa chặng rồi, đừng quay xe!"
+        : "🏆 Sắp về đích, ráng thêm chút xíu!";
       box.className = "pt-fade"; inner.innerHTML = "";
       if(st.t === "need") renderNeed(box, st.n);
       else if(st.t === "core") renderQuestion(box, pickItem(st.s, state.level), qDone + 1, qTotal, "core");
@@ -1110,20 +1160,24 @@
 
     function renderNeed(box, n){
       var idx = NEEDS.filter(function(x){ return !x.onlyIf || x.onlyIf(state.needs); }).indexOf(n);
-      box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (idx + 1) + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">Chọn một đáp án.</p><div class="opts"></div>';
-      var opts = box.querySelector(".opts");
-      n.opts.forEach(function(o){
-        var b = document.createElement("button"); b.type = "button"; b.className = "opt";
-        b.innerHTML = '<span class="oe">' + o[1] + '</span>' + o[2];
+      var fun = n.opts[0] && n.opts[0][3];
+      box.innerHTML = '<div class="pt-kicker">Về bạn · ' + (idx + 1) + '</div><h2 class="pt-q">' + n.q + '</h2><p class="pt-hint">' + (n.hint || "Chọn một đáp án.") + '</p>' +
+        '<div class="opts' + (fun ? ' nc-grid' : '') + '"></div>' + (fun ? '<div class="nc-say" aria-live="polite"></div>' : '');
+      var opts = box.querySelector(".opts"), say = box.querySelector(".nc-say");
+      n.opts.forEach(function(o, oi){
+        var b = document.createElement("button"); b.type = "button"; b.className = "opt" + (fun ? " nc-card" : "");
+        if(fun){ b.style.setProperty("--i", oi); b.innerHTML = '<span class="oe">' + o[1] + '</span><span class="nc-t">' + o[3] + '</span><span class="nc-ok" aria-hidden="true">✓</span>'; }
+        else b.innerHTML = '<span class="oe">' + o[1] + '</span>' + o[2];
         b.addEventListener("click", function(){
-          b.classList.add("picked"); disableAll(opts);
+          b.classList.add("picked"); disableAll(opts); opts.classList.add("chosen");
+          if(say && o[4]){ say.innerHTML = '<img src="./lion-head.webp" alt="" width="40" height="40"><p><b>Lumina:</b> ' + o[4] + '</p>'; say.classList.add("on"); }
           state.needs[n.id] = o[0]; state.needs[n.id + "Label"] = o[2];
           if(n.id === "goal" || n.id === "role"){ // điểm xuất phát theo hồ sơ: IELTS/đi làm bắt đầu cao hơn
             var g = state.needs.goal, r = state.needs.role;
             state.level = (g === "ielts") ? 2 : (r === "hs" || r === "phuhuynh") ? 1 : (g === "toeic" || r === "dilam" || r === "sv") ? 1 : 1;
             if(g === "ielts" && r !== "hs") state.level = 2;
           }
-          setTimeout(next, 200);
+          setTimeout(next, say && o[4] ? 1500 : 200);
         });
         opts.appendChild(b);
       });
