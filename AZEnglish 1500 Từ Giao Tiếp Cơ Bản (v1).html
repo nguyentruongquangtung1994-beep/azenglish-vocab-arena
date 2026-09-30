@@ -3330,7 +3330,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     praise: [{ id:"praise", text:"Học vầy thì IELTS phải xin chữ ký bạn.", say:"Học vầy thì ai eo phải xin chữ ký bạn." }]
   };
   function luminaPick(kind){ var a = LUMINA[kind] || LUMINA.streak; return a[Math.floor(Math.random() * a.length)]; }
-  var luminaKind = null, luminaLine = null, luminaAudio = null, luminaHold = false;
+  var luminaKind = null, luminaLine = null, luminaAudio = null, luminaHold = false, luminaPlayed = false;
   (function(){
     var today = todayStamp(), met = null, day = null;
     try{ met = localStorage.getItem("az_lumina_met"); day = localStorage.getItem("az_lumina_day"); }catch(e){}
@@ -3351,7 +3351,7 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     try{
       if(luminaAudio){ luminaAudio.pause(); }
       luminaAudio = new Audio("./lumina-" + g.id + ".mp3");
-      luminaAudio.addEventListener("playing", function(){ btn.classList.add("talking"); });
+      luminaAudio.addEventListener("playing", function(){ btn.classList.add("talking"); luminaPlayed = true; });
       luminaAudio.addEventListener("ended", function(){ btn.classList.remove("talking"); luminaHold = false; setTimeout(renderQuest, 1200); });
       luminaAudio.addEventListener("pause", function(){ btn.classList.remove("talking"); });
       // Chưa có file giọng ElevenLabs → đọc tạm bằng giọng tiếng Việt của trình duyệt
@@ -3375,10 +3375,12 @@ var WORDS = [{"w":"hello","p":"int","m":"xin chào","lvl":"A1","t":"greetings","
     document.getElementById("qCoachM").textContent = gFirst.text;
     var onFirst = function(e){
       document.removeEventListener("pointerdown", onFirst, true); document.removeEventListener("keydown", onFirst, true);
+      if(luminaPlayed) return; // đã tự phát được khi vào trang
       if(e.target.closest && e.target.closest("#qCoachBtn")) return; // bấm Lumina đã tự phát
       luminaSpeak(luminaLine);
     };
     document.addEventListener("pointerdown", onFirst, true); document.addEventListener("keydown", onFirst, true);
+    setTimeout(function(){ if(!luminaPlayed && setupPanel.offsetParent !== null) luminaSpeak(luminaLine); }, 700);
   }
   // Tình huống trong lúc dùng (chỉ khi đang ở trang chủ, mỗi câu tối đa 1 lần/lượt mở trang)
   var luminaUsed = {};

@@ -495,6 +495,66 @@
   .nc-say p b{ color:var(--red); }
   @keyframes ncIn{ from{ opacity:0; transform:translateY(10px); } }
   @media (prefers-reduced-motion:reduce){ .opt.nc-card,.nc-say,.pt-bar i::after{ animation:none !important; transition:none !important; } }
+
+  /* ===== Lumina ở trang chủ ===== */
+  .crest .crest-bg{ position:absolute; inset:0; margin:auto; width:230px; height:250px; }
+  .hl-lumi{ position:relative; z-index:1; width:150px; padding:0; border:0; background:none; cursor:pointer; margin-top:40px; -webkit-tap-highlight-color:transparent; }
+  .hl-rig{ position:relative; display:block; transform-origin:50% 100%; filter:drop-shadow(0 10px 16px rgba(0,0,0,.18)); animation:hlBreath 3.4s ease-in-out infinite; }
+  .hl-rig img{ display:block; width:100%; height:auto; }
+  .hl-rig .tl,.hl-hd{ position:absolute; left:0; top:0; width:100%; height:100%; }
+  .hl-rig .tl{ transform-origin:30.65% 75.38%; animation:hlTail 1.8s ease-in-out infinite; }
+  .hl-hd{ transform-origin:51.08% 43.27%; animation:hlHead 4.6s ease-in-out infinite; }
+  .hl-hd img{ position:absolute; inset:0; }
+  .hl-lid{ position:absolute; border-radius:50%; background:radial-gradient(ellipse at 50% 30%,#FFDDB8,#F6C99C); border-bottom:2px solid #4A2A22; transform:scaleY(0); transform-origin:50% 0; animation:hlBlink 4.2s infinite; }
+  .hl-lid.l{ left:36.84%; top:24.62%; width:13%; height:7.31%; } .hl-lid.r{ left:61.3%; top:21.15%; width:10.53%; height:7.69%; animation-delay:.03s; }
+  .hl-lumi.hop .hl-rig{ animation:hlHop .62s ease; }
+  .hl-bub{ position:absolute; z-index:2; top:-22px; left:50%; transform:translateX(-50%); width:max-content; max-width:210px; margin:0; padding:8px 12px; border-radius:16px 16px 16px 4px;
+    background:var(--paper-2); border:1.5px solid var(--line); box-shadow:var(--shadow-card); font:600 13.5px/1.35 var(--font-body); color:var(--ink); text-align:left; }
+  .hl-bub b{ color:var(--red); font-family:var(--font-display); }
+  .hl-bub.pop{ animation:hlPop .4s cubic-bezier(.34,1.56,.64,1); }
+  .hero-art .fw1{ top:78px; left:-34px; } .hero-art .fw2{ top:92px; right:-30px; }
+  @keyframes hlBreath{ 0%,100%{ transform:scale(1,1); } 50%{ transform:scale(1.015,1.035); } }
+  @keyframes hlTail{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(11deg); } }
+  @keyframes hlHead{ 0%,100%{ transform:rotate(-2deg); } 50%{ transform:rotate(2.5deg); } }
+  @keyframes hlBlink{ 0%,90%,100%{ transform:scaleY(0); } 94%,96%{ transform:scaleY(1); } }
+  @keyframes hlHop{ 30%{ transform:translateY(-22px) rotate(-5deg); } 55%{ transform:translateY(0) scale(1.07,.93); } 75%{ transform:translateY(-8px); } }
+  @keyframes hlPop{ from{ transform:translateX(-50%) scale(.6); opacity:0; } }
+  @media (max-width:760px){ .hl-lumi{ width:128px; } }
+  /* ===== Góp ý ===== */
+  .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
+    background:var(--paper-2); border:2px dashed var(--line-strong); color:var(--ink); font-family:var(--font-body); transition:border-color .15s ease, transform .15s ease; }
+  .hf-btn:hover{ border-color:var(--red); transform:translateY(-2px); }
+  .hf-btn img{ width:56px; height:56px; border-radius:50%; object-fit:cover; object-position:50% 20%; background:var(--red-bg); flex:none; transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+  .hf-btn:hover img{ transform:rotate(-10deg) scale(1.08); }
+  .hf-t{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; } .hf-t b{ font:800 17px var(--font-display); } .hf-t span{ font-size:13px; color:var(--ink-soft); }
+  .hf-go{ flex:none; padding:10px 16px; border-radius:14px; background:var(--red); color:#fff; font:800 14px var(--font-display); box-shadow:0 4px 0 var(--red-ink); }
+  @media (max-width:520px){ .hf-go{ display:none; } }
+  .hf-bg{ position:fixed; inset:0; z-index:290; background:rgba(20,12,8,.5); backdrop-filter:blur(3px); }
+  .hf-sheet{ position:fixed; z-index:300; left:50%; bottom:0; transform:translateX(-50%); width:min(520px,100%); max-height:88vh; overflow:auto; box-sizing:border-box;
+    padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px)); background:var(--paper); border-radius:24px 24px 0 0; box-shadow:0 -12px 40px rgba(0,0,0,.3); animation:hfUp .32s cubic-bezier(.22,1,.36,1); }
+  .hf-sheet[hidden],.hf-bg[hidden],#hfForm[hidden],.hf-done[hidden]{ display:none; }
+  @media (min-width:640px){ .hf-sheet{ bottom:auto; top:50%; transform:translate(-50%,-50%); border-radius:24px; animation:none; } }
+  .hf-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; } .hf-head h3{ margin:0; font:800 20px var(--font-display); color:var(--ink); }
+  .hf-x{ width:38px; height:38px; border-radius:12px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft); cursor:pointer; }
+  .hf-lead{ margin:0 0 12px; font-size:14px; color:var(--ink-soft); }
+  .hf-moods{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+  .hf-moods button{ display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 2px; border-radius:14px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink-soft); font:700 11.5px var(--font-body); cursor:pointer; transition:transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .hf-moods button i{ font-style:normal; font-size:26px; line-height:1; transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+  .hf-moods button:hover i{ transform:scale(1.2) rotate(-8deg); }
+  .hf-moods button.on{ border-color:var(--red); background:var(--red-bg); color:var(--ink); transform:translateY(-3px); }
+  .hf-reply{ min-height:20px; margin:10px 0 12px; font:700 14px/1.4 var(--font-body); color:var(--red); } .hf-reply.pop{ animation:hlPop2 .35s cubic-bezier(.34,1.56,.64,1); }
+  .hf-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .hf-tags button{ padding:7px 11px; border-radius:99px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); font:600 12.5px var(--font-body); cursor:pointer; }
+  .hf-tags button.on{ border-color:var(--red); background:var(--red-bg); }
+  .hf-text{ width:100%; box-sizing:border-box; border-radius:14px; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); padding:10px 12px; font:500 15px var(--font-body); resize:vertical; }
+  .hf-text:focus{ outline:none; border-color:var(--red); }
+  .hf-send{ width:100%; min-height:52px; margin-top:12px; border:0; border-radius:16px; background:var(--red); color:#fff; font:800 16px var(--font-display); cursor:pointer; box-shadow:0 5px 0 var(--red-ink); }
+  .hf-send:disabled{ opacity:.45; cursor:default; box-shadow:none; }
+  .hf-done{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; padding:8px 0 4px; }
+  .hf-done img{ width:84px; height:84px; border-radius:50%; object-fit:cover; object-position:50% 20%; background:var(--red-bg); animation:hlHop .7s ease; }
+  .hf-done b{ font:800 20px var(--font-display); color:var(--ink); } .hf-done p{ margin:0 0 4px; font-size:14px; color:var(--ink-soft); }
+  @keyframes hfUp{ from{ transform:translate(-50%,100%); } } @keyframes hlPop2{ from{ transform:scale(.8); opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ .hl-rig,.hl-rig .tl,.hl-hd,.hl-lid,.hl-bub,.hf-sheet,.hf-done img{ animation:none !important; } }
   @media (prefers-reduced-motion: reduce){ .pt-fade{ animation:none; } .pt-bar i{ transition:none; } .hero-cta2{ transition:none; } }
 
   /* ================= Đợt 3: đồng hồ, tư vấn chuyên gia, hồ sơ ================= */
@@ -597,38 +657,14 @@
     </div>
     <div class="hero-art">
       <div class="crest">
-        <svg viewBox="0 0 120 132" fill="none">
-          <circle cx="60" cy="62" r="52" fill="var(--red)" opacity=".08"></circle>
+        <svg class="crest-bg" viewBox="0 0 120 132" fill="none" aria-hidden="true">
+          <circle cx="60" cy="66" r="52" fill="var(--red)" opacity=".08"></circle>
           <circle class="crest-ring" cx="60" cy="68" r="58" stroke="var(--red)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"></circle>
-
-          <!-- chibi body / sweater -->
-          <path d="M28 132C28 100 42 88 60 88C78 88 92 100 92 132Z" fill="var(--red)"></path>
-          <path d="M49 90c4 6 18 6 22 0" stroke="var(--red-ink)" stroke-width="2" stroke-linecap="round" fill="none"></path>
-
-          <!-- arms -->
-          <path d="M41 98c-7 5-10 13-8 21" stroke="var(--red)" stroke-width="10" stroke-linecap="round" fill="none"></path>
-          <path d="M79 98c7 5 10 13 8 21" stroke="var(--red)" stroke-width="10" stroke-linecap="round" fill="none"></path>
-
-          <!-- head -->
-          <circle cx="60" cy="60" r="30" fill="#FFD9B0"></circle>
-          <path d="M31 58a29 29 0 0 1 58 0c-6-7-14-10-22-8-4 1-8 1-14 0-8-2-16 1-22 8z" fill="#3E2A1F"></path>
-          <circle class="micon m-blink" cx="50" cy="62" r="3" fill="#2B1810"></circle>
-          <circle class="micon m-blink" cx="70" cy="62" r="3" fill="#2B1810" style="animation-delay:.5s"></circle>
-          <ellipse cx="48" cy="70" rx="5" ry="3" fill="var(--red)" opacity=".4"></ellipse>
-          <ellipse cx="72" cy="70" rx="5" ry="3" fill="var(--red)" opacity=".4"></ellipse>
-          <path d="M54 74q6 6 12 0" stroke="#2B1810" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
-
-          <!-- open book -->
-          <g class="micon m-bounce">
-            <line x1="60" y1="107" x2="60" y2="129" stroke="var(--red)" stroke-width="2"></line>
-            <path d="M60 107 36 112v22l24-5z" fill="#FFF8EC" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"></path>
-            <path d="M60 107 84 112v22l-24-5z" fill="#FFF8EC" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"></path>
-            <path d="M42 116h11M42 121h9M67 116h11M69 121h9" stroke="#C9B79C" stroke-width="1.6" stroke-linecap="round"></path>
-          </g>
-
-          <!-- sparkle -->
-          <path class="micon m-sway" d="M86 30l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="var(--ember)"></path>
         </svg>
+        <button class="hl-lumi" id="hlLumi" type="button" aria-label="Lumina — linh vật AZEnglish">
+          <span class="hl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hl-hd"><img src="./lion-head.webp" alt=""><i class="hl-lid l"></i><i class="hl-lid r"></i></span></span>
+        </button>
+        <p class="hl-bub" id="hlBub" aria-live="polite"><b>Lumina</b> chào bạn!</p>
       </div>
       <div class="float-word fw1">happy<span>adjective</span></div>
       <div class="float-word fw2">family<span>noun</span></div>
@@ -766,6 +802,38 @@
 
   </div>
 
+  <button class="hf-btn" id="hfBtn" type="button" aria-haspopup="dialog">
+    <img src="./lion-head.webp" alt="" width="56" height="56">
+    <span class="hf-t"><b>Có gì chưa ưng? Mắng Lumina đi</b><span>Góp ý 30 giây, Lumina đọc hết và sửa liền</span></span>
+    <span class="hf-go">Góp ý ✍️</span>
+  </button>
+  <div class="hf-bg" id="hfBg" hidden></div>
+  <div class="hf-sheet" id="hfSheet" role="dialog" aria-modal="true" aria-labelledby="hfTitle" hidden>
+    <div class="hf-head"><h3 id="hfTitle">Góp ý cho Lumina</h3><button class="hf-x" id="hfClose" type="button" aria-label="Đóng">✕</button></div>
+    <div id="hfForm">
+      <p class="hf-lead">Chê nhẹ thôi kẻo Lumina khóc 🥲 Bạn thấy web học từ vựng sao?</p>
+      <div class="hf-moods" id="hfMoods" role="radiogroup" aria-label="Cảm nhận">
+        <button type="button" data-m="1" role="radio" aria-checked="false"><i>😤</i>Bực mình</button>
+        <button type="button" data-m="2" role="radio" aria-checked="false"><i>😕</i>Hơi chán</button>
+        <button type="button" data-m="3" role="radio" aria-checked="false"><i>😐</i>Tàm tạm</button>
+        <button type="button" data-m="4" role="radio" aria-checked="false"><i>😊</i>Được đó</button>
+        <button type="button" data-m="5" role="radio" aria-checked="false"><i>😍</i>Mê luôn</button>
+      </div>
+      <p class="hf-reply" id="hfReply" aria-live="polite"></p>
+      <div class="hf-tags" id="hfTags">
+        <button type="button">🐞 Bị lỗi / đơ</button><button type="button">🧭 Khó dùng</button><button type="button">🎮 Muốn thêm game</button>
+        <button type="button">🦁 Lumina hỗn quá</button><button type="button">📚 Muốn thêm lộ trình</button><button type="button">💡 Có ý tưởng hay</button>
+      </div>
+      <textarea id="hfText" class="hf-text" rows="3" maxlength="600" placeholder="Nói thẳng đi, Lumina chịu được… chắc vậy."></textarea>
+      <button class="hf-send" id="hfSend" type="button" disabled>Gửi cho Lumina</button>
+    </div>
+    <div class="hf-done" id="hfDone" hidden>
+      <img src="./lion-head.webp" alt="" width="84" height="84">
+      <b>Đã nhận! Cảm ơn bạn nha</b>
+      <p id="hfDoneText">Lumina đọc liền, hứa sửa… trước khi bạn kịp quên 😎</p>
+      <button class="hf-send" id="hfOk" type="button">Đóng</button>
+    </div>
+  </div>
   <div class="contact-strip"><span>🎓 Cần tư vấn lộ trình học phù hợp?</span><span><a href="https://zalo.me/0971882096" target="_blank" rel="noopener">💬 Zalo</a> · <a href="tel:0971882096">📞 0971 882 096</a></span></div>
 
 </div>
@@ -1518,5 +1586,61 @@
 
 
 <script src="./az-core.js" defer></script>
+
+<script>
+  (function(){
+    // ===== Lumina ở trang chủ: lời chào theo tên (chữ) =====
+    var name = "bạn";
+    try{ var p = JSON.parse(localStorage.getItem("az_vocab_profile") || "null"); var t = String(p && p.name || "").trim().split(/\s+/).filter(Boolean); if(t.length) name = t[t.length - 1]; }catch(e){}
+    var h = new Date().getHours(), buoi = h < 11 ? "sáng" : h < 14 ? "trưa" : h < 18 ? "chiều" : "tối";
+    var HI = [
+      "chào {n}, vô học lẹ đi ní!", "chào {n}, cố lên cố lên, sắp tới gòi!", "yêu {n} lắm ó! Học xíu rồi thương thêm nha.",
+      "đợi {n} nãy giờ mỏi cả bờm luôn á!", "chúc {n} buổi {b} học vui, nhớ lâu!", "vui xỉu vì {n} ghé chơi nè!",
+      "hôm nay {n} phá đảo từ vựng không?", "biết {n} làm được mà, vô nghề thôi!"
+    ];
+    var bub = document.getElementById("hlBub"), lumi = document.getElementById("hlLumi"), last = -1;
+    function say(){
+      var i; do{ i = Math.floor(Math.random() * HI.length); }while(i === last && HI.length > 1); last = i;
+      bub.innerHTML = "<b>Lumina</b> " + HI[i].replace(/\{n\}/g, name.replace(/[<>&"]/g, "")).replace(/\{b\}/g, buoi);
+      bub.classList.remove("pop"); void bub.offsetWidth; bub.classList.add("pop");
+    }
+    say();
+    lumi.addEventListener("click", function(){ lumi.classList.remove("hop"); void lumi.offsetWidth; lumi.classList.add("hop"); say(); });
+
+    // ===== Góp ý =====
+    var FB_API = "https://script.google.com/macros/s/AKfycbzD1v2aekzEeyMBQ-2uD-2TRHBN9xX0__V6aAU5YZ4BFhlO4D9WEZtXr7CcwM4Gc2j1/exec";
+    var REPLY = { 1:"Ui, ai làm bạn giận? Kể Lumina nghe, Lumina xử liền!", 2:"Chán hả? Chỉ Lumina chỗ nào buồn ngủ nhất đi.",
+      3:"Tàm tạm là còn cứu được! Góp ý chút cho Lumina lên đời nha.", 4:"Được đó hả? Thêm xíu nữa là thành “mê luôn” rồi!", 5:"Thương ghê! Lumina đỏ mặt rồi nè 🥰" };
+    var DONE = { 1:"Lumina ghi hết vô sổ rồi, sửa xong sẽ báo bạn đầu tiên 🫡", 5:"Lumina in góp ý này ra dán đầu giường luôn 😍" };
+    var sheet = document.getElementById("hfSheet"), bg = document.getElementById("hfBg"), mood = 0, tags = [];
+    function $(id){ return document.getElementById(id); }
+    function sync(){ $("hfSend").disabled = !(mood || tags.length || $("hfText").value.trim()); }
+    function open(){
+      mood = 0; tags = []; $("hfForm").hidden = false; $("hfDone").hidden = true; $("hfText").value = ""; $("hfReply").textContent = "";
+      Array.prototype.forEach.call(sheet.querySelectorAll(".hf-moods button, .hf-tags button"), function(b){ b.classList.remove("on"); b.setAttribute("aria-checked", "false"); });
+      sync(); sheet.hidden = false; bg.hidden = false; document.body.style.overflow = "hidden";
+    }
+    function close(){ sheet.hidden = true; bg.hidden = true; document.body.style.overflow = ""; }
+    $("hfBtn").addEventListener("click", open); $("hfClose").addEventListener("click", close); $("hfOk").addEventListener("click", close); bg.addEventListener("click", close);
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !sheet.hidden) close(); });
+    $("hfMoods").addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return; mood = +b.dataset.m;
+      Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x === b); x.setAttribute("aria-checked", x === b ? "true" : "false"); });
+      var r = $("hfReply"); r.textContent = REPLY[mood]; r.classList.remove("pop"); void r.offsetWidth; r.classList.add("pop"); sync();
+    });
+    $("hfTags").addEventListener("click", function(e){
+      var b = e.target.closest("button"); if(!b) return; b.classList.toggle("on");
+      tags = Array.prototype.filter.call(this.children, function(x){ return x.classList.contains("on"); }).map(function(x){ return x.textContent; }); sync();
+    });
+    $("hfText").addEventListener("input", sync);
+    $("hfSend").addEventListener("click", function(){
+      var p = {}; try{ p = JSON.parse(localStorage.getItem("az_vocab_profile") || "{}") || {}; }catch(e){}
+      var body = JSON.stringify({ source:"AZ-Vocab-Feedback", course:"Trang chủ", mood:mood, tags:tags.join(", "), text:$("hfText").value.trim(),
+        name:p.name || "", phone:p.phone || "", xp:0, streak:0, page:"index.html", ua:navigator.userAgent.slice(0, 160) });
+      try{ fetch(FB_API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).catch(function(){}); }catch(e){}
+      $("hfForm").hidden = true; $("hfDone").hidden = false; $("hfDoneText").textContent = DONE[mood] || "Lumina đọc liền, hứa sửa… trước khi bạn kịp quên 😎";
+    });
+  })();
+</script>
 </body>
 </html>

@@ -132,7 +132,35 @@
   + '.azq-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}.azq-opts button{min-height:54px;border:2px solid var(--line);border-radius:14px;background:var(--paper-2);color:var(--ink);font:700 15px var(--font-body);cursor:pointer;box-shadow:0 3px 0 var(--line)}'
   + '.azq-opts button.ok{border-color:#1e9e5a;background:rgba(30,158,90,.14)}.azq-opts button.no{border-color:var(--red);background:var(--red-bg)}'
   + '.azq-rate{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.azq-rate button{min-height:52px;border-radius:14px;border:1.5px solid var(--line);background:var(--paper-2);color:var(--ink);font:700 13.5px var(--font-body);cursor:pointer}.azq-rate button small{display:block;font-weight:500;color:var(--ink-soft);font-size:11px}'
-  + '.azq-meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;font-weight:700}';
+  + '.azq-meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;font-weight:700}'
+  + '.azc-strip.azp-wrap{display:block;padding:18px 18px 14px;border-radius:24px;background:var(--paper-2);border:1.5px solid var(--line);box-shadow:0 18px 36px -24px rgba(36,26,18,.35)}'
+  + '.azp-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}'
+  + '.azp-t{font:800 20px var(--font-display);color:var(--ink)}.azp-prize{font:700 12.5px var(--font-body);color:var(--ember);background:rgba(196,127,14,.12);padding:5px 10px;border-radius:99px}'
+  + '.azp-stage{position:relative;display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:8px;max-width:520px;margin:6px auto 0;padding-top:34px}'
+  + '.azp-col{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;animation:azpUp .6s cubic-bezier(.34,1.56,.64,1) both}'
+  + '.azp-col.p1{animation-delay:.25s}.azp-col.p2{animation-delay:.1s}.azp-col.p3{animation-delay:.4s}'
+  + '.azp-av{position:relative;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font:800 22px var(--font-display);color:#3a2605;border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,.18)}'
+  + '.p1 .azp-av{width:68px;height:68px;font-size:28px;background:linear-gradient(145deg,#ffe27a,#f2b705)}.p2 .azp-av{background:linear-gradient(145deg,#eef2f6,#b8c1cc)}.p3 .azp-av{background:linear-gradient(145deg,#f4c89a,#cd7f32)}'
+  + '.azp-av.empty{background:var(--paper-3)!important;color:var(--ink-soft);border-style:dashed;border-color:var(--line)}'
+  + '.azp-crown{position:absolute;top:-26px;left:50%;transform:translateX(-50%) rotate(-8deg);font-size:26px;animation:azpCrown 2.4s ease-in-out infinite;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}'
+  + '.azp-sp{position:absolute;font-size:12px;animation:azpSp 1.8s ease-in-out infinite}.azp-sp.a{top:-6px;right:-10px}.azp-sp.b{bottom:4px;left:-12px;animation-delay:.9s}'
+  + '.azp-n{max-width:100%;font:800 14px var(--font-display);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.azp-x{font:800 13px var(--font-body);color:var(--ember);font-variant-numeric:tabular-nums}'
+  + '.azp-blk{width:100%;border-radius:14px 14px 6px 6px;display:grid;place-items:center;font:800 26px var(--font-display);color:#fff}'
+  + '.p1 .azp-blk{height:96px;background:linear-gradient(180deg,#f2b705,#c98f00)}.p2 .azp-blk{height:70px;background:linear-gradient(180deg,#b8c1cc,#8a95a3)}.p3 .azp-blk{height:54px;background:linear-gradient(180deg,#cd7f32,#a35f1c)}'
+  + '.azp-lumi{position:absolute;right:-84px;bottom:0;width:64px;pointer-events:none;animation:azpClap .7s ease-in-out infinite alternate;transform-origin:50% 100%}'
+  + '.azp-lumi img{width:100%;height:auto;display:block}.azp-lumi b{position:absolute;top:-12px;left:-8px;font-size:18px;animation:azpSp 1s ease-in-out infinite}'
+  + '.azp-me{display:flex;flex-direction:column;gap:6px;margin:14px auto 0;max-width:520px;padding:10px 14px;border-radius:16px;background:var(--red-bg);font:600 13.5px/1.4 var(--font-body);color:var(--ink)}'
+  + '.azp-me b{color:var(--red)}.azp-bar{height:8px;border-radius:99px;background:rgba(0,0,0,.08);overflow:hidden}.azp-bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--red);transition:width 1s cubic-bezier(.22,1,.36,1) .5s}'
+  + '.azp-more{display:block;text-align:center;margin-top:10px;font:700 13px var(--font-body);color:var(--red)}'
+  + '.azc-strip.azp-wrap:hover{border-color:var(--red)}'
+  + '@keyframes azpUp{from{opacity:0;transform:translateY(24px)}}@keyframes azpCrown{0%,100%{transform:translateX(-50%) rotate(-8deg)}50%{transform:translateX(-50%) rotate(6deg) translateY(-3px)}}'
+  + '@keyframes azpSp{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1.1)}}@keyframes azpClap{to{transform:rotate(-6deg) translateY(-3px)}}'
+  + '@media(max-width:760px){.azp-lumi{display:none}}@media(max-width:520px){.azp-t{font-size:18px}}'
+  + '@media(prefers-reduced-motion:reduce){.azp-col,.azp-crown,.azp-sp,.azp-lumi,.azp-lumi b{animation:none!important}.azp-bar i{transition:none}}'
+  + '.azm-hall{display:grid;gap:8px}.azm-hall .hr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--paper-2);border:1.5px solid var(--line)}'
+  + '.azm-hall .hr .wk{min-width:64px;font:800 12px var(--font-body);color:var(--ink-soft)}.azm-hall .hr .nm{flex:1;min-width:0;font-weight:800}.azm-hall .hr .xp{font:800 14px var(--font-display);color:var(--ember)}'
+  + '.azm-win{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:99px;background:rgba(242,183,5,.2);color:#8a6200;font:800 11.5px var(--font-body)}'
+  + '.azm-prize{margin:0 0 10px;padding:8px 12px;border-radius:12px;background:rgba(196,127,14,.12);color:var(--ember);font:700 13px var(--font-body)}';
   var SKIN = ''
   /* Giao diện trang học đồng bộ với trang chủ (chỉ áp cho trang học) */
   + ':root{--paper:#fffaf3;--paper-2:#fffdf9;--paper-3:#fdf3e4;--ink:#241a12;--ink-soft:#6b5c50;--line:#f0e3cf;--red:#e0102b;--red-ink:#8f0a1c;--red-bg:#fde6e8;--gold:#e0102b;--ember:#c47f0e;--tier1:#1e7a4c}'
@@ -183,7 +211,41 @@
     });
   }
   var MEDAL = ["🥇", "🥈", "🥉"];
+  function podiumCol(p, cls, place){
+    if(!p) return '<div class="azp-col ' + cls + '"><div class="azp-av empty">?</div><div class="azp-n">Còn trống</div><div class="azp-x">chỗ này cho bạn</div><div class="azp-blk">' + place + '</div></div>';
+    var ini = esc(String(p.n || "?").trim().charAt(0).toUpperCase());
+    return '<div class="azp-col ' + cls + '"><div class="azp-av">' + (place === 1 ? '<span class="azp-crown">👑</span><span class="azp-sp a">✨</span><span class="azp-sp b">✨</span>' : '') + ini + '</div>' +
+      '<div class="azp-n">' + esc(p.n) + '</div><div class="azp-x" data-xp="' + p.xp + '">' + p.xp + ' XP</div><div class="azp-blk">' + place + '</div></div>';
+  }
+  function countUp(root){
+    Array.prototype.forEach.call(root.querySelectorAll("[data-xp]"), function(el){
+      var to = +el.dataset.xp || 0, t0 = performance.now();
+      if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      (function step(now){ var p = Math.min(1, (now - t0) / 900); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + " XP"; if(p < 1) requestAnimationFrame(step); })(t0);
+    });
+  }
+  function renderPodium(node){
+    node.classList.add("azp-wrap");
+    var head = '<div class="azp-head"><span class="azp-t">🏆 Vinh danh tuần này</span><span class="azp-prize">🎁 Quán quân tuần nhận quà từ AZEnglish</span></div>';
+    node.innerHTML = head + '<div class="azp-me">Đang tải bảng xếp hạng…</div>';
+    fetchBoard(function(d){
+      var top = (d && d.week && d.week.top) || [], me = d && d.week && d.week.me;
+      var html = head + '<div class="azp-stage">' + podiumCol(top[1], "p2", 2) + podiumCol(top[0], "p1", 1) + podiumCol(top[2], "p3", 3) +
+        '<span class="azp-lumi" aria-hidden="true"><b>👏</b><img src="./lion-head.webp" alt=""></span></div>';
+      var wins = d && d.meWins ? '<span class="azm-win">🏅 ' + d.meWins + ' lần Quán quân tuần</span>' : '';
+      if(!d) html += '<div class="azp-me">Chưa tải được bảng xếp hạng. Kiểm tra mạng rồi thử lại nha.</div>';
+      else if(me && me.rank <= 3) html += '<div class="azp-me"><span>🔥 Bạn đang đứng <b>hạng ' + me.rank + '</b> với ' + me.xp + ' XP. Giữ vững ngôi vương nha!' + wins + '</span></div>';
+      else if(me){
+        var third = top[2] ? top[2].xp : 0, gap = Math.max(1, third - me.xp + 1), pct = third ? Math.min(100, me.xp / (third + 1) * 100) : 100;
+        html += '<div class="azp-me"><span>Bạn đang <b>hạng ' + me.rank + '</b> · còn <b>' + gap + ' XP</b> nữa là lên bục vinh danh' + wins + '</span><div class="azp-bar"><i style="--w:' + pct + '%"></i></div></div>';
+      } else html += '<div class="azp-me"><span>Bạn chưa có điểm tuần này. Học vài từ là có tên trên bảng liền!' + wins + '</span></div>';
+      node.innerHTML = html + '<span class="azp-more">Xem bảng Tuần / Tháng / Quý · 🏅 Bảng vàng ›</span>';
+      countUp(node);
+      var bar = node.querySelector(".azp-bar i"); if(bar) requestAnimationFrame(function(){ bar.style.width = bar.style.getPropertyValue("--w"); });
+    });
+  }
   function renderStrip(node){
+    if(!COURSE) return renderPodium(node);
     node.innerHTML = '<span class="t">🏆 Top tuần</span><span class="ppl">Đang tải bảng xếp hạng…</span>';
     fetchBoard(function(d){
       if(!d || !d.week){ node.innerHTML = '<span class="t">🏆 Đua top tuần</span><span class="ppl">Học để ghi tên mình lên bảng xếp hạng!</span>'; return; }
@@ -198,11 +260,18 @@
     return 'Bạn chưa có điểm kỳ này';
   }
   function openBoard(){
-    var body = el('<div><div class="azm-tabs"><button type="button" data-p="week" class="on">Tuần</button><button type="button" data-p="month">Tháng</button><button type="button" data-p="quarter">Quý</button></div><div class="azm-list">Đang tải…</div>' +
+    var body = el('<div><p class="azm-prize">🎁 Quán quân tuần nhận quà từ AZEnglish</p><div class="azm-tabs"><button type="button" data-p="week" class="on">Tuần</button><button type="button" data-p="month">Tháng</button><button type="button" data-p="quarter">Quý</button><button type="button" data-p="hall">🏅 Bảng vàng</button></div><div class="azm-list">Đang tải…</div>' +
       '<p class="azm-note">Điểm = XP từ các lộ trình học (học từ mới, ôn đúng, chơi game), tối đa ' + DAILY_CAP + ' XP/ngày. Từ tự nhập không tính điểm. Tên hiển thị: <b>' + esc(displayName()) + '</b> · <a href="#" class="azc-nick" style="color:var(--red)">đổi biệt danh</a></p></div>');
     var list = body.querySelector(".azm-list"), data = null, cur = "week";
     function draw(){
       if(!data){ list.innerHTML = '<p class="azm-note">Chưa tải được bảng xếp hạng. Kiểm tra kết nối mạng rồi thử lại.</p>'; return; }
+      if(cur === "hall"){
+        var h = (data.hall || []).filter(function(x){ return +x.r === 1; });
+        list.innerHTML = '<p class="azm-note" style="margin:0 0 8px">Quán quân các tuần' + (data.meWins ? ' · Bạn đã vô địch <b>' + data.meWins + '</b> lần 🏅' : '') + '</p>' +
+          (h.length ? '<div class="azm-hall">' + h.map(function(x){ return '<div class="hr"><span class="wk">Tuần ' + esc(String(x.w).replace(/^W\d{4}-/, "")) + '</span><span>👑</span><span class="nm">' + esc(x.n) + '</span><span class="xp">' + x.xp + ' XP</span></div>'; }).join("") + '</div>'
+            : '<p class="azm-note">Bảng vàng bắt đầu ghi danh từ tuần này. Hết tuần, quán quân sẽ được lưu tên ở đây mãi mãi!</p>');
+        return;
+      }
       var b = data[cur];
       list.innerHTML = '<p class="azm-note" style="margin:0 0 6px">' + PERIOD[cur] + ' · ' + (b.total || 0) + ' người tham gia</p>' +
         (b.top.length ? b.top.map(function(p, i){ return '<div class="azm-row"><span class="rk">' + (MEDAL[i] || (i + 1)) + '</span><span class="nm">' + esc(p.n) + (p.l ? '<small>' + esc(p.l) + '</small>' : '') + '</span><span class="xp">' + p.xp + '</span></div>'; }).join("")
