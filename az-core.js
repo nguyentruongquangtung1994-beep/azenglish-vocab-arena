@@ -497,7 +497,7 @@
     bad3: ["Thở sâu một nhịp nào 🍵 Chậm mà chắc!"],
     done: ["Xong buổi rồi! Tự hào về {n} quá 🎉", "Hoàn thành! Nay {n} ngầu thật sự 🦁", "Xuất sắc! Mai gặp lại nhé 👋"],
     lose: ["Ván này chưa thắng, ván sau gỡ nhé! 💪"],
-    tap:  ["Rrrr… gầm nhẹ thôi 🦁", "Học tiếp đi, mình canh cho!", "Mỗi ngày 20 từ, một năm hơn 7.000 từ đó!", "Bấm mình hoài là mình ngại á 😳", "Mình là sư tử AZ, không phải mèo đâu nha 😤"],
+    tap:  ["Rrrr… gầm nhẹ thôi 🦁", "Học tiếp đi, mình canh cho!", "Mỗi ngày 20 từ, một năm hơn 7.000 từ đó!", "Bấm mình hoài là mình ngại á 😳", "Mình là Lumina, sư tử AZ chứ không phải mèo đâu nha 😤"],
     wake: ["Ngáp… {n} quay lại rồi! Mình tưởng {n} quên mình luôn 😴"]
   };
   var lionEl, lionMove, lionBub, lionFx, lionRun = 0, lionMiss = 0, bubT = 0, upT = 0;
@@ -600,7 +600,7 @@
     setInterval(function(){ lionEl.classList.toggle("play", sp.offsetParent === null && innerWidth < 720); }, 700);
   }
   function mountLion(){
-    lionEl = el('<div class="azl enter"><div class="azl-fx" aria-hidden="true"></div><button class="azl-body" type="button" aria-label="Linh vật sư tử AZ"><span class="azl-move"><span class="azl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="azl-hd"><img src="./lion-head.webp" alt=""><i class="azl-lid l"></i><i class="azl-lid r"></i><span class="azl-shades" aria-hidden="true">🕶️</span></span></span></span></button></div>');
+    lionEl = el('<div class="azl enter"><div class="azl-fx" aria-hidden="true"></div><button class="azl-body" type="button" aria-label="Lumina — linh vật AZ"><span class="azl-move"><span class="azl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="azl-hd"><img src="./lion-head.webp" alt=""><i class="azl-lid l"></i><i class="azl-lid r"></i><span class="azl-shades" aria-hidden="true">🕶️</span></span></span></span></button></div>');
     lionMove = lionEl.querySelector(".azl-move"); lionFx = lionEl.querySelector(".azl-fx");
     lionEl.querySelector(".azl-body").addEventListener("click", function(){ lionAnim("wig"); mood("nod", 1100); burst(["❤️"], 2); lionUp(1600); lionSay(LION.tap, 2200); });
     document.body.appendChild(lionEl);
