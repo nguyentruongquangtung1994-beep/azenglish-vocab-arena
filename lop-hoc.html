@@ -480,13 +480,14 @@ const H = (() => {
     const sn = $("saveNew"); if(sn) sn.addEventListener("click", saveForm);
     $("addPaste").addEventListener("click", () => {
       const r = parseQuiz($("paste").value); cfg.quiz = cfg.quiz.concat(r.out); save();
-      $("pErr").textContent = r.errs.length ? "Chưa hiểu dòng " + r.errs.join(", ") + ", xem lại mẫu nhé." : (r.out.length ? "✓ Đã thêm " + r.out.length + " câu" : "");
-      if(r.out.length) $("paste").value = ""; drawQ(); info();
+      const pm = r.errs.length ? "Chưa hiểu dòng " + r.errs.join(", ") + ", xem lại mẫu nhé." : (r.out.length ? "✓ Đã thêm " + r.out.length + " câu" : "");
+      if(r.out.length && !$("saveSet")) quizEditor(box); else { if(r.out.length) $("paste").value = ""; drawQ(); }
+      $("pErr").textContent = pm; info();
     });
     box.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => {
       const t = b.dataset.add;
       cfg.quiz.push(t === "mcq" ? { t, p:"", o:["", "", "", ""], ok:[0], time:20, x2:false } : t === "tf" ? { t, p:"", o:["Đúng", "Sai"], ok:[0], time:20, x2:false } : { t, p:"", acc:[""], time:20, x2:false });
-      save(); drawQ(); info(); const last = $("qlist").lastElementChild; if(last){ last.scrollIntoView({ block:"nearest" }); const inp = last.querySelector("input"); if(inp) inp.focus(); }
+      save(); if(!$("saveSet")) quizEditor(box); else drawQ(); info(); const last = $("qlist").lastElementChild; if(last){ last.scrollIntoView({ block:"nearest" }); const inp = last.querySelector("input"); if(inp) inp.focus(); }
     }));
     const cl = $("clearQ"); if(cl) cl.addEventListener("click", () => { if(cl.dataset.arm){ cfg.quiz = []; cfg.setId = cfg.setName = ""; save(); quizEditor(box); info(); } else { cl.dataset.arm = 1; cl.textContent = "Bấm lần nữa để xoá hết"; } });
     drawQ();
