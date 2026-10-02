@@ -535,6 +535,7 @@
   @keyframes hlPop{ from{ transform:translateX(-50%) scale(.6); opacity:0; } }
   @media (max-width:760px){ .hl-lumi{ width:128px; } }
   /* ===== Góp ý ===== */
+  .teach-link{ margin:-6px 0 18px; text-align:center; font-size:13.5px; } .teach-link a{ color:var(--ink-soft); text-decoration:none; } .teach-link a:hover{ text-decoration:underline; }
   .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
     background:var(--paper-2); border:2px dashed var(--line-strong); color:var(--ink); font-family:var(--font-body); transition:border-color .15s ease, transform .15s ease; }
   .hf-btn:hover{ border-color:var(--red); transform:translateY(-2px); }
@@ -663,7 +664,6 @@
       <a class="nav-link active" href="#top"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"></path><path d="M6 10v9h12v-9"></path></svg> Trang chủ</a>
       <a class="nav-link" href="#courses"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"></path></svg> Chương trình</a>
       <a class="nav-link" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> Ngữ pháp</a>
-      <a class="nav-link" href="./lop-hoc.html"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"></rect><path d="M8 20h8M12 16v4"></path><path d="m10 8 4 2-4 2z" fill="currentColor"></path></svg> Lớp học</a>
       <button class="nav-link test-link" type="button" data-open-test>🎯 Kiểm tra trình độ</button>
     </nav>
     <div class="nav-stat" id="navStat">
@@ -841,6 +841,7 @@
     <span class="hf-t"><b>Có gì chưa ưng? Mắng Lumina đi</b><span>Góp ý 30 giây, Lumina đọc hết và sửa liền</span></span>
     <span class="hf-go">Góp ý ✍️</span>
   </button>
+  <p class="teach-link"><a href="./lop-hoc.html">🧑‍🏫 Dành cho giáo viên: mở game cả lớp <b>AZ Vocab Live</b> →</a></p>
   <div class="hf-bg" id="hfBg" hidden></div>
   <div class="hf-sheet" id="hfSheet" role="dialog" aria-modal="true" aria-labelledby="hfTitle" hidden>
     <div class="hf-head"><h3 id="hfTitle">Góp ý cho Lumina</h3><button class="hf-x" id="hfClose" type="button" aria-label="Đóng">✕</button></div>
