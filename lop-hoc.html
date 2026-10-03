@@ -327,6 +327,29 @@
   .tiles4{ display:flex; gap:8px; justify-content:center; }
   .tiles4 i{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff; font:800 20px var(--body); font-style:normal; box-shadow:0 4px 0 rgba(0,0,0,.2); animation:hopn 2s ease-in-out infinite; }
   .tiles4 i:nth-child(1){ background:var(--a); } .tiles4 i:nth-child(2){ background:var(--b); animation-delay:.2s; } .tiles4 i:nth-child(3){ background:var(--c); animation-delay:.4s; } .tiles4 i:nth-child(4){ background:var(--d); animation-delay:.6s; }
+  /* ===== nhà vô địch ===== */
+  .fw{ position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:70; }
+  .champ{ position:fixed; inset:0; z-index:65; display:grid; place-items:center; padding:20px; background:rgba(20,12,8,.86); opacity:0; transition:opacity .35s ease; cursor:pointer; overflow:hidden; }
+  .champ.on{ opacity:1; }
+  .champ::before{ content:""; position:absolute; left:50%; top:46%; width:1600px; height:1600px; margin:-800px 0 0 -800px; border-radius:50%;
+    background:repeating-conic-gradient(rgba(242,183,5,.16) 0 9deg, transparent 9deg 18deg); animation:spinw 26s linear infinite; }
+  .ch-in{ position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; transform:scale(.6); transition:transform .6s cubic-bezier(.34,1.56,.64,1); }
+  .champ.on .ch-in{ transform:none; }
+  .ch-crown{ font-size:clamp(56px,9vw,96px); line-height:1; animation:sway 1.6s ease-in-out infinite; filter:drop-shadow(0 8px 18px rgba(242,183,5,.6)); }
+  .ch-t{ margin:0; font:800 clamp(34px,7.2vw,92px)/1.05 var(--display); color:#fff; letter-spacing:.01em; text-shadow:0 6px 0 rgba(0,0,0,.35); }
+  .ch-t .w2{ color:#f2b705; text-shadow:0 6px 0 #8a5d00; }
+  .ch-t b{ display:inline-block; animation:chPop .5s cubic-bezier(.34,1.56,.64,1) both, chWave 1.8s ease-in-out infinite; }
+  @keyframes chPop{ from{ opacity:0; transform:translateY(50px) scale(.3) rotate(-12deg); } }
+  @keyframes chWave{ 0%,100%{ translate:0 0; } 50%{ translate:0 -8px; } }
+  .ch-name{ margin-top:6px; padding:6px 26px; border-radius:20px; background:#e0102b; color:#fff; font:800 clamp(34px,6.5vw,78px)/1.15 var(--display); box-shadow:0 8px 0 #8f0a1c; transform:rotate(-2deg); animation:chPop .6s cubic-bezier(.34,1.56,.64,1) .9s both; max-width:92vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ch-s{ font:800 clamp(18px,2.6vw,28px) var(--display); color:#f2b705; animation:chPop .5s ease 1.2s both; }
+  .ch-lumi{ display:flex; align-items:center; gap:14px; margin-top:10px; animation:chPop .6s ease 1.4s both; }
+  .ch-lumi .lumi{ width:clamp(110px,14vw,170px); }
+  .ch-lumi .say{ background:#fff; color:#241a12; font-size:clamp(16px,1.9vw,21px); text-align:left; max-width:420px; }
+  .ch-x{ margin-top:8px; font:700 13px var(--body); color:#cbb6a6; animation:pulse .9s ease infinite alternate; }
+  .p1.show .blk{ animation:p1glow 1.4s ease-in-out infinite alternate; }
+  @keyframes p1glow{ from{ box-shadow:0 0 0 0 rgba(242,183,5,.0); } to{ box-shadow:0 0 40px 10px rgba(242,183,5,.55); } }
+  @media (prefers-reduced-motion:reduce){ .champ::before{ animation:none; } }
 </style>
 </head>
 <body>
@@ -423,6 +446,70 @@ musBtn.addEventListener("click", () => { music = !music; ls("azl_music", music ?
   if(!music) Object.keys(tracks).forEach(k => { if(!tracks[k].paused) fadeTo(tracks[k], 0, 300); }); else if(want) playMusic(want.n, want.v); });
 paintBtns();
 function confettiBurst(){ confetti(); fanfare(); }
+// ===== pháo hoa: hình (canvas) + tiếng (rít bay lên, nổ ầm, lách tách) =====
+let fwCv = null, fwP = [], fwRaf = 0, fwUntil = 0;
+const FW_COLS = ["#e0102b", "#ffffff", "#f2b705", "#1d6fa5", "#1e7a4c", "#ff8a3d"];
+function fwSound(){
+  if(!sound) return;
+  try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); const t = ac.currentTime;
+    const o = ac.createOscillator(), g = ac.createGain(); o.type = "sine"; o.frequency.setValueAtTime(420, t); o.frequency.exponentialRampToValueAtTime(1500, t + .55);
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.045, t + .1); g.gain.exponentialRampToValueAtTime(.0001, t + .6); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .62);
+    const len = 1.4, buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate), d = buf.getChannelData(0);
+    for(let x = 0; x < d.length; x++){ const p = x / d.length; d[x] = (Math.random() * 2 - 1) * Math.pow(1 - p, 2.4) * (p < .01 ? p / .01 : 1); }
+    const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g2 = ac.createGain(); f.type = "lowpass"; f.frequency.value = 1400; s.buffer = buf; g2.gain.value = .38;
+    s.connect(f); f.connect(g2); g2.connect(ac.destination); s.start(t + .6);
+    for(let k = 0; k < 16; k++){ const tt = t + .75 + Math.random() * .9, b = ac.createBuffer(1, Math.floor(ac.sampleRate * .025), ac.sampleRate), dd = b.getChannelData(0);
+      for(let x = 0; x < dd.length; x++) dd[x] = (Math.random() * 2 - 1) * (1 - x / dd.length);
+      const ss = ac.createBufferSource(), hp = ac.createBiquadFilter(), hg = ac.createGain(); hp.type = "highpass"; hp.frequency.value = 2800; ss.buffer = b; hg.gain.value = .04 + Math.random() * .1;
+      ss.connect(hp); hp.connect(hg); hg.connect(ac.destination); ss.start(tt); }
+  }catch(e){}
+}
+function fireworks(ms, perSec, quiet){
+  if(!fwCv){ fwCv = document.createElement("canvas"); fwCv.className = "fw"; fwCv.setAttribute("aria-hidden", "true"); document.body.appendChild(fwCv); }
+  const cv = fwCv, dpr = Math.min(2, window.devicePixelRatio || 1);
+  if(cv.width !== Math.round(innerWidth * dpr)){ cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr); }
+  fwUntil = Math.max(fwUntil, Date.now() + ms);
+  const pick = () => FW_COLS[Math.floor(Math.random() * FW_COLS.length)];
+  const launch = () => { const x = (.12 + Math.random() * .76) * cv.width, y = (.1 + Math.random() * .32) * cv.height;
+    fwP.push({ rocket:true, x, y:cv.height, vy:-(cv.height - y) / 36, life:36, c1:pick(), c2:pick() }); if(!quiet) fwSound(); };
+  launch(); const iv = setInterval(() => { if(Date.now() > fwUntil) return clearInterval(iv); launch(); if(Math.random() < .35) setTimeout(launch, 160); }, 1000 / (perSec || 2));
+  if(fwRaf) return;
+  const ctx = cv.getContext("2d");
+  const step = () => {
+    ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,.2)"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.globalCompositeOperation = "lighter";
+    const born = [];
+    fwP = fwP.filter(p => {
+      if(p.rocket){ p.y += p.vy; p.life--; ctx.globalAlpha = 1; ctx.fillStyle = "#fff8e0"; ctx.fillRect(p.x - 1.5 * dpr, p.y, 3 * dpr, 12 * dpr);
+        if(p.life > 0) return true;
+        const N = 80; for(let i = 0; i < N; i++){ const a = Math.PI * 2 * i / N + Math.random() * .08, sp = (1.8 + Math.random() * 4.2) * dpr;
+          born.push({ x:p.x, y:p.y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, c:i % 2 ? p.c1 : p.c2, life:55 + Math.random() * 35 }); }
+        return false; }
+      p.vx *= .984; p.vy = p.vy * .984 + .055 * dpr; p.x += p.vx; p.y += p.vy; p.life--;
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 60)); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 2.3 * dpr, 0, 6.3); ctx.fill();
+      return p.life > 0; });
+    fwP = fwP.concat(born); ctx.globalAlpha = 1;
+    if(fwP.length || Date.now() < fwUntil) fwRaf = requestAnimationFrame(step); else { fwRaf = 0; ctx.clearRect(0, 0, cv.width, cv.height); }
+  };
+  fwRaf = requestAnimationFrame(step);
+}
+// ===== màn "NHÀ VÔ ĐỊCH MÃI ĐỈNH!" + giọng Lumina =====
+function champion(name, score){
+  const letters = (txt, cls, d0) => '<span class="' + cls + '">' + [...txt].map((ch, i) => '<b style="animation-delay:' + (d0 + i * 45) + 'ms,' + (d0 + i * 45 + 600) + 'ms">' + (ch === " " ? "&nbsp;" : esc(ch)) + '</b>').join("") + '</span>';
+  const ov = document.createElement("div"); ov.className = "champ"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Nhà vô địch");
+  ov.innerHTML = '<div class="ch-in"><span class="ch-crown">👑</span><p class="ch-t">' + letters("NHÀ VÔ ĐỊCH", "w1", 0) + '<br>' + letters("MÃI ĐỈNH!", "w2", 500) + '</p>' +
+    '<div class="ch-name">' + esc(name) + '</div><div class="ch-s">' + fmt(score) + ' điểm</div>' +
+    '<div class="ch-lumi"><span class="lumi cheer">' + LUMI + '</span><p class="say"><b>Lumina:</b> Chúc mừng ' + esc(name) + '! Nhà Vô Địch Mãi Đỉnh! Cả lớp vỗ tay rần rần lên nào 👏👏</p></div>' +
+    '<span class="ch-x">Bấm để xem bục vinh danh</span></div>';
+  document.body.appendChild(ov); setTimeout(() => ov.classList.add("on"), 20);
+  duck(.08); fireworks(8000, 2.4, true); confetti(); fanfare();
+  // tiếng pháo hoa thật (Mixkit) ở đầu và cuối, giọng Lumina vang rõ ở giữa
+  const boom = () => { try{ const f = new Audio("./fireworks.mp3"); f.volume = .75; const p = f.play(); if(p && p.catch) p.catch(() => fwSound()); }catch(e){ fwSound(); } };
+  if(sound){ setTimeout(boom, 150); setTimeout(boom, 6400);
+    try{ const v = new Audio("./lumina-champion.mp3"); v.volume = 1; setTimeout(() => { const p = v.play(); if(p && p.catch) p.catch(() => {}); }, 1300); }catch(e){} }
+  let shut = false; const close = () => { if(shut) return; shut = true; ov.classList.remove("on"); setTimeout(() => ov.remove(), 400); if(ph === "end") playMusic("lobby", .4); };
+  ov.addEventListener("click", close); setTimeout(close, 10000);
+}
+
 
 // ================= khởi động =================
 const params = new URLSearchParams(location.search);
@@ -1007,7 +1094,7 @@ const H = (() => {
     drumroll(1600); await wait(1800); if(ph !== "end") return; $("pod2").classList.add("show"); beep(659, .2, "triangle", .14);
     drumroll(2200); await wait(2400); if(ph !== "end") return; $("pod1").classList.add("show"); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!";
     $("endLumi").classList.add("cheer"); confettiBurst();
-    setTimeout(() => { if(ph === "end") playMusic("lobby", .4); }, 1800); }
+    if(top[0]) setTimeout(() => { if(ph === "end") champion(top[0].n, top[0].s); }, 600); }
     $("rest").hidden = false; $("endBtns").hidden = false;
     $("rep").addEventListener("click", report);
     $("again").addEventListener("click", async () => { qs = cfg.src === "quiz" || cfg.src === "lib" ? cleanQuiz() : vocabQuestions(); i = -1; scores = {}; streak = {}; prevRank = {}; log = []; finalRank = [];
@@ -1105,10 +1192,11 @@ const P = (() => {
     if(st.ph === "end"){
       const e = st.res && st.res.me && st.res.me[UID], top = (st.res && st.res.top) || [];
       view.innerHTML = '<div class="ph center"><span class="lumi cheer">' + LUMI + '</span>' +
-        '<h1>' + (e && e[1] <= 3 ? ["", "Vô địch! 👑", "Á quân! 🥈", "Hạng 3! 🥉"][e[1]] : "Hết trận!") + '</h1>' +
+        '<h1>' + (e && e[1] <= 3 ? ["", "Nhà Vô Địch Mãi Đỉnh! 👑", "Á quân! 🥈", "Hạng 3! 🥉"][e[1]] : "Hết trận!") + '</h1>' +
         (e ? '<p class="say"><b>Lumina:</b> ' + esc(nick) + ' được ' + fmt(e[0]) + ' điểm, hạng ' + e[1] + '/' + st.res.np + '. ' + (e[1] <= 3 ? "Đỉnh của chóp!" : "Về ôn lại là lần sau lên bục liền!") + '</p>' : '') +
         '<div class="board">' + top.map((t, k) => '<div class="br"><span class="r">' + ["🥇", "🥈", "🥉"][k] + '</span><span class="nm">' + esc(t.n) + '</span><span class="s">' + fmt(t.s) + '</span></div>').join("") + '</div></div>';
       if(e && e[1] <= 3) setTimeout(confettiBurst, 6500);
+      if(e && e[1] === 1) setTimeout(() => fireworks(5000, 1.6), 6500);
     }
   }
   async function answer(a){
