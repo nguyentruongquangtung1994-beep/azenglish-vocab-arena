@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>AZ Vocab Live — Lớp học</title>
+<title>AZ Live — Lớp học</title>
 <meta name="theme-color" content="#e0102b" />
 <link rel="icon" href="./icon-192.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -241,13 +241,100 @@
   .tbl th,.tbl td{ padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
   .tbl th{ font:800 12.5px var(--body); color:var(--muted); background:var(--soft); position:sticky; top:0; }
   .tbl td.nm{ text-align:left; font-weight:800; } .tbl .y{ color:var(--ok); font-weight:800; } .tbl .n{ color:var(--red); font-weight:800; } .tbl .z{ color:var(--muted); }
+  /* ===== nền & sân khấu AZ Live ===== */
+  body{ background-color:var(--bg); background-image:radial-gradient(color-mix(in srgb, var(--line) 80%, transparent) 1.3px, transparent 1.5px); background-size:24px 24px; }
+  .bgfx{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .bgfx svg{ position:absolute; opacity:.11; animation:drift 18s ease-in-out infinite alternate; }
+  .bgfx svg:nth-child(2n){ animation-duration:23s; animation-direction:alternate-reverse; } .bgfx svg:nth-child(3n){ animation-duration:27s; }
+  @keyframes drift{ 0%{ transform:translate(0,0) rotate(0); } 100%{ transform:translate(26px,-34px) rotate(28deg); } }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .bgfx svg{ opacity:.16; } }
+  .app{ position:relative; z-index:1; }
+  .stage-hero{ position:relative; overflow:hidden; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); align-items:center; gap:10px; padding:22px 24px; border-radius:28px; background:#1c1410; color:#fff; box-shadow:0 24px 50px -24px rgba(28,20,16,.6); }
+  .stage-hero::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:6px; background:repeating-linear-gradient(90deg,#e0102b 0 25%,#1d6fa5 25% 50%,#d98a00 50% 75%,#1e7a4c 75% 100%); }
+  .sh-t small{ display:inline-flex; align-items:center; gap:8px; padding:5px 12px; border-radius:99px; background:rgba(255,255,255,.1); font:800 12px var(--body); letter-spacing:.1em; text-transform:uppercase; color:#ffd7a8; }
+  .sh-t small i{ width:9px; height:9px; border-radius:50%; background:#ff3b4e; box-shadow:0 0 0 0 rgba(255,59,78,.7); animation:live 1.4s ease-out infinite; }
+  @keyframes live{ 70%{ box-shadow:0 0 0 10px rgba(255,59,78,0); } 100%{ box-shadow:0 0 0 0 rgba(255,59,78,0); } }
+  .sh-t h1{ color:#fff; font-size:clamp(40px,6vw,64px); margin:10px 0 6px; } .sh-t h1 span{ color:#ff5a68; }
+  .sh-t p{ margin:0; color:#e9d9cb; font-size:15.5px; max-width:380px; }
+  .scene{ width:100%; height:auto; overflow:visible; }
+  .scene .beam{ fill:#fff; opacity:.05; transform-origin:50% 0; animation:beam 5s ease-in-out infinite alternate; } .scene .b2{ animation-delay:-2.5s; }
+  @keyframes beam{ 0%{ transform:rotate(-6deg); } 100%{ transform:rotate(6deg); } }
+  .scene .sc-l{ font:800 11px var(--body); letter-spacing:.2em; fill:#cbb6a6; } .scene .sc-pin{ font:800 34px var(--display); fill:#fff; letter-spacing:.06em; }
+  .scene .tile{ opacity:.45; animation:tileon 2.4s steps(1) infinite; } .scene .t2{ animation-delay:.6s; } .scene .t3{ animation-delay:1.2s; } .scene .t4{ animation-delay:1.8s; }
+  @keyframes tileon{ 0%{ opacity:1; } 25%,100%{ opacity:.45; } }
+  .scene .sh{ font:800 15px var(--body); fill:#fff; text-anchor:middle; pointer-events:none; }
+  .scene .ph1{ transform-box:fill-box; transform-origin:50% 100%; animation:bob 2.2s ease-in-out infinite; } .scene .ph2{ transform-box:fill-box; transform-origin:50% 100%; animation:bob 2.6s ease-in-out -1s infinite; }
+  @keyframes bob{ 0%,100%{ transform:rotate(-5deg) translateY(0); } 50%{ transform:rotate(4deg) translateY(-6px); } }
+  .scene .tap{ fill:none; stroke:#fff; stroke-width:2.5; transform-box:fill-box; transform-origin:center; animation:ripple 1.6s ease-out infinite; }
+  .scene .k,.scene .k2{ animation:tileon 1.6s steps(1) infinite; }
+  .scene .cf > *{ transform-box:fill-box; transform-origin:center; animation:twk 2.8s ease-in-out infinite; } .scene .cf > *:nth-child(2n){ animation-delay:-1.4s; }
+  @keyframes twk{ 0%,100%{ transform:translateY(0) rotate(0); opacity:.9; } 50%{ transform:translateY(8px) rotate(90deg); opacity:.4; } }
+  .scene .crown{ font-size:22px; animation:sway 2.4s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @media (max-width:700px){ .stage-hero{ grid-template-columns:1fr; padding:20px 18px 24px; } .scene{ max-width:420px; justify-self:center; } }
+  /* sảnh chờ: khung PIN kiểu màn chiếu */
+  .pinbox{ background:#1c1410; border-color:#3a2a20; color:#fff; box-shadow:0 20px 40px -22px rgba(28,20,16,.6); position:relative; overflow:hidden; }
+  .pinbox::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:5px; background:repeating-linear-gradient(90deg,#e0102b 0 25%,#1d6fa5 25% 50%,#d98a00 50% 75%,#1e7a4c 75% 100%); }
+  .pinbox .pin{ color:#fff; } .pinbox .pin-l{ color:#ffd7a8; } .pinbox .url{ color:#cbb6a6; }
+  .pinbox .qr{ background:#fff; padding:8px; border-radius:14px; }
+  /* avatar người chơi */
+  .pl{ display:inline-flex; align-items:center; gap:8px; padding-left:6px; }
+  .av{ width:28px; height:28px; border-radius:50%; display:grid; place-items:center; color:#fff; font:800 14px var(--display); font-style:normal; flex:none; }
+  .av0{ background:var(--a); } .av1{ background:var(--b); } .av2{ background:var(--c); } .av3{ background:var(--d); }
+  .pl.kick .av{ display:none; }
+  /* thẻ câu hỏi có viền màu */
+  .card.prompt{ position:relative; overflow:hidden; } .card.prompt::before{ content:""; position:absolute; left:0; right:0; top:0; height:6px; background:repeating-linear-gradient(90deg,#e0102b 0 25%,#1d6fa5 25% 50%,#d98a00 50% 75%,#1e7a4c 75% 100%); }
+  /* ===== đợt 2.2: màu & chuyển động ===== */
+  .bgfx svg{ opacity:.14; } @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .bgfx svg{ opacity:.2; } }
+  .stage-hero{ border:1.5px solid #3a2a20; }
+  /* thẻ chọn vai */
+  .choice{ position:relative; overflow:hidden; border:0; color:#fff; padding:20px; min-height:230px; transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease; }
+  .choice.c-t{ background:#e0102b; box-shadow:0 8px 0 #8f0a1c; } .choice.c-s{ background:#1d6fa5; box-shadow:0 8px 0 #124a6f; }
+  .choice:hover{ transform:translateY(-5px) rotate(-.6deg); } .choice:active{ transform:translateY(4px); }
+  .choice.c-t:active{ box-shadow:0 3px 0 #8f0a1c; } .choice.c-s:active{ box-shadow:0 3px 0 #124a6f; }
+  .choice > span:not(.ci){ color:rgba(255,255,255,.9); } .choice b{ color:#fff; font-size:22px; }
+  .choice .ci{ background:rgba(255,255,255,.16); color:#fff; }
+  .choice::after{ position:absolute; right:-18px; bottom:-46px; font-size:170px; line-height:1; color:#fff; opacity:.13; animation:spinw 16s linear infinite; pointer-events:none; }
+  .choice.c-t::after{ content:"▲"; } .choice.c-s::after{ content:"●"; animation-name:bobw; animation-duration:4s; animation-timing-function:ease-in-out; }
+  @keyframes spinw{ to{ transform:rotate(360deg); } } @keyframes bobw{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-14px); } }
+  .choice em.go{ font-style:normal; margin-top:auto; padding:8px 16px; border-radius:99px; background:#fff; font:800 15px var(--display); box-shadow:0 3px 0 rgba(0,0,0,.18); }
+  .choice.c-t em.go{ color:#e0102b; } .choice.c-s em.go{ color:#1d6fa5; }
+  .choice:hover em.go{ animation:nudge .6s ease infinite alternate; } @keyframes nudge{ to{ transform:translateX(5px); } }
+  /* 3 bước cách chơi */
+  .steps{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; position:relative; }
+  .stp{ display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border-radius:18px; background:var(--card); border:1.5px solid var(--line); animation:up .5s cubic-bezier(.22,1,.36,1) both; }
+  .stp:nth-child(2){ animation-delay:.1s; } .stp:nth-child(3){ animation-delay:.2s; }
+  .stp > b{ flex:none; width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:#fff; font:800 20px var(--display); animation:hopn 2.4s ease-in-out infinite; }
+  .stp:nth-child(1) > b{ background:var(--a); } .stp:nth-child(2) > b{ background:var(--b); animation-delay:.3s; } .stp:nth-child(3) > b{ background:var(--c); animation-delay:.6s; }
+  @keyframes hopn{ 0%,70%,100%{ transform:none; } 80%{ transform:translateY(-6px) rotate(-6deg); } 90%{ transform:translateY(0) rotate(4deg); } }
+  .stp span{ font-size:13.5px; color:var(--muted); } .stp strong{ display:block; font:800 16px var(--display); color:var(--ink); }
+  @media (max-width:760px){ .steps{ grid-template-columns:1fr; } }
+  /* sóng nhạc ở sảnh chờ */
+  .eq{ display:inline-flex; align-items:flex-end; gap:3px; height:18px; margin-right:6px; vertical-align:middle; }
+  .eq i{ width:4px; border-radius:2px; animation:eq .9s ease-in-out infinite alternate; } .eq i:nth-child(1){ background:var(--a); } .eq i:nth-child(2){ background:var(--b); animation-delay:-.3s; } .eq i:nth-child(3){ background:var(--c); animation-delay:-.6s; } .eq i:nth-child(4){ background:var(--d); animation-delay:-.15s; }
+  @keyframes eq{ from{ height:4px; } to{ height:18px; } }
+  /* tiến độ câu hỏi */
+  .prog{ display:flex; flex-wrap:wrap; gap:4px; max-width:46%; } .prog i{ width:16px; height:8px; border-radius:99px; background:var(--line); }
+  .prog i.done{ background:var(--ok); } .prog i.now{ background:var(--red); animation:pulse .6s ease infinite alternate; }
+  /* ô đáp án: xuất hiện lần lượt + ánh sáng chạy */
+  .opts .opt{ animation:pop .45s cubic-bezier(.34,1.56,.64,1) both; overflow:hidden; } .opts .opt:nth-child(2){ animation-delay:.06s; } .opts .opt:nth-child(3){ animation-delay:.12s; } .opts .opt:nth-child(4){ animation-delay:.18s; }
+  .opt::after{ content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.22) 50%,transparent 58%); background-size:260% 100%; animation:shine 3.4s ease-in-out infinite; }
+  @keyframes shine{ 0%{ background-position:130% 0; } 60%,100%{ background-position:-130% 0; } }
+  .opt.right{ animation:glow 1s ease-in-out infinite alternate; } @keyframes glow{ to{ box-shadow:0 0 0 5px var(--card), 0 0 0 9px var(--ok), 0 0 30px 8px color-mix(in srgb, var(--ok) 50%, transparent); } }
+  /* bảng xếp hạng: hạng 2-3 */
+  .br.top2{ border-color:#aab4c0; background:color-mix(in srgb, #aab4c0 14%, var(--card)); } .br.top3{ border-color:#cd7f32; background:color-mix(in srgb, #cd7f32 12%, var(--card)); }
+  .br .r{ font-size:24px; }
+  /* màn nhập PIN: 4 ô màu nhún */
+  .tiles4{ display:flex; gap:8px; justify-content:center; }
+  .tiles4 i{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center; color:#fff; font:800 20px var(--body); font-style:normal; box-shadow:0 4px 0 rgba(0,0,0,.2); animation:hopn 2s ease-in-out infinite; }
+  .tiles4 i:nth-child(1){ background:var(--a); } .tiles4 i:nth-child(2){ background:var(--b); animation-delay:.2s; } .tiles4 i:nth-child(3){ background:var(--c); animation-delay:.4s; } .tiles4 i:nth-child(4){ background:var(--d); animation-delay:.6s; }
 </style>
 </head>
 <body>
+<div class="bgfx" aria-hidden="true"><svg viewBox="0 0 100 100" style="left:4%;top:12%;width:120px;height:120px;fill:var(--a)"><path d="M50 6 94 88H6z"/></svg><svg viewBox="0 0 100 100" style="left:86%;top:8%;width:96px;height:96px;fill:var(--b)"><path d="M50 4 96 50 50 96 4 50z"/></svg><svg viewBox="0 0 100 100" style="left:90%;top:62%;width:130px;height:130px;fill:var(--c)"><circle cx="50" cy="50" r="46"/></svg><svg viewBox="0 0 100 100" style="left:6%;top:70%;width:104px;height:104px;fill:var(--d)"><rect x="8" y="8" width="84" height="84" rx="14"/></svg><svg viewBox="0 0 100 100" style="left:48%;top:88%;width:70px;height:70px;fill:var(--a)"><circle cx="50" cy="50" r="46"/></svg><svg viewBox="0 0 100 100" style="left:70%;top:30%;width:64px;height:64px;fill:var(--d)"><path d="M50 6 94 88H6z"/></svg><svg viewBox="0 0 100 100" style="left:30%;top:4%;width:58px;height:58px;fill:var(--b)"><rect x="8" y="8" width="84" height="84" rx="14"/></svg><svg viewBox="0 0 100 100" style="left:22%;top:46%;width:54px;height:54px;fill:var(--c)"><path d="M50 4 96 50 50 96 4 50z"/></svg></div>
 <div class="app">
   <header class="top">
     <a class="logo" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
-    <span class="brand"><small>AZEnglish</small>Vocab Live</span>
+    <span class="brand"><small>AZEnglish</small>AZ Live</span>
     <span class="sp"></span>
     <span class="pill" id="net">Đang kết nối…</span>
     <button class="icon-btn" id="mus" type="button" aria-label="Bật/tắt nhạc nền" title="Nhạc nền" hidden></button>
@@ -278,6 +365,7 @@ const ls = (k, v) => { try{ if(v === undefined) return localStorage.getItem(k); 
 const wait = ms => new Promise(r => setTimeout(r, ms));
 const norm = s => String(s || "").toLowerCase().normalize("NFC").replace(/[.,!?;:"'“”‘’()]/g, "").replace(/\s+/g, " ").trim();
 const fmt = n => (+n || 0).toLocaleString("vi-VN");
+const STAGE = '<svg class="scene" viewBox="0 0 360 200" aria-hidden="true"><path class="beam b1" d="M70 0h22L150 200H40z"/><path class="beam b2" d="M268 0h22l40 200H222z"/><rect x="18" y="22" width="214" height="134" rx="14" fill="#2e221b" stroke="#5a463a" stroke-width="2"/><text x="125" y="54" text-anchor="middle" class="sc-l">MÃ PIN</text><text x="125" y="88" text-anchor="middle" class="sc-pin">482 913</text><g class="tiles"><rect class="tile t1" x="30" y="104" width="44" height="38" rx="8" fill="#e0102b"/><rect class="tile t2" x="80" y="104" width="44" height="38" rx="8" fill="#1d6fa5"/><rect class="tile t3" x="130" y="104" width="44" height="38" rx="8" fill="#d98a00"/><rect class="tile t4" x="180" y="104" width="44" height="38" rx="8" fill="#1e7a4c"/><text x="52" y="129" class="sh">▲</text><text x="102" y="129" class="sh">◆</text><text x="152" y="129" class="sh">●</text><text x="202" y="129" class="sh">■</text></g><path d="M125 156v18M98 186l27-12 27 12" stroke="#5a463a" stroke-width="4" stroke-linecap="round" fill="none"/><g class="ph1"><rect x="252" y="58" width="48" height="88" rx="10" fill="#fffaf3" stroke="#5a463a" stroke-width="2"/><rect x="259" y="74" width="16" height="22" rx="4" fill="#e0102b"/><rect x="277" y="74" width="16" height="22" rx="4" fill="#1d6fa5" class="k"/><rect x="259" y="99" width="16" height="22" rx="4" fill="#d98a00"/><rect x="277" y="99" width="16" height="22" rx="4" fill="#1e7a4c"/><circle class="tap" cx="285" cy="85" r="9"/></g><g class="ph2"><rect x="306" y="92" width="40" height="74" rx="9" fill="#fffaf3" stroke="#5a463a" stroke-width="2"/><rect x="312" y="105" width="13" height="18" rx="3" fill="#e0102b" class="k2"/><rect x="327" y="105" width="13" height="18" rx="3" fill="#1d6fa5"/><rect x="312" y="126" width="13" height="18" rx="3" fill="#d98a00"/><rect x="327" y="126" width="13" height="18" rx="3" fill="#1e7a4c"/></g><g class="cf"><rect x="250" y="20" width="7" height="10" rx="2" fill="#f2b705"/><rect x="330" y="36" width="6" height="9" rx="2" fill="#e0102b"/><rect x="300" y="12" width="6" height="9" rx="2" fill="#1d6fa5"/><circle cx="240" cy="44" r="4" fill="#1e7a4c"/><circle cx="350" cy="70" r="3.5" fill="#f2b705"/></g><text x="276" y="190" class="crown">👑</text></svg>';
 const SHAPES = ["▲", "◆", "●", "■"];
 const LUMI = '<span class="rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hd"><img src="./lion-head.webp" alt=""><i class="lid l"></i><i class="lid r"></i></span></span>';
 const ICON_T = '<span class="ci ci-t" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="44" height="32" rx="5"/><path d="M28 40v8M20 54l8-6 8 6"/><rect class="bar" x="14" y="26" width="6" height="8" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b2" x="24" y="20" width="6" height="14" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b3" x="34" y="15" width="6" height="19" rx="1.5" fill="currentColor" stroke="none"/><g class="stick"><path d="M52 50 41 20"/><circle cx="41" cy="20" r="2.5" fill="currentColor" stroke="none"/></g><path class="spark" d="M56 6v8M52 10h8" stroke-width="2.5"/></svg></span>';
@@ -343,15 +431,19 @@ function setNet(ok, txt){ net.textContent = txt || (ok ? "● Trực tuyến" : 
 (async () => {
   try{ const cred = await signInAnonymously(auth); UID = cred.user.uid; setNet(true); }
   catch(e){ setNet(false, "Không kết nối được"); }
-  if(PIN_FROM_URL) P.start(PIN_FROM_URL); else home();
+  if(PIN_FROM_URL) P.start(PIN_FROM_URL); else if(params.has("join")) P.start(""); else home();
 })();
 
 function home(){
   stopMusic(); musBtn.hidden = true; H.stopAll(); P.stopAll();
-  view.innerHTML = '<div class="hero"><span class="lumi">' + LUMI + '</span><div class="txt"><p class="say"><b>Lumina:</b> Vô lớp chơi game từ vựng nè! Ai nhanh tay, nhớ lâu thì lên bục 👑</p>' +
-    '<div class="choices"><button class="choice" id="goHost" type="button">' + ICON_T + '<b>Giáo viên: mở phòng</b><span>Soạn câu hỏi hoặc chọn kho từ, chiếu mã PIN lên màn hình lớp.</span></button>' +
-    '<button class="choice" id="goPlay" type="button">' + ICON_S + '<b>Học viên: vào phòng</b><span>Nhập mã PIN 6 số trên màn hình lớp hoặc quét mã QR.</span></button></div>' +
-    '<p class="note">Học viên <b>không cần tài khoản</b>: chỉ cần mã PIN và biệt danh.</p></div></div>';
+  view.innerHTML = '<div class="stage-hero"><div class="sh-t"><small><i></i>Game cả lớp</small><h1>AZ <span>Live</span></h1><p>Giáo viên chiếu mã PIN, cả lớp bấm trên điện thoại. Nhanh tay, nhớ lâu, lên bục vinh danh!</p></div>' + STAGE + '</div>' +
+    '<div class="hero"><span class="lumi">' + LUMI + '</span><div class="txt"><p class="say"><b>Lumina:</b> Vô lớp chơi game từ vựng nè! Ai nhanh tay, nhớ lâu thì lên bục 👑</p>' +
+    '<div class="choices"><button class="choice c-t" id="goHost" type="button">' + ICON_T + '<b>Giáo viên: mở phòng</b><span>Soạn câu hỏi hoặc chọn kho từ, chiếu mã PIN lên màn hình lớp.</span><em class="go">Mở phòng →</em></button>' +
+    '<button class="choice c-s" id="goPlay" type="button">' + ICON_S + '<b>Học viên: vào phòng</b><span>Nhập mã PIN 6 số trên màn hình lớp hoặc quét mã QR.</span><em class="go">Vào chơi →</em></button></div>' +
+    '<p class="note">Học viên <b>không cần tài khoản</b>: chỉ cần mã PIN và biệt danh.</p></div></div>' +
+    '<div class="steps"><div class="stp"><b>1</b><span><strong>Giáo viên mở phòng</strong>Chọn bộ câu, chiếu mã PIN và QR lên màn hình.</span></div>' +
+    '<div class="stp"><b>2</b><span><strong>Cả lớp vào phòng</strong>Quét QR hoặc nhập PIN, đặt biệt danh vui vui.</span></div>' +
+    '<div class="stp"><b>3</b><span><strong>Bấm nhanh, lên bục</strong>Đúng và nhanh là nhiều điểm, top 3 lên bục vinh danh.</span></div></div>';
   $("goHost").addEventListener("click", () => H.setup());
   $("goPlay").addEventListener("click", () => P.start(""));
 }
@@ -759,7 +851,7 @@ const H = (() => {
       '<button class="btn ghost sm" id="lock" type="button">🔓 Đang mở phòng</button></div>' +
       '<p class="muted" style="margin:0;font-size:13px">Bấm vào tên để mời học viên ra khỏi phòng.</p><div class="players" id="pls"></div></div></div>' +
       '<div class="row"><button class="btn ghost sm" id="bot" type="button">+ 3 người chơi ảo (thử)</button><button class="btn ghost sm" id="edit" type="button">⚙ Đổi bộ câu</button>' +
-      '<span class="credit">♪ Aylex – Sunny Day · Dagored – Wall Of Sound (freetouse.com)</span><span class="sp"></span><button class="btn" id="start" type="button" disabled>Bắt đầu ▶</button></div>';
+      '<span class="credit"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Aylex – Sunny Day · Dagored – Wall Of Sound (freetouse.com)</span><span class="sp"></span><button class="btn" id="start" type="button" disabled>Bắt đầu ▶</button></div>';
     try{ new QRCode($("qr"), { text:joinUrl(), width:168, height:168, colorDark:"#241a12", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.M }); }catch(e){ $("qr").hidden = true; }
     $("bot").addEventListener("click", addBots);
     $("edit").addEventListener("click", async () => { await endRoom(); setup(); });
@@ -775,7 +867,7 @@ const H = (() => {
   function drawLobby(){
     const box = $("pls"); if(!box) return; const r = roster();
     $("pc").textContent = r.length;
-    box.innerHTML = r.map(p => '<span class="pl' + (p.bot ? " bot" : "") + (kickArm === p.id ? " kick" : "") + '" data-id="' + esc(p.id) + '">' + (kickArm === p.id ? "Mời ra? ✕" : esc(p.n)) + '</span>').join("");
+    box.innerHTML = r.map((p, k) => '<span class="pl' + (p.bot ? " bot" : "") + (kickArm === p.id ? " kick" : "") + '" data-id="' + esc(p.id) + '"><i class="av av' + (k % 4) + '">' + esc([...String(p.n).trim()][0] || "?").toUpperCase() + '</i>' + (kickArm === p.id ? "Mời ra? ✕" : esc(p.n)) + '</span>').join("");
     $("start").disabled = !r.length;
   }
   async function kick(id, el){
@@ -813,7 +905,7 @@ const H = (() => {
       setTimeout(() => { if(ph !== "question") return; const right = Math.random() < b.skill;
         let a; if(q.t === "type") a = { a:right ? q.acc[0] : "???" }; else { const wrong = q.o.map((_, k) => k).filter(k => !q.ok.includes(k)); a = { c:right || !wrong.length ? q.ok[0] : wrong[Math.floor(Math.random() * wrong.length)] }; }
         answers[b.id] = Object.assign({ uid:b.id, q:i, ms:delay }, a); answeredCount(); }, delay); });
-    view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '<span class="sp"></span>' +
+    view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + '<span class="prog" aria-hidden="true">' + qs.map((_, k) => '<i class="' + (k < i ? "done" : k === i ? "now" : "") + '"></i>').join("") + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '<span class="sp"></span>' +
       '<span class="answered" id="ans">0 đã trả lời</span>' + timerSvg() + '</div>' +
       '<div class="card prompt"><small>' + esc(q.sub || ({ tf:"Đúng hay sai?", type:"Gõ đáp án trên điện thoại", mcq:"Chọn đáp án đúng" })[q.t]) + '</small><div class="w">' + esc(q.p) + '</div></div>' +
       (q.t === "type" ? '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
@@ -879,7 +971,7 @@ const H = (() => {
     view.innerHTML = '<div class="row"><h1>Bảng xếp hạng</h1><span class="sp"></span><span class="pill">Sau câu ' + (i + 1) + '/' + qs.length + '</span></div>' +
       '<div class="board" id="brd">' + show.map((p, k) => {
         const pr = prevRank[p.id] || k + 1, mv = pr - (k + 1);
-        return '<div class="br' + (k === 0 ? " top1" : "") + (mv > 0 ? " flash" : "") + '" data-from="' + (pr - (k + 1)) + '"><span class="r">' + (k + 1) + '</span><span class="nm">' + esc(p.n) + '</span>' +
+        return '<div class="br' + (k < 3 ? " top" + (k + 1) : "") + (mv > 0 ? " flash" : "") + '" data-from="' + (pr - (k + 1)) + '"><span class="r">' + (["🥇", "🥈", "🥉"][k] || k + 1) + '</span><span class="nm">' + esc(p.n) + '</span>' +
           '<span class="mv ' + (mv > 0 ? "up" : mv < 0 ? "down" : "") + '">' + (mv > 0 ? "▲" + mv : mv < 0 ? "▼" + (-mv) : "") + '</span>' +
           '<span class="s" data-to="' + p.s + '" data-from-s="' + Math.max(0, p.s - (lastGain(p.id))) + '">' + fmt(Math.max(0, p.s - lastGain(p.id))) + '</span></div>'; }).join("") +
       (rank.length ? "" : '<p class="muted">Chưa có điểm.</p>') + '</div>' +
@@ -936,7 +1028,7 @@ const P = (() => {
   let pin = null, nick = ls("azl_nick") || "", unRoom = null, unMe = null, joined = false, st = null, lastKey = "", answeredI = -1, qStart = 0, deadline = 0, tickT = null;
   function start(pre){
     stopAll(); musBtn.hidden = true;
-    view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><h1>Vào phòng chơi</h1>' +
+    view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><div class="tiles4" aria-hidden="true"><i>▲</i><i>◆</i><i>●</i><i>■</i></div><h1>Vào phòng chơi</h1>' +
       '<input class="pinput" type="text" id="pin" inputmode="numeric" maxlength="6" placeholder="Mã PIN" autocomplete="off" value="' + esc(pre) + '">' +
       '<input type="text" id="nick" maxlength="18" placeholder="' + esc(nick || "Biệt danh của bạn") + '" autocomplete="off">' +
       '<button class="btn big" id="enter" type="button">Vào phòng ▶</button><p class="err" id="jErr"></p><button class="btn ghost sm" id="bk" type="button">← Quay lại</button></div>';
