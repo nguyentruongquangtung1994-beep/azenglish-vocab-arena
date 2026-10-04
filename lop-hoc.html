@@ -399,6 +399,15 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 const norm = s => String(s || "").toLowerCase().normalize("NFC").replace(/[.,!?;:"'“”‘’()]/g, "").replace(/\s+/g, " ").trim();
 const fmt = n => (+n || 0).toLocaleString("vi-VN");
 const STAGE = '<svg class="scene" viewBox="0 0 360 200" aria-hidden="true"><path class="beam b1" d="M70 0h22L150 200H40z"/><path class="beam b2" d="M268 0h22l40 200H222z"/><rect x="18" y="22" width="214" height="134" rx="14" fill="#2e221b" stroke="#5a463a" stroke-width="2"/><text x="125" y="54" text-anchor="middle" class="sc-l">MÃ PIN</text><text x="125" y="88" text-anchor="middle" class="sc-pin">482 913</text><g class="tiles"><rect class="tile t1" x="30" y="104" width="44" height="38" rx="8" fill="#e0102b"/><rect class="tile t2" x="80" y="104" width="44" height="38" rx="8" fill="#1d6fa5"/><rect class="tile t3" x="130" y="104" width="44" height="38" rx="8" fill="#d98a00"/><rect class="tile t4" x="180" y="104" width="44" height="38" rx="8" fill="#1e7a4c"/><text x="52" y="129" class="sh">▲</text><text x="102" y="129" class="sh">◆</text><text x="152" y="129" class="sh">●</text><text x="202" y="129" class="sh">■</text></g><path d="M125 156v18M98 186l27-12 27 12" stroke="#5a463a" stroke-width="4" stroke-linecap="round" fill="none"/><g class="ph1"><rect x="252" y="58" width="48" height="88" rx="10" fill="#fffaf3" stroke="#5a463a" stroke-width="2"/><rect x="259" y="74" width="16" height="22" rx="4" fill="#e0102b"/><rect x="277" y="74" width="16" height="22" rx="4" fill="#1d6fa5" class="k"/><rect x="259" y="99" width="16" height="22" rx="4" fill="#d98a00"/><rect x="277" y="99" width="16" height="22" rx="4" fill="#1e7a4c"/><circle class="tap" cx="285" cy="85" r="9"/></g><g class="ph2"><rect x="306" y="92" width="40" height="74" rx="9" fill="#fffaf3" stroke="#5a463a" stroke-width="2"/><rect x="312" y="105" width="13" height="18" rx="3" fill="#e0102b" class="k2"/><rect x="327" y="105" width="13" height="18" rx="3" fill="#1d6fa5"/><rect x="312" y="126" width="13" height="18" rx="3" fill="#d98a00"/><rect x="327" y="126" width="13" height="18" rx="3" fill="#1e7a4c"/></g><g class="cf"><rect x="250" y="20" width="7" height="10" rx="2" fill="#f2b705"/><rect x="330" y="36" width="6" height="9" rx="2" fill="#e0102b"/><rect x="300" y="12" width="6" height="9" rx="2" fill="#1d6fa5"/><circle cx="240" cy="44" r="4" fill="#1e7a4c"/><circle cx="350" cy="70" r="3.5" fill="#f2b705"/></g><text x="276" y="190" class="crown">👑</text></svg>';
+// Đồng hồ máy chủ: SKEW = giờ máy chủ − giờ máy này (đo bằng 1 lần ghi serverTimestamp rồi đọc lại)
+let SKEW = 0;
+async function syncClock(ref){ let best = 1e9;
+  for(let k = 0; k < 2; k++){ try{ const t0 = Date.now(); await updateDoc(ref, { ck:serverTimestamp() }); const t1 = Date.now();
+    const s = await getDoc(ref), v = s.data() && s.data().ck; if(v && v.toMillis && t1 - t0 < best){ best = t1 - t0; SKEW = v.toMillis() - (t0 + t1) / 2; } }catch(e){} } }
+// Đếm ngược 3-2-1-GO dài CD_T ms, vẽ khớp với thời gian còn lại (máy nhận trễ thì nhảy tới đúng nhịp)
+const CD_T = 3400;
+function cdHTML(rem){ const el = Math.max(0, CD_T - rem), st = (d, extra) => ' style="animation-duration:850ms;animation-delay:' + (d - el) + 'ms' + (extra || "") + '"';
+  return '<div class="cd" aria-label="Chuẩn bị"><b' + st(0) + '>3</b><b' + st(850) + '>2</b><b' + st(1700) + '>1</b><b class="go"' + st(2550) + '>GO!</b><i class="ring"' + st(0) + '></i></div>'; }
 const SHAPES = ["▲", "◆", "●", "■"];
 const LUMI = '<span class="rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hd"><img src="./lion-head.webp" alt=""><i class="lid l"></i><i class="lid r"></i></span></span>';
 const ICON_T = '<span class="ci ci-t" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="44" height="32" rx="5"/><path d="M28 40v8M20 54l8-6 8 6"/><rect class="bar" x="14" y="26" width="6" height="8" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b2" x="24" y="20" width="6" height="14" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b3" x="34" y="15" width="6" height="19" rx="1.5" fill="currentColor" stroke="none"/><g class="stick"><path d="M52 50 41 20"/><circle cx="41" cy="20" r="2.5" fill="currentColor" stroke="none"/></g><path class="spark" d="M56 6v8M52 10h8" stroke-width="2.5"/></svg></span>';
@@ -419,13 +428,31 @@ function beep(freq, dur, type, vol){
     o.type = type || "sine"; o.frequency.value = freq; g.gain.setValueAtTime(vol || .12, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
     o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + dur); }catch(e){}
 }
-function drumroll(ms){
+function drumroll(ms){ // trống dồn: snare mạnh dần + rền trống lớn, kết bằng trống cái + chũm chọe
   if(!sound) return;
-  try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); const n = Math.floor(ms / 55);
-    for(let k = 0; k < n; k++){ const t = ac.currentTime + k * .055, len = .05, buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate), d = buf.getChannelData(0);
-      for(let x = 0; x < d.length; x++) d[x] = (Math.random() * 2 - 1) * Math.pow(1 - x / d.length, 3);
-      const s = ac.createBufferSource(), g = ac.createGain(), f = ac.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 900;
-      s.buffer = buf; g.gain.value = .08 + .14 * (k / n); s.connect(f); f.connect(g); g.connect(ac.destination); s.start(t); }
+  try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const noise = len => { const bf = ac.createBuffer(1, Math.floor(ac.sampleRate * len), ac.sampleRate), d = bf.getChannelData(0); for(let x = 0; x < d.length; x++) d[x] = Math.random() * 2 - 1; return bf; };
+    const out = ac.createGain(); out.gain.value = .9; out.connect(ac.destination);
+    const t0 = ac.currentTime + .03, end = t0 + ms / 1000, nb = noise(.15);
+    let t = t0, k = 0;
+    while(t < end - .03){
+      const p = (t - t0) / (end - t0), v = .04 + .2 * p * p + (k % 2 ? 0 : .025) + Math.random() * .02;
+      const s = ac.createBufferSource(), bp = ac.createBiquadFilter(), g = ac.createGain(); s.buffer = nb;
+      bp.type = "bandpass"; bp.frequency.value = 2600 + Math.random() * 700; bp.Q.value = .9;
+      g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0005, t + .075);
+      s.connect(bp); bp.connect(g); g.connect(out); s.start(t, Math.random() * .05, .09);
+      const o = ac.createOscillator(), og = ac.createGain(); o.type = "triangle"; o.frequency.setValueAtTime(230, t); o.frequency.exponentialRampToValueAtTime(150, t + .04);
+      og.gain.setValueAtTime(v * .55, t); og.gain.exponentialRampToValueAtTime(.0005, t + .05); o.connect(og); og.connect(out); o.start(t); o.stop(t + .06);
+      t += .064 - .024 * p; k++;
+    }
+    const rum = ac.createBufferSource(), lp = ac.createBiquadFilter(), rg = ac.createGain(); rum.buffer = noise(ms / 1000 + .2);
+    lp.type = "lowpass"; lp.frequency.value = 150; rg.gain.setValueAtTime(.0001, t0); rg.gain.exponentialRampToValueAtTime(.4, end); rg.gain.exponentialRampToValueAtTime(.0001, end + .12);
+    rum.connect(lp); lp.connect(rg); rg.connect(out); rum.start(t0);
+    const kk = ac.createOscillator(), kg = ac.createGain(); kk.frequency.setValueAtTime(130, end); kk.frequency.exponentialRampToValueAtTime(45, end + .3);
+    kg.gain.setValueAtTime(.75, end); kg.gain.exponentialRampToValueAtTime(.001, end + .45); kk.connect(kg); kg.connect(out); kk.start(end); kk.stop(end + .47);
+    const cy = ac.createBufferSource(), hp = ac.createBiquadFilter(), cg = ac.createGain(); cy.buffer = noise(1.8);
+    hp.type = "highpass"; hp.frequency.value = 4800; cg.gain.setValueAtTime(.3, end); cg.gain.exponentialRampToValueAtTime(.001, end + 1.6);
+    cy.connect(hp); hp.connect(cg); cg.connect(out); cy.start(end);
   }catch(e){}
 }
 const fanfare = () => [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, .28, "triangle", .16), i * 130));
@@ -531,7 +558,7 @@ const params = new URLSearchParams(location.search);
 const PIN_FROM_URL = (params.get("pin") || "").replace(/\D/g, "").slice(0, 6);
 function setNet(ok, txt){ net.textContent = txt || (ok ? "● Trực tuyến" : "Đang kết nối…"); net.className = "pill" + (ok ? " live" : ""); }
 (async () => {
-  try{ const cred = await signInAnonymously(auth); UID = cred.user.uid; setNet(true); }
+  try{ const cred = await signInAnonymously(auth); UID = cred.user.uid; setNet(true); getDoc(doc(db, "live_rooms", "000000")).catch(() => {}); }
   catch(e){ setNet(false, "Không kết nối được"); }
   if(PIN_FROM_URL) P.start(PIN_FROM_URL); else if(params.has("join")) P.start(""); else home();
 })();
@@ -571,11 +598,24 @@ const H = (() => {
       return c.w.filter(x => (cfg.level === "all" || x[2] === cfg.level) && (cfg.topic === "all" || String(x[3]) === String(cfg.topic))).map(x => ({ w:x[0], m:x[1] })); }
     return cfg.list.split(/\n/).map(l => { const m = l.match(/^\s*(.+?)\s*(?:\t| - | – | — |:|=)\s*(.+?)\s*$/); return m ? { w:m[1], m:m[2] } : null; }).filter(Boolean);
   }
+  // Đáp án nhiễu: ưu tiên từ có cách viết gần giống (cùng đầu/đuôi, ít khác chữ) để dễ chọn nhầm
+  function lev(a, b){ if(a === b) return 0; let prev = Array.from({ length:b.length + 1 }, (_, j) => j);
+    for(let x = 1; x <= a.length; x++){ const cur = [x]; for(let y = 1; y <= b.length; y++) cur[y] = Math.min(prev[y] + 1, cur[y - 1] + 1, prev[y - 1] + (a[x - 1] === b[y - 1] ? 0 : 1)); prev = cur; }
+    return prev[b.length]; }
+  function looks(a, b){ a = a.toLowerCase(); b = b.toLowerCase(); let s = 1 - lev(a, b) / Math.max(a.length, b.length, 1);
+    if(a.slice(0, 2) === b.slice(0, 2)) s += .25; if(a.length > 4 && a.slice(-3) === b.slice(-3)) s += .2; if(a[0] === b[0]) s += .08;
+    return s - Math.abs(a.length - b.length) * .03; }
+  function lookalikes(it, pool, n){
+    const seen = new Set([it.m.toLowerCase()]), cand = pool.filter(x => x.w.toLowerCase() !== it.w.toLowerCase() && x.m !== it.m);
+    const sample = cand.length > 6000 ? shuffle(cand.slice()).slice(0, 6000) : cand;
+    const top = sample.map(x => ({ x, s:looks(it.w, x.w) })).sort((a, b) => b.s - a.s).filter(o => { const k = o.x.m.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; }).slice(0, n + 4);
+    return top.slice(0, 2).concat(shuffle(top.slice(2, n + 4)).slice(0, Math.max(0, n - 2))).map(o => o.x);
+  }
   function vocabQuestions(){
     const p = vocabPool(), picked = shuffle(p.slice()).slice(0, Math.min(cfg.count, p.length));
     return picked.map(it => {
       const k = cfg.kinds[Math.floor(Math.random() * cfg.kinds.length)] || "en";
-      const others = shuffle(p.filter(x => x.w !== it.w && x.m !== it.m));
+      const others = lookalikes(it, p, 3);
       if(k === "tf"){ const truth = Math.random() < .5, shown = truth ? it.m : (others[0] ? others[0].m : it.m);
         return { t:"tf", p:"“" + it.w + "” nghĩa là “" + shown + "”?", o:["Đúng", "Sai"], ok:[truth || !others[0] ? 0 : 1], time:cfg.time, x2:false }; }
       if(k === "type") return { t:"type", p:it.m, hint:"Gõ từ tiếng Anh", acc:[it.w], time:Math.max(cfg.time, 20), x2:false };
@@ -738,7 +778,7 @@ const H = (() => {
       "Multiple choice: Question | *correct option | wrong option | wrong option | wrong option\n" +
       "True/false: Statement | Đúng   (or)   Statement | Sai\n" +
       "Typed answer: Question | =accepted answer / other accepted spelling\n\n" +
-      "Rules: questions test the SOURCE content; English questions, Vietnamese meanings allowed (e.g. “Hạn chót” tiếng Anh là gì?); question under 110 characters, options under 40; never use the | character inside text; exactly one * per multiple-choice line; plausible distractors of the same word type; vary the position of the correct option; typed answers must be a single word or short phrase; put [x2] at the start of the 1–2 hardest questions; facts must be correct.";
+      "Rules: questions test the SOURCE content; English questions, Vietnamese meanings allowed (e.g. “Hạn chót” tiếng Anh là gì?); question under 110 characters, options under 40; never use the | character inside text; exactly one * per multiple-choice line; distractors must be EASY TO CONFUSE with the answer: words that look or sound similar (similar spelling, same prefix/suffix, commonly confused pairs such as affect/effect, adapt/adopt, quite/quiet), same word type; vary the position of the correct option; typed answers must be a single word or short phrase; put [x2] at the start of the 1–2 hardest questions; facts must be correct.";
   }
   function bindAi(){
     if(!$("ai")) return;
@@ -928,9 +968,9 @@ const H = (() => {
     qs = cfg.src === "quiz" || cfg.src === "lib" ? cleanQuiz() : vocabQuestions();
     try{
       for(let tries = 0; tries < 6; tries++){
-        const p = String(100000 + Math.floor(Math.random() * 900000)), ref = doc(db, "live_rooms", p), s = await getDoc(ref);
-        if(s.exists() && s.data().ph !== "end" && Date.now() - ((s.data().at || {}).seconds || 0) * 1000 < 6 * 3600e3) continue;
-        await setDoc(ref, { host:UID, ph:"lobby", i:-1, n:qs.length, locked:false, at:serverTimestamp() });
+        const p = String(100000 + Math.floor(Math.random() * 900000)), ref = doc(db, "live_rooms", p);
+        try{ await setDoc(ref, { host:UID, ph:"lobby", i:-1, n:qs.length, locked:false, at:serverTimestamp() }); }catch(err){ continue; }
+        syncClock(ref);
         pin = p; roomRef = ref; break;
       }
       if(!pin) throw new Error("no pin");
@@ -940,7 +980,7 @@ const H = (() => {
       players = {}; snap.forEach(d => { players[d.id] = d.data(); });
       if(ph === "lobby") drawLobby(); if(ph === "question") answeredCount();
     });
-    unRoom = onSnapshot(roomRef, s => { const d = s.data(); if(d && d.qAt && d.qAt.toMillis) qAtMs = d.qAt.toMillis(); });
+    unRoom = onSnapshot(roomRef, () => {});
     ph = "lobby"; lobby(); playMusic("lobby", .35);
   }
   const joinUrl = () => location.origin + location.pathname + "?pin=" + pin;
@@ -989,20 +1029,21 @@ const H = (() => {
     unAnswers = onSnapshot(query(collection(db, "live_rooms", pin, "answers"), where("q", "==", i)), snap => {
       snap.docChanges().forEach(ch => { if(ch.type !== "removed"){ const d = ch.doc.data(); answers[d.uid] = d; } }); answeredCount();
     });
-    upRoom({ ph:"ready", i, q:publicQ(q), res:null }).catch(() => {});
+    const goAt = Math.round(Date.now() + SKEW + CD_T); qAtMs = goAt;
+    upRoom({ ph:"ready", i, q:publicQ(q), res:null, goAt }).catch(() => {});
     playMusic("play", .4); speedUp(false);
     drawReady(q);
-    readyT = setTimeout(startQuestion, 3200);
+    readyT = setTimeout(startQuestion, Math.max(0, goAt - SKEW - Date.now()));
   }
   function drawReady(q){
     view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '</div>' +
-      '<div class="card prompt"><small>Sẵn sàng chưa?</small><div class="w">' + esc(q.p) + '</div></div>' + '<div class="cd" aria-label="Chuẩn bị"><b>3</b><b>2</b><b>1</b><b class="go">GO!</b><i class="ring"></i></div>';
-    [0, 800, 1600].forEach(t => setTimeout(() => { if(ph === "ready") beep(440, .12, "square", .08); }, t));
-    setTimeout(() => { if(ph === "ready") beep(880, .3, "triangle", .16); }, 2400);
+      '<div class="card prompt"><small>Sẵn sàng chưa?</small><div class="w">' + esc(q.p) + '</div></div>' + cdHTML(CD_T);
+    [0, 850, 1700].forEach(t => setTimeout(() => { if(ph === "ready") beep(440, .12, "square", .08); }, t));
+    setTimeout(() => { if(ph === "ready") beep(880, .3, "triangle", .16); }, 2550);
   }
   function startQuestion(){
-    const q = qs[i]; ph = "question"; deadline = Date.now() + q.time * 1000; qAtMs = 0;
-    upRoom({ ph:"question", qAt:serverTimestamp() }).catch(() => {});
+    const q = qs[i]; ph = "question"; deadline = Date.now() + q.time * 1000; if(window.__azlT) window.__azlT.push(["host-show", i, Date.now(), SKEW]);
+    upRoom({ ph:"question" }).catch(() => {});
     bots.forEach(b => { const delay = 1200 + Math.random() * q.time * 700;
       setTimeout(() => { if(ph !== "question") return; const right = Math.random() < b.skill;
         let a; if(q.t === "type") a = { a:right ? q.acc[0] : "???" }; else { const wrong = q.o.map((_, k) => k).filter(k => !q.ok.includes(k)); a = { c:right || !wrong.length ? q.ok[0] : wrong[Math.floor(Math.random() * wrong.length)] }; }
@@ -1105,9 +1146,9 @@ const H = (() => {
       '<div class="row" id="endBtns" hidden><button class="btn ghost" id="again" type="button">↻ Chơi lại (giữ người chơi)</button><button class="btn ghost" id="newset" type="button">⚙ Bộ câu mới</button><span class="sp"></span><button class="btn" id="rep" type="button">📊 Báo cáo trận</button></div>';
     if(instant){ ["pod3", "pod2", "pod1"].forEach(id => $(id).classList.add("show")); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!"; }
     else {
-    drumroll(1600); await wait(1700); if(ph !== "end") return; $("pod3").classList.add("show"); beep(523, .2, "triangle", .14);
-    drumroll(1600); await wait(1800); if(ph !== "end") return; $("pod2").classList.add("show"); beep(659, .2, "triangle", .14);
-    drumroll(2200); await wait(2400); if(ph !== "end") return; $("pod1").classList.add("show"); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!";
+    drumroll(1600); await wait(1630); if(ph !== "end") return; $("pod3").classList.add("show"); await wait(650);
+    drumroll(1600); await wait(1630); if(ph !== "end") return; $("pod2").classList.add("show"); await wait(750);
+    drumroll(2600); await wait(2630); if(ph !== "end") return; $("pod1").classList.add("show"); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!";
     $("endLumi").classList.add("cheer"); confettiBurst();
     if(top[0]) setTimeout(() => { if(ph === "end") champion(top[0].n, top[0].s); }, 600); }
     $("rest").hidden = false; $("endBtns").hidden = false;
@@ -1127,7 +1168,7 @@ const H = (() => {
 // HỌC VIÊN
 // =================================================================
 const P = (() => {
-  let pin = null, nick = ls("azl_nick") || "", unRoom = null, unMe = null, joined = false, st = null, lastKey = "", answeredI = -1, qStart = 0, deadline = 0, tickT = null;
+  let pin = null, nick = ls("azl_nick") || "", unRoom = null, unMe = null, joined = false, st = null, lastKey = "", answeredI = -1, qStart = 0, deadline = 0, tickT = null, qTimer = null, shownQ = -1;
   function start(pre){
     stopAll(); musBtn.hidden = true;
     view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><div class="tiles4" aria-hidden="true"><i>▲</i><i>◆</i><i>●</i><i>■</i></div><h1>Vào phòng chơi</h1>' +
@@ -1151,7 +1192,7 @@ const P = (() => {
       const s = await getDoc(doc(db, "live_rooms", p));
       if(!s.exists() || s.data().ph === "closed"){ throw "Không tìm thấy phòng " + p + ". Xem lại mã PIN trên màn hình nha."; }
       if(s.data().locked){ throw "Phòng đã khoá. Nhờ giáo viên mở phòng nha."; }
-      await setDoc(doc(db, "live_rooms", p, "players", UID), { n, at:serverTimestamp() });
+      await setDoc(doc(db, "live_rooms", p, "players", UID), { n, at:serverTimestamp() }); syncClock(doc(db, "live_rooms", p, "players", UID));
     }catch(e){ err.textContent = typeof e === "string" ? e : "Không vào được phòng, thử lại nha."; btn.disabled = false; btn.textContent = "Vào phòng ▶"; return; }
     pin = p; nick = n; ls("azl_nick", n); joined = true; lastKey = "";
     history.replaceState(null, "", location.pathname + "?pin=" + p);
@@ -1162,23 +1203,11 @@ const P = (() => {
   function kicked(){ view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><h1>Bạn đã được mời ra khỏi phòng</h1><p class="muted">Nếu nhầm lẫn, hỏi giáo viên rồi vào lại nha.</p><button class="btn" id="rj" type="button">Vào lại</button></div>';
     $("rj").addEventListener("click", () => start(pin || "")); }
   function wait_(msg){ view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><h1>' + esc(nick) + '</h1><p class="say"><b>Lumina:</b> ' + msg + '</p></div>'; }
-  function render(){
-    if(!st) return wait_("Phòng không còn nữa rồi 🥲");
-    const key = st.ph + ":" + st.i + ((st.ph === "reveal" || st.ph === "end") && st.res ? "+res" : "");
-    if(key === lastKey) return; // chỉ vẽ lại khi đổi giai đoạn
-    lastKey = key;
+  function renderQ(){
     if(tickT){ clearInterval(tickT); tickT = null; }
-    const q = st.q || {};
-    if(st.ph === "closed") return wait_("Giáo viên đã đóng phòng. Cảm ơn bạn đã chơi nha! 👋");
-    if(st.ph === "lobby"){ answeredI = -1; return wait_("Vào phòng rồi! Nhìn lên màn hình lớp và chờ giáo viên bắt đầu nha 👀"); }
-    if(st.ph === "ready"){
-      view.innerHTML = '<div class="ph center"><p class="pill">Câu ' + (st.i + 1) + '/' + st.n + (q.x2 ? ' · x2 điểm' : '') + '</p><h1>Ready?</h1>' +
-        '<p class="cd-l">' + ({ tf:"Đúng hay sai?", type:"Gõ đáp án", mcq:"Chọn đáp án" })[q.t] + '</p>' + '<div class="cd" aria-label="Chuẩn bị"><b>3</b><b>2</b><b>1</b><b class="go">GO!</b><i class="ring"></i></div>' + '</div>';
-      return;
-    }
-    if(st.ph === "question"){
+    const q = st.q || {}; shownQ = st.i; if(window.__azlT) window.__azlT.push(["player-show", st.i, Date.now(), SKEW]);
       if(answeredI === st.i) return lockedView();
-      qStart = Date.now(); deadline = Date.now() + (q.dur || 20) * 1000;
+      qStart = Date.now(); deadline = (st.goAt ? st.goAt - SKEW : Date.now()) + (q.dur || 20) * 1000;
       let body;
       if(q.t === "type") body = '<input type="text" id="typed" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án…" style="font:800 22px var(--display);text-align:center;min-height:64px">' +
         '<button class="btn big" id="send" type="button">Gửi ▶</button>';
@@ -1189,8 +1218,26 @@ const P = (() => {
         $("send").addEventListener("click", send); inp.addEventListener("keydown", e => { if(e.key === "Enter") send(); }); }
       else view.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => answer({ c:+b.dataset.k })));
       const pt = $("pt"); tickT = setInterval(() => { const left = Math.max(0, deadline - Date.now()); pt.textContent = "⏱ " + Math.ceil(left / 1000) + "s"; }, 250);
+        }
+  function render(){
+    if(!st) return wait_("Phòng không còn nữa rồi 🥲");
+    const key = st.ph + ":" + st.i + ((st.ph === "reveal" || st.ph === "end") && st.res ? "+res" : "");
+    if(key === lastKey) return; // chỉ vẽ lại khi đổi giai đoạn
+    lastKey = key;
+    if(st.ph === "question" && shownQ === st.i) return;
+    if(qTimer){ clearTimeout(qTimer); qTimer = null; }
+    if(tickT){ clearInterval(tickT); tickT = null; }
+    const q = st.q || {};
+    if(st.ph === "closed") return wait_("Giáo viên đã đóng phòng. Cảm ơn bạn đã chơi nha! 👋");
+    if(st.ph === "lobby"){ answeredI = -1; shownQ = -1; return wait_("Vào phòng rồi! Nhìn lên màn hình lớp và chờ giáo viên bắt đầu nha 👀"); }
+    if(st.ph === "ready"){
+      const rem = st.goAt ? Math.max(0, st.goAt - SKEW - Date.now()) : CD_T, myI = st.i; if(window.__azlT) window.__azlT.push(["player-ready", st.i, Date.now(), rem]);
+      view.innerHTML = '<div class="ph center"><p class="pill">Câu ' + (st.i + 1) + '/' + st.n + (q.x2 ? ' · x2 điểm' : '') + '</p><h1>Ready?</h1>' +
+        '<p class="cd-l">' + ({ tf:"Đúng hay sai?", type:"Gõ đáp án", mcq:"Chọn đáp án" })[q.t] + '</p>' + cdHTML(rem) + '</div>';
+      qTimer = setTimeout(() => { qTimer = null; if(st && st.i === myI && (st.ph === "ready" || st.ph === "question")) renderQ(); }, rem);
       return;
     }
+    if(st.ph === "question") return renderQ();
     if(st.ph === "reveal" || st.ph === "board"){
       const r = st.res && st.res.me && st.res.me[UID];
       if(!r){ return wait_(answeredI === st.i ? "Đang chấm… hồi hộp ghê 😬" : "Hết giờ rồi! Câu sau nhanh tay hơn nha ⏰"); }
@@ -1215,14 +1262,14 @@ const P = (() => {
     }
   }
   async function answer(a){
-    if(!st || st.ph !== "question" || answeredI === st.i) return;
+    if(!st || !(st.ph === "question" || (st.ph === "ready" && shownQ === st.i)) || answeredI === st.i) return;
     answeredI = st.i; beep(700, .08); lockedView();
     try{ await setDoc(doc(db, "live_rooms", pin, "answers", st.i + "_" + UID), Object.assign({ uid:UID, q:st.i, at:serverTimestamp() }, a)); }
     catch(e){ answeredI = -1; lastKey = ""; render(); }
   }
   function lockedView(){ if(tickT){ clearInterval(tickT); tickT = null; }
     view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><h1>Đã chốt!</h1><p class="say"><b>Lumina:</b> Chờ cả lớp xíu… hồi hộp ghê 😬</p></div>'; }
-  function stopAll(){ [unRoom, unMe].forEach(u => u && u()); unRoom = unMe = null; if(tickT){ clearInterval(tickT); tickT = null; } }
+  function stopAll(){ [unRoom, unMe].forEach(u => u && u()); unRoom = unMe = null; if(tickT){ clearInterval(tickT); tickT = null; } if(qTimer){ clearTimeout(qTimer); qTimer = null; } }
   return { start, stopAll };
 })();
 </script>
