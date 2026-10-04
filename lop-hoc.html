@@ -358,6 +358,40 @@
   .p1.show .blk{ animation:p1glow 1.4s ease-in-out infinite alternate; }
   @keyframes p1glow{ from{ box-shadow:0 0 0 0 rgba(242,183,5,.0); } to{ box-shadow:0 0 40px 10px rgba(242,183,5,.55); } }
   @media (prefers-reduced-motion:reduce){ .champ::before{ animation:none; } }
+  /* ===== r8: thẻ chọn nguồn câu hỏi ===== */
+  .srcs{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+  .src{ --sc:#e0102b; position:relative; display:flex; align-items:center; gap:12px; min-width:0; padding:14px; border-radius:18px; border:2px solid var(--line); background:var(--card); cursor:pointer; text-align:left;
+    transition:transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s ease, box-shadow .2s ease, background-color .2s ease; }
+  .src:hover{ transform:translateY(-3px); border-color:color-mix(in srgb, var(--sc) 55%, var(--line)); }
+  .src .si{ flex:none; width:46px; height:46px; border-radius:14px; display:grid; place-items:center; color:#fff; background:var(--sc); box-shadow:0 4px 0 color-mix(in srgb, var(--sc) 55%, #000); }
+  .src .si svg{ width:26px; height:26px; overflow:visible; }
+  .src .st{ min-width:0; } .src b{ display:block; font:800 15.5px/1.2 var(--display); color:var(--ink); }
+  .src small{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; margin-top:2px; font-size:12px; line-height:1.3; color:var(--muted); overflow:hidden; }
+  .src .ck{ position:absolute; top:-8px; right:-8px; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:var(--sc); color:#fff; font:800 13px var(--body); font-style:normal;
+    box-shadow:0 0 0 3px var(--card); transform:scale(0); transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+  .src.on{ border-color:var(--sc); background:color-mix(in srgb, var(--sc) 10%, var(--card)); box-shadow:0 12px 26px -16px var(--sc); }
+  .src.on .ck{ transform:scale(1); } .src.on .si{ animation:siHop .55s cubic-bezier(.34,1.56,.64,1); }
+  .src.on .si .tw{ animation:tw 1.8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes siHop{ 40%{ transform:translateY(-6px) rotate(-8deg); } }
+  .s-quiz{ --sc:#e0102b; } .s-list{ --sc:#1d6fa5; } .s-bank{ --sc:#d98a00; } .s-grammar{ --sc:#1e7a4c; } .s-lib{ --sc:#3a2a20; }
+  .s-lib .si{ box-shadow:0 4px 0 #120c09, inset 0 0 0 1px rgba(255,255,255,.14); }
+  @media (max-width:1050px){ .srcs{ grid-template-columns:repeat(3,minmax(0,1fr)); } } @media (max-width:620px){ .srcs{ grid-template-columns:1fr 1fr; } }
+  /* chủ điểm ngữ pháp */
+  .gchips button small{ margin-left:6px; font-size:11.5px; opacity:.7; font-weight:700; }
+  .prompt .w.long{ font-size:clamp(24px,3.2vw,40px); line-height:1.3; text-wrap:pretty; }
+  /* kết quả mỗi câu */
+  .opt .vb{ position:absolute; left:0; bottom:0; height:8px; width:0; border-radius:0 6px 0 0; background:rgba(255,255,255,.6); animation:vbGrow .9s cubic-bezier(.22,1,.36,1) .15s forwards; }
+  @keyframes vbGrow{ to{ width:var(--p); } }
+  .autob{ position:relative; overflow:hidden; } .autob::after{ content:""; position:absolute; left:0; bottom:0; height:4px; width:100%; background:rgba(255,255,255,.55); transform-origin:0 50%; animation:autob 3.5s linear forwards; }
+  @keyframes autob{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+  .res.ok{ animation:okPop .6s cubic-bezier(.34,1.56,.64,1); box-shadow:0 0 0 0 rgba(30,122,76,.5); }
+  .res.ok::before{ content:""; position:absolute; inset:-30%; background:radial-gradient(circle, rgba(95,211,148,.45), transparent 60%); animation:okGlow 1.1s ease-out forwards; pointer-events:none; }
+  .res{ position:relative; overflow:hidden; } .res .big,.res .pts{ position:relative; }
+  @keyframes okPop{ 0%{ transform:scale(.6); } 60%{ transform:scale(1.06); } 100%{ transform:none; } }
+  @keyframes okGlow{ from{ opacity:1; transform:scale(.4); } to{ opacity:0; transform:scale(1.3); } }
+  .res.no{ animation:shake .5s cubic-bezier(.36,.07,.19,.97); }
+  @keyframes shake{ 10%,90%{ transform:translateX(-2px); } 20%,80%{ transform:translateX(5px); } 30%,50%,70%{ transform:translateX(-9px); } 40%,60%{ transform:translateX(9px); } }
+  .rankcard{ animation:up .45s cubic-bezier(.22,1,.36,1) .25s both; }
 </style>
 <script>try{ var t = localStorage.getItem("azvocab_index_theme"); if(t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); }catch(e){}</script>
 </head>
@@ -535,6 +569,7 @@ function fireworks(ms, perSec, quiet){
   fwRaf = requestAnimationFrame(step);
 }
 // ===== màn "NHÀ VÔ ĐỊCH MÃI ĐỈNH!" + giọng Lumina =====
+function playBoom(v){ if(!sound) return; try{ const f = new Audio("./fireworks.mp3"); f.volume = v || .75; const p = f.play(); if(p && p.catch) p.catch(() => fwSound()); }catch(e){ fwSound(); } }
 function champion(name, score){
   const letters = (txt, cls, d0) => '<span class="' + cls + '">' + [...txt].map((ch, i) => '<b style="animation-delay:' + (d0 + i * 45) + 'ms,' + (d0 + i * 45 + 600) + 'ms">' + (ch === " " ? "&nbsp;" : esc(ch)) + '</b>').join("") + '</span>';
   const ov = document.createElement("div"); ov.className = "champ"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Nhà vô địch");
@@ -581,7 +616,7 @@ function home(){
 // GIÁO VIÊN
 // =================================================================
 const H = (() => {
-  const cfg = { src:"quiz", course:"giaotiep", level:"all", topic:"all", kinds:["en"], count:10, time:20, list:"", quiz:[] };
+  const cfg = { src:"quiz", course:"giaotiep", level:"all", topic:"all", kinds:["en"], count:10, time:20, list:"", quiz:[], gTopics:[], gCount:10, gTime:30 };
   try{ const s = JSON.parse(ls("azl_cfg2") || "null"); if(s) Object.assign(cfg, s); }catch(e){}
   if(!Array.isArray(cfg.quiz)) cfg.quiz = [];
   const save = () => ls("azl_cfg2", JSON.stringify(cfg));
@@ -591,6 +626,32 @@ const H = (() => {
 
   function upRoom(data){ try{ return updateDoc(roomRef, data).catch(e => console.warn("room update", e)); }catch(e){ console.error("room update", e); return Promise.resolve(); } }
   // ---------- nguồn câu hỏi ----------
+  function loadGrammar(cb){ if(window.AZG) return cb(); const s = document.createElement("script"); s.src = "./live-grammar.js"; s.onload = () => cb(); s.onerror = () => cb("err"); document.head.appendChild(s); }
+  function grammarPool(){ if(!window.AZG) return []; const on = new Set(cfg.gTopics);
+    return AZG.topics.filter(t => on.has(t.id)).flatMap(t => t.q.map(x => ({ p:x[0], o:x[1], k:x[2], tt:t.t }))); }
+  function grammarQuestions(){
+    const pool = grammarPool(), picked = shuffle(pool.slice()).slice(0, Math.min(cfg.gCount, pool.length));
+    return picked.map(x => { const ord = shuffle(x.o.map((_, j) => j));
+      return { t:"mcq", p:x.p, sub:"Ngữ pháp · " + x.tt, o:ord.map(j => x.o[j]), ok:[ord.indexOf(x.k)], time:cfg.gTime + (x.p.length > 120 ? 10 : 0), x2:false }; });
+  }
+  function grammarBox(box){
+    box.innerHTML = '<p class="muted">Đang tải ngữ pháp…</p>';
+    loadGrammar(err => {
+      if(err || !window.AZG){ box.innerHTML = '<p class="pool bad">Không tải được dữ liệu ngữ pháp. Kiểm tra mạng rồi thử lại.</p>'; return; }
+      const ids = AZG.topics.map(t => t.id); cfg.gTopics = (cfg.gTopics || []).filter(id => ids.includes(id)); if(!cfg.gTopics.length) cfg.gTopics = ids.slice();
+      box.innerHTML = '<div class="row"><b style="font:800 16px var(--display)">Chủ điểm</b><span class="sp"></span><button class="btn ghost sm" id="gAll" type="button">Chọn tất cả</button><button class="btn ghost sm" id="gNone" type="button">Bỏ chọn</button></div>' +
+        '<div class="chips gchips" id="gT">' + AZG.topics.map(t => '<button type="button" data-v="' + t.id + '">' + esc(t.t) + '<small>' + t.q.length + '</small></button>').join("") + '</div>' +
+        '<div class="grid2"><label class="f">Số câu<div class="chips" id="gN"></div></label><label class="f">Thời gian mỗi câu<div class="chips" id="gS"></div></label></div>' +
+        '<p class="muted" style="margin:0;font-size:13px">Câu dài trên 120 ký tự tự cộng thêm 10 giây. Đáp án được xáo vị trí mỗi lần chơi.</p>';
+      const gT = $("gT"), paint = () => [...gT.children].forEach(b => b.classList.toggle("on", cfg.gTopics.includes(b.dataset.v)));
+      gT.addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; const s = new Set(cfg.gTopics); s.has(b.dataset.v) ? s.delete(b.dataset.v) : s.add(b.dataset.v); cfg.gTopics = ids.filter(id => s.has(id)); save(); paint(); info(); });
+      $("gAll").addEventListener("click", () => { cfg.gTopics = ids.slice(); save(); paint(); info(); });
+      $("gNone").addEventListener("click", () => { cfg.gTopics = []; save(); paint(); info(); });
+      chips($("gN"), [10, 15, 20, 30], "gCount", v => v + " câu"); chips($("gS"), [20, 30, 45], "gTime", v => v + " giây");
+      paint(); info();
+    });
+  }
+  function srcQuestions(){ return cfg.src === "quiz" || cfg.src === "lib" ? cleanQuiz() : cfg.src === "grammar" ? grammarQuestions() : vocabQuestions(); }
   function loadBank(cb){ if(window.AZW) return cb(); const s = document.createElement("script"); s.src = "./live-words.js"; s.onload = () => cb(); s.onerror = () => cb("err"); document.head.appendChild(s); }
   function levelsOf(c){ const o = ["A1", "A2", "B1", "B2", "C1"], seen = {}; AZW[c].w.forEach(x => { seen[x[2]] = (seen[x[2]] || 0) + 1; }); return o.filter(l => (seen[l] || 0) >= 20); }
   function vocabPool(){
@@ -649,11 +710,11 @@ const H = (() => {
     stopAll(); ph = "setup"; stopMusic(); musBtn.hidden = false;
     view.innerHTML = '<div class="row"><h1>Mở phòng chơi</h1><span class="sp"></span><button class="btn ghost" id="back" type="button">← Quay lại</button></div>' +
       '<div class="card" style="display:flex;flex-direction:column;gap:16px">' +
-      '<div class="tabs" role="tablist"><button type="button" data-s="quiz">✏️ Câu hỏi của tôi</button><button type="button" data-s="list">📝 Danh sách từ</button><button type="button" data-s="bank">📚 Kho từ AZ</button><button type="button" data-s="lib">🗂 Thư viện bộ đề</button></div>' +
+      '<div class="srcs" role="tablist"><button type="button" role="tab" class="src s-quiz" data-s="quiz"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/><path class="tw" d="M20 1.5v3.5M18.25 3.25h3.5"/></svg></span><span class="st"><b>Câu hỏi của tôi</b><small>Tự soạn · Lumina soạn giúp</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-list" data-s="list"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V2.8h6V4"/><path d="M8.5 10h7M8.5 14h7M8.5 18h4"/></svg></span><span class="st"><b>Danh sách từ</b><small>Dán từ của buổi học</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-bank" data-s="bank"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5" opacity=".65"/></svg></span><span class="st"><b>Kho từ AZ</b><small>10.000+ từ · 5 lộ trình</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-grammar" data-s="grammar"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><text x="1.5" y="17.5" font-size="13.5" font-weight="800" fill="currentColor" stroke="none" font-family="Baloo 2,Be Vietnam Pro,sans-serif">Aa</text><path class="tw" d="M20 5v14"/></svg></span><span class="st"><b>Ngữ pháp TOEIC</b><small>987 câu · 15 chủ điểm</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-lib" data-s="lib"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg></span><span class="st"><b>Thư viện bộ đề</b><small>Bộ đề đã lưu</small></span><i class="ck">✓</i></button></div>' +
       '<div id="srcBox"></div>' +
       '<div class="row"><span class="pool" id="poolInfo"></span><span class="sp"></span><button class="btn" id="create" type="button">Tạo phòng →</button></div></div>';
     $("back").addEventListener("click", home);
-    view.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => { cfg.src = b.dataset.s; save(); srcBox(); }));
+    view.querySelectorAll(".srcs .src").forEach(b => b.addEventListener("click", () => { cfg.src = b.dataset.s; save(); srcBox(); }));
     $("create").addEventListener("click", createRoom);
     srcBox();
   }
@@ -673,10 +734,11 @@ const H = (() => {
     chips($("tm"), [10, 20, 30], "time", v => v + " giây");
   }
   function srcBox(){
-    view.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.s === cfg.src));
+    view.querySelectorAll(".srcs .src").forEach(b => { b.classList.toggle("on", b.dataset.s === cfg.src); b.setAttribute("aria-selected", b.dataset.s === cfg.src); });
     const box = $("srcBox");
     if(cfg.src === "quiz") return quizEditor(box);
     if(cfg.src === "lib") return library(box);
+    if(cfg.src === "grammar") return grammarBox(box);
     if(cfg.src === "list"){
       box.innerHTML = '<label class="f">Dán danh sách từ của buổi học (mỗi dòng: <code>từ - nghĩa</code>)<textarea id="list" placeholder="deadline - hạn chót&#10;take off - cất cánh&#10;confident - tự tin&#10;schedule - lịch trình"></textarea></label>' + vocabOptions();
       const ta = $("list"); ta.value = cfg.list; ta.addEventListener("input", () => { cfg.list = ta.value; save(); info(); });
@@ -689,7 +751,7 @@ const H = (() => {
       box.innerHTML = '<div class="grid2"><label class="f">Lộ trình<select id="course">' + Object.keys(AZW).map(k => '<option value="' + k + '">' + esc(AZW[k].name) + ' (' + fmt(AZW[k].w.length) + ' từ)</option>').join("") + '</select></label>' +
         '<label class="f">Chủ đề<select id="topic"></select></label></div><label class="f">Cấp độ<div class="chips" id="lv"></div></label>' + vocabOptions();
       const cs = $("course"); cs.value = c; cs.addEventListener("change", () => { cfg.course = cs.value; cfg.topic = "all"; cfg.level = "all"; save(); srcBox(); });
-      const ts = $("topic"); ts.innerHTML = '<option value="all">Tất cả chủ đề</option>' + AZW[c].topics.map((t, idx) => '<option value="' + idx + '">' + esc((t[2] ? t[2] + " " : "") + t[1]) + '</option>').join("");
+      const ts = $("topic"); ts.innerHTML = '<option value="all">Tất cả chủ đề</option>' + AZW[c].topics.map((t, idx) => '<option value="' + idx + '">' + esc(t[1]) + '</option>').join("");
       ts.value = cfg.topic; ts.addEventListener("change", () => { cfg.topic = ts.value; save(); info(); });
       const lvs = ["all"].concat(levelsOf(c)); if(!lvs.includes(cfg.level)) cfg.level = "all";
       chips($("lv"), lvs, "level", l => l === "all" ? "Tất cả" : l);
@@ -958,6 +1020,7 @@ const H = (() => {
     const el = $("poolInfo"), btn = $("create"); if(!el) return;
     let ok, txt;
     if(cfg.src === "quiz" || cfg.src === "lib"){ const n = cleanQuiz().length; ok = n >= 1; txt = ok ? "✓ " + n + " câu hợp lệ" : "Thêm ít nhất 1 câu hỏi đầy đủ"; }
+    else if(cfg.src === "grammar"){ const n = grammarPool().length; ok = n >= 1; txt = ok ? "✓ " + fmt(n) + " câu ngữ pháp · lấy " + Math.min(cfg.gCount, n) + " câu" : "Chọn ít nhất 1 chủ điểm"; }
     else { const n = vocabPool().length; ok = n >= 4; txt = ok ? "✓ " + fmt(n) + " từ phù hợp · lấy " + Math.min(cfg.count, n) + " câu" : "Cần ít nhất 4 từ (hiện có " + n + ")"; }
     el.textContent = txt; el.className = "pool" + (ok ? "" : " bad"); btn.disabled = !ok || !UID;
   }
@@ -965,7 +1028,7 @@ const H = (() => {
   // ---------- tạo phòng ----------
   async function createRoom(){
     const btn = $("create"); btn.disabled = true; btn.textContent = "Đang tạo…";
-    qs = cfg.src === "quiz" || cfg.src === "lib" ? cleanQuiz() : vocabQuestions();
+    qs = srcQuestions();
     try{
       for(let tries = 0; tries < 6; tries++){
         const p = String(100000 + Math.floor(Math.random() * 900000)), ref = doc(db, "live_rooms", p);
@@ -1037,7 +1100,7 @@ const H = (() => {
   }
   function drawReady(q){
     view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '</div>' +
-      '<div class="card prompt"><small>Sẵn sàng chưa?</small><div class="w">' + esc(q.p) + '</div></div>' + cdHTML(CD_T);
+      '<div class="card prompt"><small>Sẵn sàng chưa?</small><div class="w' + (q.p.length > 70 ? " long" : "") + '">' + esc(q.p) + '</div></div>' + cdHTML(CD_T);
     [0, 850, 1700].forEach(t => setTimeout(() => { if(ph === "ready") beep(440, .12, "square", .08); }, t));
     setTimeout(() => { if(ph === "ready") beep(880, .3, "triangle", .16); }, 2550);
   }
@@ -1050,7 +1113,7 @@ const H = (() => {
         answers[b.id] = Object.assign({ uid:b.id, q:i, ms:delay }, a); answeredCount(); }, delay); });
     view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + '<span class="prog" aria-hidden="true">' + qs.map((_, k) => '<i class="' + (k < i ? "done" : k === i ? "now" : "") + '"></i>').join("") + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '<span class="sp"></span>' +
       '<span class="answered" id="ans">0 đã trả lời</span>' + timerSvg() + '</div>' +
-      '<div class="card prompt"><small>' + esc(q.sub || ({ tf:"Đúng hay sai?", type:"Gõ đáp án trên điện thoại", mcq:"Chọn đáp án đúng" })[q.t]) + '</small><div class="w">' + esc(q.p) + '</div></div>' +
+      '<div class="card prompt"><small>' + esc(q.sub || ({ tf:"Đúng hay sai?", type:"Gõ đáp án trên điện thoại", mcq:"Chọn đáp án đúng" })[q.t]) + '</small><div class="w' + (q.p.length > 70 ? " long" : "") + '">' + esc(q.p) + '</div></div>' +
       (q.t === "type" ? '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
         '<div class="opts">' + q.o.map((o, k) => '<div class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" id="op' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></div>').join("") + '</div>') +
       '<div class="row"><span class="sp"></span><button class="btn ghost" id="skip" type="button">Hiện đáp án ngay</button></div>';
@@ -1099,10 +1162,12 @@ const H = (() => {
     const line = !r.length ? "Chưa có ai chơi, Lumina buồn ghê 🥲" : pct >= .7 ? "Lớp mình đỉnh vậy trời! 🔥" : pct >= .35 ? "Cũng được, nhưng chưa đủ đô nha!" : "Ơ kìa, câu này học rồi mà ta 😅";
     upRoom({ ph:"reveal", res:{ ok:q.ok || null, acc:q.acc || null, dist, me, np:rank.length } }).catch(() => {});
     if(q.t === "type"){ const tb = view.querySelector(".typebox"); if(tb) tb.outerHTML = '<div class="accepted">' + q.acc.map(x => '<span>✓ ' + esc(x) + '</span>').join("") + '</div>'; }
-    else view.querySelectorAll(".opt").forEach((el, k) => { el.classList.add(q.ok.includes(k) ? "right" : "dim"); el.insertAdjacentHTML("beforeend", '<span class="cnt">' + (dist[k] || 0) + '</span>'); });
+    else { const tot = Math.max(1, dist.reduce((s, x) => s + x, 0));
+      view.querySelectorAll(".opt").forEach((el, k) => { el.classList.add(q.ok.includes(k) ? "right" : "dim"); el.insertAdjacentHTML("beforeend", '<span class="cnt">' + (dist[k] || 0) + '</span><span class="vb" style="--p:' + Math.round((dist[k] || 0) * 100 / tot) + '%"></span>'); }); }
     const ans = $("ans"); if(ans) ans.textContent = right + "/" + r.length + " trả lời đúng";
-    const sk = $("skip"); if(sk) sk.outerHTML = '<p class="say" style="flex:1"><b>Lumina:</b> ' + line + '</p><button class="btn" id="toBoard" type="button">Bảng xếp hạng →</button>';
+    const sk = $("skip"); if(sk) sk.outerHTML = '<p class="say" style="flex:1"><b>Lumina:</b> ' + line + '</p><button class="btn autob" id="toBoard" type="button">Bảng xếp hạng →</button>';
     $("toBoard").addEventListener("click", board);
+    const ri = i; setTimeout(() => { if(ph === "reveal" && i === ri) board(); }, 3500);
     beep(pct >= .5 ? 880 : 330, .3, "triangle", .14);
   }
   function ranking(){ const r = roster(), nm = {}; r.forEach(p => nm[p.id] = p.n);
@@ -1140,20 +1205,21 @@ const H = (() => {
     const rank = finalRank, top = rank.slice(0, 3);
     const col = (x, cls, place) => '<div class="pc ' + cls + '" id="pod' + place + '">' + (place === 1 ? '<span class="crown">👑</span>' : '') + '<span class="nm">' + (x ? esc(x.n) : "—") + '</span><span class="s">' + (x ? fmt(x.s) + " điểm" : "") + '</span><div class="blk">' + place + '</div></div>';
     view.innerHTML = '<div class="row"><h1>Ai là quán quân?</h1><span class="sp"></span><span class="lumi" id="endLumi" style="width:110px">' + LUMI + '</span></div>' +
-      '<p class="drum" id="drum">🥁 Trống đâu… trống đâu…</p>' +
+      '<p class="drum" id="drum">🎆 Công bố kết quả!</p>' +
       '<div class="podium">' + col(top[1], "p2", 2) + col(top[0], "p1", 1) + col(top[2], "p3", 3) + '</div>' +
       '<div class="board" id="rest" hidden>' + rank.slice(3, 10).map((x, k) => '<div class="br"><span class="r">' + (k + 4) + '</span><span class="nm">' + esc(x.n) + '</span><span class="s">' + fmt(x.s) + '</span></div>').join("") + '</div>' +
       '<div class="row" id="endBtns" hidden><button class="btn ghost" id="again" type="button">↻ Chơi lại (giữ người chơi)</button><button class="btn ghost" id="newset" type="button">⚙ Bộ câu mới</button><span class="sp"></span><button class="btn" id="rep" type="button">📊 Báo cáo trận</button></div>';
     if(instant){ ["pod3", "pod2", "pod1"].forEach(id => $(id).classList.add("show")); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!"; }
     else {
-    drumroll(1600); await wait(1630); if(ph !== "end") return; $("pod3").classList.add("show"); await wait(650);
-    drumroll(1600); await wait(1630); if(ph !== "end") return; $("pod2").classList.add("show"); await wait(750);
-    drumroll(2600); await wait(2630); if(ph !== "end") return; $("pod1").classList.add("show"); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!";
-    $("endLumi").classList.add("cheer"); confettiBurst();
-    if(top[0]) setTimeout(() => { if(ph === "end") champion(top[0].n, top[0].s); }, 600); }
+    playBoom(.7); fireworks(3200, 3, true); confetti();
+    await wait(250); if(ph !== "end") return; $("pod3").classList.add("show"); beep(523, .14, "triangle", .12);
+    await wait(550); if(ph !== "end") return; $("pod2").classList.add("show"); beep(659, .14, "triangle", .12);
+    await wait(550); if(ph !== "end") return; $("pod1").classList.add("show"); beep(784, .2, "triangle", .14); $("drum").textContent = top[0] ? "👏 Quán quân: " + top[0].n + "!" : "Hết trận!";
+    $("endLumi").classList.add("cheer"); fanfare();
+    if(top[0]) setTimeout(() => { if(ph === "end") champion(top[0].n, top[0].s); }, 450); }
     $("rest").hidden = false; $("endBtns").hidden = false;
     $("rep").addEventListener("click", report);
-    $("again").addEventListener("click", async () => { qs = cfg.src === "quiz" || cfg.src === "lib" ? cleanQuiz() : vocabQuestions(); i = -1; scores = {}; streak = {}; prevRank = {}; log = []; finalRank = [];
+    $("again").addEventListener("click", async () => { qs = srcQuestions(); i = -1; scores = {}; streak = {}; prevRank = {}; log = []; finalRank = [];
       await upRoom({ ph:"lobby", i:-1, n:qs.length, res:null, q:null }); ph = "lobby"; lobby(); playMusic("lobby", .35); });
     $("newset").addEventListener("click", async () => { await endRoom(); setup(); });
   }
@@ -1168,7 +1234,7 @@ const H = (() => {
 // HỌC VIÊN
 // =================================================================
 const P = (() => {
-  let pin = null, nick = ls("azl_nick") || "", unRoom = null, unMe = null, joined = false, st = null, lastKey = "", answeredI = -1, qStart = 0, deadline = 0, tickT = null, qTimer = null, shownQ = -1;
+  let resShownI = -1, pin = null, nick = ls("azl_nick") || "", unRoom = null, unMe = null, joined = false, st = null, lastKey = "", answeredI = -1, qStart = 0, deadline = 0, tickT = null, qTimer = null, shownQ = -1;
   function start(pre){
     stopAll(); musBtn.hidden = true;
     view.innerHTML = '<div class="ph center"><span class="lumi">' + LUMI + '</span><div class="tiles4" aria-hidden="true"><i>▲</i><i>◆</i><i>●</i><i>■</i></div><h1>Vào phòng chơi</h1>' +
@@ -1213,7 +1279,7 @@ const P = (() => {
         '<button class="btn big" id="send" type="button">Gửi ▶</button>';
       else body = '<div class="opts' + (q.t === "tf" ? " two" : "") + '">' + q.o.map((o, k) => '<button type="button" class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" data-k="' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></button>').join("") + '</div>';
       view.innerHTML = '<div class="ph"><div class="qbar"><span class="n">Câu ' + (st.i + 1) + '/' + st.n + '</span><span class="sp"></span><span class="answered" id="pt"></span></div>' +
-        '<div class="card prompt" style="padding:14px"><div class="w" style="font-size:clamp(22px,6.5vw,34px)">' + esc(q.p) + '</div></div>' + body + '</div>';
+        '<div class="card prompt" style="padding:14px"><div class="w" style="font-size:' + ((q.p || "").length > 70 ? "clamp(17px,4.6vw,22px);line-height:1.35" : "clamp(22px,6.5vw,34px)") + '">' + esc(q.p) + '</div></div>' + body + '</div>';
       if(q.t === "type"){ const inp = $("typed"); inp.focus(); const send = () => { const v = inp.value.trim(); if(v) answer({ a:v }); };
         $("send").addEventListener("click", send); inp.addEventListener("keydown", e => { if(e.key === "Enter") send(); }); }
       else view.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => answer({ c:+b.dataset.k })));
@@ -1229,7 +1295,7 @@ const P = (() => {
     if(tickT){ clearInterval(tickT); tickT = null; }
     const q = st.q || {};
     if(st.ph === "closed") return wait_("Giáo viên đã đóng phòng. Cảm ơn bạn đã chơi nha! 👋");
-    if(st.ph === "lobby"){ answeredI = -1; shownQ = -1; return wait_("Vào phòng rồi! Nhìn lên màn hình lớp và chờ giáo viên bắt đầu nha 👀"); }
+    if(st.ph === "lobby"){ answeredI = -1; shownQ = -1; resShownI = -1; return wait_("Vào phòng rồi! Nhìn lên màn hình lớp và chờ giáo viên bắt đầu nha 👀"); }
     if(st.ph === "ready"){
       const rem = st.goAt ? Math.max(0, st.goAt - SKEW - Date.now()) : CD_T, myI = st.i; if(window.__azlT) window.__azlT.push(["player-ready", st.i, Date.now(), rem]);
       view.innerHTML = '<div class="ph center"><p class="pill">Câu ' + (st.i + 1) + '/' + st.n + (q.x2 ? ' · x2 điểm' : '') + '</p><h1>Ready?</h1>' +
@@ -1239,6 +1305,7 @@ const P = (() => {
     }
     if(st.ph === "question") return renderQ();
     if(st.ph === "reveal" || st.ph === "board"){
+      if(st.ph === "board" && resShownI === st.i) return;
       const r = st.res && st.res.me && st.res.me[UID];
       if(!r){ return wait_(answeredI === st.i ? "Đang chấm… hồi hộp ghê 😬" : "Hết giờ rồi! Câu sau nhanh tay hơn nha ⏰"); }
       const [score, rank, gain, ok, stk, aheadN, aheadGap] = r, answered = answeredI === st.i;
@@ -1248,7 +1315,11 @@ const P = (() => {
         (!ok && right ? '<p class="muted">Đáp án: <b>' + esc(right) + '</b></p>' : '') + '</div>' +
         '<div class="rankcard"><span class="rk">#' + rank + '</span><div><b>' + fmt(score) + ' điểm</b><div class="gap">' +
         (rank === 1 ? "Bạn đang dẫn đầu! Giữ vững nha 👑" : aheadGap > 0 ? "Kém <b>" + esc(aheadN) + "</b> " + fmt(aheadGap) + " điểm" : "Đang bằng điểm <b>" + esc(aheadN) + "</b>") + '</div></div></div></div>';
-      if(st.ph === "reveal") ok ? beep(880, .2, "triangle", .12) : beep(260, .25, "sawtooth", .06);
+      resShownI = st.i;
+      if(st.ph === "reveal"){ ok ? beep(880, .2, "triangle", .12) : beep(260, .25, "sawtooth", .06);
+        try{ if(navigator.vibrate) navigator.vibrate(ok ? 60 : [90, 50, 90]); }catch(e){}
+        if(ok){ confetti(); const pe = view.querySelector(".pts"), t0 = performance.now();
+          if(pe && gain){ const step = now => { const p = Math.min(1, (now - t0) / 700); pe.textContent = "+" + fmt(Math.round(gain * (1 - Math.pow(1 - p, 3)))) + " điểm"; if(p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); } } }
       return;
     }
     if(st.ph === "end"){
@@ -1257,8 +1328,8 @@ const P = (() => {
         '<h1>' + (e && e[1] <= 3 ? ["", "Nhà Vô Địch Mãi Đỉnh! 👑", "Á quân! 🥈", "Hạng 3! 🥉"][e[1]] : "Hết trận!") + '</h1>' +
         (e ? '<p class="say"><b>Lumina:</b> ' + esc(nick) + ' được ' + fmt(e[0]) + ' điểm, hạng ' + e[1] + '/' + st.res.np + '. ' + (e[1] <= 3 ? "Đỉnh của chóp!" : "Về ôn lại là lần sau lên bục liền!") + '</p>' : '') +
         '<div class="board">' + top.map((t, k) => '<div class="br"><span class="r">' + ["🥇", "🥈", "🥉"][k] + '</span><span class="nm">' + esc(t.n) + '</span><span class="s">' + fmt(t.s) + '</span></div>').join("") + '</div></div>';
-      if(e && e[1] <= 3) setTimeout(confettiBurst, 6500);
-      if(e && e[1] === 1) setTimeout(() => fireworks(5000, 1.6), 6500);
+      if(e && e[1] <= 3) setTimeout(confettiBurst, 1500);
+      if(e && e[1] === 1) setTimeout(() => fireworks(5000, 1.6), 1500);
     }
   }
   async function answer(a){
