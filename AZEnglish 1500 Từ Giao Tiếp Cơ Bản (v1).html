@@ -1399,6 +1399,28 @@ body.qv-lock{ overflow:hidden; }
 @media (prefers-reduced-motion: reduce){ .nag, .nag-ava, .qv-s-ava, .qm-zones-sec.qv-open, .qm-zones-sec.qv-open .qm-zones{ animation:none !important; } }
 #qmPsgHome, #modePsg, .qm-psgbtn{ display:none !important; }
 .qm-dev-btn, .qm-dev{ display:none !important; }   /* công cụ thử nghiệm chỉ dùng ở bản mock */
+
+/* ===== Thẻ bật nhắc học + bảng chọn giờ ===== */
+.rmd-card{ width:100%; display:flex; align-items:center; gap:10px; margin:0 0 14px; padding:10px 12px; border-radius:18px; border:1.5px dashed #f3b8bf; background:var(--paper); cursor:pointer; text-align:left; font-family:var(--sx-font); color:var(--ink); }
+.rmd-card[hidden]{ display:none; }
+.rmd-card.on{ border-style:solid; border-color:#a8e6c1; background:linear-gradient(135deg,#f3fff8,#e3f8ec); }
+.rmd-bell{ flex:none; width:40px; height:40px; border-radius:14px; display:grid; place-items:center; font-size:21px; background:#fff1d6; animation:rmdRing 2.6s ease-in-out infinite; transform-origin:50% 10%; }
+@keyframes rmdRing{ 0%,70%,100%{ transform:rotate(0); } 75%{ transform:rotate(14deg); } 80%{ transform:rotate(-12deg); } 85%{ transform:rotate(8deg); } 90%{ transform:rotate(-4deg); } }
+.rmd-tx{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.rmd-tx b{ font:900 14px/1.25 var(--sx-font); }
+.rmd-tx small{ font:700 12px/1.35 var(--sx-font); color:var(--ink-soft); }
+.rmd-go{ flex:none; padding:8px 14px; border-radius:99px; background:var(--ink); color:#fff; font:900 13px var(--sx-font); }
+.rmd-card.on .rmd-go{ background:#1e9a5a; }
+.rmd-sheet{ text-align:left; }
+.rmd-lab{ margin:4px 0 8px; font:900 14px var(--sx-font); }
+.rmd-times{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.rmd-times button{ border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); border-radius:12px; padding:9px 0; font:800 13px var(--sx-font); cursor:pointer; }
+.rmd-times button.on{ background:var(--red); border-color:var(--red); color:#fff; }
+.rmd-custom{ display:flex; align-items:center; gap:8px; margin:10px 0 6px; font:800 13px var(--sx-font); }
+.rmd-custom input{ flex:1; border:1.5px solid var(--line); border-radius:12px; padding:8px 10px; font:800 15px var(--sx-font); background:var(--paper); color:var(--ink); }
+.rmd-note{ margin:6px 0 10px; font-size:12.5px; color:var(--ink-soft); line-height:1.45; }
+.rmd-ios{ margin:0 0 10px; padding:10px 12px; border-radius:14px; background:#fff7df; border:1.5px solid #f3cf7a; color:#5a3a00; font-size:12.5px; line-height:1.45; }
+@media (prefers-reduced-motion: reduce){ .rmd-bell{ animation:none; } }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -1475,6 +1497,11 @@ body.qv-lock{ overflow:hidden; }
       <button class="nag-go" id="nagGo" type="button">Học 5 phút</button>
       <button class="nag-x" id="nagX" type="button" aria-label="Ẩn nhắc nhở hôm nay">✕</button>
     </div>
+    <button class="rmd-card" id="rmdCard" type="button" hidden>
+      <span class="rmd-bell">🔔</span>
+      <span class="rmd-tx"><b id="rmdTitle">Bật nhắc học trên điện thoại</b><small id="rmdSub">Lumina sẽ "réo" bạn mỗi ngày — mỏ hơi hỗn, chịu khó nghe nha 😏</small></span>
+      <span class="rmd-go" id="rmdGo">Bật</span>
+    </button>
     <!-- ① TODAY'S QUEST — khu vực quan trọng nhất -->
     <div class="home-hero q-hero" id="qHero">
       <p class="q-hello" id="qHello"><b>Lumina</b> chào bạn<i class="q-wave" aria-hidden="true"><b></b><b></b><b></b></i></p>
@@ -2871,6 +2898,7 @@ button, input, select, textarea{ font-family:inherit; }
     }catch(e){ return {dayStreak:0, longestStreak:0, lastActiveDay:-1, xp:0, badges:[], todayKey:-1, todayCount:0}; }
   }
   function bumpTodayProgress(){
+    try{ rmdPing(); }catch(e){}
     var today = todayStamp();
     if(meta.todayKey !== today){ meta.todayKey = today; meta.todayCount = 0; }
     meta.todayCount++;
@@ -4138,6 +4166,81 @@ button, input, select, textarea{ font-family:inherit; }
     document.getElementById("nagX").addEventListener("click", function(){ try{ localStorage.setItem(NAG_KEY, String(todayStamp())); }catch(e){} el.hidden = true; });
     setTimeout(nagRender, 400);
     document.addEventListener("visibilitychange", function(){ if(!document.hidden) nagRender(); });
+  })();
+
+
+  // ===== Thông báo nhắc học về điện thoại (Web Push · lưu Firestore push_subs/{uid}) =====
+  var RMD_KEY = "azq_rmd", rmdCfg = null;
+  function rmdState(){ try{ return JSON.parse(localStorage.getItem(RMD_KEY) || "null"); }catch(e){ return null; } }
+  function rmdSaveState(v){ try{ localStorage.setItem(RMD_KEY, JSON.stringify(v)); }catch(e){} }
+  function rmdDay(){ var d = new Date(), z = function(n){ return (n < 10 ? "0" : "") + n; }; return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()); }
+  function rmdIOS(){ if(/android/i.test(navigator.userAgent)) return false; return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
+  function rmdStandalone(){ return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true; }
+  function rmdSupported(){ return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window; }
+  function rmdB64(s){ var pad = "=".repeat((4 - s.length % 4) % 4), b = (s + pad).replace(/-/g, "+").replace(/_/g, "/"), raw = atob(b), out = new Uint8Array(raw.length); for(var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+  function rmdFb(){ return window.__az_firebase && window.__az_uid ? window.__az_firebase : null; }
+  function rmdWrite(data){
+    var fb = rmdFb(); if(!fb) return Promise.reject(new Error("firebase"));
+    data.updatedAt = fb.serverTimestamp();
+    return fb.setDoc(fb.doc(fb.db, "push_subs", window.__az_uid), data, { merge:true });
+  }
+  function rmdPing(){
+    var st = rmdState(); if(!st || !st.on || st.ping === rmdDay()) return;
+    rmdWrite({ lastLearnDay: rmdDay(), streak: meta.dayStreak || 0 }).then(function(){ st.ping = rmdDay(); rmdSaveState(st); }).catch(function(){});
+  }
+  function rmdCardRender(){
+    var c = document.getElementById("rmdCard"); if(!c) return;
+    if(!rmdCfg || !rmdSupported() && !rmdIOS()){ c.hidden = true; return; }
+    var st = rmdState(); c.hidden = false; c.classList.toggle("on", !!(st && st.on));
+    if(st && st.on){ document.getElementById("rmdTitle").textContent = "Lumina sẽ réo bạn lúc " + st.time + " 🔔"; document.getElementById("rmdSub").textContent = "Học rồi thì Lumina im re, chưa học là bị cà khịa liền."; document.getElementById("rmdGo").textContent = "Sửa"; }
+    else { document.getElementById("rmdTitle").textContent = "Bật nhắc học trên điện thoại"; document.getElementById("rmdSub").textContent = "Lumina sẽ \"réo\" bạn mỗi ngày — mỏ hơi hỗn, chịu khó nghe nha 😏"; document.getElementById("rmdGo").textContent = "Bật"; }
+  }
+  function rmdOpenSheet(){
+    var st = rmdState() || {}, cur = st.time || "20:00", ios = rmdIOS() && !rmdStandalone();
+    var times = ["07:00", "12:00", "19:00", "20:00", "21:30"];
+    var html = '<div class="rmd-sheet">' +
+      (ios ? '<div class="rmd-ios"><b>📱 Trên iPhone làm thêm 1 bước:</b> bấm nút <b>Chia sẻ</b> ⬆️ → <b>Thêm vào MH chính</b>, mở trang từ biểu tượng mới rồi bật nhắc ở đó nha. (Apple bắt vậy chứ Lumina không có làm khó đâu 😤)</div>' : "") +
+      '<p class="rmd-lab">Chọn giờ Lumina "réo" bạn</p><div class="rmd-times">' +
+      times.map(function(t){ return '<button type="button" data-t="' + t + '"' + (t === cur ? ' class="on"' : "") + ">" + t + "</button>"; }).join("") +
+      '</div><label class="rmd-custom">Giờ khác: <input type="time" id="rmdTime" value="' + cur + '"></label>' +
+      '<p class="rmd-note">Chỉ nhắc khi hôm đó bạn <b>chưa học</b>. Học rồi thì Lumina ngoan, không làm phiền.</p>' +
+      '<p class="rmd-err" id="rmdErr" hidden></p></div>';
+    qmOpen({ kicker: "Nhắc học mỗi ngày", title: st.on ? "Đổi giờ hoặc tắt nhắc" : "Cho Lumina réo bạn nha?", line: "", html: html,
+      primary: { label: st.on ? "Lưu giờ mới" : "Bật nhắc 🔔", fn: function(){ rmdEnable(document.getElementById("rmdTime").value || cur); } },
+      secondary: { label: st.on ? "Tắt nhắc" : "Để sau", fn: function(){ if(st.on) rmdDisable(); } } });
+    var box = document.querySelector(".rmd-sheet");
+    box.addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(!b) return; Array.prototype.forEach.call(box.querySelectorAll("[data-t]"), function(x){ x.classList.toggle("on", x === b); }); document.getElementById("rmdTime").value = b.dataset.t; });
+    var pb = document.getElementById("qmPrimary"); if(ios && pb){ pb.disabled = !rmdSupported(); }
+  }
+  function rmdToast(t){ try{ qmToast(t); }catch(e){} }
+  function rmdEnable(time){
+    if(!rmdSupported()){ rmdToast(rmdIOS() ? "📱 Thêm trang vào Màn hình chính rồi mở từ đó để bật nhắc nha!" : "Trình duyệt này chưa hỗ trợ thông báo 😢"); return; }
+    var hm = (time || "20:00").split(":"), hh = +hm[0] || 20, mm = +hm[1] || 0;
+    Notification.requestPermission().then(function(perm){
+      if(perm !== "granted"){ rmdToast("Bạn chặn thông báo mất rồi 🙈 Vào cài đặt trình duyệt cho phép lại nha."); throw new Error("denied"); }
+      return navigator.serviceWorker.register("./sw.js").then(function(){ return navigator.serviceWorker.ready; });
+    }).then(function(reg){
+      return reg.pushManager.getSubscription().then(function(sub){ return sub || reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: rmdB64(rmdCfg.vapidPublic) }); });
+    }).then(function(sub){
+      return rmdWrite({ enabled:true, sub: JSON.parse(JSON.stringify(sub)), hh:hh, mm:mm, tz: -new Date().getTimezoneOffset(), course: (window.AZ_COURSE && AZ_COURSE.id) || "giaotiep",
+        url: location.href.split("?")[0].split("#")[0], lastLearnDay: (meta.todayKey === todayStamp() && meta.todayCount > 0) ? rmdDay() : "", streak: meta.dayStreak || 0,
+        device: rmdIOS() ? "ios" : /android/i.test(navigator.userAgent) ? "android" : "other" });
+    }).then(function(){
+      var t = (hh < 10 ? "0" : "") + hh + ":" + (mm < 10 ? "0" : "") + mm;
+      rmdSaveState({ on:true, time:t, ping: rmdDay() }); rmdCardRender();
+      rmdToast("Xong! " + t + " mỗi ngày Lumina sẽ réo bạn. Liệu hồn mà học nha 😏");
+      try{ navigator.serviceWorker.ready.then(function(reg){ reg.showNotification("Lumina đã vào vị trí 🦁", { body:"Từ giờ chưa học là bị réo đó nha. Đừng có bơ Lumina 😤", icon:"./icon-192.png", badge:"./icon-192.png", tag:"az-remind" }); }); }catch(e){}
+    }).catch(function(e){ if(e && e.message !== "denied") rmdToast("Bật nhắc chưa được 😵 Thử lại sau chút nha."); });
+  }
+  function rmdDisable(){
+    rmdWrite({ enabled:false }).catch(function(){});
+    try{ navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){ if(sub) sub.unsubscribe(); }); }catch(e){}
+    rmdSaveState({ on:false }); rmdCardRender(); rmdToast("Tắt nhắc rồi. Nhưng đừng để Lumina nhớ bạn quá nha 🥺");
+  }
+  (function(){
+    var c = document.getElementById("rmdCard"); if(!c) return;
+    c.addEventListener("click", rmdOpenSheet);
+    fetch("./push-config.json", { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){ if(j && j.vapidPublic){ rmdCfg = j; rmdCardRender(); } }).catch(function(){});
   })();
 
   function showFeedback(word, correct){

@@ -28,3 +28,28 @@ self.addEventListener("fetch", function(event){
     })
   );
 });
+
+// ===== Thông báo nhắc học (Web Push) =====
+self.addEventListener("push", function(event){
+  var d = {};
+  try{ d = event.data ? event.data.json() : {}; }catch(e){ d = { body: event.data ? event.data.text() : "" }; }
+  event.waitUntil(self.registration.showNotification(d.title || "Lumina réo bạn nè 🦁", {
+    body: d.body || "Vô học 5 phút đi bạn ơi!",
+    icon: "./icon-192.png",
+    badge: "./icon-192.png",
+    tag: "az-remind",
+    renotify: true,
+    data: { url: d.url || "./" }
+  }));
+});
+
+self.addEventListener("notificationclick", function(event){
+  event.notification.close();
+  var url = (event.notification.data && event.notification.data.url) || "./";
+  event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function(list){
+    for(var i = 0; i < list.length; i++){
+      if(list[i].url.split("?")[0] === url.split("?")[0] && "focus" in list[i]) return list[i].focus();
+    }
+    return self.clients.openWindow(url);
+  }));
+});
