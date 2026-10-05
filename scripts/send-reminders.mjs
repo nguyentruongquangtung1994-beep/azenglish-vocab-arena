@@ -1,6 +1,7 @@
 // Gửi thông báo nhắc học (chạy bằng GitHub Actions mỗi 30 phút).
 // Cần secrets: FIREBASE_SA (JSON service account), VAPID_PUBLIC, VAPID_PRIVATE.
 import admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import webpush from "web-push";
 
 const SITE = "https://nguyentruongquangtung1994-beep.github.io/azenglish-vocab-arena/";
@@ -8,7 +9,7 @@ const DRY = process.env.DRY_RUN === "1";
 const WINDOW_MIN = 180;          // sau giờ hẹn tối đa 3 tiếng vẫn nhắc (phòng Actions chạy trễ)
 
 admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SA)) });
-const db = admin.firestore();
+const db = getFirestore(admin.app(), process.env.FIRESTORE_DB || "default");   // database tên "default" (giống lop-hoc.html)
 webpush.setVapidDetails(SITE, process.env.VAPID_PUBLIC, process.env.VAPID_PRIVATE);
 
 // Câu nhắc "mỏ hỗn, cà khịa" — {s} = số ngày chuỗi

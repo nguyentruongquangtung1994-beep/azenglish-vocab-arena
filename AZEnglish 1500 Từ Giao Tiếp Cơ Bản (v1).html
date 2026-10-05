@@ -4182,7 +4182,7 @@ button, input, select, textarea{ font-family:inherit; }
   function rmdWrite(data){
     var fb = rmdFb(); if(!fb) return Promise.reject(new Error("firebase"));
     data.updatedAt = fb.serverTimestamp();
-    return fb.setDoc(fb.doc(fb.db, "push_subs", window.__az_uid), data, { merge:true });
+    return fb.setDoc(fb.doc(fb.dbPush || fb.db, "push_subs", window.__az_uid), data, { merge:true });
   }
   function rmdPing(){
     var st = rmdState(); if(!st || !st.on || st.ping === rmdDay()) return;
@@ -7751,7 +7751,7 @@ button, input, select, textarea{ font-family:inherit; }
   var fbDb = getFirestore(fbApp);
 
   window.__az_firebase = {
-    db: fbDb, doc: doc, setDoc: setDoc, getDocs: getDocs,
+    db: fbDb, dbPush: getFirestore(fbApp, "default"), doc: doc, setDoc: setDoc, getDocs: getDocs,
     collection: collection, query: query, orderBy: orderBy, limit: limit, serverTimestamp: serverTimestamp
   };
 
