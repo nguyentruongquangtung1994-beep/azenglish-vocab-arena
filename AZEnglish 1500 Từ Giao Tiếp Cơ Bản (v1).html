@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@500;600;700;800;900&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa;
@@ -1429,6 +1429,41 @@ body.qv-lock{ overflow:hidden; }
 .rmd-head.off{ animation:rmdRing 2.6s ease-in-out infinite; transform-origin:50% 10%; }
 @keyframes rmdDot{ 50%{ transform:scale(1.35); } }
 #rmdCard{ display:none !important; }
+
+/* ===== Phù Thủy & Bạch Tuyết — giao diện kiểu Kahoot ===== */
+#sprintCard{ --kh-font:"Inter","Be Vietnam Pro",Arial,sans-serif; font-family:var(--kh-font); background:radial-gradient(120% 85% at 50% 0%, #2a1416 0%, #161011 55%, #0b0809 100%) !important; border:0 !important; color:#fff; border-radius:26px !important;
+  box-shadow:0 22px 44px -22px rgba(17,17,17,.85), inset 0 3px 0 #E02020 !important; overflow:hidden; }
+#sprintCard::after{ content:""; position:absolute; left:-30%; right:-30%; top:-60px; height:180px; background:radial-gradient(closest-side, rgba(224,32,32,.35), transparent); pointer-events:none; }
+#sprintCard::before{ content:""; position:absolute; inset:0; pointer-events:none; opacity:.08;
+  background:radial-gradient(circle at 15% 20%, #fff 0 6px, transparent 7px), radial-gradient(circle at 85% 30%, #fff 0 9px, transparent 10px), radial-gradient(circle at 70% 85%, #fff 0 5px, transparent 6px), radial-gradient(circle at 25% 75%, #fff 0 8px, transparent 9px); }
+#sprintCard > *{ position:relative; }
+#sprintCard #sprintIndexText{ display:inline-block; padding:5px 12px; border-radius:99px; background:#E02020; color:#fff; font-family:var(--kh-font) !important; font-weight:800 !important; letter-spacing:.02em; }
+#sprintCard .pause-btn{ background:rgba(255,255,255,.18) !important; color:#fff !important; border:0 !important; }
+#sprintCard .sprint-danger-track{ border-radius:16px; box-shadow:inset 0 0 0 2px rgba(255,255,255,.18); }
+#sprintCard .sprint-question{ background:#fff; color:#1a1210; border-radius:18px; padding:14px 16px 16px; margin:4px 0 16px !important; box-shadow:0 8px 0 rgba(0,0,0,.18); text-align:center; }
+.kh-q{ display:block; font:800 11.5px var(--kh-font); letter-spacing:.1em; text-transform:uppercase; color:#E02020; margin-bottom:6px; }
+#sprintCard .sprint-word{ font-family:var(--kh-font) !important; font-weight:800 !important; letter-spacing:-.02em; font-size:clamp(27px, 7.6vw, 38px) !important; color:#111 !important; line-height:1.1; }
+#sprintCard .sprint-ipa{ color:#6b6b6b !important; font-family:"Noto Sans",sans-serif; }
+#sprintCard .sprint-options{ display:grid !important; grid-template-columns:1fr 1fr; gap:10px !important; }
+#sprintCard .sprint-opt{ min-height:92px; border:0 !important; border-radius:14px !important; color:#fff !important; padding:12px 12px !important; align-items:center; gap:10px !important;
+  font-family:var(--kh-font) !important; font-weight:700 !important; letter-spacing:-.005em; font-size:clamp(14.5px, 4vw, 16.5px) !important; line-height:1.3; text-align:left;
+  box-shadow:0 5px 0 rgba(0,0,0,.28) !important; transition:transform .1s, box-shadow .1s, opacity .25s, filter .15s !important; }
+#sprintCard .sprint-opt.k0{ background:#e21b3c !important; } #sprintCard .sprint-opt.k1{ background:#1368ce !important; }
+#sprintCard .sprint-opt.k2{ background:#d89e00 !important; } #sprintCard .sprint-opt.k3{ background:#26890c !important; }
+#sprintCard .sprint-opt:hover:not(:disabled){ transform:translateY(-2px) !important; filter:brightness(1.07); }
+#sprintCard .sprint-opt:active:not(:disabled){ transform:translateY(3px) !important; box-shadow:0 2px 0 rgba(0,0,0,.28) !important; }
+#sprintCard .sprint-opt-letter{ flex:none; width:34px !important; height:34px !important; border:0 !important; border-radius:10px !important; background:rgba(255,255,255,.2) !important; display:grid !important; place-items:center; }
+#sprintCard .sprint-opt-letter svg{ width:19px; height:19px; fill:#fff; }
+#sprintCard .sprint-opt:disabled:not(.sprint-opt-correct):not(.sprint-opt-wrong){ opacity:.35; }
+#sprintCard .sprint-opt-correct{ opacity:1 !important; box-shadow:0 0 0 4px #fff, 0 5px 0 rgba(0,0,0,.28) !important; animation:khPop .4s cubic-bezier(.3,1.6,.5,1); }
+#sprintCard .sprint-opt-correct .sprint-opt-letter{ background:#fff !important; }
+#sprintCard .sprint-opt-correct .sprint-opt-letter svg{ display:none; }
+#sprintCard .sprint-opt-correct .sprint-opt-letter::after{ content:"✓"; color:#26890c; font:900 20px var(--kh-font); }
+#sprintCard .sprint-opt-wrong{ opacity:1 !important; filter:saturate(.6) brightness(.85); animation:sxShake .35s ease; }
+#sprintCard .sprint-opt-wrong .sprint-opt-letter svg{ display:none; }
+#sprintCard .sprint-opt-wrong .sprint-opt-letter::after{ content:"✕"; color:#fff; font:900 18px var(--kh-font); }
+@keyframes khPop{ 0%{ transform:scale(1); } 50%{ transform:scale(1.06); } 100%{ transform:scale(1); } }
+@media (max-width:380px){ #sprintCard .sprint-opt{ min-height:80px; font-size:14px !important; } }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -2061,6 +2096,7 @@ body.qv-lock{ overflow:hidden; }
       <span class="sprint-tier-toast hidden" id="sprintTierToast">⚡ Nhanh hơn!</span>
     </div>
     <div class="sprint-question">
+      <span class="kh-q">Nghĩa của từ này là gì?</span>
       <div class="sprint-word" id="sprintWord">word</div>
       <div class="sprint-ipa" id="sprintIpa"></div>
     </div>
@@ -4748,6 +4784,21 @@ button, input, select, textarea{ font-family:inherit; }
     }catch(e){}
     return out;
   }
+  // Ưu tiên từ chưa gặp trong game lâu nhất (từ mới học chưa ra lần nào sẽ lên đầu)
+  var Q_SEEN_KEY = "azq_gseen";
+  function qSeenMap(){ try{ return JSON.parse(localStorage.getItem(Q_SEEN_KEY) || "{}") || {}; }catch(e){ return {}; } }
+  function qFresh(list){
+    var m = qSeenMap(), dup = {}, out = [];
+    list.forEach(function(w){ if(w && !dup[w.w]){ dup[w.w] = 1; out.push(w); } });
+    return out.map(function(w){ return { w:w, k:(m[w.w] || 0) + Math.random() * 60000 }; }).sort(function(a, b){ return a.k - b.k; }).map(function(x){ return x.w; });
+  }
+  function qMarkSeen(list){
+    var m = qSeenMap(), t = Date.now();
+    list.forEach(function(w){ if(w && w.w) m[w.w] = t; });
+    var ks = Object.keys(m);
+    if(ks.length > 3000){ ks.sort(function(a, b){ return m[a] - m[b]; }).slice(0, ks.length - 3000).forEach(function(k){ delete m[k]; }); }
+    try{ localStorage.setItem(Q_SEEN_KEY, JSON.stringify(m)); }catch(e){}
+  }
   function qPadPool(list, min){
     if(!list.length) return list;
     var out = list.slice();
@@ -5341,8 +5392,8 @@ button, input, select, textarea{ font-family:inherit; }
     var sprintCurrentEntry = null;
 
     function nextSprintQuestion(){
-      if(sprintQueue.length === 0){ sprintQueue = shuffle(sprintFullPool.slice()); }
-      sprintCurrent = sprintQueue.pop();
+      if(sprintQueue.length === 0){ sprintQueue = qFresh(sprintFullPool).reverse(); }
+      sprintCurrent = sprintQueue.pop(); qMarkSeen([sprintCurrent]);
       sprintCurrentEntry = { word: sprintCurrent, ok: false };
       sprintSeenWords.push(sprintCurrentEntry);
       sprintIndexText.textContent = sprintCorrectCount + "/" + SPRINT_WIN_COUNT; questMilestone(sprintCorrectCount);
@@ -5359,17 +5410,17 @@ button, input, select, textarea{ font-family:inherit; }
       var distractors = pickDistractors(sprintCurrent, sprintFullPool, 3);
       if(distractors.length < 3){ distractors = pickDistractors(sprintCurrent, WORDS, 3); }
       var options = shuffle([sprintCurrent].concat(distractors));
-      var letters = ["A", "B", "C", "D"];
+      var letters = ['<svg viewBox="0 0 24 24"><path d="M12 4.5l8.5 15h-17z"/></svg>', '<svg viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></svg>', '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/></svg>', '<svg viewBox="0 0 24 24"><rect x="4.5" y="4.5" width="15" height="15" rx="1.5"/></svg>'];
       sprintOptionsEl.innerHTML = "";
       sprintCorrectBtnRef = null;
       options.forEach(function(opt, idx){
         var btn = document.createElement("button");
-        btn.className = "sprint-opt";
+        btn.className = "sprint-opt k" + idx;
         btn.type = "button";
         btn.style.animationDelay = (idx * 0.05) + "s";
         var letterSpan = document.createElement("span");
         letterSpan.className = "sprint-opt-letter";
-        letterSpan.textContent = letters[idx] || "";
+        letterSpan.innerHTML = letters[idx] || "";
         var textSpan = document.createElement("span");
         textSpan.className = "sprint-opt-text";
         textSpan.textContent = opt.m;
@@ -5464,9 +5515,9 @@ button, input, select, textarea{ font-family:inherit; }
       var learned = qLearnedPool();
       if(learned.length){
         var lw = learned.filter(function(w){ return state[w.w] && state[w.w].wrong > 0; }).sort(function(a, b){ return state[b.w].wrong - state[a.w].wrong; });
-        var ld = learned.filter(function(w){ return lw.indexOf(w) === -1 && state[w.w] && isDue(w); });
-        var lr = learned.filter(function(w){ return lw.indexOf(w) === -1 && ld.indexOf(w) === -1; });
-        return qPadPool(lw.concat(ld, shuffle(lr)), 24);
+        var hard = qFresh(lw).slice(0, 3), fr = qFresh(learned).filter(function(w){ return hard.indexOf(w) === -1; });
+        hard.forEach(function(w, i){ fr.splice(Math.min(fr.length, 4 + i * 5), 0, w); });   // chỉ chen tối đa 3 từ hay sai, rải xen kẽ
+        return qPadPool(fr, 24);
       }
       var full = poolForLevel(selectedLevel);
       var weak = missedWords(selectedLevel);
@@ -5507,7 +5558,7 @@ button, input, select, textarea{ font-family:inherit; }
       sprintSeenWords = [];
       sprintStartTime = performance.now();
       updateSprintFlame(0);
-      sprintQueue = shuffle(sprintFullPool.slice());
+      sprintQueue = sprintFullPool.slice().reverse();     // lấy từ cuối (pop) → từ "tươi" nhất ra trước
       resizeParticleCanvas();
       sprintBriefing.classList.add("hidden");
       sprintSummary.classList.add("hidden");
@@ -5696,7 +5747,7 @@ button, input, select, textarea{ font-family:inherit; }
       var lp = qLearnedPool();
       if(lp.length){
         var lph = lp.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
-        return qPadPool(shuffle((lph.length >= 8 ? lph : lp).slice()), RACE_KILLS_TO_WIN + 4);
+        return qPadPool(qFresh(lph.length >= 8 ? lph : lp), RACE_KILLS_TO_WIN + 4);
       }
       var phrases = poolForLevel(selectedLevel).filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
       if(phrases.length < RACE_KILLS_TO_WIN) phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
@@ -5721,7 +5772,7 @@ button, input, select, textarea{ font-family:inherit; }
     }
 
     function loadRacePhrase(){
-      raceCurrent = nextRacePhrase();
+      raceCurrent = nextRacePhrase(); qMarkSeen([raceCurrent]);
       raceCurrentEntry = { word: raceCurrent, ok: false };
       raceSeenPhrases.push(raceCurrentEntry);
       racePromptEl.textContent = raceCurrent.w;
@@ -6040,7 +6091,7 @@ button, input, select, textarea{ font-family:inherit; }
 
     function buildChasePool(){
       var lc = qLearnedPool().filter(function(w){ return w.w.trim().split(/\s+/).length >= 2; });
-      if(lc.length) return qPadPool(shuffle(lc.slice()), CHASE_WIN_COUNT + 4);
+      if(lc.length) return qPadPool(qFresh(lc), CHASE_WIN_COUNT + 4);
       var phrases = poolForLevel(selectedLevel).filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
       if(phrases.length < CHASE_WIN_COUNT) phrases = WORDS.filter(function(w){ return w.w.trim().split(/\s+/).length >= 3; });
       var sorted = phrases.slice().sort(function(a, b){
@@ -6110,7 +6161,7 @@ button, input, select, textarea{ font-family:inherit; }
     }
 
     function loadChasePhrase(){
-      chaseCurrent = nextChasePhrase();
+      chaseCurrent = nextChasePhrase(); qMarkSeen([chaseCurrent]);
       chaseCurrentEntry = { word: chaseCurrent, ok: false };
       chaseSeenPhrases.push(chaseCurrentEntry);
       chaseSelected = [];
