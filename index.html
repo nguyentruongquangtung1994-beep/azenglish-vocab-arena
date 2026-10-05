@@ -580,6 +580,20 @@
   /* ô AZ Live trong danh sách chương trình: chỉ hiện trên điện thoại (menu trên cùng bị ẩn) */
   .live-card{ display:none !important; }
   @media (max-width:760px){ .live-card{ display:grid !important; } }
+  /* ô Game (Guess the Word): chỉ hiện trên điện thoại, cạnh ô AZ Live */
+  .game-card{ display:none; position:relative; overflow:hidden; margin:0 0 18px; padding:20px 18px 22px; border-radius:26px; color:#241a12; text-decoration:none;
+    background:#6cae5a url(./game/assets/map-bg.jpg) center 20%/cover no-repeat; box-shadow:0 18px 40px -22px rgba(26,18,16,.6); isolation:isolate; }
+  .game-card::before{ content:""; position:absolute; inset:0; z-index:-1; background:rgba(255,250,243,.86); }
+  .gc-tag i{ width:8px; height:8px; border-radius:50%; background:#fff; animation:lvLive 1.4s ease-out infinite; }
+  .gc-tag{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:99px; background:#e0102b; color:#fff; font:800 11.5px var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+  .gc-title{ margin:10px 0 4px; font:800 clamp(32px,9vw,44px)/1 var(--font-display); } .gc-title span{ color:#e0102b; }
+  .gc-txt{ max-width:62%; } .gc-txt p{ margin:0 0 14px; font-size:14.5px; line-height:1.45; color:#5c534f; }
+  .gc-tiles{ display:flex; gap:4px; margin:0 0 14px; } .gc-tiles b{ width:26px; height:32px; display:grid; place-items:center; border-radius:7px; border:2px solid #e6e1dc; background:#fff; font:900 16px var(--font-display); }
+  .gc-tiles b:first-child{ background:#e0102b; border-color:#e0102b; color:#fff; }
+  .gc-go{ display:inline-flex; align-items:center; gap:6px; min-height:46px; padding:0 20px; border-radius:14px; background:#e0102b; color:#fff; font:800 15.5px var(--font-display); box-shadow:0 4px 0 #8f0a1c; }
+  .gc-lion{ position:absolute; right:-4px; bottom:-10px; width:38%; max-width:150px; height:auto; filter:drop-shadow(0 8px 12px rgba(0,0,0,.35)); transform-origin:50% 100%; animation:lvLion 3s ease-in-out infinite; }
+  @media (max-width:760px){ .game-card{ display:block; } }
+  @media (prefers-reduced-motion:reduce){ .gc-lion{ animation:none; } }
   @media (prefers-reduced-motion:reduce){ .nav-live::before,.nl-tiles i,.nl-dot{ animation:none !important; } .nl-tiles i{ opacity:1; } }
   .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
     background:var(--paper-2); border:2px dashed var(--line-strong); color:var(--ink); font-family:var(--font-body); transition:border-color .15s ease, transform .15s ease; }
@@ -781,6 +795,16 @@
       <img class="lv-lion" src="./lion-head.webp" alt="" width="96" height="96">
     </div>
   </div>
+  <a class="game-card" href="./game/">
+    <div class="gc-txt">
+      <span class="gc-tag"><i></i>Mới · Game</span>
+      <div class="gc-title">Vocab <span>Challenge</span></div>
+      <p>Nhìn nghĩa tiếng Việt, đoán từ tiếng Anh trước khi hết 10 giây. Ghi XP, giữ chuỗi.</p>
+      <div class="gc-tiles" aria-hidden="true"><b>F</b><b></b><b></b><b></b><b></b><b></b></div>
+      <span class="gc-go"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Chơi ngay</span>
+    </div>
+    <img class="gc-lion" src="./game/assets/lion.webp" alt="" width="150" height="241">
+  </a>
   <div class="cards">
 
     <a class="card t1" id="c-giaotiep" data-course="giaotiep" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="2968">
