@@ -39,6 +39,8 @@ self.addEventListener("push", function(event){
     badge: "./icon-192.png",
     tag: "az-remind",
     renotify: true,
+    vibrate: [200, 100, 200, 100, 300],
+    silent: false,
     data: { url: d.url || "./" }
   }));
 });

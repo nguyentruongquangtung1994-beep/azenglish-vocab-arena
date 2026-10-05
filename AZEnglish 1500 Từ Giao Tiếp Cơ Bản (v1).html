@@ -1464,6 +1464,9 @@ body.qv-lock{ overflow:hidden; }
 #sprintCard .sprint-opt-wrong .sprint-opt-letter::after{ content:"✕"; color:#fff; font:900 18px var(--kh-font); }
 @keyframes khPop{ 0%{ transform:scale(1); } 50%{ transform:scale(1.06); } 100%{ transform:scale(1); } }
 @media (max-width:380px){ #sprintCard .sprint-opt{ min-height:80px; font-size:14px !important; } }
+.rmd-stat{ margin:4px 0 8px; padding:9px 12px; border-radius:12px; font:700 12.5px/1.45 var(--sx-font); background:var(--paper-2); }
+.rmd-stat.ok{ background:#e7f7ee; color:#146b3e; } .rmd-stat.warn{ background:#fff7df; color:#5a3a00; } .rmd-stat.bad{ background:#fdeaea; color:#8f0a1c; }
+.rmd-test{ width:100%; margin:0 0 6px; padding:10px; border-radius:12px; border:1.5px dashed var(--line); background:var(--paper); color:var(--ink); font:800 13.5px var(--sx-font); cursor:pointer; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -4251,6 +4254,7 @@ button, input, select, textarea{ font-family:inherit; }
       times.map(function(t){ return '<button type="button" data-t="' + t + '"' + (t === cur ? ' class="on"' : "") + ">" + t + "</button>"; }).join("") +
       '</div><label class="rmd-custom">Giờ khác: <input type="time" id="rmdTime" value="' + cur + '"></label>' +
       '<p class="rmd-note">Chỉ nhắc khi hôm đó bạn <b>chưa học</b>. Học rồi thì Lumina ngoan, không làm phiền.</p>' +
+      '<p class="rmd-stat" id="rmdStat">Đang kiểm tra máy này…</p><button type="button" class="rmd-test" id="rmdTest">🔔 Gửi thông báo thử tới máy này</button>' +
       '<p class="rmd-err" id="rmdErr" hidden></p></div>';
     qmOpen({ kicker: "Nhắc học mỗi ngày", title: st.on ? "Đổi giờ hoặc tắt nhắc" : "Cho Lumina réo bạn nha?", line: "", html: html,
       primary: { label: st.on ? "Lưu giờ mới" : "Bật nhắc 🔔", fn: function(){ rmdEnable(document.getElementById("rmdTime").value || cur); } },
@@ -4258,6 +4262,27 @@ button, input, select, textarea{ font-family:inherit; }
     var box = document.querySelector(".rmd-sheet");
     box.addEventListener("click", function(e){ var b = e.target.closest("[data-t]"); if(!b) return; Array.prototype.forEach.call(box.querySelectorAll("[data-t]"), function(x){ x.classList.toggle("on", x === b); }); document.getElementById("rmdTime").value = b.dataset.t; });
     var pb = document.getElementById("qmPrimary"); if(ios && pb){ pb.disabled = !rmdSupported(); }
+    rmdCheck();
+    document.getElementById("rmdTest").addEventListener("click", rmdTestNow);
+  }
+  function rmdCheck(){
+    var el = document.getElementById("rmdStat"); if(!el) return;
+    var set = function(t, c){ el.textContent = t; el.className = "rmd-stat " + (c || ""); };
+    if(rmdIOS() && !rmdStandalone()){ set("📱 Máy này đang mở trong Safari — phải mở từ biểu tượng ở Màn hình chính mới nhận được thông báo.", "warn"); return; }
+    if(!rmdSupported()){ set("😢 Trình duyệt này không hỗ trợ thông báo. Android: dùng Chrome · iPhone: iOS 16.4+ và mở từ Màn hình chính.", "warn"); return; }
+    if(Notification.permission === "denied"){ set("🚫 Thông báo đang bị chặn. Vào Cài đặt → Thông báo → AZEnglish (hoặc cài đặt trang trong Chrome) để cho phép lại.", "bad"); return; }
+    navigator.serviceWorker.getRegistration().then(function(reg){ return reg ? reg.pushManager.getSubscription() : null; }).then(function(sub){
+      if(sub && Notification.permission === "granted") set("✅ Máy này ĐÃ đăng ký nhận nhắc. Bấm nút dưới để nghe thử chuông.", "ok");
+      else set("⚠️ Máy này CHƯA đăng ký. Chọn giờ rồi bấm \"Bật nhắc\" ngay trên máy này nha.", "warn");
+    }).catch(function(){ set("⚠️ Chưa kiểm tra được, thử tải lại trang.", "warn"); });
+  }
+  function rmdTestNow(){
+    if(!rmdSupported()){ rmdToast("Máy này chưa nhận thông báo được 😢"); return; }
+    var go = function(){ navigator.serviceWorker.register("./sw.js").then(function(){ return navigator.serviceWorker.ready; }).then(function(reg){
+      return reg.showNotification("Lumina thử chuông nè 🔔", { body:"Thấy tin này + nghe ting ting là ổn áp rồi đó 😎", icon:"./icon-192.png", badge:"./icon-192.png", tag:"az-test", renotify:true, vibrate:[200, 100, 200], silent:false });
+    }).then(function(){ rmdToast("Đã gửi thử! Không thấy thì kiểm tra chế độ Không làm phiền / tắt tiếng nha."); }).catch(function(){ rmdToast("Gửi thử chưa được 😵"); }); };
+    if(Notification.permission === "granted") go();
+    else Notification.requestPermission().then(function(p){ if(p === "granted") go(); else rmdToast("Bạn chưa cho phép thông báo 🙈"); rmdCheck(); });
   }
   function rmdToast(t){ try{ qmToast(t); }catch(e){} }
   function rmdEnable(time){
