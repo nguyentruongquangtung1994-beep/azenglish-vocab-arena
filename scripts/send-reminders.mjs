@@ -45,7 +45,9 @@ for (const doc of snap.docs){
   if(!s.sub || typeof s.hh !== "number") { skipped++; continue; }
   const now = localNow(typeof s.tz === "number" ? s.tz : 420);
   const target = s.hh * 60 + (s.mm || 0);
-  if(now.min < target || now.min > target + WINDOW_MIN || s.lastSentDay === now.day || s.lastLearnDay === now.day){ skipped++; continue; }
+  const why = now.min < target ? "chưa tới giờ" : now.min > target + WINDOW_MIN ? "quá giờ hẹn 3 tiếng" : s.lastSentDay === now.day ? "hôm nay đã nhắc" : s.lastLearnDay === now.day ? "hôm nay đã học" : "";
+  if(DRY && why) console.log("BỎ QUA", doc.id.slice(0, 6) + "…", why, `(hẹn ${s.hh}:${String(s.mm || 0).padStart(2, "0")}, giờ máy học viên ${Math.floor(now.min / 60)}:${String(now.min % 60).padStart(2, "0")}, ${s.device || ""})`);
+  if(why){ skipped++; continue; }
   const [title, body] = now.hour >= 21 ? pick(LATE) : (s.streak >= 2 ? pick(STREAK) : pick(NORMAL));
   const payload = JSON.stringify({ title: title.replace("{s}", s.streak || 0), body: body.replace("{s}", s.streak || 0), url: s.url || SITE });
   if(DRY){ console.log("DRY", doc.id, payload); sent++; continue; }
