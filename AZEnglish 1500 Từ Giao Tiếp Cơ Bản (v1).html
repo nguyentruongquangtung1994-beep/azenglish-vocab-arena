@@ -1349,6 +1349,54 @@
 @keyframes sxBubble{ from{ transform:scale(.85); opacity:.3; } to{ transform:none; opacity:1; } }
 @media (max-width:420px){ .sx-stat{ padding:12px 6px !important; } .sx-sv{ align-items:center; } .sx-sv small{ font-size:9.5px !important; letter-spacing:.03em; } }
 @media (prefers-reduced-motion: reduce){ .sx-ico.fl, .sx-ico.xp, .sx-num.bump, .sx-say.pop, .sx-side span.pop{ animation:none !important; } }
+
+/* ===== Vòng 7: banner nhắc học, dải tiến độ gọn, bản đồ dạng popup ===== */
+.nag{ display:flex; align-items:center; gap:10px; margin:0 0 14px; padding:10px 10px 10px 8px; border-radius:20px; background:linear-gradient(135deg,#fff4f5,#ffe6e9); border:2px solid #ffc9cf; box-shadow:0 10px 24px -16px rgba(224,16,43,.5); animation:nagIn .5s cubic-bezier(.3,1.5,.5,1) both; }
+.nag[hidden]{ display:none; }
+.nag.ok{ background:linear-gradient(135deg,#f1fff6,#dcf7e7); border-color:#a8e6c1; }
+@keyframes nagIn{ from{ opacity:0; transform:translateY(-8px) scale(.97); } to{ opacity:1; transform:none; } }
+.nag-ava{ flex:none; width:46px; height:46px; max-width:none !important; object-fit:contain; animation:nagWig 2.4s ease-in-out infinite; transform-origin:50% 90%; }
+@keyframes nagWig{ 0%,100%{ transform:rotate(0); } 10%{ transform:rotate(-10deg); } 20%{ transform:rotate(8deg); } 30%{ transform:rotate(0); } }
+.nag-tx{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.nag-tx b{ font:900 15px/1.25 var(--sx-font); color:var(--ink); }
+.nag-tx span{ font:700 12.5px/1.35 var(--sx-font); color:var(--ink-soft); }
+.nag-go{ flex:none; border:0; border-radius:99px; background:var(--red); color:#fff; font:900 13px var(--sx-font); padding:9px 13px; cursor:pointer; box-shadow:0 3px 0 var(--red-ink); white-space:nowrap; }
+.nag.ok .nag-go{ background:#1e9a5a; box-shadow:0 3px 0 #146b3e; }
+.nag-go:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--red-ink); }
+.nag-x{ flex:none; align-self:flex-start; width:24px; height:24px; border:0; border-radius:50%; background:rgba(0,0,0,.06); color:var(--ink-soft); font-size:11px; cursor:pointer; }
+:root[data-theme="dark"] .nag{ background:var(--paper); border-color:var(--line); }
+@media (max-width:400px){ .nag-tx span{ font-size:11.5px; } .nag-go{ padding:8px 10px; font-size:12px; } }
+/* dải tiến độ gọn thay bản đồ lớn */
+.qm-zones-sec:not(.qv-open) .qm-zones, .qm-zones-sec:not(.qv-open) #qtStatus, .qm-zones-sec:not(.qv-open) .qm-zones-head, .qm-zones-sec:not(.qv-open) .qv-close{ display:none !important; }
+.qv-strip{ width:100%; display:flex; align-items:center; gap:12px; padding:10px 14px 10px 8px; border-radius:22px; cursor:pointer; text-align:left; font-family:var(--sx-font);
+  border:0; background:linear-gradient(120deg,#2f7d3c 0%,#5aa64f 55%,#e9c46a 130%); color:#fff; box-shadow:0 12px 26px -16px rgba(30,90,40,.8), inset 0 -3px 0 rgba(0,0,0,.15); position:relative; overflow:hidden; }
+.qv-strip::before{ content:""; position:absolute; inset:0; background:url(./map-bg.jpg) center 85% / 160% auto no-repeat; opacity:.28; mix-blend-mode:luminosity; pointer-events:none; }
+.qv-strip > *{ position:relative; }
+.qv-s-ava{ flex:none; height:62px; width:auto; max-width:none !important; margin:-6px 0 -10px; filter:drop-shadow(0 4px 4px rgba(0,0,0,.35)); animation:sxFloat 3s ease-in-out infinite; }
+.qv-s-mid{ flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; }
+.qv-s-mid b{ font:900 15px/1.2 var(--sx-font); text-shadow:0 1px 2px rgba(0,0,0,.25); }
+.qv-s-bar{ display:block; height:9px; border-radius:99px; background:rgba(0,0,0,.25); overflow:hidden; }
+.qv-s-bar i{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#ffe066,#ffb300); box-shadow:0 0 8px rgba(255,214,80,.8); transition:width .6s ease; }
+.qv-s-mid small{ font:800 12px/1.3 var(--sx-font); opacity:.95; }
+.qv-s-go{ flex:none; padding:7px 11px; border-radius:99px; background:rgba(255,255,255,.95); color:#2f7d3c; font:900 12.5px var(--sx-font); box-shadow:0 3px 0 rgba(0,0,0,.18); }
+.qv-s-go i{ font-style:normal; }
+.qm-zones-sec.qv-open .qv-strip{ display:none; }
+/* bản đồ mở dạng popup */
+body.qv-lock{ overflow:hidden; }
+.qm-zones-sec.qv-open{ position:fixed; inset:0; z-index:320; margin:0 !important; padding:16px 16px 28px; overflow-y:auto; background:rgba(10,14,24,.8); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); display:flex; flex-direction:column; align-items:center; gap:10px; animation:qvPop .35s ease both; }
+@keyframes qvPop{ from{ opacity:0; } to{ opacity:1; } }
+.qm-zones-sec.qv-open > *{ width:100%; max-width:520px; }
+.qm-zones-sec.qv-open .qm-zones-head{ color:#fff; margin:6px 0 0; padding-right:44px; }
+.qm-zones-sec.qv-open .qm-zones-head{ display:grid !important; grid-template-columns:1fr auto; align-items:center; gap:2px 10px; }
+.qm-zones-sec.qv-open .qm-zones-head h2{ color:#fff; font-family:var(--sx-font); font-weight:900; font-size:22px; white-space:nowrap; }
+.qm-zones-sec.qv-open .qm-zones-head #qmZonesSum{ grid-column:1 / 2; grid-row:2; font-size:12.5px; }
+.qm-zones-sec.qv-open .qm-zones-head .qm-coll{ grid-column:2; grid-row:1 / 3; }
+.qm-zones-sec.qv-open .qm-zones-head span{ color:rgba(255,255,255,.75); }
+.qm-zones-sec.qv-open .qm-zones{ animation:qvRise .45s cubic-bezier(.22,1.2,.36,1) both; }
+@keyframes qvRise{ from{ transform:translateY(24px) scale(.97); opacity:0; } to{ transform:none; opacity:1; } }
+.qm-zones-sec.qv-open #qtStatus{ background:var(--paper); border-radius:18px; padding:12px 14px; }
+.qv-close{ position:fixed; top:14px; right:14px; z-index:330; width:42px !important; max-width:none !important; height:42px; border-radius:50%; border:0; background:#fff; color:var(--red); font:900 16px var(--sx-font); cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35); }
+@media (prefers-reduced-motion: reduce){ .nag, .nag-ava, .qv-s-ava, .qm-zones-sec.qv-open, .qm-zones-sec.qv-open .qm-zones{ animation:none !important; } }
 #qmPsgHome, #modePsg, .qm-psgbtn{ display:none !important; }
 .qm-dev-btn, .qm-dev{ display:none !important; }   /* công cụ thử nghiệm chỉ dùng ở bản mock */
 </style>
@@ -1420,6 +1468,12 @@
     <div class="risk-banner hidden" id="leechBanner" style="background:var(--paper-2); color:var(--red-ink); border-color:var(--red-ink);">
       <span class="big">🪲</span>
       <span id="leechBannerText"></span>
+    </div>
+    <div class="nag" id="nagBanner" hidden role="status">
+      <img class="nag-ava" src="./lion-head.webp" alt="">
+      <div class="nag-tx"><b id="nagTitle"></b><span id="nagLine"></span></div>
+      <button class="nag-go" id="nagGo" type="button">Học 5 phút</button>
+      <button class="nag-x" id="nagX" type="button" aria-label="Ẩn nhắc nhở hôm nay">✕</button>
     </div>
     <!-- ① TODAY'S QUEST — khu vực quan trọng nhất -->
     <div class="home-hero q-hero" id="qHero">
@@ -1559,9 +1613,15 @@
 
     <!-- ③b VÙNG ĐẤT — khóa theo từ đã ghi nhớ -->
     <section class="qm-zones-sec" id="qmZonesSec">
-      <div class="qm-zones-head"><h2>Vùng đất</h2><span id="qmZonesSum"></span><button class="qm-coll" id="qmColl" type="button" aria-label="Bộ sưu tập thẻ nhân vật">🃏 <b id="qmCollN">0</b>/9</button></div>
+      <button class="qv-strip" id="qvStrip" type="button" aria-label="Mở bản đồ hành trình">
+        <img class="qv-s-ava" id="qvSAva" src="./char-1.png" alt="">
+        <span class="qv-s-mid"><b id="qvSName">Làng Khởi Hành</b><span class="qv-s-bar"><i id="qvSFill"></i></span><small id="qvSHint"></small></span>
+        <span class="qv-s-go">Bản đồ <i>›</i></span>
+      </button>
+      <div class="qm-zones-head"><h2 id="qvHeadT">Vùng đất</h2><span id="qmZonesSum"></span><button class="qm-coll" id="qmColl" type="button" aria-label="Bộ sưu tập thẻ nhân vật">🃏 <b id="qmCollN">0</b>/9</button></div>
       <div class="qm-zones" id="qmZones" role="group" aria-label="Hành trình qua các vùng đất"></div>
       <div class="qt-status" id="qtStatus"></div>
+      <button class="qv-close" id="qvClose" type="button" aria-label="Đóng bản đồ">✕</button>
     </section>
 
     <!-- ③ YOUR ARENA — phần lõi của sản phẩm -->
@@ -3655,6 +3715,7 @@ button, input, select, textarea{ font-family:inherit; }
   function renderCurrent(){
     var word = currentWord();
     currentPhase = "study"; sxTimerStop();
+    if(session && typeof session.qvLit0 !== "number" && window.AZQ){ try{ session.qvLit0 = qvSegInfo(window.AZQ.zi).lit; }catch(e){} }
     var emoji = TOPIC_EMOJI[word.t] || "✳️";
     chipEmoji.textContent = emoji;
     chipText.innerHTML = '<span class="lvl-badge ' + word.lvl + '">' + word.lvl + "</span>" +
@@ -3966,16 +4027,16 @@ button, input, select, textarea{ font-family:inherit; }
 
   // ===== Khu khích lệ quanh thẻ học =====
   var SX_CHEER = [
-    "Đọc to từ mới một lần — não sẽ nhớ lâu hơn hẳn đó!",
-    "Sai cũng là học. Từ sai sẽ quay lại để bạn chinh phục.",
-    "Nghe → nói theo → gõ lại: công thức nhớ từ của người học giỏi.",
-    "Mục tiêu nhỏ mỗi ngày tạo nên kết quả lớn.",
-    "Giữ nhịp nhé! Chuỗi ngày học là vũ khí bí mật của bạn.",
-    "Thử đặt một câu của riêng bạn với từ này trong đầu xem!",
-    "Tập trung 10 phút còn hơn lướt cả tiếng. Bạn đang làm rất tốt!"
+    "Học xong từ này là auto xịn hơn hôm qua 1 level, tin Lumina đi 😎",
+    "Đọc to lên nào, đừng ngại! Hàng xóm nghe được thì cũng học ké thôi mà.",
+    "Từ này mà quên nữa là Lumina dỗi thật đó nha 😤",
+    "Não đang load từ mới… 99%… đừng có tắt máy nha!",
+    "Học từ vựng còn dễ hơn đoán ý crush, cố lên!",
+    "Mỗi ngày một ít, cuối tháng flex tiếng Anh cho cả nhóm xem.",
+    "Nhìn kỹ, đọc to, nhớ lâu — công thức của dân pro đó nha!"
   ];
-  var SX_RIGHT = ["Chuẩn luôn! Thêm một từ vào túi rồi 🎯", "Đỉnh! Cứ giữ phong độ này nhé!", "Nhớ nhanh ghê! Tiếp tục nào!"];
-  var SX_WRONG = ["Không sao, lần sau sẽ nhớ chắc hơn!", "Hít sâu, nhìn kỹ lại một chút là nhớ thôi.", "Từ khó là từ đáng học nhất đó!"];
+  var SX_RIGHT = ["Đỉnh nóc kịch trần! 🎯", "Ủa sao giỏi dữ vậy? Ai cho phép? 😏", "Chuẩn không cần chỉnh, next luôn!", "Nhớ nhanh vậy chắc kiếp trước là cuốn từ điển ha!"];
+  var SX_WRONG = ["Sai xíu thôi, không sao, Lumina vẫn thương 🫶", "Ơ kìa, từ này nó troll bạn rồi. Lần sau phục thù nha!", "Toang nhẹ thôi, chưa toang hẳn đâu. Gỡ lại liền!", "Từ khó vậy mới đáng để chinh phục chứ!"];
   function sxNum(id, html){ var el = document.getElementById(id); if(el.innerHTML === html) return; el.innerHTML = html; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
   function sxBoostRender(lastOk){
     var Z = window.AZQ; if(!Z) return;
@@ -4004,6 +4065,80 @@ button, input, select, textarea{ font-family:inherit; }
     var sy = document.getElementById("sxSay"), ss = document.getElementById("sxSideSay");
     sy.innerHTML = who; ss.innerHTML = who; [sy, ss].forEach(function(e){ e.classList.remove("pop"); void e.offsetWidth; e.classList.add("pop"); });
   }
+
+
+  // ===== Dải tiến độ gọn + bản đồ dạng popup + popup hành trình sau buổi học =====
+  var qvForceLit = null;
+  function qvSegInfo(zi){
+    var Z = window.AZQ, p = qmZoneProgress(zi), base = zi ? Math.ceil(Z.ZONES[zi - 1] * Z.GATE_RATIO) : 0, span = Math.max(1, p.need - base), done = Math.max(0, p.c - base);
+    return { p:p, base:base, span:span, done:done, pct: p.c >= p.need ? 1 : done / span, lit: p.c >= p.need ? 10 : Math.floor(Math.min(1, done / span) * 10) };
+  }
+  function qvStripRender(){
+    var Z = window.AZQ; if(!Z || !document.getElementById("qvStrip")) return;
+    var zi = Z.zi, g = qvSegInfo(zi), nxt = Z.NAMES[Math.min(zi + 1, Z.NAMES.length - 1)], hint = "";
+    for(var k = 0; k < 3 && !hint; k++){
+      var need = Math.ceil([0.25, 0.5, 0.75][k] * g.span), op = false;
+      try{ op = localStorage.getItem(Z.KEY + "_chest_" + zi + "_" + k) === "1"; }catch(e){}
+      if(!op && g.done < need) hint = "Còn " + (need - g.done) + " từ nữa là đập rương " + [25, 50, 75][k] + "% 🎁";
+      else if(!op) hint = "Rương " + [25, 50, 75][k] + "% đang chờ bạn đập kìa! 🎁";
+    }
+    if(!hint) hint = g.p.c >= g.p.need ? "Đủ từ rồi! Vào phá cổng " + nxt + " đi ⚔️" : "Còn " + (g.p.need - g.p.c) + " từ nữa tới " + nxt + " 🚩";
+    document.getElementById("qvSName").textContent = Z.NAMES[zi] + " · " + Math.round(g.pct * 100) + "%";
+    document.getElementById("qvSFill").style.width = Math.max(3, Math.round(g.pct * 100)) + "%";
+    document.getElementById("qvSHint").textContent = hint;
+    var im = document.getElementById("qvSAva"), src = "./char-" + (zi + 1) + ".png"; if(im.getAttribute("src") !== src) im.setAttribute("src", src);
+  }
+  function qvOpenMap(title){
+    var sec = document.getElementById("qmZonesSec"); if(!sec) return;
+    document.getElementById("qvHeadT").textContent = title || "Vùng đất";
+    sec.classList.add("qv-open"); document.body.classList.add("qv-lock");
+    if(window.AZQ){ renderZones(); }
+  }
+  function qvCloseMap(){ var sec = document.getElementById("qmZonesSec"); sec.classList.remove("qv-open"); document.body.classList.remove("qv-lock"); qvStripRender(); }
+  function qvShowJourney(){
+    var Z = window.AZQ; if(!Z) return;
+    var lit0 = (typeof session !== "undefined" && session && typeof session.qvLit0 === "number") ? session.qvLit0 : null, g = qvSegInfo(Z.zi);
+    qvOpenMap("Hành trình của bạn");
+    if(lit0 !== null && lit0 < g.lit){
+      qvForceLit = lit0; qtApply(Z.zi, true); qvForceLit = null;
+      setTimeout(function(){ qtApply(Z.zi, false); qtSay(qmPick(["Thấy chưa, nhích lên rồi đó! Học thêm là phi luôn tới rương 😎", "Ê đi xa ghê ta! Mai quay lại đi tiếp nha, đừng có lặn 👀"])); }, 700);
+    }else{
+      setTimeout(function(){ qtSay(qmPick(["Hôm nay vậy là ổn áp! Mai quay lại là nhân vật phi tiếp 🏃", "Từ học hôm nay cần vài ngày để 'thấm'. Ôn đều là đường vàng tự dài ra nha!", "Đừng để Lumina nhớ bạn quá nha, mai gặp lại đó 😤"])); }, 600);
+    }
+  }
+  (function(){
+    var st = document.getElementById("qvStrip"); if(!st) return;
+    st.addEventListener("click", function(){ qvOpenMap("Vùng đất"); });
+    document.getElementById("qvClose").addEventListener("click", qvCloseMap);
+    document.getElementById("qmZonesSec").addEventListener("click", function(e){ if(e.target === this) qvCloseMap(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && document.getElementById("qmZonesSec").classList.contains("qv-open")) qvCloseMap(); });
+    setTimeout(qvStripRender, 300);
+  })();
+
+  // ===== Banner nhắc học kiểu Gen Z (chỉ hiện trên trang) =====
+  var NAG_KEY = "azq_nag_hide";
+  function nagRender(){
+    var el = document.getElementById("nagBanner"); if(!el) return;
+    var today = todayStamp(), hidden = false; try{ hidden = localStorage.getItem(NAG_KEY) === String(today); }catch(e){}
+    var cnt = meta.todayKey === today ? (meta.todayCount || 0) : 0, goal = typeof DAILY_GOAL === "number" ? DAILY_GOAL : 25, streak = meta.dayStreak || 0;
+    var learnedYesterday = meta.lastActiveDay === today - 1, h = new Date().getHours(), t = "", l = "", go = "Học 5 phút";
+    if(cnt >= goal){ t = "Xong mục tiêu rồi, flex đi! 😎"; l = qmPick(["Chuỗi 🔥 " + streak + " ngày rồi đó, khoe nhẹ cho đám bạn coi chơi.", "Hôm nay bạn là main character. Học thêm thì càng đỉnh nóc kịch trần!"]); go = "Học thêm"; }
+    else if(cnt > 0){ t = "Mới " + cnt + "/" + goal + " từ thôi á? 🤨"; l = qmPick(["Lumina biết bạn làm được hơn mà, quẩy nốt " + (goal - cnt) + " từ đi!", "Đang hay mà dừng là cụt hứng lắm nha. Thêm xíu nữa thôi!"]); go = "Học tiếp"; }
+    else if(streak > 0 && learnedYesterday){ t = "Chuỗi 🔥 " + streak + " ngày sắp toang rồi! 😱"; l = qmPick(["5 phút thôi, cứu chuỗi giùm cái. Đứt là Lumina khóc ròng á.", "Hôm qua còn chăm lắm mà, hôm nay lặn đâu rồi? Vô cứu chuỗi lẹ!"]); go = "Cứu chuỗi"; }
+    else if(h >= 21){ t = "Gần ngủ rồi mà chưa học từ nào? 🌙"; l = "Học 5 từ rồi ngủ cho ngon, mơ cũng nói tiếng Anh luôn."; }
+    else if(h < 11){ t = "Chào buổi sáng, chiến thần! ☀️"; l = "Nạp 5 từ trước khi lướt TikTok đi, não đang tươi nhất đó."; }
+    else { t = "Ủa alo? Từ vựng đang đợi bạn nè 👀"; l = qmPick(["Lướt TikTok hoài vậy, ghé học 5 phút rồi lướt tiếp cũng được mà.", "Lumina ngồi chờ mốc meo rồi đó. Vô học lẹ đi bạn ơi!", "Crush không rep thì học từ vựng, ít ra từ vựng không seen không rep 😌"]); }
+    document.getElementById("nagTitle").textContent = t; document.getElementById("nagLine").textContent = l; document.getElementById("nagGo").textContent = go;
+    el.classList.toggle("ok", cnt >= goal);
+    el.hidden = hidden;
+  }
+  (function(){
+    var el = document.getElementById("nagBanner"); if(!el) return;
+    document.getElementById("nagGo").addEventListener("click", function(){ var c = document.querySelector("#qHero .home-cta"); if(c) c.click(); });
+    document.getElementById("nagX").addEventListener("click", function(){ try{ localStorage.setItem(NAG_KEY, String(todayStamp())); }catch(e){} el.hidden = true; });
+    setTimeout(nagRender, 400);
+    document.addEventListener("visibilitychange", function(){ if(!document.hidden) nagRender(); });
+  })();
 
   function showFeedback(word, correct){
     answerInput.disabled = true;
@@ -6544,6 +6679,7 @@ button, input, select, textarea{ font-family:inherit; }
     var real = (cur === Z.zi), p = real ? qmZoneProgress(cur) : { c:1, need:1 }, ready = p.c >= p.need, last = cur >= n - 1;
     var segBase = cur ? Math.ceil(Z.ZONES[cur - 1] * Z.GATE_RATIO) : 0, segPct = real ? Math.max(0, (p.c - segBase) / Math.max(1, p.need - segBase)) : 1;
     var lit = ready ? 10 : Math.floor(Math.min(segPct, 1) * 10);
+    if(qvForceLit !== null && real) lit = qvForceLit;
     if(instant) scene.classList.add("no-tr");
     Array.prototype.forEach.call(scene.querySelectorAll(".qt-z"), function(e){
       var z = +e.dataset.z, st = z < cur ? "done" : z === cur ? "cur" : "lock", prev = z ? Z.ZONES[z - 1] : 0;
@@ -6590,6 +6726,7 @@ button, input, select, textarea{ font-family:inherit; }
     document.getElementById("qtDone").setAttribute("d", d); document.getElementById("qtShine").setAttribute("d", d); document.getElementById("qtDoneEdge").setAttribute("d", d);
     var qsv = document.getElementById("qtDone").ownerSVGElement; requestAnimationFrame(function(){ qsv.style.opacity = ".999"; requestAnimationFrame(function(){ qsv.style.opacity = ""; }); });
     scene.dataset.lit = lit; scene.dataset.cur = cur;
+    if(real) setTimeout(qvStripRender, 0);
     if(real){
       var left = p.need - p.c, pct = Math.min(100, Math.round(segPct * 100));
       document.getElementById("qtStatus").innerHTML =
@@ -6728,6 +6865,18 @@ button, input, select, textarea{ font-family:inherit; }
 
   // ---------- Modal Lumina ----------
   function qmClose(){ var m = document.getElementById("qmModal"); m.hidden = true; }
+  // Giọng Lumina thu sẵn (ElevenLabs · Thùy Dương); lỗi tải thì quay về giọng trình duyệt
+  var qmClip = null;
+  function qmVoiceClip(src, fallback){
+    try{
+      if(window.speechSynthesis) window.speechSynthesis.cancel();
+      if(qmClip){ qmClip.pause(); }
+      qmClip = new Audio(src); qmClip.volume = 1;
+      var fb = function(){ if(fallback) speakReactionVi(fallback); };
+      qmClip.onerror = fb;
+      var pr = qmClip.play(); if(pr && pr.catch) pr.catch(fb);
+    }catch(e){ if(fallback) speakReactionVi(fallback); }
+  }
   function qmOpen(o){
     var m = document.getElementById("qmModal");
     document.getElementById("qmKicker").textContent = o.kicker || "";
@@ -6741,7 +6890,8 @@ button, input, select, textarea{ font-family:inherit; }
     pb.onclick = function(){ qmClose(); o.primary.fn && o.primary.fn(); };
     sb.onclick = function(){ qmClose(); o.secondary.fn && o.secondary.fn(); };
     m.hidden = false;
-    if(o.say){ setTimeout(function(){ speakReactionVi(o.say); }, 350); }
+    if(o.audio){ setTimeout(function(){ qmVoiceClip(o.audio, o.say); }, 350); }
+    else if(o.say){ setTimeout(function(){ speakReactionVi(o.say); }, 350); }
   }
   document.addEventListener("keydown", function(e){ if(e.key === "Escape"){ var m = document.getElementById("qmModal"); if(m && !m.hidden){ m.querySelector("#qmSecondary").click(); } } });
   function qmFireworks(times, big){
@@ -7167,7 +7317,7 @@ button, input, select, textarea{ font-family:inherit; }
 
   // ---------- bục huy chương + rương ----------
   var PODIUM_LINES = {
-    1: ["Chặng này bạn đứng nhất bục luôn! Lumina vỗ tay đỏ cả bàn tay.", "Gần như hoàn hảo. Lumina bắt đầu lo cho đối thủ rồi đó!"],
+    1: ["Ơ kìa, đứng nhất bục luôn! Lumina vỗ tay rát cả tay rồi nè!", "Gần như hoàn hảo luôn á! Đối thủ chắc đang run cầm cập rồi đó, hihi!"],
     2: ["Bạc sáng lấp lánh! Thêm một chặng nữa là chạm vàng.", "Khá lắm! Chỉ cần ít sai hơn một chút là lên bục cao nhất."],
     3: ["Đồng cũng là huy chương nha! Lumina tin chặng sau bạn sẽ khá hơn.", "Chưa đẹp lắm nhưng bạn đã qua chặng. Hít sâu, đi tiếp nào!"]
   };
@@ -7194,7 +7344,7 @@ button, input, select, textarea{ font-family:inherit; }
     var best = 0; try{ best = +localStorage.getItem(QM_KEY + "_roundbest") || 0; }catch(e){}
     var isRec = pct > best && pct > 0;
     if(isRec && !demo){ try{ localStorage.setItem(QM_KEY + "_roundbest", String(pct)); }catch(e){} }
-    var more = !demo && qmChunkIdx < qmChunks.length - 1, line = qmPick(PODIUM_LINES[tier]);
+    var more = !demo && qmChunkIdx < qmChunks.length - 1, li = Math.floor(Math.random() * PODIUM_LINES[tier].length), line = PODIUM_LINES[tier][li];
     function step(cls, medal, txt, mine){ return '<div class="step ' + cls + (mine ? " me" : "") + '">' + (mine ? '<img class="face" src="./lion-head.webp" alt="">' : "") + '<i class="medal m' + medal + '">' + medal + "</i><span>" + txt + "</span></div>"; }
     var html = '<div class="qm-podium">' + step("s2", 2, "từ 70%", tier === 2) + step("s1", 1, "từ 90%", tier === 1) + step("s3", 3, "dưới 70%", tier === 3) + "</div>" +
       '<p class="qm-score">Đúng ngay lần đầu: <b>' + first + "/" + total + "</b> (" + pct + "%) · kỷ lục: " + (isRec ? "<b>mới!</b>" : best + "%") + "</p>" +
@@ -7203,9 +7353,9 @@ button, input, select, textarea{ font-family:inherit; }
     if(tier === 1) { qmFireworks(2, true); playSfx(QM_FIREWORK, 0.5); } else { playFanfare(false); }
     qmOpen({
       kicker: (more ? "Chặng " + (qmChunkIdx + 1) + "/" + qmChunks.length + " · " : "") + "Kết quả", title: tier === 1 ? "Huy chương vàng!" : tier === 2 ? "Huy chương bạc!" : "Huy chương đồng!",
-      line: line, html: html, say: line,
-      primary: { label: more ? "Chặng tiếp →" : "Xong", fn: function(){ if(more) qmNextRound(); } },
-      secondary: { label: more ? "Nghỉ ở đây" : "Đóng", fn: function(){} }
+      line: line, html: html, say: line, audio: "./lumina-podium-" + tier + "ab".charAt(li) + ".mp3",
+      primary: { label: more ? "Chặng tiếp →" : "Xem hành trình →", fn: function(){ if(more) qmNextRound(); else setTimeout(qvShowJourney, 250); } },
+      secondary: { label: more ? "Nghỉ ở đây" : "Đóng", fn: function(){ setTimeout(qvShowJourney, 250); } }
     });
     var chest = document.getElementById("qmChest"), pgo = document.getElementById("qmPsgGo");
     if(pgo) pgo.addEventListener("click", function(){
