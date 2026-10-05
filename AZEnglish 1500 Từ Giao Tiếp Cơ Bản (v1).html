@@ -1423,6 +1423,12 @@ body.qv-lock{ overflow:hidden; }
 @media (prefers-reduced-motion: reduce){ .rmd-bell{ animation:none; } }
 .rmd-head{ opacity:1 !important; }
 .rmd-head[hidden]{ display:none !important; }
+.rmd-head{ position:relative; }
+.rmd-head.off::after{ content:""; position:absolute; top:5px; right:5px; width:8px; height:8px; border-radius:50%; background:#e0102b; box-shadow:0 0 0 2px var(--paper); animation:rmdDot 1.6s ease-in-out infinite; }
+.rmd-head.on::after{ content:""; position:absolute; top:5px; right:5px; width:8px; height:8px; border-radius:50%; background:#1e9a5a; box-shadow:0 0 0 2px var(--paper); }
+.rmd-head.off{ animation:rmdRing 2.6s ease-in-out infinite; transform-origin:50% 10%; }
+@keyframes rmdDot{ 50%{ transform:scale(1.35); } }
+#rmdCard{ display:none !important; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -4195,8 +4201,8 @@ button, input, select, textarea{ font-family:inherit; }
     var c = document.getElementById("rmdCard"); if(!c) return;
     if(!rmdCfg || !rmdSupported() && !rmdIOS()){ c.hidden = true; return; }
     var st = rmdState(), hb = document.getElementById("rmdHeadBtn"), on = !!(st && st.on);
-    if(hb){ hb.hidden = !on; hb.title = on ? "Nhắc học lúc " + st.time + " — bấm để đổi" : ""; }
-    c.hidden = on; c.classList.toggle("on", on);     // đã bật thì ẩn thẻ, chỉnh giờ qua nút 🔔 trên thanh tiêu đề
+    if(hb){ hb.hidden = false; hb.classList.toggle("on", on); hb.classList.toggle("off", !on); hb.title = on ? "Nhắc học lúc " + st.time + " — bấm để đổi" : "Bật nhắc học trên điện thoại"; hb.setAttribute("aria-label", hb.title); }
+    c.hidden = true;     // nhắc học chỉ nằm ở nút 🔔 trên thanh tiêu đề
     if(st && st.on){ document.getElementById("rmdTitle").textContent = "Lumina sẽ réo bạn lúc " + st.time + " 🔔"; document.getElementById("rmdSub").textContent = "Học rồi thì Lumina im re, chưa học là bị cà khịa liền."; document.getElementById("rmdGo").textContent = "Sửa"; }
     else { document.getElementById("rmdTitle").textContent = "Bật nhắc học trên điện thoại"; document.getElementById("rmdSub").textContent = "Lumina sẽ \"réo\" bạn mỗi ngày — mỏ hơi hỗn, chịu khó nghe nha 😏"; document.getElementById("rmdGo").textContent = "Bật"; }
   }
