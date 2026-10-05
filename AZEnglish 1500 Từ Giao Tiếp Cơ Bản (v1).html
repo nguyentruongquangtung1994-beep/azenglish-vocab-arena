@@ -1421,6 +1421,8 @@ body.qv-lock{ overflow:hidden; }
 .rmd-note{ margin:6px 0 10px; font-size:12.5px; color:var(--ink-soft); line-height:1.45; }
 .rmd-ios{ margin:0 0 10px; padding:10px 12px; border-radius:14px; background:#fff7df; border:1.5px solid #f3cf7a; color:#5a3a00; font-size:12.5px; line-height:1.45; }
 @media (prefers-reduced-motion: reduce){ .rmd-bell{ animation:none; } }
+.rmd-head{ opacity:1 !important; }
+.rmd-head[hidden]{ display:none !important; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -1459,6 +1461,7 @@ body.qv-lock{ overflow:hidden; }
     </div>
     <button class="music-btn" id="leaderboardBtn" type="button" aria-label="Bảng xếp hạng" title="Bảng xếp hạng">🏆</button>
     <button class="music-btn" id="musicBtn" type="button" aria-label="Bật/tắt nhạc nền">🎵</button>
+    <button class="music-btn rmd-head" id="rmdHeadBtn" type="button" aria-label="Giờ nhắc học" title="Giờ nhắc học" hidden>🔔</button>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
   </header>
   <div class="music-vol-row" id="musicVolRow">
@@ -4191,7 +4194,9 @@ button, input, select, textarea{ font-family:inherit; }
   function rmdCardRender(){
     var c = document.getElementById("rmdCard"); if(!c) return;
     if(!rmdCfg || !rmdSupported() && !rmdIOS()){ c.hidden = true; return; }
-    var st = rmdState(); c.hidden = false; c.classList.toggle("on", !!(st && st.on));
+    var st = rmdState(), hb = document.getElementById("rmdHeadBtn"), on = !!(st && st.on);
+    if(hb){ hb.hidden = !on; hb.title = on ? "Nhắc học lúc " + st.time + " — bấm để đổi" : ""; }
+    c.hidden = on; c.classList.toggle("on", on);     // đã bật thì ẩn thẻ, chỉnh giờ qua nút 🔔 trên thanh tiêu đề
     if(st && st.on){ document.getElementById("rmdTitle").textContent = "Lumina sẽ réo bạn lúc " + st.time + " 🔔"; document.getElementById("rmdSub").textContent = "Học rồi thì Lumina im re, chưa học là bị cà khịa liền."; document.getElementById("rmdGo").textContent = "Sửa"; }
     else { document.getElementById("rmdTitle").textContent = "Bật nhắc học trên điện thoại"; document.getElementById("rmdSub").textContent = "Lumina sẽ \"réo\" bạn mỗi ngày — mỏ hơi hỗn, chịu khó nghe nha 😏"; document.getElementById("rmdGo").textContent = "Bật"; }
   }
@@ -4240,6 +4245,7 @@ button, input, select, textarea{ font-family:inherit; }
   (function(){
     var c = document.getElementById("rmdCard"); if(!c) return;
     c.addEventListener("click", rmdOpenSheet);
+    var hb = document.getElementById("rmdHeadBtn"); if(hb) hb.addEventListener("click", rmdOpenSheet);
     fetch("./push-config.json", { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){ if(j && j.vapidPublic){ rmdCfg = j; rmdCardRender(); } }).catch(function(){});
   })();
 
