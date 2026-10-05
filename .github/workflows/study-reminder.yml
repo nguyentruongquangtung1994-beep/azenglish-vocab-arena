@@ -1,7 +1,7 @@
 name: Nhắc học (Web Push)
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "13,43 * * * *"   # lệch khỏi mốc :00/:30 (GitHub hay bỏ lịch giờ chẵn)
   workflow_dispatch:
     inputs:
       dry_run:
