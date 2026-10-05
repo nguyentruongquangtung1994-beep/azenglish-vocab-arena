@@ -162,6 +162,14 @@
   .o0{ background:var(--a); } .o1{ background:var(--b); } .o2{ background:var(--c); } .o3{ background:var(--d); }
   .opt.dim{ opacity:.28; } .opt.right{ transform:scale(1.03); box-shadow:0 0 0 5px var(--card), 0 0 0 9px var(--ok); }
   .opt .cnt{ margin-left:auto; padding:2px 12px; border-radius:99px; background:rgba(0,0,0,.25); font-size:18px; }
+  .gw{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:6px 0 2px; }
+  .gw i{ font-style:normal; width:clamp(30px,8vw,46px); height:clamp(40px,10vw,58px); display:grid; place-items:end center; padding-bottom:6px; border-bottom:4px solid currentColor; font:800 clamp(22px,6vw,34px)/1 var(--display); text-transform:uppercase; }
+  .gw i.f{ color:var(--red); border-color:var(--red); }
+  .gw i.on{ animation:gwPop .18s ease; }
+  .gw i.gap{ border:0; width:12px; }
+  .gw.big i{ width:clamp(44px,5vw,72px); height:clamp(60px,7vw,92px); font-size:clamp(34px,4.4vw,58px); border-bottom-width:6px; }
+  .gwn{ text-align:center; font:700 14px var(--display); color:var(--muted); margin-bottom:8px; }
+  @keyframes gwPop{ 50%{ transform:translateY(-5px); } }
   .typebox{ text-align:center; padding:20px; border-radius:20px; background:var(--card); border:2px dashed var(--line); font:800 22px var(--display); color:var(--muted); }
   .accepted{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
   .accepted span{ padding:8px 16px; border-radius:99px; background:var(--ok-bg); color:var(--ok); font:800 22px var(--display); }
@@ -443,6 +451,16 @@ const CD_T = 3400;
 function cdHTML(rem){ const el = Math.max(0, CD_T - rem), st = (d, extra) => ' style="animation-duration:850ms;animation-delay:' + (d - el) + 'ms' + (extra || "") + '"';
   return '<div class="cd" aria-label="Chuẩn bị"><b' + st(0) + '>3</b><b' + st(850) + '>2</b><b' + st(1700) + '>1</b><b class="go"' + st(2550) + '>GO!</b><i class="ring"' + st(0) + '></i></div>'; }
 const SHAPES = ["▲", "◆", "●", "■"];
+// Đoán từ: mẫu "B______" (giữ dấu cách/gạch nối), ô chữ điền dần theo chữ học viên gõ
+const gwMask = w => [...w].map((c, k) => k === 0 ? c.toUpperCase() : /[a-z]/i.test(c) ? "_" : c).join("");
+function gwHTML(mask, typed, size){
+  const t = String(typed || "").toLowerCase().replace(/[^a-z]/g, ""); let li = 0;
+  const n = [...mask].filter(c => c === "_" || /[A-Z]/.test(c)).length;
+  return '<div class="gw' + (size ? " " + size : "") + '" aria-label="Từ có ' + n + ' chữ cái, bắt đầu bằng ' + esc(mask[0]) + '">' + [...mask].map(c => {
+    if(c !== "_" && !/[A-Z]/.test(c)) return '<i class="gap">' + (c === "-" ? "-" : "") + '</i>';
+    const idx = li++; if(idx === 0) return '<i class="f">' + esc(c) + '</i>';
+    const ch = t[idx] || ""; return '<i' + (ch ? ' class="on"' : '') + '>' + esc(ch.toUpperCase()) + '</i>'; }).join("") + '</div><div class="gwn">' + n + ' chữ cái · bắt đầu bằng “' + esc(mask[0]) + '”</div>';
+}
 const LUMI = '<span class="rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hd"><img src="./lion-head.webp" alt=""><i class="lid l"></i><i class="lid r"></i></span></span>';
 const ICON_T = '<span class="ci ci-t" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="44" height="32" rx="5"/><path d="M28 40v8M20 54l8-6 8 6"/><rect class="bar" x="14" y="26" width="6" height="8" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b2" x="24" y="20" width="6" height="14" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b3" x="34" y="15" width="6" height="19" rx="1.5" fill="currentColor" stroke="none"/><g class="stick"><path d="M52 50 41 20"/><circle cx="41" cy="20" r="2.5" fill="currentColor" stroke="none"/></g><path class="spark" d="M56 6v8M52 10h8" stroke-width="2.5"/></svg></span>';
 const ICON_S = '<span class="ci ci-s" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><g class="phone"><rect x="16" y="4" width="32" height="54" rx="7"/><path d="M28 10h8"/><rect class="k k1" x="21" y="18" width="10" height="13" rx="3" fill="var(--a)" stroke="none"/><rect class="k k2" x="33" y="18" width="10" height="13" rx="3" fill="var(--b)" stroke="none"/><rect class="k k3" x="21" y="34" width="10" height="13" rx="3" fill="var(--c)" stroke="none"/><rect class="k k4" x="33" y="34" width="10" height="13" rx="3" fill="var(--d)" stroke="none"/></g><circle class="ring" cx="26" cy="24" r="7" stroke-width="2.5"/></svg></span>';
@@ -680,6 +698,7 @@ const H = (() => {
       if(k === "tf"){ const truth = Math.random() < .5, shown = truth ? it.m : (others[0] ? others[0].m : it.m);
         return { t:"tf", p:"“" + it.w + "” nghĩa là “" + shown + "”?", o:["Đúng", "Sai"], ok:[truth || !others[0] ? 0 : 1], time:cfg.time, x2:false }; }
       if(k === "type") return { t:"type", p:it.m, hint:"Gõ từ tiếng Anh", acc:[it.w], time:Math.max(cfg.time, 20), x2:false };
+      if(k === "guess"){ const w = String(it.w).trim(); return { t:"type", p:it.m, sub:"Đoán từ · VI → EN", gw:gwMask(w), acc:[w], time:Math.max(cfg.time, 15), x2:false }; }
       const opts = shuffle([it].concat(others.slice(0, 3)));
       return { t:"mcq", p:k === "en" ? it.w : it.m, sub:k === "en" ? "Nghĩa của từ này là gì?" : "Từ tiếng Anh nào có nghĩa này?",
         o:opts.map(x => k === "en" ? x.m : x.w), ok:[opts.indexOf(it)], time:cfg.time, x2:false };
@@ -729,7 +748,7 @@ const H = (() => {
       '<label class="f">Số câu<div class="chips" id="cnt"></div></label><label class="f">Thời gian mỗi câu<div class="chips" id="tm"></div></label></div>';
   }
   function bindVocabOptions(){
-    chips($("kinds"), ["en", "vi", "tf", "type"], "kinds", v => ({ en:"Chọn nghĩa", vi:"Chọn từ", tf:"Đúng/Sai", type:"Gõ từ" })[v], true);
+    chips($("kinds"), ["en", "vi", "tf", "type", "guess"], "kinds", v => ({ en:"Chọn nghĩa", vi:"Chọn từ", tf:"Đúng/Sai", type:"Gõ từ", guess:"Đoán từ (chữ đầu)" })[v], true);
     chips($("cnt"), [5, 10, 15, 20], "count", v => v + " câu");
     chips($("tm"), [10, 20, 30], "time", v => v + " giây");
   }
@@ -1083,7 +1102,7 @@ const H = (() => {
   }
 
   // ---------- vòng câu hỏi ----------
-  function publicQ(q){ const o = { t:q.t, p:q.p, x2:!!q.x2, dur:q.time }; if(q.sub) o.sub = q.sub; if(q.hint) o.hint = q.hint; if(q.t !== "type") o.o = q.o; return o; }
+  function publicQ(q){ const o = { t:q.t, p:q.p, x2:!!q.x2, dur:q.time }; if(q.sub) o.sub = q.sub; if(q.hint) o.hint = q.hint; if(q.gw) o.gw = q.gw; if(q.t !== "type") o.o = q.o; return o; }
   async function next(){
     stopTick(); i++;
     if(i >= qs.length) return end();
@@ -1114,7 +1133,7 @@ const H = (() => {
     view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + '<span class="prog" aria-hidden="true">' + qs.map((_, k) => '<i class="' + (k < i ? "done" : k === i ? "now" : "") + '"></i>').join("") + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '<span class="sp"></span>' +
       '<span class="answered" id="ans">0 đã trả lời</span>' + timerSvg() + '</div>' +
       '<div class="card prompt"><small>' + esc(q.sub || ({ tf:"Đúng hay sai?", type:"Gõ đáp án trên điện thoại", mcq:"Chọn đáp án đúng" })[q.t]) + '</small><div class="w' + (q.p.length > 70 ? " long" : "") + '">' + esc(q.p) + '</div></div>' +
-      (q.t === "type" ? '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
+      (q.t === "type" ? (q.gw ? gwHTML(q.gw, "", "big") : '') + '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
         '<div class="opts">' + q.o.map((o, k) => '<div class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" id="op' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></div>').join("") + '</div>') +
       '<div class="row"><span class="sp"></span><button class="btn ghost" id="skip" type="button">Hiện đáp án ngay</button></div>';
     $("skip").addEventListener("click", reveal);
@@ -1275,12 +1294,13 @@ const P = (() => {
       if(answeredI === st.i) return lockedView();
       qStart = Date.now(); deadline = (st.goAt ? st.goAt - SKEW : Date.now()) + (q.dur || 20) * 1000;
       let body;
-      if(q.t === "type") body = '<input type="text" id="typed" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án…" style="font:800 22px var(--display);text-align:center;min-height:64px">' +
+      if(q.t === "type") body = (q.gw ? '<div id="gwp">' + gwHTML(q.gw, "") + '</div>' : '') + '<input type="text" id="typed" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án…" style="font:800 22px var(--display);text-align:center;min-height:64px">' +
         '<button class="btn big" id="send" type="button">Gửi ▶</button>';
       else body = '<div class="opts' + (q.t === "tf" ? " two" : "") + '">' + q.o.map((o, k) => '<button type="button" class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" data-k="' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></button>').join("") + '</div>';
       view.innerHTML = '<div class="ph"><div class="qbar"><span class="n">Câu ' + (st.i + 1) + '/' + st.n + '</span><span class="sp"></span><span class="answered" id="pt"></span></div>' +
         '<div class="card prompt" style="padding:14px"><div class="w" style="font-size:' + ((q.p || "").length > 70 ? "clamp(17px,4.6vw,22px);line-height:1.35" : "clamp(22px,6.5vw,34px)") + '">' + esc(q.p) + '</div></div>' + body + '</div>';
       if(q.t === "type"){ const inp = $("typed"); inp.focus(); const send = () => { const v = inp.value.trim(); if(v) answer({ a:v }); };
+        if(q.gw) inp.addEventListener("input", () => { const g = $("gwp"); if(g) g.innerHTML = gwHTML(q.gw, inp.value); });
         $("send").addEventListener("click", send); inp.addEventListener("keydown", e => { if(e.key === "Enter") send(); }); }
       else view.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => answer({ c:+b.dataset.k })));
       const pt = $("pt"); tickT = setInterval(() => { const left = Math.max(0, deadline - Date.now()); pt.textContent = "⏱ " + Math.ceil(left / 1000) + "s"; }, 250);
