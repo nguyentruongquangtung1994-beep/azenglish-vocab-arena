@@ -7,6 +7,9 @@ on:
       dry_run:
         description: "Chạy thử, không gửi thật (1 = có)"
         default: "0"
+      only:
+        description: "Gửi thử ngay cho 1 đăng ký (mã bắt đầu bằng…), bỏ trống = chạy bình thường"
+        default: ""
 jobs:
   send:
     runs-on: ubuntu-latest
@@ -24,6 +27,7 @@ jobs:
           VAPID_PUBLIC: ${{ secrets.VAPID_PUBLIC }}
           VAPID_PRIVATE: ${{ secrets.VAPID_PRIVATE }}
           DRY_RUN: ${{ github.event.inputs.dry_run || '0' }}
+          ONLY: ${{ github.event.inputs.only || '' }}
         run: |
           if [ -z "$FIREBASE_SA" ] || [ -z "$VAPID_PRIVATE" ]; then echo "Chưa cài khoá (FIREBASE_SA / VAPID_PRIVATE) — bỏ qua."; exit 0; fi
           node scripts/send-reminders.mjs

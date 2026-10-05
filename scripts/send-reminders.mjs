@@ -6,6 +6,7 @@ import webpush from "web-push";
 
 const SITE = "https://nguyentruongquangtung1994-beep.github.io/azenglish-vocab-arena/";
 const DRY = process.env.DRY_RUN === "1";
+const ONLY = (process.env.ONLY || "").trim();     // gửi thử ngay cho 1 đăng ký (mã bắt đầu bằng ONLY), bỏ qua giờ hẹn
 const WINDOW_MIN = 180;          // sau giờ hẹn tối đa 3 tiếng vẫn nhắc (phòng Actions chạy trễ)
 
 admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SA)) });
@@ -45,7 +46,8 @@ for (const doc of snap.docs){
   if(!s.sub || typeof s.hh !== "number") { skipped++; continue; }
   const now = localNow(typeof s.tz === "number" ? s.tz : 420);
   const target = s.hh * 60 + (s.mm || 0);
-  const why = now.min < target ? "chưa tới giờ" : now.min > target + WINDOW_MIN ? "quá giờ hẹn 3 tiếng" : s.lastSentDay === now.day ? "hôm nay đã nhắc" : s.lastLearnDay === now.day ? "hôm nay đã học" : "";
+  if(ONLY && !doc.id.startsWith(ONLY)) { skipped++; continue; }
+  const why = ONLY ? "" : now.min < target ? "chưa tới giờ" : now.min > target + WINDOW_MIN ? "quá giờ hẹn 3 tiếng" : s.lastSentDay === now.day ? "hôm nay đã nhắc" : s.lastLearnDay === now.day ? "hôm nay đã học" : "";
   if(DRY && why) console.log("BỎ QUA", doc.id.slice(0, 6) + "…", why, `(hẹn ${s.hh}:${String(s.mm || 0).padStart(2, "0")}, giờ máy học viên ${Math.floor(now.min / 60)}:${String(now.min % 60).padStart(2, "0")}, ${s.device || ""})`);
   if(why){ skipped++; continue; }
   const [title, body] = now.hour >= 21 ? pick(LATE) : (s.streak >= 2 ? pick(STREAK) : pick(NORMAL));
@@ -53,7 +55,7 @@ for (const doc of snap.docs){
   if(DRY){ console.log("DRY", doc.id, payload); sent++; continue; }
   try{
     await webpush.sendNotification(s.sub, payload, { TTL: 3600 * 3 });
-    await doc.ref.update({ lastSentDay: now.day });
+    if(!ONLY) await doc.ref.update({ lastSentDay: now.day });
     sent++;
   }catch(e){
     if(e.statusCode === 404 || e.statusCode === 410){ await doc.ref.update({ enabled: false }); dead++; }
