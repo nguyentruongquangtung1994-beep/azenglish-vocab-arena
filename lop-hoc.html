@@ -168,6 +168,18 @@
   .gw i.on{ animation:gwPop .18s ease; }
   .gw i.gap{ border:0; width:12px; }
   .gw.big i{ width:clamp(44px,5vw,72px); height:clamp(60px,7vw,92px); font-size:clamp(34px,4.4vw,58px); border-bottom-width:6px; }
+  .gw i.rv{ color:#e6a63a; border-color:#e6a63a; }
+  #gwh.flash .gw,#gwp.flash .gw{ animation:gwFlash .6s ease; }
+  @keyframes gwFlash{ 30%{ transform:scale(1.06); filter:drop-shadow(0 0 14px rgba(230,166,58,.8)); } }
+  .guesses{ display:grid; gap:8px; justify-items:center; margin-top:4px; }
+  .guesses small{ font:700 14px var(--display); color:var(--muted); }
+  .guesses .gr{ display:flex; align-items:center; gap:12px; }
+  .guesses .wt{ display:flex; gap:5px; }
+  .guesses .wt i{ font-style:normal; width:38px; height:44px; display:grid; place-items:center; border-radius:8px; font:800 22px var(--display); color:#fff; }
+  .guesses i.g{ background:#1f9d5c; } .guesses i.y{ background:#c98a00; } .guesses i.x{ background:#6b625e; }
+  .guesses .gr b{ font:800 22px var(--display); min-width:32px; }
+  .guesses .lg{ display:flex; gap:6px; align-items:center; font-size:13px; color:var(--muted); margin:2px 0 0; }
+  .guesses .lg i{ width:12px; height:12px; border-radius:3px; display:inline-block; margin-left:6px; }
   .gwn{ text-align:center; font:700 14px var(--display); color:var(--muted); margin-bottom:8px; }
   @keyframes gwPop{ 50%{ transform:translateY(-5px); } }
   .typebox{ text-align:center; padding:20px; border-radius:20px; background:var(--card); border:2px dashed var(--line); font:800 22px var(--display); color:var(--muted); }
@@ -451,15 +463,25 @@ const CD_T = 3400;
 function cdHTML(rem){ const el = Math.max(0, CD_T - rem), st = (d, extra) => ' style="animation-duration:850ms;animation-delay:' + (d - el) + 'ms' + (extra || "") + '"';
   return '<div class="cd" aria-label="Chuẩn bị"><b' + st(0) + '>3</b><b' + st(850) + '>2</b><b' + st(1700) + '>1</b><b class="go"' + st(2550) + '>GO!</b><i class="ring"' + st(0) + '></i></div>'; }
 const SHAPES = ["▲", "◆", "●", "■"];
+// bot thử nghiệm gõ sai giống người: đổi 1 chữ trong từ
+const botTypo = w => { const l = [...String(w).toLowerCase()], k = 1 + Math.floor(Math.random() * Math.max(1, l.length - 1)); l[k] = "aeioustrnl"[Math.floor(Math.random() * 10)]; return l.join(""); };
+// Wordle: g = đúng chỗ, y = có trong từ nhưng sai chỗ, x = không có
+function wordleMarks(guess, word){
+  const g = String(guess).toLowerCase().replace(/[^a-z]/g, ""), w = String(word).toLowerCase().replace(/[^a-z]/g, ""), res = [...g].map(() => "x"), left = {};
+  [...w].forEach((c, k) => { if(g[k] === c) res[k] = "g"; else left[c] = (left[c] || 0) + 1; });
+  [...g].forEach((c, k) => { if(res[k] !== "g" && left[c]){ res[k] = "y"; left[c]--; } });
+  return [...g].map((c, k) => [c, res[k]]);
+}
 // Đoán từ: mẫu "B______" (giữ dấu cách/gạch nối), ô chữ điền dần theo chữ học viên gõ
 const gwMask = w => [...w].map((c, k) => k === 0 ? c.toUpperCase() : /[a-z]/i.test(c) ? "_" : c).join("");
-function gwHTML(mask, typed, size){
-  const t = String(typed || "").toLowerCase().replace(/[^a-z]/g, ""); let li = 0;
+function gwHTML(mask, typed, size, gr){
+  const t = String(typed || "").toLowerCase().replace(/[^a-z]/g, ""), rv = String(gr || "").toUpperCase(); let li = 0;
   const n = [...mask].filter(c => c === "_" || /[A-Z]/.test(c)).length;
   return '<div class="gw' + (size ? " " + size : "") + '" aria-label="Từ có ' + n + ' chữ cái, bắt đầu bằng ' + esc(mask[0]) + '">' + [...mask].map(c => {
     if(c !== "_" && !/[A-Z]/.test(c)) return '<i class="gap">' + (c === "-" ? "-" : "") + '</i>';
     const idx = li++; if(idx === 0) return '<i class="f">' + esc(c) + '</i>';
-    const ch = t[idx] || ""; return '<i' + (ch ? ' class="on"' : '') + '>' + esc(ch.toUpperCase()) + '</i>'; }).join("") + '</div><div class="gwn">' + n + ' chữ cái · bắt đầu bằng “' + esc(mask[0]) + '”</div>';
+    if(idx < rv.length) return '<i class="rv">' + esc(rv[idx]) + '</i>';
+    const ch = t[idx] || ""; return '<i' + (ch ? ' class="on"' : '') + '>' + esc(ch.toUpperCase()) + '</i>'; }).join("") + '</div><div class="gwn">' + n + ' chữ cái · ' + (rv.length > 1 ? 'đã lật ' + rv.length + ' chữ' : 'bắt đầu bằng “' + esc(mask[0]) + '”') + '</div>';
 }
 const LUMI = '<span class="rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="hd"><img src="./lion-head.webp" alt=""><i class="lid l"></i><i class="lid r"></i></span></span>';
 const ICON_T = '<span class="ci ci-t" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="8" width="44" height="32" rx="5"/><path d="M28 40v8M20 54l8-6 8 6"/><rect class="bar" x="14" y="26" width="6" height="8" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b2" x="24" y="20" width="6" height="14" rx="1.5" fill="currentColor" stroke="none"/><rect class="bar b3" x="34" y="15" width="6" height="19" rx="1.5" fill="currentColor" stroke="none"/><g class="stick"><path d="M52 50 41 20"/><circle cx="41" cy="20" r="2.5" fill="currentColor" stroke="none"/></g><path class="spark" d="M56 6v8M52 10h8" stroke-width="2.5"/></svg></span>';
@@ -673,7 +695,7 @@ const H = (() => {
   function loadBank(cb){ if(window.AZW) return cb(); const s = document.createElement("script"); s.src = "./live-words.js"; s.onload = () => cb(); s.onerror = () => cb("err"); document.head.appendChild(s); }
   function levelsOf(c){ const o = ["A1", "A2", "B1", "B2", "C1"], seen = {}; AZW[c].w.forEach(x => { seen[x[2]] = (seen[x[2]] || 0) + 1; }); return o.filter(l => (seen[l] || 0) >= 20); }
   function vocabPool(){
-    if(cfg.src === "bank"){ const c = window.AZW && AZW[cfg.course]; if(!c) return [];
+    if(cfg.src === "bank" || cfg.src === "guess"){ const c = window.AZW && AZW[cfg.course]; if(!c) return [];
       return c.w.filter(x => (cfg.level === "all" || x[2] === cfg.level) && (cfg.topic === "all" || String(x[3]) === String(cfg.topic))).map(x => ({ w:x[0], m:x[1] })); }
     return cfg.list.split(/\n/).map(l => { const m = l.match(/^\s*(.+?)\s*(?:\t| - | – | — |:|=)\s*(.+?)\s*$/); return m ? { w:m[1], m:m[2] } : null; }).filter(Boolean);
   }
@@ -693,12 +715,13 @@ const H = (() => {
   function vocabQuestions(){
     const p = vocabPool(), picked = shuffle(p.slice()).slice(0, Math.min(cfg.count, p.length));
     return picked.map(it => {
-      const k = cfg.kinds[Math.floor(Math.random() * cfg.kinds.length)] || "en";
+      const kinds = cfg.src === "guess" ? ["guess"] : cfg.kinds;
+      const k = kinds[Math.floor(Math.random() * kinds.length)] || "en";
       const others = lookalikes(it, p, 3);
       if(k === "tf"){ const truth = Math.random() < .5, shown = truth ? it.m : (others[0] ? others[0].m : it.m);
         return { t:"tf", p:"“" + it.w + "” nghĩa là “" + shown + "”?", o:["Đúng", "Sai"], ok:[truth || !others[0] ? 0 : 1], time:cfg.time, x2:false }; }
       if(k === "type") return { t:"type", p:it.m, hint:"Gõ từ tiếng Anh", acc:[it.w], time:Math.max(cfg.time, 20), x2:false };
-      if(k === "guess"){ const w = String(it.w).trim(); return { t:"type", p:it.m, sub:"Đoán từ · VI → EN", gw:gwMask(w), acc:[w], time:Math.max(cfg.time, 15), x2:false }; }
+      if(k === "guess"){ const w = String(it.w).trim(); return { t:"type", p:it.m, sub:"Đoán từ · VI → EN", gw:gwMask(w), acc:[w], time:Math.max(cfg.time, 20), x2:false }; }
       const opts = shuffle([it].concat(others.slice(0, 3)));
       return { t:"mcq", p:k === "en" ? it.w : it.m, sub:k === "en" ? "Nghĩa của từ này là gì?" : "Từ tiếng Anh nào có nghĩa này?",
         o:opts.map(x => k === "en" ? x.m : x.w), ok:[opts.indexOf(it)], time:cfg.time, x2:false };
@@ -729,7 +752,7 @@ const H = (() => {
     stopAll(); ph = "setup"; stopMusic(); musBtn.hidden = false;
     view.innerHTML = '<div class="row"><h1>Mở phòng chơi</h1><span class="sp"></span><button class="btn ghost" id="back" type="button">← Quay lại</button></div>' +
       '<div class="card" style="display:flex;flex-direction:column;gap:16px">' +
-      '<div class="srcs" role="tablist"><button type="button" role="tab" class="src s-quiz" data-s="quiz"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/><path class="tw" d="M20 1.5v3.5M18.25 3.25h3.5"/></svg></span><span class="st"><b>Câu hỏi của tôi</b><small>Tự soạn · Lumina soạn giúp</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-list" data-s="list"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V2.8h6V4"/><path d="M8.5 10h7M8.5 14h7M8.5 18h4"/></svg></span><span class="st"><b>Danh sách từ</b><small>Dán từ của buổi học</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-bank" data-s="bank"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5" opacity=".65"/></svg></span><span class="st"><b>Kho từ AZ</b><small>10.000+ từ · 5 lộ trình</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-grammar" data-s="grammar"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><text x="1.5" y="17.5" font-size="13.5" font-weight="800" fill="currentColor" stroke="none" font-family="Baloo 2,Be Vietnam Pro,sans-serif">Aa</text><path class="tw" d="M20 5v14"/></svg></span><span class="st"><b>Ngữ pháp TOEIC</b><small>987 câu · 15 chủ điểm</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-lib" data-s="lib"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg></span><span class="st"><b>Thư viện bộ đề</b><small>Bộ đề đã lưu</small></span><i class="ck">✓</i></button></div>' +
+      '<div class="srcs" role="tablist"><button type="button" role="tab" class="src s-guess" data-s="guess"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="5" height="10" rx="1.5"/><path d="M10 17h4M16.5 17h5"/><circle cx="18" cy="8" r="3"/><path d="m20.2 10.2 1.8 1.8"/></svg></span><span class="st"><b>Đoán từ</b><small>Nghĩa → từ · lật dần chữ</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-quiz" data-s="quiz"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/><path class="tw" d="M20 1.5v3.5M18.25 3.25h3.5"/></svg></span><span class="st"><b>Câu hỏi của tôi</b><small>Tự soạn · Lumina soạn giúp</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-list" data-s="list"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V2.8h6V4"/><path d="M8.5 10h7M8.5 14h7M8.5 18h4"/></svg></span><span class="st"><b>Danh sách từ</b><small>Dán từ của buổi học</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-bank" data-s="bank"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5" opacity=".65"/></svg></span><span class="st"><b>Kho từ AZ</b><small>10.000+ từ · 5 lộ trình</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-grammar" data-s="grammar"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><text x="1.5" y="17.5" font-size="13.5" font-weight="800" fill="currentColor" stroke="none" font-family="Baloo 2,Be Vietnam Pro,sans-serif">Aa</text><path class="tw" d="M20 5v14"/></svg></span><span class="st"><b>Ngữ pháp TOEIC</b><small>987 câu · 15 chủ điểm</small></span><i class="ck">✓</i></button><button type="button" role="tab" class="src s-lib" data-s="lib"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></svg></span><span class="st"><b>Thư viện bộ đề</b><small>Bộ đề đã lưu</small></span><i class="ck">✓</i></button></div>' +
       '<div id="srcBox"></div>' +
       '<div class="row"><span class="pool" id="poolInfo"></span><span class="sp"></span><button class="btn" id="create" type="button">Tạo phòng →</button></div></div>';
     $("back").addEventListener("click", home);
@@ -744,11 +767,13 @@ const H = (() => {
       save(); [...box.children].forEach(x => { let xv = x.dataset.v; if(typeof vals[0] === "number") xv = +xv; x.classList.toggle("on", multi ? cfg[key].includes(xv) : cfg[key] === xv); }); info(); });
   }
   function vocabOptions(){
+    if(cfg.src === "guess") return '<div class="help"><b>Đoán từ:</b> màn chiếu hiện nghĩa tiếng Việt và chữ cái đầu, cả lớp gõ từ tiếng Anh trên điện thoại. Hết 40% thời gian lật thêm 1 chữ, hết 70% lật thêm 1 chữ nữa. Trả lời trước khi lật chữ được nhiều điểm hơn.</div>' +
+      '<div class="grid2"><label class="f">Số câu<div class="chips" id="cnt"></div></label><label class="f">Thời gian mỗi câu<div class="chips" id="tm"></div></label></div>';
     return '<div class="grid2"><label class="f">Kiểu câu hỏi (chọn nhiều)<div class="chips" id="kinds"></div></label>' +
       '<label class="f">Số câu<div class="chips" id="cnt"></div></label><label class="f">Thời gian mỗi câu<div class="chips" id="tm"></div></label></div>';
   }
   function bindVocabOptions(){
-    chips($("kinds"), ["en", "vi", "tf", "type", "guess"], "kinds", v => ({ en:"Chọn nghĩa", vi:"Chọn từ", tf:"Đúng/Sai", type:"Gõ từ", guess:"Đoán từ (chữ đầu)" })[v], true);
+    if($("kinds")) chips($("kinds"), ["en", "vi", "tf", "type", "guess"], "kinds", v => ({ en:"Chọn nghĩa", vi:"Chọn từ", tf:"Đúng/Sai", type:"Gõ từ", guess:"Đoán từ (chữ đầu)" })[v], true);
     chips($("cnt"), [5, 10, 15, 20], "count", v => v + " câu");
     chips($("tm"), [10, 20, 30], "time", v => v + " giây");
   }
@@ -1112,7 +1137,7 @@ const H = (() => {
       snap.docChanges().forEach(ch => { if(ch.type !== "removed"){ const d = ch.doc.data(); answers[d.uid] = d; } }); answeredCount();
     });
     const goAt = Math.round(Date.now() + SKEW + CD_T); qAtMs = goAt;
-    upRoom({ ph:"ready", i, q:publicQ(q), res:null, goAt }).catch(() => {});
+    upRoom({ ph:"ready", i, q:publicQ(q), res:null, goAt, gr:null }).catch(() => {});
     playMusic("play", .4); speedUp(false);
     drawReady(q);
     readyT = setTimeout(startQuestion, Math.max(0, goAt - SKEW - Date.now()));
@@ -1124,16 +1149,16 @@ const H = (() => {
     setTimeout(() => { if(ph === "ready") beep(880, .3, "triangle", .16); }, 2550);
   }
   function startQuestion(){
-    const q = qs[i]; ph = "question"; deadline = Date.now() + q.time * 1000; if(window.__azlT) window.__azlT.push(["host-show", i, Date.now(), SKEW]);
+    const q = qs[i]; ph = "question"; deadline = Date.now() + q.time * 1000; gwShown = 1; if(window.__azlT) window.__azlT.push(["host-show", i, Date.now(), SKEW]);
     upRoom({ ph:"question" }).catch(() => {});
     bots.forEach(b => { const delay = 1200 + Math.random() * q.time * 700;
       setTimeout(() => { if(ph !== "question") return; const right = Math.random() < b.skill;
-        let a; if(q.t === "type") a = { a:right ? q.acc[0] : "???" }; else { const wrong = q.o.map((_, k) => k).filter(k => !q.ok.includes(k)); a = { c:right || !wrong.length ? q.ok[0] : wrong[Math.floor(Math.random() * wrong.length)] }; }
+        let a; if(q.t === "type") a = { a:right ? q.acc[0] : q.gw ? botTypo(q.acc[0]) : "???" }; else { const wrong = q.o.map((_, k) => k).filter(k => !q.ok.includes(k)); a = { c:right || !wrong.length ? q.ok[0] : wrong[Math.floor(Math.random() * wrong.length)] }; }
         answers[b.id] = Object.assign({ uid:b.id, q:i, ms:delay }, a); answeredCount(); }, delay); });
     view.innerHTML = '<div class="qbar"><span class="n">Câu ' + (i + 1) + '/' + qs.length + '</span>' + '<span class="prog" aria-hidden="true">' + qs.map((_, k) => '<i class="' + (k < i ? "done" : k === i ? "now" : "") + '"></i>').join("") + '</span>' + (q.x2 ? '<span class="x2b">x2 điểm</span>' : '') + '<span class="sp"></span>' +
       '<span class="answered" id="ans">0 đã trả lời</span>' + timerSvg() + '</div>' +
       '<div class="card prompt"><small>' + esc(q.sub || ({ tf:"Đúng hay sai?", type:"Gõ đáp án trên điện thoại", mcq:"Chọn đáp án đúng" })[q.t]) + '</small><div class="w' + (q.p.length > 70 ? " long" : "") + '">' + esc(q.p) + '</div></div>' +
-      (q.t === "type" ? (q.gw ? gwHTML(q.gw, "", "big") : '') + '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
+      (q.t === "type" ? (q.gw ? '<div id="gwh">' + gwHTML(q.gw, "", "big") + '</div>' : '') + '<div class="typebox">⌨️ Học viên gõ đáp án trên điện thoại</div>' :
         '<div class="opts">' + q.o.map((o, k) => '<div class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" id="op' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></div>').join("") + '</div>') +
       '<div class="row"><span class="sp"></span><button class="btn ghost" id="skip" type="button">Hiện đáp án ngay</button></div>';
     $("skip").addEventListener("click", reveal);
@@ -1142,8 +1167,18 @@ const H = (() => {
       const left = Math.max(0, deadline - Date.now()), sec = Math.ceil(left / 1000);
       drawTimer(left);
       if(sec <= 5 && sec > 0 && left % 1000 > 750){ beep(520, .06, "square", .05); speedUp(true); }
+      if(q.gw) gwStep(q, 1 - left / (q.time * 1000));
       if(left <= 0) reveal();
     }, 250);
+  }
+  // Đoán từ: hết 40% thời gian lộ chữ thứ 2, hết 70% lộ chữ thứ 3 (từ ngắn thì luôn chừa ít nhất 2 ô trống)
+  let gwShown = 1;
+  function gwStep(q, p){
+    const letters = q.acc[0].replace(/[^a-z]/gi, ""), want = Math.min(p >= .7 ? 3 : p >= .4 ? 2 : 1, Math.max(1, letters.length - 2));
+    if(want <= gwShown) return;
+    gwShown = want; const gr = letters.slice(0, want).toUpperCase();
+    const h = $("gwh"); if(h){ h.innerHTML = gwHTML(q.gw, "", "big", gr); h.classList.remove("flash"); void h.offsetWidth; h.classList.add("flash"); }
+    upRoom({ gr }).catch(() => {}); beep(660, .12, "triangle", .14); setTimeout(() => beep(990, .16, "triangle", .14), 110);
   }
   const timerSvg = () => '<span class="timer" id="tmr"><svg viewBox="0 0 80 80"><circle class="bg" cx="40" cy="40" r="34"/><circle class="fg" id="tfg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="0"/></svg><b id="tnum"></b></span>';
   function drawTimer(left){ const fg = $("tfg"), num = $("tnum"), t = $("tmr"); if(!fg) return; const q = qs[i];
@@ -1180,13 +1215,21 @@ const H = (() => {
     const pct = r.length ? right / r.length : 0;
     const line = !r.length ? "Chưa có ai chơi, Lumina buồn ghê 🥲" : pct >= .7 ? "Lớp mình đỉnh vậy trời! 🔥" : pct >= .35 ? "Cũng được, nhưng chưa đủ đô nha!" : "Ơ kìa, câu này học rồi mà ta 😅";
     upRoom({ ph:"reveal", res:{ ok:q.ok || null, acc:q.acc || null, dist, me, np:rank.length } }).catch(() => {});
-    if(q.t === "type"){ const tb = view.querySelector(".typebox"); if(tb) tb.outerHTML = '<div class="accepted">' + q.acc.map(x => '<span>✓ ' + esc(x) + '</span>').join("") + '</div>'; }
+    if(q.t === "type"){ const tb = view.querySelector(".typebox"); if(tb) tb.outerHTML = '<div class="accepted">' + q.acc.map(x => '<span>✓ ' + esc(x) + '</span>').join("") + '</div>';
+      if(q.gw){
+        const h = $("gwh"); if(h) h.innerHTML = gwHTML(q.gw, "", "big", q.acc[0].replace(/[^a-z]/gi, ""));
+        const cnt = {}; r.forEach(p => { const a = answers[p.id]; if(a && !isRight(q, a)){ const k = norm(a.a).replace(/[^a-z]/g, ""); if(k.length > 1) cnt[k] = (cnt[k] || 0) + 1; } });
+        const top = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 4);
+        if(top.length) view.querySelector(".accepted").insertAdjacentHTML("afterend", '<div class="guesses"><small>Cả lớp đoán sai thành…</small>' +
+          top.map(([g, n]) => '<div class="gr"><span class="wt">' + wordleMarks(g, q.acc[0]).map(([c, m]) => '<i class="' + m + '">' + esc(c.toUpperCase()) + '</i>').join("") + '</span><b>' + n + '</b></div>').join("") +
+          '<p class="lg"><i class="g"></i>đúng chỗ <i class="y"></i>có trong từ <i class="x"></i>không có</p></div>');
+      } }
     else { const tot = Math.max(1, dist.reduce((s, x) => s + x, 0));
       view.querySelectorAll(".opt").forEach((el, k) => { el.classList.add(q.ok.includes(k) ? "right" : "dim"); el.insertAdjacentHTML("beforeend", '<span class="cnt">' + (dist[k] || 0) + '</span><span class="vb" style="--p:' + Math.round((dist[k] || 0) * 100 / tot) + '%"></span>'); }); }
     const ans = $("ans"); if(ans) ans.textContent = right + "/" + r.length + " trả lời đúng";
     const sk = $("skip"); if(sk) sk.outerHTML = '<p class="say" style="flex:1"><b>Lumina:</b> ' + line + '</p><button class="btn autob" id="toBoard" type="button">Bảng xếp hạng →</button>';
     $("toBoard").addEventListener("click", board);
-    const ri = i; setTimeout(() => { if(ph === "reveal" && i === ri) board(); }, 3500);
+    const ri = i; setTimeout(() => { if(ph === "reveal" && i === ri) board(); }, q.gw ? 6500 : 3500);
     beep(pct >= .5 ? 880 : 330, .3, "triangle", .14);
   }
   function ranking(){ const r = roster(), nm = {}; r.forEach(p => nm[p.id] = p.n);
@@ -1281,7 +1324,9 @@ const P = (() => {
     }catch(e){ err.textContent = typeof e === "string" ? e : "Không vào được phòng, thử lại nha."; btn.disabled = false; btn.textContent = "Vào phòng ▶"; return; }
     pin = p; nick = n; ls("azl_nick", n); joined = true; lastKey = "";
     history.replaceState(null, "", location.pathname + "?pin=" + p);
-    unRoom = onSnapshot(doc(db, "live_rooms", p), s => { st = s.data() || null; render(); });
+    unRoom = onSnapshot(doc(db, "live_rooms", p), s => { const prevGr = st && st.gr; st = s.data() || null; render();
+      if(st && st.ph === "question" && st.q && st.q.gw && st.gr !== prevGr){ const g = $("gwp"), inp = $("typed");
+        if(g){ g.innerHTML = gwHTML(st.q.gw, inp ? inp.value : "", "", st.gr); g.classList.remove("flash"); void g.offsetWidth; g.classList.add("flash"); try{ navigator.vibrate && navigator.vibrate(40); }catch(e){} } } });
     unMe = onSnapshot(doc(db, "live_rooms", p, "players", UID), s => { if(joined && !s.exists()){ joined = false; stopAll(); kicked(); } });
     beep(880, .1);
   }
@@ -1294,13 +1339,13 @@ const P = (() => {
       if(answeredI === st.i) return lockedView();
       qStart = Date.now(); deadline = (st.goAt ? st.goAt - SKEW : Date.now()) + (q.dur || 20) * 1000;
       let body;
-      if(q.t === "type") body = (q.gw ? '<div id="gwp">' + gwHTML(q.gw, "") + '</div>' : '') + '<input type="text" id="typed" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án…" style="font:800 22px var(--display);text-align:center;min-height:64px">' +
+      if(q.t === "type") body = (q.gw ? '<div id="gwp">' + gwHTML(q.gw, "", "", st.gr) + '</div>' : '') + '<input type="text" id="typed" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Gõ đáp án…" style="font:800 22px var(--display);text-align:center;min-height:64px">' +
         '<button class="btn big" id="send" type="button">Gửi ▶</button>';
       else body = '<div class="opts' + (q.t === "tf" ? " two" : "") + '">' + q.o.map((o, k) => '<button type="button" class="opt o' + (q.t === "tf" ? (k ? 0 : 1) : k) + '" data-k="' + k + '"><span class="sh">' + (q.t === "tf" ? (k ? "✗" : "✓") : SHAPES[k]) + '</span><span>' + esc(o) + '</span></button>').join("") + '</div>';
       view.innerHTML = '<div class="ph"><div class="qbar"><span class="n">Câu ' + (st.i + 1) + '/' + st.n + '</span><span class="sp"></span><span class="answered" id="pt"></span></div>' +
         '<div class="card prompt" style="padding:14px"><div class="w" style="font-size:' + ((q.p || "").length > 70 ? "clamp(17px,4.6vw,22px);line-height:1.35" : "clamp(22px,6.5vw,34px)") + '">' + esc(q.p) + '</div></div>' + body + '</div>';
       if(q.t === "type"){ const inp = $("typed"); inp.focus(); const send = () => { const v = inp.value.trim(); if(v) answer({ a:v }); };
-        if(q.gw) inp.addEventListener("input", () => { const g = $("gwp"); if(g) g.innerHTML = gwHTML(q.gw, inp.value); });
+        if(q.gw) inp.addEventListener("input", () => { const g = $("gwp"); if(g) g.innerHTML = gwHTML(q.gw, inp.value, "", st && st.gr); });
         $("send").addEventListener("click", send); inp.addEventListener("keydown", e => { if(e.key === "Enter") send(); }); }
       else view.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => answer({ c:+b.dataset.k })));
       const pt = $("pt"); tickT = setInterval(() => { const left = Math.max(0, deadline - Date.now()); pt.textContent = "⏱ " + Math.ceil(left / 1000) + "s"; }, 250);
