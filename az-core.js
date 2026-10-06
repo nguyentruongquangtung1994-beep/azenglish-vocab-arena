@@ -324,7 +324,8 @@
     document.addEventListener("click", function(e){
       if(e.isTrusted && e.target.closest && e.target.closest("#levelRow .level-chip, .size-chip, .size-btn")) lsSet(manualKey, "1");
     }, true);
-    var lv = (LEVEL_MAP[COURSE.id] || {})[profile.level];
+    var zoned = !!window.AZQ;                      // khoá có bản đồ vùng: không lọc cấp độ (vùng đầu chỉ có A1) — dùng "Thi vượt vùng"
+    var lv = zoned ? null : (LEVEL_MAP[COURSE.id] || {})[profile.level];
     var size = SIZE_BY_TIME[lastTest && lastTest.time] || 20;
     var hero = document.querySelector(".home-hero");
     if(hero && !lsGet(manualKey)){
@@ -336,7 +337,8 @@
       }, 300);
     }
     if(hero){
-      var note = el('<p class="azc-auto">🎯 Theo bài test của bạn: cấp độ <b>' + (lv || "tất cả") + '</b> · <b>' + size + ' từ</b>/buổi. Muốn đổi? Mở “Tuỳ chỉnh”.</p>');
+      var note = el(zoned ? '<p class="azc-auto">🎯 Theo bài test của bạn: <b>' + size + ' từ</b>/buổi. Trình độ cao? Mở bản đồ → <b>Thi vượt vùng</b>.</p>'
+        : '<p class="azc-auto">🎯 Theo bài test của bạn: cấp độ <b>' + (lv || "tất cả") + '</b> · <b>' + size + ' từ</b>/buổi. Muốn đổi? Mở “Tuỳ chỉnh”.</p>');
       var cta = hero.querySelector(".home-cta, .hero-cta");
       if(cta && cta.parentNode) cta.parentNode.insertBefore(note, cta.nextSibling); else hero.appendChild(note);
       if(lsGet(manualKey)) note.innerHTML = '⚙️ Bạn đang dùng tuỳ chỉnh riêng. <a href="#" style="color:var(--red)">Về lộ trình theo bài test</a>';

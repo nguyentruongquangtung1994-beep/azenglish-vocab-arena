@@ -2204,6 +2204,7 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
       <div class="qm-zones-head"><h2 id="qvHeadT">Vùng đất</h2><span id="qmZonesSum"></span><button class="qm-coll" id="qmColl" type="button" aria-label="Bộ sưu tập thẻ nhân vật">🃏 <b id="qmCollN">0</b>/9</button></div>
       <div class="qm-zones" id="qmZones" role="group" aria-label="Hành trình qua các vùng đất"></div>
       <div class="qt-status" id="qtStatus"></div>
+      <button class="pz-entry" id="pzEntry" type="button" hidden></button>
       <button class="qv-close" id="qvClose" type="button" aria-label="Đóng bản đồ">✕</button>
     </section>
 
@@ -2220,14 +2221,14 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
       </div>
       <button class="q-reco" id="qReco" type="button"></button>
       <div class="q-games">
-        <button class="q-game q-game-new" id="modeMil" data-game="mil" type="button">
-          <span class="q-game-ic gi-crown" data-gi="crown"></span>
+        <button class="q-game q-game-new q-game-has-art" id="modeMil" data-game="mil" type="button">
+          <img class="q-game-art" src="mil-cover.jpg" alt="Bạn học sinh AZ ngồi ghế nóng Ai Là Triệu Phú" width="200" height="200" loading="lazy">
           <b class="q-game-name">Ai Là Triệu Phú</b>
           <span class="q-game-meta">tới +100 XP</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="milBestInline">--</b></span>
         </button>
-        <button class="q-game q-game-new" id="modeMt" data-game="mt" type="button">
-          <span class="q-game-ic gi-bolt" data-gi="bolt"></span>
+        <button class="q-game q-game-new q-game-has-art" id="modeMt" data-game="mt" type="button">
+          <img class="q-game-art" src="mt-cover.jpg" alt="Sư tử Lumina giới thiệu thẻ từ vựng AZEnglish" width="200" height="200" loading="lazy">
           <b class="q-game-name">Ghép Cặp Thần Tốc</b>
           <span class="q-game-meta">~1 phút</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="mtBestInline">--</b></span>
@@ -2245,8 +2246,8 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
           <span class="q-game-best"><i data-ic="trophy"></i><b id="chaseBestInline">--</b></span>
         </button>
         <button class="q-game q-game-has-art" id="modeRace" data-game="race" type="button">
-          <img class="q-game-art" src="zombie-cover.jpg" alt="Zombie học sinh AZ với thanh máu HP 15% đang dồn một bạn học sinh vào góc lớp" width="200" height="200" loading="lazy">
-          <b class="q-game-name">Trốn Thoát Zombie</b>
+          <img class="q-game-art" src="zb-cover.jpg" alt="Zombie học sinh AZ với thanh máu HP 15% đang dồn một bạn học sinh vào góc lớp" width="200" height="200" loading="lazy">
+          <b class="q-game-name">Thoát Khỏi Zombie</b>
           <span class="q-game-meta">+40 XP</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="raceBestInline">--</b></span>
         </button>
@@ -2517,6 +2518,75 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
     </div>
   </div>
 
+  <div class="gx gx-zb" id="gxZb" hidden role="dialog" aria-label="Thoát Khỏi Zombie">
+    <div class="gx-in">
+      <div class="gx-top">
+        <button class="gx-x" type="button" aria-label="Thoát">✕</button>
+        <button class="gx-theme" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
+        <div class="zb-toplogo"><small>Thoát khỏi</small><b>ZOMBIE</b></div>
+        <div class="mt-best"><img class="fe fe-i" src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f3c6.webp" alt=""> <b id="zbBest">--</b></div>
+      </div>
+      <div class="mil-hero zb-hero"><span class="mil-gem">◆</span><div class="mil-logo"><small>Thoát khỏi</small><b>ZOMBIE</b><em>Gõ từ thần tốc · AZEnglish</em></div><span class="mil-gem">◆</span></div>
+      <div id="zbPlay">
+        <div class="mil-life zb-life">
+          <button data-z="hint" type="button" title="Bỏ qua 1 từ (1 lần mỗi màn)"><span class="ll-ic"><svg viewBox="0 0 24 24"><path d="M5 5l8 7-8 7zM13 5l8 7-8 7z"/></svg></span><small>Bỏ qua</small></button>
+          <button data-z="freeze" type="button" title="Đóng băng zombie 6 giây (1 lần)"><span class="ll-ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7"/><path d="M9.5 3.8L12 6l2.5-2.2M9.5 20.2L12 18l2.5 2.2"/></svg></span><small>Đóng băng</small></button>
+          <button data-z="say" type="button" title="Nghe phát âm"><span class="ll-ic"><svg viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span><small>Nghe lại</small></button>
+        </div>
+        <ol class="mil-ladder zb-ladder" id="zbLadder"></ol>
+        <div class="mil-bar zb-bar">
+          <span class="zb-hearts" id="zbHearts"></span>
+          <span class="zb-mid"><b id="zbRound">Màn 1/3</b> · Từ <b id="zbProg">1/18</b><br><span class="zb-combo" id="zbCombo"></span></span>
+          <span class="mil-time zb-ring" id="zbRingW" title="Khoảng cách với zombie (mét)"><svg viewBox="0 0 36 36"><circle class="tb" cx="18" cy="18" r="15"/><circle class="tf" id="zbRing" cx="18" cy="18" r="15"/></svg><b id="zbGap">7.4</b></span>
+        </div>
+        <div class="zb-stage" id="zbStage" data-r="0">
+          <div class="zb-sky" aria-hidden="true"><i class="moon"></i></div>
+          <div class="zb-far" aria-hidden="true"></div>
+          <div class="zb-near" aria-hidden="true"></div>
+          <div class="zb-road" aria-hidden="true"></div>
+          <div class="zb-lines" aria-hidden="true"></div>
+          <span class="zb-shadow zs" aria-hidden="true"></span><span class="zb-shadow ps" aria-hidden="true"></span>
+          <img class="zb-z" src="./zb-zombie.webp" alt="Zombie học sinh AZ đang đuổi theo">
+          <img class="zb-p" src="./zb-boy.webp" alt="Bạn học sinh AZ đang chạy trốn">
+          <span class="zb-dust" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="zb-warn" aria-hidden="true">NGUY HIỂM!</span>
+          <span class="zb-time"><span id="zbTime">0.0</span>s</span>
+          <span class="zb-bubble" id="zbSay"></span>
+        </div>
+        <div class="mil-card zb-fc" id="zbCard"><div class="fc-head"><b><i>AZ</i>English</b><em>Flashcard</em></div>
+          <span class="mil-tile zb-ftile" id="zbPic"></span>
+          <p class="zb-en" id="zbEn"></p><span class="zb-ipa" id="zbIpa"></span><span class="zb-vi" id="zbVi"></span>
+          <button class="mil-speak" id="zbSpeak" type="button" aria-label="Nghe phát âm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+        </div>
+        <div class="mil-qbar"><div class="hx"><div class="hx-in zb-qbar" id="zbQbar">Gõ từ tiếng Anh</div></div></div>
+        <div class="zb-boxes" id="zbBoxes"></div>
+        <div class="zb-kb" id="zbKb"></div>
+        <p class="gx-deck" id="zbDeck"></p>
+        <div class="mt-count zb-count" id="zbCount" hidden>3</div>
+      </div>
+      <div class="gx-end" id="zbEnd" hidden></div>
+    </div>
+  </div>
+
+  <div class="gx gx-pz" id="gxPz" hidden role="dialog" aria-label="Thi vượt vùng">
+    <div class="gx-in">
+      <div class="gx-top">
+        <button class="gx-x" type="button" aria-label="Thoát">✕</button>
+        <button class="gx-theme" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
+        <div class="mt-logo pz-logo"><b>THI VƯỢT VÙNG</b><em id="pzSub"></em></div>
+        <div class="pz-t" id="pzT">12</div>
+      </div>
+      <div id="pzPlay">
+        <div class="pz-bar"><span id="pzQn">Câu 1/20</span><span id="pzScore"></span></div>
+        <div class="pz-dots" id="pzDots"></div>
+        <div class="pz-q" id="pzQ"></div>
+        <div class="pz-opts" id="pzOpts"></div>
+        <p class="mt-say"><img src="./lion-head.webp" alt=""><span id="pzSay2">Đúng 17/20 câu là qua môn. Chơi tới bến!</span></p>
+      </div>
+      <div class="gx-end" id="pzEnd" hidden></div>
+    </div>
+  </div>
+
   <canvas id="sprintParticleCanvas" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:250;"></canvas>
 
   <div class="pause-overlay hidden" id="pauseOverlay">
@@ -2534,7 +2604,7 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
   <!-- RACE BRIEFING SCREEN -->
   <section class="panel hidden" id="raceBriefing">
     <h2>🧟 Sắp vào: Chặn Đứng Zombie</h2>
-    <img class="race-cover" src="zombie-cover.jpg" alt="Lớp học AZ World bị zombie tấn công" width="200" height="200">
+    <img class="race-cover" src="zb-cover.jpg" alt="Lớp học AZ World bị zombie tấn công" width="200" height="200">
     <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn chỉ có 2 mạng (❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi diệt đủ 20 zombie là thua.</p>
     <div class="btn-row">
       <button class="btn-ghost" id="raceBriefingBackBtn" type="button"><i data-ic="arrL"></i> Về màn hình chọn</button>
@@ -3319,6 +3389,221 @@ button, input, select, textarea{ font-family:inherit; }
 .psg-blank.reveal .hint{ color:var(--red-ink); }
 .psg-top .ic, .psg-meta .ic{ font-size:16px; }
 .psg-blank:not(.pending):not(.ok):not(.reveal) input{ border-bottom-color:var(--ink-soft); }
+
+/* ===== v31 · Thoát Khỏi Zombie (đồng bộ khung Triệu Phú) ===== */
+.zb-hero .mil-logo b::after{ content:"ZOMBIE" !important; }
+.zb-hero .mil-logo b{ background:linear-gradient(180deg,#ffffff 0%,#ff8a8a 30%,#E02020 62%,#8f0a1c 100%) !important; -webkit-background-clip:text !important; background-clip:text !important; filter:drop-shadow(0 3px 0 #3a0006) drop-shadow(0 0 18px rgba(224,32,32,.55)) !important; letter-spacing:.08em !important; }
+.zb-hero{ margin-bottom:6px !important; }
+.zb-life{ margin-bottom:10px !important; }
+.zb-life button.used{ pointer-events:none; }
+.zb-ladder{ flex-direction:row !important; justify-content:flex-start !important; scroll-behavior:smooth; }
+.zb-ladder li{ min-width:40px !important; }
+.zb-ladder li small{ display:block; font:800 8px var(--gx-font); letter-spacing:.08em; opacity:.8; white-space:nowrap; }
+.zb-ladder li b{ font:900 14px var(--gx-font); }
+.zb-ladder li.rs{ margin-left:8px; }
+.zb-ladder li.done{ background:#22b25a !important; color:#fff !important; } .zb-ladder li.done b{ color:#fff !important; }
+.zb-ladder li.miss{ background:#5a1a1a !important; color:#ffb3b3 !important; } .zb-ladder li.miss b{ color:#ffb3b3 !important; }
+.zb-bar{ align-items:center !important; }
+.zb-mid{ flex:1; text-align:center; line-height:1.35; }
+.zb-mid b{ color:#fff; }
+.zb-combo{ font:900 12.5px var(--gx-font); color:var(--gold); }
+.zb-combo .fe-i{ width:15px !important; height:15px !important; vertical-align:-3px; }
+.zb-hearts{ display:flex; gap:1px; }
+.zb-hearts i{ font-style:normal; filter:grayscale(1) opacity(.25); transition:filter .3s, transform .3s; }
+.zb-hearts i.on{ filter:none; animation:zbHeart 1.2s ease-in-out infinite; }
+.zb-hearts i:nth-child(2){ animation-delay:.15s; } .zb-hearts i:nth-child(3){ animation-delay:.3s; }
+@keyframes zbHeart{ 50%{ transform:scale(1.12); } }
+.zb-hearts .zb-h{ width:24px !important; height:24px !important; }
+.zb-hearts .fe-txt{ font-size:19px; }
+.zb-ring b{ font-size:13px !important; }
+.zb-ring b::after{ content:"m"; font-size:9px; margin-left:1px; }
+/* sân khấu chạy */
+.zb-stage{ --zx:20%; position:relative; height:210px; border-radius:22px; overflow:hidden; margin:0 0 10px; isolation:isolate;
+  box-shadow:0 0 0 3px #E02020, 0 0 0 6px rgba(224,32,32,.18), 0 18px 34px -14px rgba(224,32,32,.7); }
+.zb-sky{ position:absolute; inset:0; background:radial-gradient(120% 90% at 80% 0%, #5a1218 0%, #2a0a0d 45%, #12070a 100%); }
+.zb-sky .moon{ position:absolute; right:22px; top:14px; width:34px; height:34px; border-radius:50%; background:radial-gradient(circle at 40% 40%, #fff8e0, #ffd98a 70%); box-shadow:0 0 30px 8px rgba(255,217,138,.35); }
+.zb-far{ position:absolute; left:0; right:0; bottom:58px; height:118px; opacity:.55; background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22420%22 height=%22140%22 viewBox=%220 0 420 140%22%3E%3Crect x=%226%22 y=%2248%22 width=%2258%22 height=%2292%22 fill=%22%23E02020%22/%3E%3Crect x=%2212.8%22 y=%2259.9%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2212.8%22 y=%2275.5%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2212.8%22 y=%2291.1%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2212.8%22 y=%22106.7%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2212.8%22 y=%22122.3%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2225.2%22 y=%2259.9%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2225.2%22 y=%2275.5%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2225.2%22 y=%2291.1%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2225.2%22 y=%22106.7%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2225.2%22 y=%22122.3%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2237.8%22 y=%2259.9%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2237.8%22 y=%2275.5%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2237.8%22 y=%2291.1%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2237.8%22 y=%22106.7%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2237.8%22 y=%22122.3%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2250.2%22 y=%2259.9%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2250.2%22 y=%2275.5%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2250.2%22 y=%2291.1%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2250.2%22 y=%22106.7%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2250.2%22 y=%22122.3%22 width=%227.0%22 height=%227.8%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2270%22 y=%2280%22 width=%2240%22 height=%2260%22 fill=%22%23b3121f%22/%3E%3Crect x=%2277.5%22 y=%2291.8%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2277.5%22 y=%22107.2%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2277.5%22 y=%22122.5%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%2293.5%22 y=%2291.8%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2293.5%22 y=%22107.2%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%2293.5%22 y=%22122.5%22 width=%229.0%22 height=%227.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22118%22 y=%2224%22 width=%2290%22 height=%22116%22 fill=%22%23E02020%22/%3E%3Crect x=%22125.0%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22125.0%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22125.0%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22125.0%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22125.0%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22125.0%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22138.7%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22138.7%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22138.7%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22138.7%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22138.7%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22138.7%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22152.3%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22152.3%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22152.3%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22152.3%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22152.3%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22152.3%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22166.0%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22166.0%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22166.0%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22166.0%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22166.0%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22166.0%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22179.7%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22179.7%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22179.7%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22179.7%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22179.7%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22179.7%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22193.3%22 y=%2236.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22193.3%22 y=%2253.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22193.3%22 y=%2270.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22193.3%22 y=%2287.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22193.3%22 y=%22104.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22193.3%22 y=%22121.2%22 width=%227.7%22 height=%228.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22214%22 y=%2266%22 width=%2246%22 height=%2274%22 fill=%22%238f0a1c%22/%3E%3Crect x=%22220.8%22 y=%2277.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22220.8%22 y=%2292.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22220.8%22 y=%22107.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22220.8%22 y=%22122.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22233.5%22 y=%2277.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22233.5%22 y=%2292.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22233.5%22 y=%22107.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22233.5%22 y=%22122.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22246.1%22 y=%2277.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22246.1%22 y=%2292.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22246.1%22 y=%22107.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22246.1%22 y=%22122.8%22 width=%227.1%22 height=%227.5%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22268%22 y=%2240%22 width=%2270%22 height=%22100%22 fill=%22%23E02020%22/%3E%3Crect x=%22274.7%22 y=%2252.3%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22274.7%22 y=%2269.5%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22274.7%22 y=%2286.7%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22274.7%22 y=%22103.9%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22274.7%22 y=%22121.1%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22287.1%22 y=%2252.3%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22287.1%22 y=%2269.5%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22287.1%22 y=%2286.7%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22287.1%22 y=%22103.9%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22287.1%22 y=%22121.1%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22299.5%22 y=%2252.3%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22299.5%22 y=%2269.5%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22299.5%22 y=%2286.7%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22299.5%22 y=%22103.9%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22299.5%22 y=%22121.1%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22311.9%22 y=%2252.3%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22311.9%22 y=%2269.5%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22311.9%22 y=%2286.7%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22311.9%22 y=%22103.9%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22311.9%22 y=%22121.1%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22324.3%22 y=%2252.3%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22324.3%22 y=%2269.5%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22324.3%22 y=%2286.7%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22324.3%22 y=%22103.9%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22324.3%22 y=%22121.1%22 width=%226.9%22 height=%228.6%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22346%22 y=%2274%22 width=%2264%22 height=%2266%22 fill=%22%23b3121f%22/%3E%3Crect x=%22353.1%22 y=%2286.3%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22353.1%22 y=%22103.7%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22353.1%22 y=%22121.0%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22367.1%22 y=%2286.3%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22367.1%22 y=%22103.7%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22367.1%22 y=%22121.0%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22381.1%22 y=%2286.3%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22381.1%22 y=%22103.7%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22%23ffe9a8%22/%3E%3Crect x=%22381.1%22 y=%22121.0%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22395.1%22 y=%2286.3%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22395.1%22 y=%22103.7%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22395.1%22 y=%22121.0%22 width=%227.8%22 height=%228.7%22 rx=%221.5%22 fill=%22rgba(255,255,255,.55)%22/%3E%3Crect x=%22138%22 y=%2230%22 width=%2250%22 height=%2222%22 rx=%224%22 fill=%22%23fff%22/%3E%3Ctext x=%22163%22 y=%2247%22 font-family=%22Arial Black,Arial%22 font-weight=%22900%22 font-size=%2217%22 text-anchor=%22middle%22 fill=%22%23E02020%22%3EAZ%3C/text%3E%3C/svg%3E") 0 100% / 354px 118px repeat-x; animation:zbScrollF 22s linear infinite; }
+.zb-near{ position:absolute; left:0; right:0; bottom:46px; height:76px; background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%2290%22 viewBox=%220 0 260 90%22%3E%3Crect x=%2227%22 y=%2252%22 width=%226%22 height=%2238%22 fill=%22%233b2219%22/%3E%3Ccircle cx=%2230%22 cy=%2244%22 r=%2222%22 fill=%22%231f5a2c%22/%3E%3Ccircle cx=%2218%22 cy=%2252%22 r=%2214%22 fill=%22%23256b34%22/%3E%3Ccircle cx=%2243%22 cy=%2250%22 r=%2215%22 fill=%22%231a4d25%22/%3E%3Crect x=%22147%22 y=%2252%22 width=%226%22 height=%2238%22 fill=%22%233b2219%22/%3E%3Ccircle cx=%22150%22 cy=%2244%22 r=%2222%22 fill=%22%231f5a2c%22/%3E%3Ccircle cx=%22138%22 cy=%2252%22 r=%2214%22 fill=%22%23256b34%22/%3E%3Ccircle cx=%22163%22 cy=%2250%22 r=%2215%22 fill=%22%231a4d25%22/%3E%3Crect x=%22214%22 y=%2218%22 width=%224%22 height=%2272%22 fill=%22%232a2a2a%22/%3E%3Crect x=%22206%22 y=%2214%22 width=%2220%22 height=%226%22 rx=%223%22 fill=%22%232a2a2a%22/%3E%3Ccircle cx=%22216%22 cy=%2222%22 r=%225%22 fill=%22%23ffe9a8%22/%3E%3Ccircle cx=%22216%22 cy=%2222%22 r=%2216%22 fill=%22%23ffe9a8%22 opacity=%22.25%22/%3E%3Crect x=%220%22 y=%2274%22 width=%22260%22 height=%224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%224%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2217%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2230%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2243%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2256%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2269%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2282%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%2295%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22108%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22121%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22134%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22147%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22160%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22173%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22186%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22199%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22212%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22225%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22238%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3Crect x=%22251%22 y=%2266%22 width=%223%22 height=%2224%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3C/svg%3E") 0 100% / 220px 76px repeat-x; animation:zbScrollN 7s linear infinite; }
+@keyframes zbScrollF{ to{ background-position-x:-708px; } }
+@keyframes zbScrollN{ to{ background-position-x:-880px; } }
+.zb-road{ position:absolute; left:0; right:0; bottom:0; height:52px; background:linear-gradient(180deg,#3b3436 0%,#26201f 100%); box-shadow:inset 0 3px 0 #E02020; }
+.zb-lines{ position:absolute; left:0; right:0; bottom:22px; height:5px; background:repeating-linear-gradient(90deg,#fff 0 34px,transparent 34px 80px); opacity:.75; animation:zbLines .45s linear infinite; }
+@keyframes zbLines{ to{ background-position-x:-80px; } }
+.zb-stage[data-r="1"] .zb-near{ animation-duration:5s; } .zb-stage[data-r="1"] .zb-lines{ animation-duration:.33s; } .zb-stage[data-r="1"] .zb-far{ animation-duration:16s; }
+.zb-stage[data-r="2"] .zb-near{ animation-duration:3.6s; } .zb-stage[data-r="2"] .zb-lines{ animation-duration:.24s; } .zb-stage[data-r="2"] .zb-far{ animation-duration:12s; }
+.zb-shadow{ position:absolute; bottom:8px; height:12px; border-radius:50%; background:rgba(0,0,0,.45); filter:blur(2px); z-index:1; }
+.zb-shadow.zs{ left:calc(var(--zx) + 18px); width:90px; transition:left .12s linear; }
+.zb-shadow.ps{ right:30px; width:110px; }
+.zb-z{ position:absolute; left:var(--zx); bottom:10px; height:178px; width:auto; max-width:none !important; z-index:3; transition:left .12s linear; transform-origin:50% 100%; animation:zbLurch .5s ease-in-out infinite alternate; filter:drop-shadow(0 0 10px rgba(120,255,140,.25)); }
+@keyframes zbLurch{ from{ transform:rotate(-5deg) translateY(0); } to{ transform:rotate(4deg) translateY(-7px); } }
+.zb-p{ position:absolute; right:-16px; bottom:6px; height:146px; width:auto; max-width:none !important; z-index:2; transform-origin:50% 100%; animation:zbRun .3s ease-in-out infinite alternate; }
+@keyframes zbRun{ from{ transform:translateY(0) rotate(-2deg); } to{ transform:translateY(-9px) rotate(2deg); } }
+.zb-dust{ position:absolute; right:110px; bottom:10px; z-index:2; }
+.zb-dust i{ position:absolute; width:14px; height:14px; border-radius:50%; background:rgba(255,255,255,.35); animation:zbDust .6s ease-out infinite; }
+.zb-dust i:nth-child(2){ animation-delay:.2s; } .zb-dust i:nth-child(3){ animation-delay:.4s; }
+@keyframes zbDust{ from{ transform:translate(0,0) scale(.4); opacity:.8; } to{ transform:translate(-46px,-14px) scale(1.6); opacity:0; } }
+.zb-time{ position:absolute; left:10px; top:10px; z-index:4; padding:4px 10px; border-radius:99px; background:rgba(0,0,0,.55); color:#fff; font:900 12.5px var(--gx-font); font-variant-numeric:tabular-nums; }
+.zb-warn{ position:absolute; left:50%; top:12px; transform:translateX(-50%); z-index:4; padding:4px 12px; border-radius:99px; background:#E02020; color:#fff; font:900 12px var(--gx-font); letter-spacing:.12em; opacity:0; transition:opacity .2s; }
+.zb-stage.danger .zb-warn{ opacity:1; animation:sxBeat .5s ease-in-out infinite; }
+.zb-stage::after{ content:""; position:absolute; inset:0; z-index:5; pointer-events:none; box-shadow:inset 0 0 0 0 rgba(224,32,32,0); transition:box-shadow .3s; }
+.zb-stage.danger::after{ box-shadow:inset 0 0 70px 10px rgba(224,32,32,.8); animation:zbPulse .6s ease-in-out infinite; }
+@keyframes zbPulse{ 50%{ box-shadow:inset 0 0 90px 18px rgba(224,32,32,.95); } }
+.zb-stage.danger .zb-p{ animation-duration:.17s; }
+.zb-stage.frozen .zb-z{ animation:none; filter:hue-rotate(160deg) saturate(1.6) brightness(1.15) drop-shadow(0 0 14px #9fe3ff); }
+.zb-stage.frozen::before{ content:"❄"; position:absolute; left:calc(var(--zx) + 50px); top:16px; z-index:6; font-size:30px; color:#cdf3ff; text-shadow:0 0 12px #6fd3ff; animation:feBob 1.4s ease-in-out infinite; }
+.zb-stage.bite{ animation:zbBite .5s ease; }
+@keyframes zbBite{ 20%{ transform:translateX(-9px); } 40%{ transform:translateX(9px); } 60%{ transform:translateX(-5px); } 80%{ transform:translateX(4px); } }
+.zb-stage.bite::after{ box-shadow:inset 0 0 0 400px rgba(224,32,32,.55); transition:none; }
+.zb-stage.push .zb-z{ animation:zbBack .45s ease; }
+@keyframes zbBack{ 30%{ transform:rotate(-16deg) translateX(-14px); } }
+.zb-mc{ margin:0 0 8px !important; }
+.zb-mc p.pop{ animation:khPop .35s ease; }
+/* flashcard */
+.zb-fc{ display:block; text-align:center; max-width:290px !important; padding-bottom:10px !important; }
+.zb-fc.in{ animation:qvRise .4s cubic-bezier(.22,1.2,.36,1) both; }
+.zb-fc.ok{ border-color:#22b25a !important; box-shadow:0 0 0 2px rgba(255,255,255,.25), 0 18px 34px -14px rgba(34,178,90,.8) !important; }
+.zb-fc.bad{ animation:sxShake .4s ease; }
+.zb-ftile{ width:84px !important; height:84px !important; margin-bottom:4px !important; }
+.zb-fc .mil-vn{ margin:2px 0 0; font-size:22px !important; }
+.zb-pos{ display:block; font:800 11px var(--gx-font); color:#E02020; text-transform:uppercase; letter-spacing:.1em; }
+.zb-fc .mil-speak{ margin-top:2px !important; }
+.zb-qbar{ display:flex; align-items:center; justify-content:center; gap:4px; min-height:40px; padding:8px 26px; font:800 14px var(--gx-font); }
+.zb-qbar b{ color:#ffcf4d; }
+/* ô chữ + bàn phím */
+.zb-boxes{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:4px 0 12px; }
+.zb-boxes i{ width:34px; height:44px; border-radius:10px; display:grid; place-items:center; font:900 22px var(--gx-font); font-style:normal; background:#fff; color:#111; box-shadow:0 4px 0 #8f0a1c, inset 0 0 0 2px #f3d0d0; transition:transform .12s; }
+.zb-boxes i.sp{ width:12px; background:none; box-shadow:none; }
+.zb-boxes i.pn{ width:16px; background:none; box-shadow:none; color:#fff; }
+.zb-boxes i.f{ background:#E02020; color:#fff; box-shadow:0 4px 0 #5c0610; transform:translateY(-2px); animation:khPop .25s ease; }
+.zb-boxes i.cur{ box-shadow:0 4px 0 #8f0a1c, inset 0 0 0 3px #f5c542; }
+.zb-boxes.reveal i.f{ background:#111; box-shadow:0 4px 0 #000, inset 0 0 0 2px #E02020; }
+.zb-kb{ display:flex; flex-direction:column; gap:7px; margin-top:2px; }
+.zb-kr{ display:flex; justify-content:center; gap:5px; }
+.zb-k{ flex:1; max-width:44px; height:50px; border:0; border-radius:12px; background:linear-gradient(180deg,#fff,#f1eceb); color:#111; font:900 19px var(--gx-font); cursor:pointer; box-shadow:0 4px 0 #8f8a89; padding:0; touch-action:manipulation; }
+.zb-k.wide{ max-width:64px; flex:1.5; background:linear-gradient(180deg,#ff5a5a,#E02020); color:#fff; box-shadow:0 4px 0 #8f0a1c; }
+.zb-k.hit{ animation:zbKey .18s ease; }
+@keyframes zbKey{ 50%{ transform:translateY(3px); box-shadow:0 1px 0 #8f8a89; background:#E02020; color:#fff; } }
+.zb-count{ text-align:center; line-height:1; }
+.zb-count small{ display:block; font-size:20px; letter-spacing:.3em; color:#ffb3b3; margin-bottom:6px; }
+/* kết thúc */
+.zb-caught{ display:block; width:100%; max-width:340px; margin:0 auto 6px; border-radius:20px; border:5px solid #E02020; transform:rotate(-1.5deg); box-shadow:0 18px 34px -14px rgba(224,32,32,.7); }
+.zb-win{ position:relative; width:230px; height:210px; margin:0 auto; border-radius:50%; background:radial-gradient(circle, rgba(245,197,66,.5), transparent 65%); }
+.zb-boy-end{ height:210px; width:auto; max-width:none !important; animation:zbRun .5s ease-in-out infinite alternate; }
+.zb-rv-h{ margin:12px 0 0; font:800 12.5px var(--gx-font); color:#ffb3b3; }
+/* sáng */
+.gx-light .zb-mid b{ color:#1a1210; }
+.gx-light .zb-sky{ background:linear-gradient(180deg,#ffe3e3 0%,#fff6f0 60%,#ffffff 100%); }
+.gx-light .zb-sky .moon{ background:radial-gradient(circle at 40% 40%, #fff, #ffd166 70%); box-shadow:0 0 30px 10px rgba(255,209,102,.5); }
+.gx-light .zb-far{ opacity:.35; }
+.gx-light .zb-road{ background:linear-gradient(180deg,#5b5456,#3e3839); }
+.gx-light .zb-ladder li.miss{ background:#ffe1e1 !important; color:#E02020 !important; } .gx-light .zb-ladder li.miss b{ color:#E02020 !important; }
+.gx-light .zb-boxes i.pn{ color:#111; }
+.gx-light .zb-k{ box-shadow:0 4px 0 #d3c7c4, 0 0 0 1px #eee3e0; }
+.gx-light .zb-rv-h{ color:#E02020; }
+@media (prefers-reduced-motion: reduce){ .zb-far, .zb-near, .zb-lines, .zb-z, .zb-p, .zb-dust i, .zb-stage.danger::after, .zb-boy-end, .zb-hearts i.on{ animation:none !important; } }
+
+/* ===== v31 · Thi vượt vùng ===== */
+.pz-logo b{ font-size:19px; } .pz-logo em{ letter-spacing:.02em; font-size:11.5px; color:#ffb3b3; font-weight:700; }
+.pz-t{ flex:none; width:44px; height:44px; border-radius:50%; display:grid; place-items:center; font:900 17px var(--gx-font); background:#E02020; color:#fff; box-shadow:0 0 0 4px rgba(224,32,32,.3); }
+.pz-bar{ display:flex; justify-content:space-between; font:800 13px var(--gx-font); margin:4px 0 8px; }
+.pz-bar b{ color:var(--gold); }
+.pz-dots{ display:flex; gap:4px; margin-bottom:14px; }
+.pz-dots i{ flex:1; height:6px; border-radius:6px; background:rgba(255,255,255,.15); }
+.pz-dots i.ok{ background:#26b85a; } .pz-dots i.no{ background:#E02020; } .pz-dots i.cur{ background:#fff; }
+.pz-q{ position:relative; text-align:center; padding:18px 14px 16px; border-radius:22px; background:#fff; color:#111; box-shadow:0 0 0 3px #E02020, 0 8px 0 #8f0a1c; margin-bottom:16px; animation:qvRise .35s cubic-bezier(.22,1.2,.36,1) both; }
+.pz-pic{ display:grid; place-items:center; width:74px; height:74px; margin:0 auto 6px; border-radius:20px; background:#fff1f1; }
+.pz-fe{ width:56px !important; height:56px !important; animation:feBob 2.6s ease-in-out infinite; }
+.pz-pic .fe-txt{ font-size:42px; }
+.pz-w{ display:inline-block; font:900 28px var(--gx-font); vertical-align:middle; }
+.pz-vi{ display:block; font:900 22px/1.3 var(--gx-font); }
+.pz-q small{ display:block; margin-top:6px; font:700 12.5px var(--gx-font); color:#8a7f7a; }
+.pz-say{ vertical-align:middle; margin-left:8px; width:36px; height:36px; border-radius:50%; border:0; background:#E02020; color:#fff; cursor:pointer; box-shadow:0 3px 0 #8f0a1c; }
+.pz-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.pz-a{ display:flex; align-items:center; gap:8px; min-height:64px; padding:10px 12px; border:0; border-radius:16px; text-align:left; font:800 14px/1.25 var(--gx-font); color:#fff; cursor:pointer; box-shadow:0 5px 0 rgba(0,0,0,.35); transition:transform .1s, opacity .2s; }
+.pz-a i{ flex:none; width:26px; height:26px; border-radius:8px; display:grid; place-items:center; background:rgba(255,255,255,.22); font-style:normal; font-size:13px; }
+.pz-a.k0{ background:#E02020; } .pz-a.k1{ background:#111; box-shadow:0 5px 0 #000, inset 0 0 0 2px rgba(255,255,255,.25); } .pz-a.k2{ background:#b3121f; } .pz-a.k3{ background:#3a3a3a; }
+.pz-a:active{ transform:translateY(3px); }
+.pz-a:disabled{ opacity:.35; cursor:default; }
+.pz-a.ok{ opacity:1; background:#26b85a !important; box-shadow:0 5px 0 #146b3e; animation:khPop .35s ease; }
+.pz-a.no{ opacity:1; background:#fff !important; color:#E02020; box-shadow:0 0 0 3px #E02020, 0 5px 0 #8f0a1c; animation:sxShake .4s ease; }
+.pz-hero{ display:block; height:150px; width:auto; max-width:none !important; margin:0 auto 4px; animation:feBob 2.6s ease-in-out infinite; }
+.pz-note{ margin:10px 0 0; font:600 12px/1.5 var(--gx-font); color:rgba(255,255,255,.65); }
+.pz-entry{ display:flex; align-items:center; gap:10px; width:calc(100% - 24px); margin:10px 12px 0; padding:11px 14px; border:0; border-radius:16px; background:#111; color:#fff; text-align:left; cursor:pointer; box-shadow:0 4px 0 #000, inset 0 0 0 2px #E02020; font-family:var(--sx-font, inherit); }
+.pz-entry svg{ flex:none; width:28px; height:28px; fill:#f5c542; }
+.pz-entry b{ display:block; font-weight:900; font-size:15px; }
+.pz-entry small{ display:block; font-size:12px; opacity:.8; }
+.pz-entry[hidden]{ display:none !important; }
+#qmZonesSec:not(.qv-open) .pz-entry{ display:none !important; }
+.gx-light .pz-bar{ color:#1a1210; } .gx-light .pz-bar b{ color:#b7791f; }
+.gx-light .pz-dots i{ background:#eadedb; } .gx-light .pz-dots i.cur{ background:#111; }
+.gx-light .pz-logo em{ color:#E02020; } .gx-light .pz-note{ color:#6b5f5a; }
+
+/* gọn 1 màn hình khi đang chơi */
+.gx-zb .zb-hero{ display:none; }
+.gx-zb.zb-over .zb-hero{ display:flex; }
+.zb-toplogo{ flex:1; text-align:center; line-height:1; }
+.zb-toplogo small{ display:block; font:900 12px var(--gx-font); color:#ff5a5a; }
+.zb-toplogo b{ display:block; font:900 26px var(--gx-font); letter-spacing:.08em; background:linear-gradient(180deg,#fff 0%,#ff8a8a 30%,#E02020 62%,#8f0a1c 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 2px 0 #3a0006); }
+.gx-light .zb-toplogo small{ color:#E02020; }
+.gx-zb.zb-over .zb-toplogo{ visibility:hidden; }
+.gx-zb .gx-top{ margin-bottom:6px; }
+.zb-life{ margin-bottom:6px !important; }
+.zb-life .ll-ic{ width:42px !important; height:42px !important; }
+.zb-life .ll-ic svg{ width:21px !important; height:21px !important; }
+.zb-life button{ flex-direction:row !important; gap:6px !important; justify-content:center; }
+.zb-life small{ font-size:11.5px !important; }
+.zb-ladder{ margin-bottom:4px !important; padding-top:2px !important; padding-bottom:4px !important; }
+.zb-ladder li{ padding:3px 4px !important; min-width:34px !important; }
+.zb-ladder li b{ font-size:12.5px; }
+.zb-bar{ margin-bottom:6px !important; }
+.zb-stage{ height:168px; }
+.zb-z{ height:150px; } .zb-p{ height:124px; }
+.zb-far{ bottom:50px; } .zb-near{ bottom:40px; }
+.zb-road{ height:44px; } .zb-lines{ bottom:18px; }
+.zb-mc{ position:absolute; left:8px; right:120px; top:8px; z-index:6; margin:0 !important; display:none !important; }
+.zb-bubble{ position:absolute; left:50%; top:10px; transform:translateX(-50%); z-index:6; max-width:72%; padding:6px 11px; border-radius:14px; background:#fff; color:#111; font:700 12px/1.35 var(--gx-font); text-align:center; box-shadow:0 4px 12px rgba(0,0,0,.25); }
+.zb-bubble::after{ content:""; position:absolute; left:50%; bottom:-6px; width:12px; height:12px; background:#fff; transform:translateX(-50%) rotate(45deg); }
+.zb-bubble.pop{ animation:khPop .35s ease; }
+.zb-stage.danger .zb-bubble{ background:#E02020; color:#fff; } .zb-stage.danger .zb-bubble::after{ background:#E02020; }
+.zb-warn{ top:auto; bottom:52px; }
+.zb-time{ top:auto; bottom:6px; left:8px; }
+.zb-fc{ display:grid !important; grid-template-columns:auto 1fr auto; grid-template-rows:auto auto auto; align-items:center; column-gap:10px; text-align:left; max-width:none !important; margin:4px 4px 8px !important; padding:8px 12px 10px !important; transform:rotate(-1deg); }
+.zb-fc .fc-head{ grid-column:1 / -1; margin:-2px 0 6px; }
+.zb-ftile{ grid-row:2 / 4; width:62px !important; height:62px !important; margin:0 !important; }
+.zb-fc .mil-vn{ grid-column:2; font-size:19px !important; line-height:1.2 !important; margin:0 !important; }
+.zb-pos{ grid-column:2; }
+.zb-fc .mil-speak{ grid-column:3; grid-row:2 / 4; margin:0 !important; width:44px !important; height:44px !important; background:#E02020 !important; color:#fff !important; border-radius:50%; box-shadow:0 4px 0 #8f0a1c; }
+.zb-fc .mil-speak svg{ width:22px; height:22px; }
+.gx-zb .mil-qbar{ margin:6px -16px 8px !important; }
+.zb-qbar{ min-height:34px; padding:6px 26px; font-size:13px; }
+.zb-boxes{ margin:2px 0 10px; gap:5px; }
+.zb-boxes i{ width:31px; height:40px; font-size:20px; }
+.zb-k{ height:46px; }
+.zb-kb{ gap:6px; }
+
+.zb-bubble{ transition:opacity .35s, transform .35s; }
+.zb-bubble.hide{ opacity:0; transform:translateX(-50%) translateY(-8px); }
+.zb-bubble{ top:8px; max-width:64%; font-size:11.5px; }
+.zb-boxes{ flex-wrap:nowrap; }
+.zb-boxes i{ flex:1 1 0; max-width:31px; min-width:0; }
+.zb-boxes i.sp{ flex:0 0 8px; } .zb-boxes i.pn{ flex:0 0 12px; }
+.zb-boxes.sm i{ height:36px; font-size:16px; border-radius:8px; }
+.zb-life .ll-ic{ width:38px !important; height:38px !important; flex:none; }
+.zb-life small{ white-space:nowrap; font-size:11px !important; }
+.zb-life{ gap:4px !important; }
+body.gx-lock #motivateToast{ display:none !important; }
+.gx-light .zb-ladder li.done, .zb-ladder li.done{ background:#22b25a !important; color:#fff !important; }
+.gx-light .zb-ladder li.done b, .gx-light .zb-ladder li.done small{ color:#fff !important; }
+
+/* v32: thẻ hiện từ tiếng Anh để gõ lại */
+.zb-en{ grid-column:2; margin:0; font:900 26px/1.1 var(--gx-font); color:#111; letter-spacing:-.01em; word-break:break-word; }
+.zb-ipa{ grid-column:2; font:600 13px "Noto Sans",sans-serif; color:#777; }
+.zb-vi{ grid-column:2; font:700 13px/1.3 var(--gx-font); color:#333; }
+.zb-vi em{ font-style:normal; font-weight:900; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:#E02020; margin-right:3px; }
+.zb-ftile{ grid-row:2 / 5 !important; }
+.zb-fc .mil-speak{ grid-row:2 / 5 !important; }
+.zb-fc .zb-en{ font-size:30px !important; font-weight:900 !important; line-height:1.05 !important; }
+.q-reco-art{ width:56px !important; height:56px !important; flex:none; object-fit:cover; border-radius:14px; box-shadow:0 0 0 2px #E02020; max-width:none !important; }
 </style>
 <div class="qm-modal" id="qmModal" hidden>
   <div class="qm-card" role="dialog" aria-modal="true" aria-labelledby="qmTitle">
@@ -3372,6 +3657,7 @@ button, input, select, textarea{ font-family:inherit; }
   // "Đã ghi nhớ" = đúng bằng ≥ 2 phương pháp khác nhau, ở ≥ 2 ngày khác nhau (hoặc người học cũ: nhớ ≥ 7 ngày)
   function remembered(s){
     if(!s) return false;
+    if(s.pz) return true;                         // đã vượt qua bài thi vượt vùng
     var ks = s.mm ? Object.keys(s.mm) : [];
     if(ks.length >= 2){
       var d = ks.map(function(k){ return s.mm[k]; });
@@ -5120,7 +5406,7 @@ button, input, select, textarea{ font-family:inherit; }
     }
   }
   function milEnd(kind){
-    clearInterval(milTimerId);
+    clearInterval(milTimerId); setTimeout(function(){ qmBossEnd("mil", kind === "win", document.getElementById("gxMil")); }, 0);
     var won = kind === "win", stop = kind === "stop", keep = 0;
     if(won) keep = mil.ladder[mil.total - 1];
     else if(stop) keep = mil.level ? mil.ladder[mil.level - 1] : 0;
@@ -5220,7 +5506,7 @@ button, input, select, textarea{ font-family:inherit; }
       '<div class="mt-done">' + mt.words.map(function(w){ return '<span><b>' + qmEsc(w.w) + "</b>" + qmEsc(w.m) + "</span>"; }).join("") + "</div>" +
       '<p class="mil-deck2">' + gdChip("mt") + "</p>" +
       '<div class="gx-btns"><button class="gx-btn ghost" data-act="close" type="button">Về Đấu trường</button><button class="gx-btn" data-act="again" type="button">6 từ tiếp ▶</button></div>';
-    mtEl("mtEnd").hidden = false;
+    mtEl("mtEnd").hidden = false; qmBossEnd("mt", stars >= 2, mtEl("gxMt"));
     if(isRec) gxChampion(); else if(stars === 3){ gxFireworks(3500, 2.2); gxBoom(.6); celebrate(true); } else celebrate(false);
   }
   function mtBestInline(){ var b = document.getElementById("mtBestInline"), v = +(localStorage.getItem("azq_best_mt") || 0); if(b) b.textContent = v ? (v / 1000).toFixed(1) + "s" : "--"; }
@@ -5243,6 +5529,343 @@ button, input, select, textarea{ font-family:inherit; }
       if(e.target.closest(".gx-x")){ if(mt) mt.run = false; clearInterval(mtTick); gxClose(gt); }
     });
     milBestInline(); mtBestInline();
+  })();
+
+
+  // =====================================================================
+  // v31 · THOÁT KHỎI ZOMBIE (thay game cũ) — gõ đúng từ để chạy thoát
+  // =====================================================================
+  var ZB_ROUNDS = 3, ZB_PER = 6, ZB_SPEED = [0.052, 0.07, 0.092];   // tốc độ zombie áp sát (khoảng cách/giây)
+  var ZB_SAY = {
+    start: ["Zombie AZ đói chữ lắm rồi đó. Gõ đúng là chạy thoát, gõ sai là… thôi khỏi nói 😏", "Chạy đi chờ chi! Mỗi từ gõ đúng là một bước thoát thân 🏃"],
+    ok: ["Ngon! Zombie hít khói 💨", "Chuẩn không cần chỉnh!", "Gõ vậy ai đuổi kịp 😎", "Đúng rồi! Chạy tiếp lẹ!"],
+    combo: ["Combo! Zombie bắt đầu thấy mệt rồi đó 🔥", "Tay nhanh hơn zombie nhiều nha 😎", "Đang vào form, quẩy tiếp!"],
+    bad: ["Sai chính tả là zombie tới gần đó nha 👀", "Ơ kìa, gõ lại coi! Nó đang áp sát 😱", "Gần đúng… mà gần đúng thì zombie vẫn cắn 🙃"],
+    close: ["Nó sát gáy rồi!!! Gõ lẹ lên 😱", "Nghe tiếng thở chưa? GÕ NHANH!", "Còn gang tấc nữa thôi á!!!"],
+    bite: "Bị cắn một phát rồi! Còn mạng thì chạy tiếp 🩹",
+    round: ["Màn 2 — zombie đã uống nước tăng lực ⚡", "Màn cuối — zombie chạy như shipper trễ đơn 🛵"],
+    hint: "Bỏ qua 1 từ, zombie vẫn đang đuổi đó nha!",
+    win: "Thoát rồi! Zombie đứng khóc ở cổng trường 😂", lose: "Bị tóm rồi! Ôn lại mấy từ này rồi phục thù liền nha 😤"
+  };
+  var zb = null, zbRaf = 0, zbBeep = 0, zbTickA = null;
+  function zbTick(on, rate){
+    try{
+      if(!zbTickA){ zbTickA = new Audio("./dragon-studio-slow-cinematic-clock-ticking-405471.mp3"); zbTickA.loop = true; zbTickA.volume = .55; }
+      if(on){ zbTickA.playbackRate = rate || 1; if(zbTickA.paused){ var pr = zbTickA.play(); if(pr && pr.catch) pr.catch(function(){}); } }
+      else zbTickA.pause();
+    }catch(e){}
+  }
+  function zbEl(id){ return document.getElementById(id); }
+  function zbOk(w){ return /^[a-z][a-z' -]*$/i.test(w.w) && w.w.length <= 16; }
+  function zbStart(){
+    var lp = qLearnedPool();
+    if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
+    var need = ZB_ROUNDS * ZB_PER, focus = window.qGameFocus; window.qGameFocus = null;
+    var dr = gdDraw("zb", need + 12), words = (focus && focus.length ? shuffle(focus.filter(zbOk)) : dr.words.filter(zbOk)).slice(0, need);
+    if(words.length < need){ var have = {}; words.forEach(function(w){ have[w.w] = 1; }); words = words.concat(qFresh(lp.filter(function(w){ return zbOk(w) && !have[w.w]; })).slice(0, need - words.length)); }
+    while(words.length < need && words.length) words.push(words[words.length % Math.max(1, words.length)]);
+    zb = { froze:0, freezeUntil:0, words:words, i:0, lives:3, combo:0, best:0, dist:.62, typed:"", miss:0, hint:[0, 0, 0], el:0, run:false, done:[], newRound:dr.newRound, bitAt:0 };
+    zbEl("zbEnd").hidden = true; zbEl("zbPlay").hidden = false; zbEl("gxZb").classList.remove("zb-over");
+    var b = +(localStorage.getItem("azq_best_zb") || 0); zbEl("zbBest").textContent = b ? Math.round(b / 1000) + "s" : "--";
+    zbEl("zbDeck").innerHTML = gdChip("zb");
+    zbSay(dr.newRound ? "Ôn hết cả bộ rồi! Vòng mới, zombie mới 🔥" : qmPick(ZB_SAY.start));
+    gxOpen(zbEl("gxZb"));
+    zbCard(); zbHud(); zbDraw();
+    zbCount("MÀN 1", function(){ speak(zb.words[0].w); });
+    speakReactionVi(dr.newRound ? "Ôn hết cả bộ rồi! Vòng mới của Thoát Khỏi Zombie!" : "Thoát khỏi zombie! Gõ đúng từ để chạy, sẵn sàng chưa?");
+  }
+  function zbCount(label, after){
+    var cd = zbEl("zbCount"), n = 4; cd.hidden = false; cd.innerHTML = "<small>" + label + "</small>Sẵn sàng?"; zb.run = false; zbTick(false);
+    gxTone([[392, .12], [523, .12, "triangle", .12], [659, .25, "triangle", .24]]);
+    var iv = setInterval(function(){
+      if(!zb || zbEl("gxZb").hidden){ clearInterval(iv); return; }
+      n--; if(n > 3) return;
+      if(n > 0){ cd.innerHTML = "<small>" + label + "</small>" + n; playTone(523, .1); cd.classList.remove("pop"); void cd.offsetWidth; cd.classList.add("pop"); return; }
+      clearInterval(iv); cd.innerHTML = "<small>" + label + "</small>Chạy!"; gxTone([[784, .18], [1046, .25, "triangle", .1]]);
+      setTimeout(function(){ cd.hidden = true; }, 450);
+      zb.run = true; zb.last = performance.now(); zbTick(true, 1 + zbRound() * .15); zbLoop(); if(after) after();
+    }, 700);
+  }
+  var zbSayT = 0;
+  function zbSay(t){ var s = zbEl("zbSay"); s.textContent = t; s.classList.remove("pop", "hide"); void s.offsetWidth; s.classList.add("pop"); clearTimeout(zbSayT); zbSayT = setTimeout(function(){ s.classList.add("hide"); }, 2600); }
+  function zbCur(){ return zb.words[zb.i]; }
+  function zbRound(){ return Math.min(ZB_ROUNDS - 1, Math.floor(zb.i / ZB_PER)); }
+  function zbHud(){
+    zbEl("zbHearts").innerHTML = [0, 1, 2].map(function(k){ return '<i class="' + (k < zb.lives ? "on" : "") + '">' + fe("❤️", "zb-h") + "</i>"; }).join("");
+    zbEl("zbRound").textContent = "Màn " + (zbRound() + 1) + "/" + ZB_ROUNDS;
+    zbEl("zbProg").textContent = Math.min(zb.i + 1, zb.words.length) + "/" + zb.words.length;
+    zbEl("zbCombo").innerHTML = zb.combo >= 2 ? fe("🔥", "fe-i") + " Combo x" + zb.combo : "";
+    var lad = zbEl("zbLadder");
+    lad.innerHTML = zb.words.map(function(_, k){ var r = Math.floor(k / ZB_PER), d = zb.done[k];
+      return '<li class="' + (k === zb.i ? "cur" : "") + (d ? (d.ok ? " done" : " miss") : "") + (k % ZB_PER === 0 ? " rs" : "") + '">' + (k % ZB_PER === 0 ? "<small>MÀN " + (r + 1) + "</small>" : "<small>&nbsp;</small>") + "<b>" + (k + 1) + "</b></li>"; }).join("");
+    var cur = lad.children[zb.i]; if(cur && cur.scrollIntoView) try{ lad.scrollTo({ left: cur.offsetLeft - lad.clientWidth / 2 + cur.clientWidth / 2, behavior:"smooth" }); }catch(e){}
+    var hb = zbEl("gxZb").querySelector('[data-z="hint"]'), fb = zbEl("gxZb").querySelector('[data-z="freeze"]');
+    hb.classList.toggle("used", !!zb.hint[zbRound()]); fb.classList.toggle("used", !!zb.froze);
+  }
+  function zbCard(){
+    var w = zbCur(); zb.typed = ""; zb.miss = 0;
+    zbEl("zbPic").innerHTML = fe(w.e || TOPIC_EMOJI[w.t] || "✳️", "mil-pic");
+    zbEl("zbEn").textContent = w.w;
+    zbEl("zbIpa").textContent = w.ipa ? "/" + w.ipa + "/" : "";
+    var pos = w.p ? ({ n:"danh từ", v:"động từ", adj:"tính từ", adv:"trạng từ", phr:"cụm từ", int:"thán từ", prep:"giới từ", pron:"đại từ" }[w.p] || w.p) : "";
+    zbEl("zbVi").innerHTML = (pos ? "<em>" + pos + "</em> " : "") + qmEsc(w.m.charAt(0).toUpperCase() + w.m.slice(1));
+    var nL = w.w.replace(/[^a-z]/gi, "").length, nW = w.w.trim().split(/\s+/).length;
+    zbEl("zbQbar").innerHTML = "Gõ lại thật nhanh · <b>" + nL + "</b> chữ cái" + (nW > 1 ? " · " + nW + " từ" : "");
+    zbEl("zbBoxes").classList.toggle("sm", w.w.length > 11);
+    zbEl("zbBoxes").innerHTML = w.w.split("").map(function(c){ return '<i class="' + (c === " " ? "sp" : /[-']/.test(c) ? "pn" : "") + '">' + (/[-']/.test(c) ? c : "") + "</i>"; }).join("");
+    var card = zbEl("zbCard"); card.classList.remove("in", "ok", "bad"); void card.offsetWidth; card.classList.add("in");
+    zbPaint();
+  }
+  function zbPaint(){
+    var w = zbCur().w, bx = zbEl("zbBoxes").children;
+    for(var k = 0; k < bx.length; k++){
+      if(/[ \-']/.test(w[k])) continue;
+      var ch = zb.typed[k] || ""; bx[k].textContent = ch.toUpperCase(); bx[k].classList.toggle("f", !!ch); bx[k].classList.toggle("cur", k === zb.typed.length);
+    }
+  }
+  function zbKey(k){
+    if(!zb || !zb.run || zb.lock) return;
+    var w = zbCur().w;
+    if(k === "back"){ zb.typed = zb.typed.replace(/[ \-']*.$/, ""); playKeyClick(true); zbPaint(); return; }
+    if(!/^[a-z'-]$/.test(k) || zb.typed.length >= w.length) return;
+    while(zb.typed.length < w.length && /[ \-']/.test(w[zb.typed.length]) && w[zb.typed.length] !== k) zb.typed += w[zb.typed.length];
+    if(zb.typed.length >= w.length) return;
+    zb.typed += k; playKeyClick(false);
+    while(zb.typed.length < w.length && /[ \-']/.test(w[zb.typed.length])) zb.typed += w[zb.typed.length];
+    zbPaint();
+    if(zb.typed.length >= w.length) setTimeout(zbCheck, 120);
+  }
+  function zbCheck(){
+    var w = zbCur(), card = zbEl("zbCard");
+    if(zb.typed.toLowerCase() === w.w.toLowerCase()){
+      zb.combo++; zb.best = Math.max(zb.best, zb.combo); zb.lock = true;
+      zb.dist = Math.min(1, zb.dist + .2 + Math.min(zb.combo, 5) * .03);
+      card.classList.add("ok"); gxBurst(card); playTone(660 + Math.min(zb.combo, 6) * 80, .09); playTone(990 + Math.min(zb.combo, 6) * 80, .12, "triangle", .07);
+      zbEl("zbStage").classList.remove("push"); void zbEl("zbStage").offsetWidth; zbEl("zbStage").classList.add("push");
+      zb.done.push({ w:w, ok:!zb.miss }); if(!zb.miss){ gdClear("zb", w); } try{ qMarkSeen([w]); }catch(e){}
+      zbSay(zb.combo >= 3 && zb.combo % 3 === 0 ? qmPick(ZB_SAY.combo) : qmPick(ZB_SAY.ok));
+      setTimeout(function(){ speak(w.w, "happy"); }, 80);
+      setTimeout(zbNext, 620);
+    }else{
+      zb.combo = 0; zb.miss++; zb.dist = Math.max(0.02, zb.dist - .12);
+      card.classList.remove("bad"); void card.offsetWidth; card.classList.add("bad"); chimeWrong();
+      if(zb.miss >= 2){                                 // sai 2 lần: lộ đáp án, chuyển từ (từ ở lại bộ để ôn)
+        zb.lock = true; zb.typed = w.w; zbPaint(); zbEl("zbBoxes").classList.add("reveal");
+        zbSay("Đáp án là “" + w.w + "” — nhớ mặt chữ nha!"); speak(w.w);
+        zb.done.push({ w:w, ok:false });
+        setTimeout(function(){ zbEl("zbBoxes").classList.remove("reveal"); zbNext(); }, 1500);
+      }else{ zbSay(qmPick(ZB_SAY.bad)); setTimeout(function(){ zb.typed = ""; zbPaint(); }, 380); }
+    }
+    zbHud();
+  }
+  function zbNext(){
+    if(!zb) return; zb.lock = false; zb.i++;
+    if(zb.i >= zb.words.length){ zbEnd(true); return; }
+    var newRound = zb.i % ZB_PER === 0;
+    zbCard(); zbHud();
+    if(newRound){ zb.dist = Math.max(zb.dist, .6); zbSay(ZB_SAY.round[zbRound() - 1] || "Màn mới!"); zbCount("MÀN " + (zbRound() + 1), function(){ speak(zbCur().w); }); zbEl("zbStage").dataset.r = zbRound(); }
+    else speak(zbCur().w);
+  }
+  function zbLoop(){
+    cancelAnimationFrame(zbRaf);
+    var step = function(now){
+      if(!zb || !zb.run || zbEl("gxZb").hidden) return;
+      var dt = Math.min(.1, (now - zb.last) / 1000); zb.last = now; zb.el += dt * 1000;
+      var d0 = zb.dist, frozen = zb.freezeUntil && now < zb.freezeUntil; zbEl("zbStage").classList.toggle("frozen", !!frozen);
+      if(!zb.lock && !frozen) zb.dist -= ZB_SPEED[zbRound()] * dt;
+      if(zb.dist <= 0){
+        zb.lives--; zb.combo = 0; zb.dist = .55; zbHud();
+        var st = zbEl("zbStage"); st.classList.remove("bite"); void st.offsetWidth; st.classList.add("bite");
+        chimeWrong(); try{ navigator.vibrate && navigator.vibrate([80, 40, 120]); }catch(e){}
+        if(zb.lives <= 0){ zbDraw(); zbEnd(false); return; }
+        zbSay(ZB_SAY.bite);
+      }
+      var tr = (frozen ? .6 : d0 < .25 ? 1.7 : d0 < .45 ? 1.3 : 1) + zbRound() * .12;
+      if(zbTickA && Math.abs(zbTickA.playbackRate - tr) > .05) zbTickA.playbackRate = tr;
+      if(zb.dist < .25 && now - zbBeep > 650){ zbBeep = now; playTone(140, .08, "sawtooth"); if(Math.random() < .25) zbSay(qmPick(ZB_SAY.close)); }
+      zbEl("zbTime").textContent = (zb.el / 1000).toFixed(1);
+      zbDraw();
+      zbRaf = requestAnimationFrame(step);
+    };
+    zbRaf = requestAnimationFrame(step);
+  }
+  function zbDraw(){
+    var d = Math.max(0, Math.min(1, zb.dist)), st = zbEl("zbStage");
+    st.style.setProperty("--zx", (2 + (1 - d) * 46).toFixed(2) + "%");
+    st.classList.toggle("danger", d < .25);
+    zbEl("zbRing").style.strokeDashoffset = (94.25 * (1 - d)).toFixed(1);
+    zbEl("zbRingW").classList.toggle("low", d < .25);
+    zbEl("zbGap").textContent = (d * 12).toFixed(1);
+  }
+  function zbEnd(won){
+    if(!zb) return; zb.run = false; cancelAnimationFrame(zbRaf); zbTick(false);
+    var ms = Math.round(zb.el), best = +(localStorage.getItem("azq_best_zb") || 0), isRec = won && (!best || ms < best);
+    if(isRec){ try{ localStorage.setItem("azq_best_zb", String(ms)); }catch(e){} }
+    zbBestInline(); var nb = +(localStorage.getItem("azq_best_zb") || 0); zbEl("zbBest").textContent = nb ? Math.round(nb / 1000) + "s" : "--";
+    var okN = zb.done.filter(function(x){ return x.ok; }).length, xp = won ? 40 + zb.lives * 5 + (isRec ? 10 : 0) : 5 + okN;
+    gxXp(xp);
+    var miss = zb.done.filter(function(x){ return !x.ok; }).map(function(x){ return x.w; });
+    if(!won){ var cur = zb.words[zb.i]; if(cur && miss.indexOf(cur) < 0) miss.push(cur); }
+    zbEl("zbPlay").hidden = true; zbEl("gxZb").classList.add("zb-over");
+    zbEl("zbEnd").innerHTML = (won ? '<div class="zb-win"><img src="./zb-boy.webp" alt="Bạn học sinh AZ đã chạy thoát" class="zb-boy-end"></div><h3><b>THOÁT RỒI!</b>' + (isRec ? " <em>Kỷ lục mới!</em>" : "") + "</h3>"
+        : '<img class="zb-caught" src="./zb-caught.jpg" alt="Zombie AZ tóm được bạn học sinh, bạn ấy hét HELP"><h3><b>BỊ TÓM!</b></h3>') +
+      '<p class="mil-sum">' + (won ? "Chạy thoát trong <b>" + (ms / 1000).toFixed(1) + "s</b> · còn <b>" + zb.lives + " mạng</b>" : "Gõ đúng <b>" + okN + "/" + zb.words.length + "</b> từ") +
+      " · combo cao nhất <b>x" + zb.best + "</b> · <b>+" + xp + " XP</b></p>" +
+      '<p class="mil-quote">“' + (won ? (isRec && best ? "Phá kỷ lục cũ " + (best / 1000).toFixed(1) + "s! Zombie xin chữ ký 🚀" : ZB_SAY.win) : ZB_SAY.lose) + "”</p>" +
+      (miss.length ? '<p class="zb-rv-h">Ôn lại mấy từ này nha</p><div class="mt-done">' + miss.slice(0, 8).map(function(w){ return "<span><b>" + qmEsc(w.w) + "</b>" + qmEsc(w.m) + "</span>"; }).join("") + "</div>" : "") +
+      '<p class="mil-deck2">' + gdChip("zb") + "</p>" +
+      '<div class="gx-btns"><button class="gx-btn ghost" data-act="close" type="button">Về Đấu trường</button><button class="gx-btn" data-act="again" type="button">' + (won ? "Chạy tiếp ▶" : "Phục thù ▶") + "</button></div>";
+    zbEl("zbEnd").hidden = false;
+    if(won){ if(isRec) gxChampion(); else { gxFireworks(3500, 2.2); gxBoom(.6); celebrate(true); } speakReactionVi(ZB_SAY.win); }
+    else { speakReactionVi(ZB_SAY.lose); }
+    qmBossEnd("zb", won, zbEl("gxZb"));
+  }
+  // Trận Boss mở cổng dùng 3 game mới: thắng thì đóng game rồi phá cổng
+  function qmBossEnd(game, won, el){
+    if(typeof qmBoss === "undefined" || qmBoss !== game) return;
+    if(won){ setTimeout(function(){ gxClose(el); questOnEnd(true, game); }, 2600); } else questOnEnd(false, game);
+  }
+  function zbBestInline(){ var b = document.getElementById("raceBestInline"), v = +(localStorage.getItem("azq_best_zb") || 0); if(b) b.textContent = v ? Math.round(v / 1000) + "s" : "--"; }
+  (function(){
+    var g = document.getElementById("gxZb"); if(!g) return;
+    var rows = ["qwertyuiop", "asdfghjkl", "zxcvbnm'-"];
+    zbEl("zbKb").innerHTML = rows.map(function(r, ri){ return '<div class="zb-kr">' + (ri === 2 ? '<button class="zb-k wide" data-k="back" type="button" aria-label="Xoá">⌫</button>' : "") + r.split("").map(function(c){ return '<button class="zb-k" data-k="' + c + '" type="button">' + c.toUpperCase() + "</button>"; }).join("") + "</div>"; }).join("");
+    g.addEventListener("click", function(e){
+      var k = e.target.closest(".zb-k"); if(k){ zbKey(k.dataset.k); k.classList.remove("hit"); void k.offsetWidth; k.classList.add("hit"); return; }
+      if(e.target.closest("#zbSpeak")){ if(zb) speak(zbCur().w); return; }
+      var lf = e.target.closest("[data-z]");
+      if(lf && zb){
+        var z = lf.dataset.z;
+        if(z === "say"){ speak(zbCur().w); return; }
+        if(!zb.run) return;
+        if(z === "hint"){ if(zb.hint[zbRound()] || zb.lock) return; zb.hint[zbRound()] = 1; zb.lock = true; zb.combo = 0; zb.done.push({ w:zbCur(), ok:false }); zbSay("Bỏ qua từ này — lát nữa ôn lại nha 😉"); zbHud(); setTimeout(zbNext, 350); return; }
+        if(z === "freeze"){ if(zb.froze) return; zb.froze = 1; zb.freezeUntil = performance.now() + 6000; gxTone([[1568, .08], [1318, .08, "sine", .07], [1046, .2, "sine", .14]]); zbSay("Đóng băng zombie 6 giây! Gõ lẹ đi 🧊"); zbHud(); return; }
+      }
+      var act = e.target.closest("[data-act]"); if(act){ if(act.dataset.act === "again") zbStart(); else { zbTick(false); gxClose(g); } return; }
+      if(e.target.closest(".gx-x")){ if(zb) zb.run = false; cancelAnimationFrame(zbRaf); zbTick(false); gxClose(g); }
+    });
+    document.addEventListener("keydown", function(e){
+      if(g.hidden || !zb || e.metaKey || e.ctrlKey || e.altKey) return;
+      var k = e.key === "Backspace" ? "back" : String(e.key || "").toLowerCase();
+      if(k === "back" || /^[a-z'-]$/.test(k)){ e.preventDefault(); zbKey(k); var b = g.querySelector('.zb-k[data-k="' + k + '"]'); if(b){ b.classList.remove("hit"); void b.offsetWidth; b.classList.add("hit"); } }
+    });
+    var mr = document.getElementById("modeRace");
+    if(mr) mr.addEventListener("click", function(e){ e.stopImmediatePropagation(); if(document.getElementById("qArena").classList.contains("locked")) return; zbStart(); }, true);
+    zbBestInline();
+  })();
+
+  // =====================================================================
+  // v31 · THI VƯỢT VÙNG — vượt qua bài kiểm tra nhanh thì mở thẳng vùng sau
+  // =====================================================================
+  var PZ_Q = 20, PZ_PASS = 17, PZ_SECS = 12;
+  var PZ_BY_LEVEL = { "A2.1":1, "B1.1":2, "B1.2":2, "C1":3 };
+  var PZ_SAY = {
+    ok: ["Chuẩn!", "Ngon lành!", "Dễ ợt ha 😎", "Đúng rồi, tiếp!"],
+    no: ["Ối, trật rồi 👀", "Câu này hơi lú ha 🙃", "Sai rồi, tập trung nè!"],
+    pass: "Qua môn! Lumina mở cổng cho bạn liền 🎉", fail: "Chưa đủ điểm rồi. Học từ vùng này trước rồi quay lại thi nha 😤"
+  };
+  var pz = null, pzTimer = null;
+  function pzEl(id){ return document.getElementById(id); }
+  function pzTarget(){ var Z = window.AZQ, lv = null; try{ lv = (JSON.parse(localStorage.getItem("az_vocab_profile") || "null") || {}).level; }catch(e){} var t = PZ_BY_LEVEL[lv] || 0; return t > Z.zi ? Math.min(t, Z.ZONES.length - 1) : 0; }
+  function pzTriedToday(to){ try{ return localStorage.getItem("azq_pz_try_" + to) === String(todayStamp()); }catch(e){ return false; } }
+  function pzRange(to){ var Z = window.AZQ; return Z.ORDER.slice(Z.zi ? Z.ZONES[Z.zi - 1] : 0, Z.ZONES[to - 1]); }
+  function pzOpen(to){
+    var Z = window.AZQ; if(!to || to <= Z.zi) return;
+    if(pzTriedToday(to)){ qmToast("Hôm nay bạn thi vượt rồi — mai thi lại nha, giờ học vài từ đã 😉"); return; }
+    var pool = pzRange(to).filter(function(w){ return !Z.remembered(state[w.w]); });
+    if(pool.length < PZ_Q) pool = pzRange(to);
+    var qs = shuffle(pool.slice()).slice(0, PZ_Q), names = Z.NAMES.slice(Z.zi, to).join(", ");
+    pz = { to:to, qs:qs, i:0, ok:0, no:0, wrong:[], lock:false };
+    pzEl("pzEnd").hidden = true; pzEl("pzPlay").hidden = false;
+    pzEl("pzSub").textContent = "Vượt " + names + " → tới " + Z.NAMES[to];
+    try{ localStorage.setItem("azq_pz_try_" + to, String(todayStamp())); }catch(e){}
+    gxOpen(pzEl("gxPz"));
+    speakReactionVi("Thi vượt vùng! Trả lời đúng " + PZ_PASS + " trên " + PZ_Q + " câu là Lumina mở cổng cho bạn.");
+    pzAsk();
+  }
+  function pzAsk(){
+    var w = pz.qs[pz.i], Z = window.AZQ, kind = pz.i % 3 === 1 ? "word" : "mean";
+    var pool = shuffle(Z.ORDER.filter(function(x){ return x !== w && x.m !== w.m && x.w !== w.w && (x.p === w.p || Math.random() < .2); })).slice(0, 3);
+    var opts = shuffle([w].concat(pool)).map(function(x){ return { t: kind === "mean" ? x.m.charAt(0).toUpperCase() + x.m.slice(1) : x.w, ok: x === w }; });
+    pz.cur = { w:w, opts:opts }; pz.lock = false;
+    pzEl("pzQn").textContent = "Câu " + (pz.i + 1) + "/" + PZ_Q;
+    pzEl("pzScore").innerHTML = "<b>" + pz.ok + "</b> đúng · cần " + PZ_PASS;
+    pzEl("pzDots").innerHTML = pz.qs.map(function(_, k){ return '<i class="' + (k < pz.i ? (pz.res && pz.res[k] ? "ok" : "no") : k === pz.i ? "cur" : "") + '"></i>'; }).join("");
+    pzEl("pzQ").innerHTML = '<span class="pz-pic">' + fe(w.e || TOPIC_EMOJI[w.t] || "✳️", "pz-fe") + "</span>" +
+      (kind === "mean" ? '<b class="pz-w">' + qmEsc(w.w) + '</b><button class="pz-say" id="pzSay" type="button" aria-label="Nghe phát âm">' + ic("speaker") + "</button><small>Nghĩa của từ này là gì?</small>"
+        : '<b class="pz-vi">“' + qmEsc(w.m) + '”</b><small>Từ tiếng Anh nào có nghĩa như trên?</small>');
+    pzEl("pzOpts").innerHTML = opts.map(function(o, k){ return '<button class="pz-a k' + k + '" data-i="' + k + '" type="button"><i>' + "ABCD"[k] + "</i>" + qmEsc(o.t) + "</button>"; }).join("");
+    if(kind === "mean") setTimeout(function(){ speak(w.w); }, 200);
+    var t = PZ_SECS, ring = pzEl("pzT"); ring.textContent = t; clearInterval(pzTimer);
+    pzTimer = setInterval(function(){ if(pzEl("gxPz").hidden){ clearInterval(pzTimer); return; } t--; ring.textContent = t; if(t <= 3) playTone(880, .05); if(t <= 0){ clearInterval(pzTimer); pzPick(-1); } }, 1000);
+  }
+  function pzPick(i){
+    if(!pz || pz.lock) return; pz.lock = true; clearInterval(pzTimer);
+    var btns = pzEl("pzOpts").children, okI = pz.cur.opts.findIndex(function(o){ return o.ok; }), ok = i === okI;
+    pz.res = pz.res || []; pz.res[pz.i] = ok;
+    Array.prototype.forEach.call(btns, function(b, k){ b.disabled = true; if(k === okI) b.classList.add("ok"); else if(k === i) b.classList.add("no"); });
+    if(ok){ pz.ok++; chimeCorrect(); pzEl("pzSay2").textContent = qmPick(PZ_SAY.ok); }
+    else { pz.no++; pz.wrong.push(pz.cur.w); chimeWrong(); pzEl("pzSay2").textContent = i < 0 ? "Hết giờ rồi! ⏰" : qmPick(PZ_SAY.no); }
+    var fail = pz.no > PZ_Q - PZ_PASS;
+    setTimeout(function(){ pz.i++; if(fail || pz.i >= PZ_Q) pzEnd(!fail && pz.ok >= PZ_PASS); else pzAsk(); }, ok ? 650 : 1200);
+  }
+  function pzEnd(pass){
+    var Z = window.AZQ, to = pz.to;
+    pzEl("pzPlay").hidden = true;
+    if(pass){
+      var today = todayStamp(), n = 0;
+      pzRange(to).forEach(function(w){
+        var s = state[w.w]; if(!s){ s = state[w.w] = { ivl:0, ease:EASE_START, due:0, wrong:0, correct:0 }; }
+        if(Z.remembered(s)) return;
+        s.pz = today; s.ivl = Math.max(s.ivl || 0, 7); s.correct = Math.max(s.correct || 0, 1); s.last = today;
+        s.due = today + 7 + Math.floor(Math.random() * 50);       // rải lịch ôn kiểm tra lại trong ~2 tháng
+        n++;
+      });
+      saveState(state);
+      try{ localStorage.setItem(Z.zoneKey, String(to)); localStorage.setItem(Z.justKey, "boss:" + to); }catch(e){}
+      gxXp(30);
+    }
+    pzEl("pzEnd").innerHTML = '<img class="pz-hero" src="./char-' + (pass ? to + 1 : Z.zi + 1) + '.png" alt="">' +
+      "<h3><b>" + (pass ? "QUA MÔN!" : "CHƯA QUA") + "</b></h3>" +
+      '<p class="mil-sum">Đúng <b>' + pz.ok + "/" + (pz.i) + "</b> câu" + (pass ? " · mở thẳng tới <b>" + Z.NAMES[to] + "</b> · <b>+30 XP</b>" : " · cần " + PZ_PASS + "/" + PZ_Q) + "</p>" +
+      '<p class="mil-quote">“' + (pass ? PZ_SAY.pass : PZ_SAY.fail) + "”</p>" +
+      (pz.wrong.length ? '<p class="zb-rv-h">' + (pass ? "Mấy từ này sẽ được ôn lại sớm" : "Từ bạn chưa chắc") + '</p><div class="mt-done">' + pz.wrong.slice(0, 8).map(function(w){ return "<span><b>" + qmEsc(w.w) + "</b>" + qmEsc(w.m) + "</span>"; }).join("") + "</div>" : "") +
+      (pass ? '<p class="pz-note">Các từ của vùng đã vượt vẫn được xếp lịch ôn nhẹ trong 2 tháng tới để chắc là bạn nhớ thật.</p>' : "") +
+      '<div class="gx-btns">' + (pass ? '<button class="gx-btn" data-act="go" type="button">Tới ' + qmEsc(Z.NAMES[to]) + " ▶</button>" : '<button class="gx-btn ghost" data-act="close" type="button">Đóng</button><button class="gx-btn" data-act="learn" type="button">Học vùng này ▶</button>') + "</div>";
+    if(pass){ pz.wrong.forEach(function(w){ var s = state[w.w]; if(s){ s.due = todayStamp(); s.wrong = (s.wrong || 0) + 1; } }); saveState(state); }
+    pzEl("pzEnd").hidden = false;
+    if(pass){ gxChampion(); speakReactionVi(PZ_SAY.pass); } else speakReactionVi(PZ_SAY.fail);
+  }
+  function pzEntryRender(){
+    var b = pzEl("pzEntry"), Z = window.AZQ; if(!b || !Z) return;
+    var to = Math.max(pzTarget(), Z.zi + 1), last = Z.zi >= Z.ZONES.length - 1;
+    b.hidden = last; if(last) return;
+    b.dataset.to = to;
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg><span><b>Thi vượt vùng</b><small>Đúng ' + PZ_PASS + "/" + PZ_Q + " câu là mở thẳng tới " + qmEsc(Z.NAMES[to]) + "</small></span>";
+  }
+  (function(){
+    var g = document.getElementById("gxPz"); if(!g) return;
+    g.addEventListener("click", function(e){
+      var a = e.target.closest(".pz-a"); if(a){ pzPick(+a.dataset.i); return; }
+      if(e.target.closest("#pzSay")){ if(pz) speak(pz.cur.w.w); return; }
+      var act = e.target.closest("[data-act]");
+      if(act){ if(act.dataset.act === "go"){ location.reload(); return; } gxClose(g); if(act.dataset.act === "learn"){ var c = document.getElementById("homeCtaBtn"); if(c) c.click(); } return; }
+      if(e.target.closest(".gx-x")){ clearInterval(pzTimer); gxClose(g); }
+    });
+    var eb = pzEl("pzEntry"); if(eb) eb.addEventListener("click", function(){ var sec = document.getElementById("qmZonesSec"); if(sec){ sec.classList.remove("qv-open"); document.body.classList.remove("qv-lock"); } pzOpen(+eb.dataset.to); });
+    pzEntryRender();
+    // Gợi ý 1 lần theo kết quả bài test đầu vào
+    var to = pzTarget(), Z = window.AZQ, k = "azq_pz_offer_" + to;
+    var seen = null; try{ seen = localStorage.getItem(k); }catch(e){}
+    if(to && !seen && !pzTriedToday(to)){
+      setTimeout(function(){
+        try{ localStorage.setItem(k, "1"); }catch(e){}
+        var lv = ""; try{ lv = (JSON.parse(localStorage.getItem("az_vocab_profile") || "null") || {}).level || ""; }catch(e){}
+        var line = "Bài test xếp bạn ở trình độ " + lv + ". Làm bài thi vượt " + PZ_Q + " câu, đúng từ " + PZ_PASS + " câu là Lumina mở thẳng tới " + Z.NAMES[to] + ", khỏi học lại từ dễ!";
+        qmOpen({ kicker:"Thi vượt vùng", title:"Nhảy cóc tới " + Z.NAMES[to] + "?", line:line, html:qtStageHtml(to, "Vùng đích: "),
+          say:line, primary:{ label:"Thi luôn ⚡", fn:function(){ pzOpen(to); } }, secondary:{ label:"Để sau", fn:function(){} } });
+      }, 1600);
+    }
   })();
 
 
@@ -5532,7 +6155,7 @@ button, input, select, textarea{ font-family:inherit; }
   var ARENA_GAMES = [
     { id:"mil",    btn:"modeMil",    emoji:"crown", name:"Ai Là Triệu Phú",       time:"~5 phút", xp:"tới +100 XP",  best:"milBestInline",    why:"15 câu leo thang — ngồi ghế nóng ôn sâu" },
     { id:"mt",     btn:"modeMt",     emoji:"bolt",  name:"Ghép Cặp Thần Tốc",     time:"~1 phút", xp:"+25 XP",       best:"mtBestInline",     why:"Ôn nhanh 6 từ trong 1 phút" },
-    { id:"race",   btn:"modeRace",   emoji:"keys",  name:"Trốn Thoát Zombie",      time:"~3 phút", xp:"thắng +40 XP", best:"raceBestInline",   why:"Gõ nhanh để nhớ mặt chữ" }
+    { id:"race",   btn:"modeRace",   emoji:"keys",  name:"Thoát Khỏi Zombie",      time:"~3 phút", xp:"thắng +40 XP", best:"raceBestInline",   why:"Gõ nhanh để nhớ mặt chữ" }
   ];
   var ARENA_RULES = [
     function(g){ var b = document.getElementById(g.best); return b && b.textContent.trim() === "--" ? { s:3, why:"Bạn chưa thử game này" } : null; },
@@ -5619,7 +6242,8 @@ button, input, select, textarea{ font-family:inherit; }
     rb.dataset.target = reco.game.btn;
     rb.title = reco.why;
     reco.game.time = reco.game.time;
-    rb.innerHTML = '<span class="e q-game-ic gi-' + reco.game.emoji + '">' + QGI[reco.game.emoji] + '</span><span class="t"><span class="k">Gợi ý hôm nay</span><span class="n">' + reco.game.name +
+    var QCOV = { mil:"mil-cover.jpg", mt:"mt-cover.jpg", race:"zb-cover.jpg" };
+    rb.innerHTML = (QCOV[reco.game.id] ? '<img class="e q-reco-art" src="' + QCOV[reco.game.id] + '" alt="">' : '<span class="e q-game-ic gi-' + reco.game.emoji + '">' + QGI[reco.game.emoji] + '</span>') + '<span class="t"><span class="k">Gợi ý hôm nay</span><span class="n">' + reco.game.name +
       '</span><span class="w">' + reco.game.time + ' · ' + reco.game.xp + '</span></span><span class="go" aria-hidden="true">' + ic("play") + '</span>';
     ARENA_GAMES.forEach(function(g){ var b = document.getElementById(g.best); if(b) b.parentNode.hidden = b.textContent.trim() === "--"; });
     ARENA_GAMES.forEach(function(g){ document.getElementById(g.btn).classList.toggle("is-reco", g === reco.game); });
@@ -5857,7 +6481,7 @@ button, input, select, textarea{ font-family:inherit; }
       var b = e.target.closest("button[data-b]"); if(!b || b.disabled) return;
       var list = srsGroups()[b.dataset.b] || [];
       close();
-      if(b.dataset.m === "game"){ window.qGameFocus = list; document.getElementById("modeSprint").click(); }
+      if(b.dataset.m === "game"){ window.qGameFocus = list; zbStart(); }
       else beginSession(shuffle(list.slice()).slice(0, sessionSize), "due");
     });
   })();
@@ -7970,13 +8594,13 @@ button, input, select, textarea{ font-family:inherit; }
   }
 
   // ---------- Boss mở cổng ----------
-  var BOSS_GAMES = ["sprint", "chase", "race"];
+  var BOSS_GAMES = ["mil", "mt", "zb"], BOSS_RULE = { mil:"leo hết thang câu hỏi", mt:"ghép 6 cặp dưới 35 giây", zb:"chạy thoát cả 3 màn" };
   var qmBoss = null, qmBossArm = false;
   function qmStartBoss(){
     var Z = window.AZQ, game = BOSS_GAMES[Z.zi % 3];
     qmBoss = game; qmBossArm = true;
-    qmToast("⚔️ Boss " + Z.NAMES[Z.zi] + ": thắng 20/20 để phá cổng!");
-    document.getElementById(game === "sprint" ? "modeSprint" : game === "chase" ? "modeChase" : "modeRace").click();
+    qmToast("⚔️ Boss " + Z.NAMES[Z.zi] + ": " + BOSS_RULE[game] + " để phá cổng!");
+    qmBossArm = false; if(game === "mil") milStart(); else if(game === "mt") mtStart(); else zbStart();
   }
   ["modeSprint", "modeChase", "modeRace"].forEach(function(id){
     var b = document.getElementById(id);
