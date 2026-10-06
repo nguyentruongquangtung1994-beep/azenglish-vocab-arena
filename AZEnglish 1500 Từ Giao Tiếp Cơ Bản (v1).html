@@ -3653,6 +3653,60 @@ body.gx-lock #motivateToast{ display:none !important; }
 .zb-boxes i.sp.f::after{ background:#E02020; }
 .zb-boxes.nudge{ animation:sxShake .3s ease; }
 @media (max-height: 680px){ .gx-zb .zb-k{ height:35px; } }
+/* ===== v37 · dòng gõ kiểu luyện gõ phím (thay hàng ô chữ) ===== */
+.gx-zb .zb-boxes{ display:none !important; }
+.zb-fc .zb-typing{ font-size:34px !important; line-height:1.15 !important; letter-spacing:.01em; margin:2px 0 4px !important; }
+.zb-fc .zb-typing.l2{ font-size:27px !important; } .zb-fc .zb-typing.l3{ font-size:22px !important; }
+.zb-typing .c{ position:relative; display:inline-block; color:#2b2626; border-radius:5px; padding:0 .5px; transition:color .12s; }
+.zb-typing .c.sp{ width:.42em; }
+.zb-typing .c.ok{ color:#1e9a5a; }
+.zb-typing .c.ok.pn, .zb-typing .c.ok.sp{ color:#1e9a5a; }
+.zb-typing .c.cur{ background:rgba(224,32,32,.1); box-shadow:inset 0 -4px 0 #E02020; animation:zbCaret 1s steps(1) infinite; }
+.zb-typing .c.sp.cur::before{ content:"␣"; position:absolute; left:50%; bottom:.05em; transform:translateX(-50%); font-size:.7em; color:#E02020; }
+@keyframes zbCaret{ 50%{ box-shadow:inset 0 -4px 0 rgba(224,32,32,.25); } }
+.zb-typing .c.bad{ color:#fff !important; background:#E02020 !important; animation:zbBadKey .32s ease; }
+@keyframes zbBadKey{ 20%{ transform:translateX(-4px); } 50%{ transform:translateX(4px); } 80%{ transform:translateX(-2px); } }
+.zb-typing.reveal .c{ color:#E02020 !important; }
+.zb-fc.ok .zb-typing .c{ color:#1e9a5a; }
+@media (prefers-reduced-motion: reduce){ .zb-typing .c.cur, .zb-typing .c.bad{ animation:none; } }
+/* v37b · bố cục thẻ: dòng gõ trọn chiều ngang */
+.zb-typing .wd{ display:inline-block; white-space:nowrap; }
+.zb-typing .c.sp{ display:inline-block; width:.38em; }
+.gx-zb .zb-fc{ grid-template-columns:auto 1fr auto !important; grid-template-rows:auto auto auto auto !important; row-gap:2px; padding:8px 12px 10px !important; }
+.gx-zb .zb-fc .fc-head{ grid-column:1 / -1; grid-row:1; }
+.gx-zb .zb-fc .zb-en{ grid-column:1 / -1 !important; grid-row:2; justify-self:center; text-align:center; margin:4px 0 6px !important; }
+.gx-zb .zb-ftile{ grid-column:1; grid-row:3 / 5 !important; width:46px !important; height:46px !important; }
+.gx-zb .zb-fc .zb-ipa{ grid-column:2; grid-row:3; }
+.gx-zb .zb-fc .zb-vi{ grid-column:2; grid-row:4; }
+.gx-zb .zb-fc .mil-speak{ grid-column:3; grid-row:3 / 5 !important; width:40px !important; height:40px !important; }
+.zb-fc .zb-typing{ font-size:36px !important; } .zb-fc .zb-typing.l2{ font-size:30px !important; } .zb-fc .zb-typing.l3{ font-size:24px !important; }
+@media (max-height: 760px){ .zb-fc .zb-typing{ font-size:30px !important; } .zb-fc .zb-typing.l2{ font-size:25px !important; } .zb-fc .zb-typing.l3{ font-size:21px !important; } .gx-zb .zb-ftile{ width:38px !important; height:38px !important; } }
+/* ===== v38 · hàng ô gõ kiểu "Đoán từ" AZ Live ===== */
+.gx-zb .zb-boxes{ display:flex !important; flex-wrap:nowrap; justify-content:center; gap:6px; margin:2px 0 12px; }
+.gx-zb .zb-boxes i{ flex:1 1 0; max-width:34px; min-width:0; height:46px; display:grid; place-items:end center; padding-bottom:5px; border-radius:0 !important; background:none !important; box-shadow:none !important;
+  border-bottom:4px solid rgba(255,255,255,.35); color:#fff; font:900 26px var(--gx-font); font-style:normal; transform:none !important; animation:none; }
+.gx-zb .zb-boxes i.f{ border-color:#fff; animation:gwPopZ .18s ease; }
+.gx-zb .zb-boxes i.cur{ border-color:#E02020; animation:zbCaretB 1s steps(1) infinite; }
+.gx-zb .zb-boxes i.bad{ color:#ff4d4d; border-color:#ff4d4d; animation:zbBadKey .32s ease; }
+.gx-zb .zb-boxes i.sp{ flex:0 0 14px !important; border:0 !important; }
+.gx-zb .zb-boxes i.sp::after{ display:none; }
+.gx-zb .zb-boxes i.sp.cur{ border-bottom:4px dashed #E02020 !important; }
+.gx-zb .zb-boxes i.pn{ flex:0 0 14px !important; border:0 !important; color:rgba(255,255,255,.7); }
+.gx-zb .zb-boxes.reveal i{ color:#E02020; border-color:#E02020; }
+@keyframes gwPopZ{ 50%{ transform:translateY(-4px) scale(1.12) !important; } }
+@keyframes zbCaretB{ 50%{ border-color:rgba(224,32,32,.25); } }
+.gx-light .gx-zb .zb-boxes i, .gx-zb.gx-light .zb-boxes i{ color:#111; border-bottom-color:#cdbfbb; }
+.gx-zb.gx-light .zb-boxes i.f{ border-color:#111; }
+.gx-zb.gx-light .zb-boxes i.cur{ border-color:#E02020; }
+.gx-zb.gx-light .zb-boxes i.bad{ color:#E02020; border-color:#E02020; }
+.gx-zb.gx-light .zb-boxes i.pn{ color:#555; }
+/* thẻ: chỉ để nhìn chép — bỏ con trỏ trên thẻ */
+.zb-typing .c.cur{ background:none !important; box-shadow:none !important; animation:none !important; }
+.zb-typing .c.sp.cur::before{ display:none; }
+@media (max-height: 760px){ .gx-zb .zb-boxes i{ height:38px; font-size:22px; } .gx-zb .zb-boxes{ margin-bottom:8px; } }
+@media (max-height: 680px){ .gx-zb .zb-boxes i{ height:32px; font-size:19px; } }
+@media (max-height: 680px){ .gx-zb .zb-stage{ height:100px; } .gx-zb .zb-z{ height:90px; } .gx-zb .zb-p{ height:76px; } .gx-zb .zb-k{ height:33px; } .gx-zb .zb-life .ll-ic{ width:30px !important; height:30px !important; } }
+@media (max-height: 680px){ .gx-zb .gx-in{ padding-bottom:6px !important; padding-top:8px !important; } .gx-zb .zb-stage{ height:104px !important; } .gx-zb .zb-z{ height:92px !important; } .gx-zb .zb-p{ height:78px !important; } }
 
 /* ===== v33 · sửa sau buổi chơi thử ===== */
 .letterbox-row{ --bw:clamp(17px, calc((min(100vw, 640px) - 70px) / var(--n, 8) - 5px), 42px) !important; gap:5px !important; flex-wrap:nowrap !important; }
@@ -5739,7 +5793,8 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function zbCard(){
     var w = zbCur(); zb.typed = ""; zb.miss = 0;
     zbEl("zbPic").innerHTML = fe(w.e || TOPIC_EMOJI[w.t] || "✳️", "mil-pic");
-    zbEl("zbEn").textContent = w.w; zbEl("zbEn").className = "zb-en" + (w.w.length > 14 ? " l3" : w.w.length > 10 ? " l2" : "");
+    zbEl("zbEn").innerHTML = w.w.split(" ").map(function(part){ return '<span class="wd">' + part.split("").map(function(ch){ return '<span class="c' + (/[-']/.test(ch) ? " pn" : "") + '">' + qmEsc(ch) + "</span>"; }).join("") + "</span>"; }).join('<span class="c sp"> </span>');
+    zbEl("zbEn").className = "zb-en zb-typing" + (w.w.length > 15 ? " l3" : w.w.length > 11 ? " l2" : "");
     zbEl("zbIpa").textContent = w.ipa ? "/" + w.ipa + "/" : "";
     var pos = w.p ? ({ n:"danh từ", v:"động từ", adj:"tính từ", adv:"trạng từ", phr:"cụm từ", int:"thán từ", prep:"giới từ", pron:"đại từ" }[w.p] || w.p) : "";
     zbEl("zbVi").innerHTML = (pos ? "<em>" + pos + "</em> " : "") + qmEsc(w.m.charAt(0).toUpperCase() + w.m.slice(1));
@@ -5751,29 +5806,51 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     zbPaint();
   }
   function zbPaint(){
-    var w = zbCur().w, bx = zbEl("zbBoxes").children;
-    for(var k = 0; k < bx.length; k++){
-      if(w[k] === " "){ bx[k].classList.toggle("f", zb.typed.length > k); bx[k].classList.toggle("cur", k === zb.typed.length); continue; }
-      if(/[\-']/.test(w[k])) continue;
-      var ch = zb.typed[k] || ""; bx[k].textContent = ch.toUpperCase(); bx[k].classList.toggle("f", !!ch); bx[k].classList.toggle("cur", k === zb.typed.length);
+    var n = zb.typed.length, cs = zbEl("zbEn").querySelectorAll(".c"), bx = zbEl("zbBoxes").children, w = zbCur().w;
+    for(var k = 0; k < cs.length; k++) cs[k].classList.toggle("ok", k < n);
+    for(var i = 0; i < bx.length; i++){
+      if(w[i] === " "){ bx[i].classList.toggle("cur", i === n); continue; }
+      if(/[\-']/.test(w[i])) continue;
+      var ch = zb.typed[i] || ""; bx[i].textContent = ch.toUpperCase(); bx[i].className = (ch ? "f" : "") + (i === n ? " cur" : "");
     }
   }
+  // Gõ sai: chữ sai hiện đỏ ở ô đang gõ rồi tự xoá để gõ lại (giống Đoán từ của AZ Live)
+  function zbBadClear(){ clearTimeout(zb.badT); if(zb.badI != null){ var b = zbEl("zbBoxes").children[zb.badI]; if(b){ b.classList.remove("bad"); } zb.badI = null; zbPaint(); } }
+  function zbBad(k){
+    zbBadClear();
+    var i = zb.typed.length, b = zbEl("zbBoxes").children[i];
+    if(b){ b.textContent = String(k).toUpperCase(); b.className = "bad"; zb.badI = i; }
+    playTone(180, .07, "square");
+    var zo = zb; zb.badT = setTimeout(function(){ if(zb === zo) zbBadClear(); }, 450);
+  }
   function zbKey(k){
-    if(!zb || !zb.run || zb.lock) return;
-    var w = zbCur().w;
-    if(k === "back"){ zb.typed = zb.typed.replace(/[ \-']*.$/, ""); playKeyClick(true); zbPaint(); return; }
-    if(!/^[a-z' -]$/.test(k) || zb.typed.length >= w.length) return;
-    if(/['-]/.test(k) && zb.typed.length && zb.typed[zb.typed.length - 1] === k) return;   // dấu đã tự điền — bỏ qua phím trùng
-    if(k === " "){                                    // dấu cách người chơi tự bấm; bấm sai chỗ thì bỏ qua
-      if(w[zb.typed.length] !== " "){ if(zb.typed.length && zb.typed[zb.typed.length - 1] !== " "){ var bxs = zbEl("zbBoxes"); bxs.classList.remove("nudge"); void bxs.offsetWidth; bxs.classList.add("nudge"); } return; }
-      zb.typed += " "; playKeyClick(false); zbPaint(); return;
+    if(!zb || !zb.run) return;
+    if(zb.lock){ if(k !== "back") (zb.q = zb.q || []).push(k); return; }     // đang chuyển từ: giữ phím lại, không nuốt
+    zbBadClear();
+    var w = zbCur().w, n = zb.typed.length;
+    if(k === "back"){ zb.typed = zb.typed.replace(/[\-']*.$/, ""); playKeyClick(true); zbPaint(); return; }
+    if(!/^[a-z' -]$/.test(k) || n >= w.length) return;
+    var exp = w[n].toLowerCase();
+    if(k === exp){ zb.typed += w[n]; }
+    else if(exp === " " && n + 1 < w.length && k === w[n + 1].toLowerCase()){ zb.typed += " " + w[n + 1]; }   // quên dấu cách: tự thêm
+    else if(/['-]/.test(exp) && n + 1 < w.length && k === w[n + 1].toLowerCase()){ zb.typed += w[n] + w[n + 1]; }
+    else if(k === " " || /['-]/.test(k)){ return; }                       // dấu sai chỗ: bỏ qua, không phạt
+    else {                                                                 // gõ sai chữ
+      zb.combo = 0; zb.miss++; zb.dist = Math.max(0.02, zb.dist - .035); zbBad(k); zbHud();
+      if(zb.miss === 3) zbSay(qmPick(ZB_SAY.bad));
+      if(zb.miss >= 6){ zbReveal(); }
+      return;
     }
-    while(zb.typed.length < w.length && /[ \-']/.test(w[zb.typed.length]) && w[zb.typed.length] !== k) zb.typed += w[zb.typed.length];
-    if(zb.typed.length >= w.length) return;
-    zb.typed += k; playKeyClick(false);
-    while(zb.typed.length < w.length && /[\-']/.test(w[zb.typed.length])) zb.typed += w[zb.typed.length];   // ' và - tự điền, dấu cách để người chơi bấm
+    playKeyClick(false);
+    while(zb.typed.length < w.length && /[\-']/.test(w[zb.typed.length])) zb.typed += w[zb.typed.length];
     zbPaint();
-    if(zb.typed.length >= w.length) setTimeout(zbCheck, 120);
+    if(zb.typed.length >= w.length) zbCheck();
+  }
+  function zbReveal(){
+    zbBadClear(); var w = zbCur(); zb.lock = true; zb.typed = w.w; zbPaint(); zbEl("zbEn").classList.add("reveal"); zbEl("zbBoxes").classList.add("reveal");
+    zbSay("Đáp án là “" + w.w + "” — nhìn kỹ mặt chữ nha!"); speak(w.w);
+    zb.done.push({ w:w, ok:false });
+    var zr = zb; setTimeout(function(){ zbEl("zbEn").classList.remove("reveal"); zbEl("zbBoxes").classList.remove("reveal"); if(zb === zr) zbNext(); }, 1300);
   }
   function zbCheck(){
     var w = zbCur(), card = zbEl("zbCard");
@@ -5782,10 +5859,10 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
       zb.dist = Math.min(1, zb.dist + .2 + Math.min(zb.combo, 5) * .03);
       card.classList.add("ok"); gxBurst(card); playTone(660 + Math.min(zb.combo, 6) * 80, .09); playTone(990 + Math.min(zb.combo, 6) * 80, .12, "triangle", .07);
       zbEl("zbStage").classList.remove("push"); void zbEl("zbStage").offsetWidth; zbEl("zbStage").classList.add("push");
-      zb.done.push({ w:w, ok:!zb.miss }); if(!zb.miss){ gdClear("zb", w); } try{ qMarkSeen([w]); }catch(e){}
+      zb.done.push({ w:w, ok:zb.miss < 2 }); if(zb.miss < 2){ gdClear("zb", w); } try{ qMarkSeen([w]); }catch(e){}
       zbSay(zb.combo >= 3 && zb.combo % 3 === 0 ? qmPick(ZB_SAY.combo) : qmPick(ZB_SAY.ok));
       setTimeout(function(){ speak(w.w, "happy"); }, 80);
-      var zc = zb; setTimeout(function(){ if(zb === zc) zbNext(); }, 620);
+      var zc = zb; setTimeout(function(){ if(zb === zc) zbNext(); }, 320);
     }else{
       zb.combo = 0; zb.miss++; zb.dist = Math.max(0.02, zb.dist - .12);
       card.classList.remove("bad"); void card.offsetWidth; card.classList.add("bad"); chimeWrong();
@@ -5803,6 +5880,8 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(zb.i >= zb.words.length){ if(zb.endless){ zb.words = zb.words.concat(shuffle(zb.words.slice(0, 50))); } else { zbEnd(true); return; } }
     var newRound = zb.i % ZB_PER === 0;
     zbCard(); zbHud();
+    var q = zb.q || []; zb.q = [];
+    if(!newRound) q.forEach(function(k){ zbKey(k); });
     if(newRound){ zb.dist = Math.max(zb.dist, .6); zbSay(ZB_SAY.round[zbRound() - 1] || "Màn mới!"); zbCount("MÀN " + (zbRound() + 1), function(){ speak(zbCur().w); }); zbEl("zbStage").dataset.r = zbRound(); }
     else speak(zbCur().w);
   }
