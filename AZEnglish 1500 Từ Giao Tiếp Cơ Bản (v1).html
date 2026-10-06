@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@500;600;700;800;900&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Inter:wght@500;600;700;800;900&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Baloo+2:wght@600;700;800&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
     --paper:#fcfbfa;
@@ -1398,7 +1398,6 @@ body.qv-lock{ overflow:hidden; }
 .qv-close{ position:fixed; top:14px; right:14px; z-index:330; width:42px !important; max-width:none !important; height:42px; border-radius:50%; border:0; background:#fff; color:var(--red); font:900 16px var(--sx-font); cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35); }
 @media (prefers-reduced-motion: reduce){ .nag, .nag-ava, .qv-s-ava, .qm-zones-sec.qv-open, .qm-zones-sec.qv-open .qm-zones{ animation:none !important; } }
 #qmPsgHome, #modePsg, .qm-psgbtn{ display:none !important; }
-.qm-dev-btn, .qm-dev{ display:none !important; }   /* công cụ thử nghiệm chỉ dùng ở bản mock */
 
 /* ===== Thẻ bật nhắc học + bảng chọn giờ ===== */
 .rmd-card{ width:100%; display:flex; align-items:center; gap:10px; margin:0 0 14px; padding:10px 12px; border-radius:18px; border:1.5px dashed #f3b8bf; background:var(--paper); cursor:pointer; text-align:left; font-family:var(--sx-font); color:var(--ink); }
@@ -1467,6 +1466,516 @@ body.qv-lock{ overflow:hidden; }
 .rmd-stat{ margin:4px 0 8px; padding:9px 12px; border-radius:12px; font:700 12.5px/1.45 var(--sx-font); background:var(--paper-2); }
 .rmd-stat.ok{ background:#e7f7ee; color:#146b3e; } .rmd-stat.warn{ background:#fff7df; color:#5a3a00; } .rmd-stat.bad{ background:#fdeaea; color:#8f0a1c; }
 .rmd-test{ width:100%; margin:0 0 6px; padding:10px; border-radius:12px; border:1.5px dashed var(--line); background:var(--paper); color:var(--ink); font:800 13.5px var(--sx-font); cursor:pointer; }
+
+/* ===================== 2 GAME MỚI: TRIỆU PHÚ + GHÉP CẶP ===================== */
+.q-game-new{ position:relative; }
+.q-game-art{ display:block; width:84px; height:84px; flex:none; object-fit:cover; border-radius:14px; box-shadow:0 0 0 2px #E02020, 0 6px 18px rgba(224,32,32,.35); transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+.q-game:hover .q-game-art{ transform:translateY(-3px) scale(1.04); }
+.race-cover{ display:block; width:100%; max-width:200px; aspect-ratio:1; object-fit:cover; margin:4px auto 12px; border-radius:16px; box-shadow:0 0 0 2px #E02020; }
+@media (prefers-reduced-motion: reduce){ .q-game-art{ transition:none; } }
+.q-game-new::after{ content:"MỚI"; position:absolute; top:8px; right:8px; padding:2px 7px; border-radius:99px; background:#E02020; color:#fff; font:900 9.5px/1.4 "Inter",sans-serif; letter-spacing:.06em; }
+.gi-crown .gi path, .gi-bolt .gi rect, .gi-bolt .gi path{ fill:none; stroke:currentColor; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+.gi-crown .gi .spk{ fill:currentColor; stroke:none; }
+body.gx-lock{ overflow:hidden; }
+.gx{ --gx-font:"Nunito","Be Vietnam Pro",Arial,sans-serif; --gold:#f5c542; --red:#E02020; position:fixed; inset:0; z-index:420; overflow-y:auto; font-family:var(--gx-font); color:#fff;
+  background:radial-gradient(120% 70% at 50% -10%, #3a1214 0%, #160c0d 45%, #070505 100%); animation:gxIn .3s ease both; }
+.gx[hidden]{ display:none; }
+@keyframes gxIn{ from{ opacity:0; } to{ opacity:1; } }
+.gx::before{ content:""; position:fixed; inset:0; pointer-events:none; background:repeating-conic-gradient(from 0deg at 50% -20%, rgba(224,32,32,.07) 0 6deg, transparent 6deg 18deg); animation:gxSpin 60s linear infinite; }
+@keyframes gxSpin{ to{ transform:rotate(360deg); } }
+.gx-in{ position:relative; max-width:520px; margin:0 auto; padding:14px 16px 28px; }
+.gx-top{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.gx-x{ flex:none; width:40px; height:40px; border-radius:50%; border:0; background:rgba(255,255,255,.1); color:#fff; font:800 15px var(--gx-font); cursor:pointer; }
+.gx-x:hover{ background:var(--red); }
+.gx-deck{ display:block; text-align:center; margin:12px 0 0; font:600 12px var(--gx-font); color:rgba(255,255,255,.65); }
+.gx-deck b{ color:var(--gold); }
+.gx-btns{ display:flex; gap:10px; margin-top:16px; }
+.gx-btn{ flex:1; border:0; border-radius:14px; padding:14px; background:var(--red); color:#fff; font:800 15px var(--gx-font); cursor:pointer; box-shadow:0 5px 0 #8f0a1c; }
+.gx-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #8f0a1c; }
+.gx-btn.ghost{ background:rgba(255,255,255,.1); box-shadow:0 5px 0 rgba(0,0,0,.4); }
+.gx-end{ text-align:center; padding:18px 4px; animation:qvRise .5s cubic-bezier(.22,1.2,.36,1) both; }
+.gx-end h3{ margin:4px 0 6px; font:800 20px var(--gx-font); }
+.gx-end h3 b{ font-size:44px; font-weight:900; letter-spacing:-.03em; background:linear-gradient(180deg,#fff3c4,var(--gold) 60%,#c98410); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.gx-end h3 em{ display:inline-block; vertical-align:middle; margin-left:6px; padding:3px 9px; border-radius:99px; background:var(--red); color:#fff; font:800 12px var(--gx-font); font-style:normal; animation:khPop .6s ease infinite alternate; }
+.mil-sum{ margin:4px 0; font:500 13.5px/1.5 var(--gx-font); color:rgba(255,255,255,.8); }
+.mil-sum b{ color:#fff; }
+.mil-quote{ margin:12px auto 6px; max-width:360px; padding:12px 14px; border-radius:16px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); font:600 14px/1.5 var(--gx-font); }
+.mil-deck2{ font:600 12px var(--gx-font); color:rgba(255,255,255,.65); } .mil-deck2 b{ color:var(--gold); }
+/* --- Triệu Phú --- */
+.mil-logo{ flex:1; text-align:center; line-height:1; }
+.mil-logo small{ display:block; font:800 10px var(--gx-font); letter-spacing:.3em; color:var(--gold); }
+.mil-logo b{ display:block; font:900 22px var(--gx-font); letter-spacing:.06em; background:linear-gradient(180deg,#fff7d6,var(--gold) 55%,#b9770e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.mil-logo em{ display:block; margin-top:3px; font:600 10px var(--gx-font); font-style:normal; color:rgba(255,255,255,.55); letter-spacing:.08em; }
+.mil-life{ flex:none; display:flex; gap:5px; }
+.mil-life button{ width:40px; height:30px; border-radius:99px; border:1.5px solid var(--gold); background:rgba(245,197,66,.12); color:var(--gold); font:800 11px var(--gx-font); cursor:pointer; }
+.mil-life button.used{ opacity:.25; text-decoration:line-through; }
+.mil-ladder{ list-style:none; display:flex; gap:6px; overflow-x:auto; margin:0 -16px 10px; padding:4px 16px 8px; scrollbar-width:none; flex-direction:row-reverse; justify-content:flex-end; }
+.mil-ladder::-webkit-scrollbar{ display:none; }
+.mil-ladder li{ flex:none; display:flex; flex-direction:column; align-items:center; min-width:58px; padding:5px 6px; border-radius:10px; background:rgba(255,255,255,.06); font:700 10px var(--gx-font); color:rgba(255,255,255,.5); }
+.mil-ladder li b{ font:800 11.5px var(--gx-font); color:rgba(255,255,255,.75); }
+.mil-ladder li.safe{ box-shadow:inset 0 0 0 1.5px var(--gold); }
+.mil-ladder li.safe b{ color:var(--gold); }
+.mil-ladder li.done{ background:rgba(38,137,12,.3); }
+.mil-ladder li.cur{ background:linear-gradient(180deg,#ffd76a,#f0a81c); color:#3a2400; transform:scale(1.08); box-shadow:0 0 16px rgba(245,197,66,.6); }
+.mil-ladder li.cur b{ color:#3a2400; }
+.mil-bar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; font:600 13px var(--gx-font); color:rgba(255,255,255,.75); }
+.mil-bar b{ color:#fff; }
+.mil-pts{ font:900 20px var(--gx-font); color:var(--gold) !important; }
+.mil-time{ position:relative; width:42px; height:42px; display:grid; place-items:center; }
+.mil-time svg{ position:absolute; inset:0; transform:rotate(-90deg); }
+.mil-time .tb{ fill:none; stroke:rgba(255,255,255,.15); stroke-width:3.5; }
+.mil-time .tf{ fill:none; stroke:var(--gold); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:94.25; transition:stroke-dashoffset .1s linear; }
+.mil-time b{ position:relative; font:900 15px var(--gx-font); }
+.mil-time.low .tf{ stroke:var(--red); } .mil-time.low{ animation:sxBeat .5s ease-in-out infinite; }
+.mil-mc{ display:flex; align-items:flex-start; gap:8px; margin-bottom:10px; min-height:40px; }
+.mil-mc img{ flex:none; width:38px; height:38px; max-width:none !important; object-fit:contain; }
+.mil-mc p, .mt-say span{ margin:0; padding:8px 12px; border-radius:14px 14px 14px 4px; background:rgba(255,255,255,.08); font:600 13px/1.45 var(--gx-font); }
+#milSay.pop{ animation:sxBubble .4s cubic-bezier(.3,1.6,.5,1); transform-origin:0 50%; }
+.mil-card{ position:relative; margin:0 6px 14px; padding:18px 18px 16px; text-align:center; color:#fff;
+  background:linear-gradient(180deg,#24120f,#120808); border:2px solid var(--gold); border-radius:22px; box-shadow:0 0 0 4px rgba(245,197,66,.12), 0 12px 30px -10px rgba(0,0,0,.8); }
+.mil-card::before, .mil-card::after{ content:""; position:absolute; top:50%; width:22px; height:2px; background:var(--gold); }
+.mil-card::before{ left:-24px; } .mil-card::after{ right:-24px; }
+.mil-card.in{ animation:qvRise .45s cubic-bezier(.22,1.2,.36,1) both; }
+.mil-card small{ display:block; margin-bottom:6px; font:800 10.5px var(--gx-font); letter-spacing:.14em; text-transform:uppercase; color:var(--gold); }
+.mil-card p{ margin:0; font:700 clamp(17px, 4.6vw, 20px)/1.4 var(--gx-font); }
+.mil-w{ display:block; font:900 clamp(28px, 8vw, 38px)/1.1 var(--gx-font); letter-spacing:-.02em; }
+.mil-blank{ display:inline-block; min-width:70px; color:transparent; border-bottom:3px solid var(--gold); animation:sxBlank 1.4s ease-in-out infinite; }
+.mil-ear{ font-size:40px; }
+.mil-speak{ position:absolute; right:10px; top:10px; width:34px; height:34px; border-radius:50%; border:0; background:rgba(245,197,66,.18); color:var(--gold); font-size:15px; cursor:pointer; }
+.mil-speak[hidden]{ display:none; }
+.mil-ans{ display:grid; grid-template-columns:1fr; gap:9px; }
+@media (min-width:460px){ .mil-ans{ grid-template-columns:1fr 1fr; } }
+.mil-a{ position:relative; display:flex; align-items:center; gap:10px; min-height:54px; padding:10px 16px; border:2px solid rgba(245,197,66,.55); border-radius:999px; cursor:pointer; text-align:left; color:#fff;
+  background:linear-gradient(180deg,#22100e,#140909); font:700 15px/1.3 var(--gx-font); transition:transform .1s, background .2s, border-color .2s; animation:sprintOptIn .3s ease both; }
+.mil-a:nth-child(2){ animation-delay:.06s; } .mil-a:nth-child(3){ animation-delay:.12s; } .mil-a:nth-child(4){ animation-delay:.18s; }
+.mil-a i{ flex:none; font:900 15px var(--gx-font); font-style:normal; color:var(--gold); }
+.mil-a:hover:not(:disabled){ border-color:var(--gold); transform:translateY(-1px); }
+.mil-a.sel{ background:linear-gradient(180deg,#ff9a2a,#e06a00); border-color:#ffd08a; }
+.mil-a.sel i{ color:#fff; }
+.mil-a.lock{ animation:milLock .45s ease-in-out infinite alternate; }
+@keyframes milLock{ from{ box-shadow:0 0 0 0 rgba(255,154,42,.6); } to{ box-shadow:0 0 0 8px rgba(255,154,42,0); } }
+.mil-a.ok{ background:linear-gradient(180deg,#3ccf6e,#1f9a49) !important; border-color:#b8ffcf !important; animation:milOk .5s ease 3; }
+@keyframes milOk{ 50%{ filter:brightness(1.35); } }
+.mil-a.ok i{ color:#fff; }
+.mil-a.no{ background:linear-gradient(180deg,#e0353b,#9a0d14) !important; border-color:#ffb3b3 !important; animation:sxShake .4s ease; }
+.mil-a.gone{ opacity:.12 !important; animation:none !important; pointer-events:none; filter:grayscale(1); }
+.mil-help{ margin:0 0 12px; padding:10px 12px; border-radius:14px; background:rgba(255,255,255,.06); font:700 12.5px var(--gx-font); }
+.mil-bars{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; height:90px; margin-top:8px; align-items:end; }
+.mil-bars span{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:3px; }
+.mil-bars i{ width:70%; border-radius:6px 6px 0 0; background:linear-gradient(180deg,var(--gold),#c98410); animation:milBar .7s ease both; transform-origin:bottom; }
+@keyframes milBar{ from{ transform:scaleY(0); } }
+.mil-bars em{ font:800 11px var(--gx-font); font-style:normal; } .mil-bars small{ font:900 12px var(--gx-font); color:var(--gold); }
+.mil-foot{ margin-top:14px; text-align:center; }
+.mil-stop{ border:1.5px solid rgba(255,255,255,.25); background:transparent; color:#fff; border-radius:99px; padding:9px 16px; font:700 13px var(--gx-font); cursor:pointer; }
+.mil-stop b{ color:var(--gold); }
+.mil-trophy{ font-size:64px; animation:khPop .8s ease infinite alternate; }
+.mil-k{ margin:6px 0 0; font:800 12px var(--gx-font); letter-spacing:.16em; text-transform:uppercase; color:var(--gold); }
+/* --- Ghép Cặp Thần Tốc --- */
+.mt-logo{ flex:1; text-align:center; line-height:1.05; }
+.mt-logo b{ display:block; font:900 21px var(--gx-font); letter-spacing:.04em; }
+.mt-logo em{ display:block; font:900 14px var(--gx-font); font-style:normal; letter-spacing:.2em; color:var(--red); }
+.mt-best{ flex:none; padding:7px 11px; border-radius:99px; background:rgba(255,255,255,.1); font:800 12.5px var(--gx-font); }
+.mt-best b{ color:var(--gold); }
+.mt-hud{ display:flex; align-items:baseline; justify-content:center; gap:12px; margin:4px 0 8px; }
+.mt-time{ font:900 44px/1 var(--gx-font); letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+.mt-time span{ font-variant-numeric:tabular-nums; }
+.mt-combo{ font:900 15px var(--gx-font); color:var(--gold); min-height:20px; }
+.mt-combo.pop{ animation:khPop .4s ease; }
+.mt-say{ display:flex; align-items:center; gap:8px; margin:0 0 12px; }
+.mt-say img{ flex:none; width:32px; height:32px; max-width:none !important; object-fit:contain; }
+.mt-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+.mt-c{ position:relative; min-height:82px; padding:10px 8px; border-radius:16px; border:0; cursor:pointer; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  background:#fff; color:#111; font:600 13.5px/1.25 var(--gx-font); box-shadow:0 5px 0 #c9c2c2; transition:transform .12s, box-shadow .12s, opacity .3s; animation:sprintOptIn .35s ease both; }
+.mt-c.en{ background:linear-gradient(180deg,#fff,#fff1f1); font-weight:800; font-size:14.5px; }
+.mt-c.en em{ position:absolute; top:6px; left:8px; font:900 8.5px var(--gx-font); font-style:normal; letter-spacing:.1em; color:var(--red); }
+.mt-c:disabled{ cursor:default; }
+.mt-c.sel{ transform:translateY(-4px); box-shadow:0 0 0 3px var(--red), 0 9px 0 #8f0a1c; }
+.mt-c.ok{ background:#26b85a !important; color:#fff; box-shadow:0 0 0 3px #b8ffcf, 0 5px 0 #146b3e; animation:khPop .35s ease; }
+.mt-c.ok em{ color:#fff; }
+.mt-c.gone{ opacity:0; transform:scale(.6); pointer-events:none; transition:opacity .3s, transform .3s; }
+.mt-c.bad{ background:#ffe1e1 !important; box-shadow:0 0 0 3px var(--red), 0 5px 0 #8f0a1c; animation:sxShake .4s ease; }
+.mt-count{ position:fixed; inset:0; z-index:5; display:grid; place-items:center; font:900 96px var(--gx-font); color:#fff; background:rgba(7,5,5,.55); text-shadow:0 0 30px rgba(224,32,32,.8); }
+.mt-count.pop{ animation:khPop .5s ease; }
+.mt-count[hidden]{ display:none; }
+.mt-stars{ font-size:46px; letter-spacing:6px; }
+.mt-stars i{ font-style:normal; color:rgba(255,255,255,.18); display:inline-block; }
+.mt-stars i.on{ color:var(--gold); text-shadow:0 0 18px rgba(245,197,66,.7); animation:mtStar .5s cubic-bezier(.3,1.7,.5,1) both; animation-delay:var(--d); }
+@keyframes mtStar{ from{ transform:scale(0) rotate(-40deg); } to{ transform:none; } }
+.mt-done{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:12px 0 4px; }
+.mt-done span{ padding:5px 10px; border-radius:10px; background:rgba(255,255,255,.08); font:500 12px var(--gx-font); }
+.mt-done b{ margin-right:5px; color:#fff; }
+@media (prefers-reduced-motion: reduce){ .gx::before, .gx, .mil-a, .mil-a.lock, .mil-a.ok, .mt-c, .mil-trophy, .gx-end h3 em, .mt-stars i.on{ animation:none !important; } }
+
+/* ===== Emoji 3D, thẻ lật, pháo hoa ===== */
+img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !important; vertical-align:-.25em; object-fit:contain; }
+.fe-txt{ display:inline-block; }
+.fe-i{ width:1.15em !important; height:1.15em !important; vertical-align:-.22em; }
+.study-visual img.fe.wv, .study-visual .fe-txt{ width:62%; height:62%; vertical-align:middle; filter:drop-shadow(0 6px 8px rgba(0,0,0,.18)); }
+.study-visual img.fe.wv{ animation:feBob 3s ease-in-out infinite; }
+@keyframes feBob{ 50%{ transform:translateY(-4px) rotate(-3deg); } }
+.gx-fw{ position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:460; }
+.gx-spark{ position:fixed; z-index:470; width:7px; height:7px; border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); animation:gxSpark .65s cubic-bezier(.2,.8,.3,1) forwards; }
+@keyframes gxSpark{ to{ transform:translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.2); opacity:0; } }
+/* Ghép cặp: thẻ lật 3D */
+.gx-mt .mt-c{ background:transparent !important; box-shadow:none !important; padding:0 !important; perspective:700px; min-height:96px; animation:none !important; }
+.mt-in{ position:relative; display:block; width:100%; height:100%; min-height:96px; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.3,1.3,.5,1); transition-delay:var(--d, 0s); }
+.mt-grid.up .mt-in{ transform:rotateY(180deg); }
+.mt-back, .mt-face{ position:absolute; inset:0; border-radius:16px; backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:8px 6px; }
+.mt-back{ background:radial-gradient(circle at 30% 25%, #ff5a5a, #E02020 45%, #8f0a1c); box-shadow:0 5px 0 #5c0610, inset 0 0 0 3px rgba(255,255,255,.25); }
+.mt-back b{ font:900 22px "Be Vietnam Pro",sans-serif; color:#fff; letter-spacing:.04em; text-shadow:0 2px 0 rgba(0,0,0,.25); }
+.mt-back::before{ content:""; position:absolute; inset:7px; border-radius:11px; border:1.5px dashed rgba(255,255,255,.35); }
+.mt-face{ transform:rotateY(180deg); background:#fff; color:#111; box-shadow:0 5px 0 #c9c2c2; transition:background .2s, box-shadow .2s; }
+.mt-c.en .mt-face{ background:linear-gradient(180deg,#fff,#fff1f1); }
+.mt-face em{ position:absolute; top:6px; left:8px; font:900 8.5px "Be Vietnam Pro",sans-serif; font-style:normal; letter-spacing:.1em; color:#E02020; }
+.mt-pic{ width:34px !important; height:34px !important; animation:feBob 2.6s ease-in-out infinite; filter:drop-shadow(0 4px 4px rgba(0,0,0,.15)); }
+.mt-t{ font:600 13.5px/1.25 var(--gx-font); }
+.mt-c.en .mt-t{ font-weight:800; font-size:14px; }
+.mt-c.sel .mt-face{ box-shadow:0 0 0 3px #E02020, 0 9px 0 #8f0a1c; transform:rotateY(180deg) translateY(-4px); }
+.mt-c.ok .mt-face{ background:#26b85a !important; color:#fff; box-shadow:0 0 0 3px #b8ffcf, 0 5px 0 #146b3e; }
+.mt-c.ok em{ color:#fff; }
+.mt-c.bad .mt-face{ background:#ffe1e1 !important; box-shadow:0 0 0 3px #E02020, 0 5px 0 #8f0a1c; }
+.mt-c.bad .mt-in{ animation:sxShake .4s ease; }
+.mt-c.gone{ opacity:0 !important; transform:scale(.5) !important; transition:opacity .35s, transform .35s !important; }
+.mt-stars i{ display:inline-block; margin:0 4px; filter:grayscale(1) opacity(.25); }
+.mt-stars i.on{ filter:drop-shadow(0 0 14px rgba(245,197,66,.7)); }
+.mt-stars img.fe{ width:56px; height:56px; }
+.mt-best img.fe{ width:18px; height:18px; }
+/* Triệu Phú: hình 3D trong câu hỏi */
+.mil-pic{ display:block !important; width:56px !important; height:56px !important; margin:0 auto 6px; animation:feBob 2.8s ease-in-out infinite; filter:drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+.mil-pic.big{ width:76px !important; height:76px !important; }
+.mil-vn{ display:block; font:800 clamp(19px, 5vw, 23px)/1.35 var(--gx-font); }
+.mil-trophy img.fe{ width:84px; height:84px; }
+@media (prefers-reduced-motion: reduce){ .study-visual img.fe.wv, .mt-pic, .mil-pic{ animation:none !important; } .mt-in{ transition:none; } }
+
+/* ===== Vòng 10: hình to hơn, viết hoa chữ đầu, căn giữa, sáng/tối ===== */
+.gx-mt .mt-c, .mt-in{ min-height:112px !important; }
+.mt-pic{ width:50px !important; height:50px !important; }
+.mt-t{ font:700 14px/1.25 var(--gx-font) !important; }
+.mt-c.en .mt-t{ font-weight:900 !important; font-size:15px !important; }
+.mt-c.vi .mt-t, .mil-a span.vi, .mil-vn, .mt-done span{ display:block; }
+.mt-c.vi .mt-t::first-letter, .mil-a span.vi::first-letter, .mil-vn::first-letter, #studyMeaning::first-letter, #fbMeaning::first-letter,
+#recallPhase .alt-opt .tx::first-letter, #recallPhase .alt-vn::first-letter, .sprint-opt-text::first-letter{ text-transform:uppercase; }
+#recallPhase .alt-opt .tx, .sprint-opt-text{ display:block; }
+.mil-a{ font-weight:800 !important; }
+.mil-card p{ font-weight:800 !important; }
+.mt-count{ font-size:72px !important; }
+/* căn giữa mọi biểu tượng trong vòng tròn */
+.gx-x, .gx-theme, .mil-speak, .mil-time, .mil-life button, .alt-say, #studyAudioBtn, .sx-ib, .sx-ring, .sx-ico, .rmd-bell, .study-visual, .q-srs-ic, .qv-close, .sprint-opt-letter{
+  display:grid !important; place-items:center !important; padding:0 !important; line-height:1 !important; text-align:center; }
+.study-visual img.fe, .sx-ico img.fe, .alt-say img.fe, .mil-life img.fe{ display:block !important; margin:0 auto !important; vertical-align:0 !important; }
+.study-visual > *{ grid-area:1 / 1; }
+.mil-speak[hidden], .gx-theme[hidden], .alt-say[hidden], .sx-ib[hidden]{ display:none !important; }
+.mil-logo b{ font-size:19px !important; white-space:nowrap; } .mil-logo em{ white-space:nowrap; } .mil-logo{ min-width:0; }
+@media (max-width:420px){ .mil-logo em{ display:none !important; } .mil-life button{ width:36px !important; } .gx-top{ gap:6px !important; } }
+.gx-theme{ flex:none; width:40px; height:40px; border-radius:50%; border:0; background:rgba(255,255,255,.1); color:#fff; font:800 16px var(--gx-font); cursor:pointer; }
+.mil-speak{ color:var(--gold); }
+/* ---- chế độ sáng cho 2 game ---- */
+.gx.gx-light{ color:#1a1210; background:radial-gradient(120% 70% at 50% -10%, #ffdede 0%, #fff4f1 45%, #fffaf8 100%); }
+.gx.gx-light::before{ background:repeating-conic-gradient(from 0deg at 50% -20%, rgba(224,32,32,.05) 0 6deg, transparent 6deg 18deg); }
+.gx-light .gx-x, .gx-light .gx-theme{ background:#fff; color:#1a1210; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.gx-light .gx-deck, .gx-light .mil-deck2{ color:#6b5f5a; } .gx-light .gx-deck b, .gx-light .mil-deck2 b{ color:#b7791f; }
+.gx-light .gx-btn.ghost{ background:#fff; color:#1a1210; box-shadow:0 5px 0 #e6dcd9; }
+.gx-light .gx-end h3{ color:#1a1210; }
+.gx-light .gx-end h3 b{ background:linear-gradient(180deg,#f6b800,#c47f0e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.gx-light .mil-sum{ color:#5c534f; } .gx-light .mil-sum b{ color:#1a1210; }
+.gx-light .mil-quote{ background:#fff; border-color:#f0dcd8; color:#1a1210; }
+.gx-light .mil-k{ color:#b7791f; }
+.gx-light .mil-logo em{ color:#8a7f7a; }
+.gx-light .mil-logo b{ background:linear-gradient(180deg,#f6b800,#b9770e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.gx-light .mil-logo small{ color:#E02020; }
+.gx-light .mil-life button{ background:#fff7df; color:#a5680a; border-color:#e0a63a; }
+.gx-light .mil-ladder li{ background:#fff; color:#8a7f7a; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.gx-light .mil-ladder li b{ color:#1a1210; }
+.gx-light .mil-ladder li.done{ background:#dff5e6; }
+.gx-light .mil-ladder li.safe b{ color:#b7791f; }
+.gx-light .mil-ladder li.cur, .gx-light .mil-ladder li.cur b{ color:#3a2400; }
+.gx-light .mil-bar{ color:#5c534f; } .gx-light .mil-bar b{ color:#1a1210; } .gx-light .mil-pts{ color:#b7791f !important; }
+.gx-light .mil-time .tb{ stroke:rgba(0,0,0,.1); }
+.gx-light .mil-mc p, .gx-light .mt-say span{ background:#fff; color:#1a1210; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.gx-light .mil-card{ background:#fff; color:#1a1210; box-shadow:0 0 0 4px rgba(245,197,66,.25), 0 14px 30px -16px rgba(0,0,0,.3); }
+.gx-light .mil-card small{ color:#b7791f; }
+.gx-light .mil-speak{ background:#fff7df; color:#a5680a; }
+.gx-light .mil-a{ background:#fff; color:#1a1210; border-color:#e7c66b; box-shadow:0 3px 0 #f0e2c0; }
+.gx-light .mil-a i{ color:#E02020; }
+.gx-light .mil-a.sel, .gx-light .mil-a.ok, .gx-light .mil-a.no, .gx-light .mil-a.sel i, .gx-light .mil-a.ok i, .gx-light .mil-a.no i{ color:#fff; }
+.gx-light .mil-help{ background:#fff; color:#1a1210; } .gx-light .mil-bars em{ color:#1a1210; }
+.gx-light .mil-stop{ border-color:rgba(0,0,0,.15); color:#1a1210; } .gx-light .mil-stop b{ color:#b7791f; }
+.gx-light .mt-logo b, .gx-light .mt-time{ color:#1a1210; }
+.gx-light .mt-best{ background:#fff; color:#1a1210; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.gx-light .mt-face{ box-shadow:0 5px 0 #e6dcd9, 0 0 0 1px #f0e6e3; }
+.gx-light .mt-done span{ background:#fff; color:#5c534f; } .gx-light .mt-done b{ color:#1a1210; }
+.gx-light .mt-count{ background:rgba(255,246,243,.75); color:#E02020; text-shadow:0 4px 0 rgba(224,32,32,.15); }
+.gx-light .mt-stars i{ filter:grayscale(1) opacity(.2); } .gx-light .mt-stars i.on{ filter:drop-shadow(0 0 12px rgba(245,197,66,.6)); }
+
+/* ===== Vòng 11 ===== */
+.fe-txt{ display:inline-grid !important; place-items:center; line-height:1; font-style:normal; }
+.mt-pic.fe-txt{ font-size:40px; } .mil-pic.fe-txt{ font-size:48px; } .mil-trophy .fe-txt{ font-size:72px; } .mt-stars .fe-txt{ font-size:46px; } .fe-i.fe-txt{ font-size:1em; }
+.ui-i{ width:1.15em; height:1.15em; vertical-align:-.2em; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.mil-stop .ui-i{ fill:currentColor; stroke:none; }
+/* ô hình giống mục học từ */
+.mil-tile, .mt-tile{ display:grid !important; place-items:center; margin:0 auto; transform:rotate(-4deg); border-radius:26px;
+  background:radial-gradient(circle at 30% 25%, #fff 0%, #ffe1e1 72%); box-shadow:0 12px 26px -12px rgba(224,32,32,.75), inset 0 0 0 2px rgba(224,16,43,.12); }
+.mil-tile{ width:92px; height:92px; margin-bottom:12px; }
+.mil-tile.big{ width:104px; height:104px; }
+.mil-tile .mil-pic{ width:66% !important; height:66% !important; margin:0 !important; display:block !important; }
+.mil-tile .mil-pic.fe-txt{ width:auto !important; height:auto !important; }
+.gx-mt .mt-c, .mt-in{ min-height:138px !important; }
+.mt-tile{ width:70px; height:70px; border-radius:20px; margin-bottom:6px; }
+.mt-tile .mt-pic{ width:68% !important; height:68% !important; animation:feBob 2.6s ease-in-out infinite; }
+.mt-tile .mt-pic.fe-txt{ width:auto !important; height:auto !important; }
+.mt-c.en .mt-t{ font-size:14.5px !important; }
+.mt-c.ok .mt-tile{ background:radial-gradient(circle at 30% 25%, #fff 0%, #c9f5d8 72%); }
+/* logo Triệu Phú nổi bật */
+.gx-spacer{ flex:1; }
+.mil-hero{ display:flex; align-items:center; justify-content:center; gap:12px; margin:-6px 0 14px; }
+.mil-gem{ font-size:16px; color:var(--gold); text-shadow:0 0 12px rgba(245,197,66,.9); animation:milGem 2s ease-in-out infinite; }
+@keyframes milGem{ 50%{ transform:scale(1.35) rotate(45deg); opacity:.7; } }
+.mil-hero .mil-logo{ flex:none; text-align:center; line-height:1; }
+.mil-hero .mil-logo small{ display:block; font:900 14px var(--gx-font) !important; letter-spacing:.06em !important; text-transform:none; color:#ff5a5a; margin-bottom:2px; }
+.mil-hero .mil-logo b{ position:relative; display:block; font:900 clamp(34px, 10vw, 44px)/1 var(--gx-font) !important; letter-spacing:.03em !important; white-space:nowrap;
+  background:linear-gradient(180deg,#fffbe8 0%,#ffe27a 35%,#f5b80c 62%,#b9770e 100%); -webkit-background-clip:text; background-clip:text; color:transparent !important;
+  filter:drop-shadow(0 3px 0 #5c2a00) drop-shadow(0 0 18px rgba(245,197,66,.45)); }
+.mil-hero .mil-logo b::after{ content:"TRIỆU PHÚ"; position:absolute; inset:0; background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,.85) 50%, transparent 65%) -150% 0 / 250% 100% no-repeat;
+  -webkit-background-clip:text; background-clip:text; color:transparent; animation:milShine 3.2s ease-in-out infinite; }
+@keyframes milShine{ 0%,40%{ background-position:-150% 0; } 80%,100%{ background-position:150% 0; } }
+.mil-hero .mil-logo em{ display:block !important; margin-top:6px; font:700 11.5px var(--gx-font) !important; letter-spacing:.04em !important; color:rgba(255,255,255,.6); font-style:normal; }
+.gx-light .mil-hero .mil-logo em{ color:#8a7f7a; }
+.gx-light .mil-hero .mil-logo b{ filter:drop-shadow(0 3px 0 #e7c27a) drop-shadow(0 0 14px rgba(245,197,66,.35)); }
+.gx-light .mil-hero .mil-logo small{ color:#E02020; }
+/* quyền trợ giúp: huy chương vàng */
+.mil-life{ display:grid !important; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 14px; }
+.mil-life button{ display:flex !important; flex-direction:column; align-items:center; gap:6px; width:auto !important; height:auto !important; padding:0 !important; border:0 !important; background:none !important; cursor:pointer; color:inherit; }
+.mil-life .ll-ic{ position:relative; width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#3a2400;
+  background:radial-gradient(circle at 35% 30%, #fff6c8, #f5c542 55%, #c98410); box-shadow:0 4px 0 #8a5a08, 0 0 0 3px rgba(245,197,66,.25), 0 0 18px rgba(245,197,66,.35); transition:transform .15s; animation:llGlow 2.4s ease-in-out infinite; }
+.mil-life button:nth-child(2) .ll-ic{ animation-delay:.4s; } .mil-life button:nth-child(3) .ll-ic{ animation-delay:.8s; }
+@keyframes llGlow{ 50%{ box-shadow:0 4px 0 #8a5a08, 0 0 0 5px rgba(245,197,66,.35), 0 0 26px rgba(245,197,66,.6); } }
+.mil-life button:hover .ll-ic{ transform:translateY(-2px) scale(1.05); }
+.mil-life button:active .ll-ic{ transform:translateY(2px); box-shadow:0 1px 0 #8a5a08; }
+.mil-life .ll-ic svg{ width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+.mil-life .ll-ic b{ font:900 13px/1 var(--gx-font); }
+.mil-life .ll-ic i{ display:block; width:22px; height:2px; margin:2px 0; background:currentColor; transform:rotate(-30deg); border-radius:2px; }
+.mil-life .ll-ic:has(i){ display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.mil-life small{ font:800 11px var(--gx-font); color:var(--gold); }
+.gx-light .mil-life small{ color:#a5680a; }
+.mil-life button.used .ll-ic{ filter:grayscale(1) brightness(.7); animation:none; box-shadow:0 2px 0 #555; }
+.mil-life button.used .ll-ic::after{ content:""; position:absolute; inset:-3px; border-radius:50%; background:linear-gradient(45deg, transparent 46%, #E02020 46% 54%, transparent 54%); }
+.mil-life button.used small{ opacity:.45; text-decoration:line-through; }
+.mil-life button.used{ text-decoration:none !important; opacity:1 !important; }
+@media (prefers-reduced-motion: reduce){ .mil-gem, .mil-hero .mil-logo b::after, .mil-life .ll-ic{ animation:none !important; } }
+
+/* ===================== Vòng 12: phong cách sân khấu truyền hình (theo ảnh mẫu) ===================== */
+.gx{ background:radial-gradient(120% 55% at 50% 0%, #3a0c1f 0%, #121a4a 42%, #070a1e 100%) !important; }
+.gx::before{ animation:none !important; background:
+  radial-gradient(circle at 50% 14%, transparent 0 118px, rgba(255,60,60,.55) 120px 124px, transparent 126px 150px, rgba(110,150,255,.3) 152px 154px, transparent 156px 196px, rgba(255,60,60,.25) 198px 200px, transparent 202px),
+  radial-gradient(circle at 12% 6%, rgba(255,255,255,.55) 0 2px, transparent 3px), radial-gradient(circle at 30% 3%, rgba(160,190,255,.6) 0 2px, transparent 3px), radial-gradient(circle at 70% 4%, rgba(160,190,255,.6) 0 2px, transparent 3px), radial-gradient(circle at 88% 7%, rgba(255,255,255,.55) 0 2px, transparent 3px),
+  linear-gradient(180deg, transparent 70%, rgba(224,32,32,.18)) !important; }
+.gx::after{ content:""; position:fixed; left:0; right:0; bottom:0; height:120px; pointer-events:none; background:linear-gradient(180deg, transparent, rgba(224,32,32,.22)); }
+/* logo trong vòng sân khấu */
+.mil-hero{ position:relative; padding:18px 0 10px; }
+.mil-hero::before{ content:""; position:absolute; left:50%; top:50%; width:230px; height:230px; margin:-115px 0 0 -115px; border-radius:50%; z-index:-1;
+  background:radial-gradient(circle, rgba(20,28,80,.95) 0 55%, transparent 56%), conic-gradient(from 0deg, rgba(255,60,60,.0) 0 8deg, rgba(255,60,60,.6) 8deg 10deg, rgba(255,60,60,0) 10deg 22deg);
+  box-shadow:0 0 0 3px rgba(255,60,60,.5), 0 0 40px rgba(255,60,60,.35); animation:gxSpin 40s linear infinite; }
+/* flashcard viền đỏ */
+.mil-card{ background:#fff !important; color:#111 !important; border:6px solid #E02020 !important; border-radius:18px !important; padding:10px 14px 14px !important; margin:0 auto 4px !important; max-width:300px;
+  box-shadow:0 0 0 2px rgba(255,255,255,.25), 0 18px 34px -14px rgba(224,32,32,.7) !important; transform:rotate(-1.5deg); }
+.mil-card::before, .mil-card::after{ display:none !important; }
+.fc-head{ display:flex; justify-content:space-between; align-items:center; margin:-4px -4px 6px; padding-bottom:6px; border-bottom:1.5px solid #f3d0d0; }
+.fc-head b{ font:900 15px var(--gx-font); color:#111; } .fc-head b i{ font-style:normal; color:#E02020; }
+.fc-head em{ font:800 italic 11px var(--gx-font); color:#E02020; }
+.mil-card small#milQk{ display:none !important; }
+.mil-card p{ color:#111 !important; }
+.mil-card .mil-w{ color:#111; }
+.mil-ipa{ display:block; margin-top:4px; font:600 15px "Noto Sans",sans-serif; color:#555; }
+.mil-card .mil-vn{ color:#111; }
+.mil-tile{ transform:none !important; background:radial-gradient(circle at 50% 40%, #fff 0%, #fff4f4 70%) !important; box-shadow:none !important; width:118px !important; height:118px !important; }
+.mil-tile.big{ width:118px !important; height:118px !important; }
+.mil-tile .mil-pic{ width:80% !important; height:80% !important; }
+.mil-speak{ position:static !important; margin:6px auto 0; background:none !important; color:#E02020 !important; width:36px; height:36px; }
+.mil-speak svg{ width:26px; height:26px; }
+.mil-blank{ border-bottom-color:#E02020 !important; }
+/* thanh lục giác */
+.mil-qbar{ position:relative; margin:14px -16px 12px; padding:0 10px; }
+.mil-qbar::before{ content:""; position:absolute; left:0; right:0; top:50%; height:2px; background:linear-gradient(90deg, transparent, #8fb0ff 15%, #8fb0ff 85%, transparent); box-shadow:0 0 10px #6f8fff; }
+.hx{ position:relative; padding:2px; background:linear-gradient(180deg,#c9d7ff,#6d86d8); clip-path:polygon(20px 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 20px 100%, 0 50%); }
+.hx-in{ clip-path:polygon(19px 0, calc(100% - 19px) 0, 100% 50%, calc(100% - 19px) 100%, 19px 100%, 0 50%); background:linear-gradient(180deg,#1f2d6e,#0b1238); color:#fff; }
+#milQbar{ padding:13px 30px; text-align:center; font:800 16.5px/1.35 var(--gx-font); }
+.mil-ans{ gap:10px !important; }
+.mil-a{ position:relative; padding:2px !important; border:0 !important; border-radius:0 !important; min-height:0 !important; background:linear-gradient(180deg,#c9d7ff,#6d86d8) !important; box-shadow:none !important;
+  clip-path:polygon(18px 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0 50%); color:#fff !important; }
+.mil-a .hx-in{ display:flex; align-items:center; gap:10px; min-height:50px; padding:10px 26px; font:800 16px/1.3 var(--gx-font); }
+.mil-a i{ color:#ff4646 !important; font:900 16px var(--gx-font) !important; }
+.mil-a:hover:not(:disabled){ transform:none !important; filter:brightness(1.15); }
+.mil-a.sel{ background:linear-gradient(180deg,#ffd6a0,#ff8a1f) !important; } .mil-a.sel .hx-in{ background:linear-gradient(180deg,#ff9a2a,#d65f00); } .mil-a.sel i{ color:#fff !important; }
+.mil-a.ok{ background:linear-gradient(180deg,#c8ffd9,#2bd46a) !important; } .mil-a.ok .hx-in{ background:linear-gradient(180deg,#25b85a,#137a39); } .mil-a.ok i{ color:#fff !important; }
+.mil-a.no{ background:linear-gradient(180deg,#ffc2c2,#ff4646) !important; } .mil-a.no .hx-in{ background:linear-gradient(180deg,#E02020,#8f0a1c); } .mil-a.no i{ color:#fff !important; }
+.mil-a.lock .hx-in{ animation:milLockIn .45s ease-in-out infinite alternate; }
+@keyframes milLockIn{ to{ filter:brightness(1.3); } }
+/* thang điểm kiểu bảng tiền thưởng */
+.mil-ladder li{ background:rgba(16,24,70,.85) !important; color:rgba(255,255,255,.6) !important; box-shadow:inset 0 0 0 1px rgba(143,176,255,.35) !important; }
+.mil-ladder li b{ color:#fff !important; }
+.mil-ladder li.safe{ box-shadow:inset 0 0 0 1.5px #f5c542 !important; } .mil-ladder li.safe b{ color:#f5c542 !important; }
+.mil-ladder li.done{ background:rgba(38,137,12,.35) !important; }
+.mil-ladder li.cur{ background:linear-gradient(180deg,#ff4a4a,#c10f1f) !important; color:#fff !important; box-shadow:0 0 18px rgba(255,60,60,.7) !important; }
+.mil-ladder li.cur b{ color:#fff !important; }
+.mil-mc p{ background:rgba(20,30,80,.75) !important; color:#fff !important; border:1px solid rgba(143,176,255,.25); }
+.mil-help{ background:rgba(20,30,80,.75) !important; color:#fff !important; }
+/* sáng: sân khấu sáng, giữ thanh navy đặc trưng */
+.gx.gx-light{ background:radial-gradient(120% 55% at 50% 0%, #ffe0e3 0%, #eef1ff 45%, #f8f9ff 100%) !important; color:#141a3a; }
+.gx.gx-light::before{ opacity:.55; }
+.gx-light .mil-hero::before{ background:radial-gradient(circle, rgba(255,255,255,.95) 0 55%, transparent 56%), conic-gradient(from 0deg, rgba(255,60,60,0) 0 8deg, rgba(255,60,60,.5) 8deg 10deg, rgba(255,60,60,0) 10deg 22deg); }
+.gx-light .mil-a{ background:linear-gradient(180deg,#9fb6ff,#4d66c4) !important; }
+.gx-light .mil-a .hx-in, .gx-light #milQbar{ color:#fff; }
+.gx-light .mil-a.sel .hx-in, .gx-light .mil-a.ok .hx-in, .gx-light .mil-a.no .hx-in{ color:#fff; }
+.gx-light .mil-ladder li{ background:#fff !important; color:#6b7090 !important; } .gx-light .mil-ladder li b{ color:#141a3a !important; }
+.gx-light .mil-ladder li.cur, .gx-light .mil-ladder li.cur b{ color:#fff !important; }
+.gx-light .mil-mc p, .gx-light .mil-help{ background:#fff !important; color:#141a3a !important; }
+/* Ghép cặp: flashcard viền đỏ + thẻ nghĩa navy */
+.mt-c.en .mt-face{ background:#fff !important; border:5px solid #E02020; box-shadow:0 6px 0 #8f0a1c, 0 10px 18px -8px rgba(224,32,32,.6) !important; }
+.mt-c.en em{ top:4px !important; left:6px !important; padding:1px 5px; border-radius:4px; background:#E02020; color:#fff !important; font-size:8px !important; }
+.mt-c.en .mt-tile{ transform:none; background:radial-gradient(circle at 50% 40%, #fff, #fff1f1 75%); box-shadow:none; width:72px; height:72px; }
+.mt-c.vi .mt-face{ background:linear-gradient(180deg,#1f2d6e,#0b1238) !important; color:#fff !important; box-shadow:0 0 0 2px #8fb0ff, 0 6px 0 #070b26 !important; }
+.mt-c.vi .mt-t{ color:#fff; }
+.gx-light .mt-c.vi .mt-face{ box-shadow:0 0 0 2px #8fb0ff, 0 6px 0 #3b4a8a !important; }
+.mt-c.sel .mt-face{ box-shadow:0 0 0 4px #ffd34a, 0 9px 0 #8f0a1c !important; }
+.mt-c.ok .mt-face{ background:#25b85a !important; border-color:#25b85a !important; color:#fff !important; }
+.mt-c.ok .mt-t{ color:#fff; }
+.mt-c.bad .mt-face{ background:#ffe1e1 !important; color:#111 !important; }
+.mt-c.bad .mt-t{ color:#111; }
+
+.mil-a{ display:block !important; } .mil-a .hx-in{ width:100%; }
+.gx-mil .gx-top{ position:absolute; left:16px; right:16px; top:12px; z-index:3; margin:0; }
+.mil-hero{ padding:6px 0 2px !important; margin:0 0 8px !important; }
+.mil-hero::before{ width:170px !important; height:170px !important; margin:-85px 0 0 -85px !important; }
+.mil-hero .mil-logo b{ font-size:clamp(28px, 8.4vw, 38px) !important; }
+.mil-hero .mil-logo small{ font-size:12.5px !important; }
+.mil-hero .mil-logo em{ margin-top:4px !important; font-size:10.5px !important; }
+.mil-life{ margin:0 0 10px !important; gap:6px !important; }
+.mil-life .ll-ic{ width:42px !important; height:42px !important; }
+.mil-life .ll-ic svg{ width:21px !important; height:21px !important; }
+.mil-life .ll-ic b{ font-size:11px !important; }
+.mil-life small{ font-size:10px !important; }
+.mil-ladder{ margin-bottom:6px !important; padding-bottom:6px !important; }
+.mil-ladder li{ padding:3px 6px !important; min-width:52px !important; }
+.mil-bar{ margin-bottom:6px !important; }
+.mil-time{ width:38px !important; height:38px !important; }
+.mil-mc{ margin-bottom:8px !important; min-height:0 !important; }
+.mil-mc img{ width:30px !important; height:30px !important; }
+.mil-mc p{ padding:6px 10px !important; font-size:12.5px !important; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.mil-card{ max-width:250px !important; padding:6px 12px 10px !important; border-width:5px !important; }
+.fc-head{ margin-bottom:4px !important; padding-bottom:4px !important; } .fc-head b{ font-size:13px !important; }
+.mil-tile, .mil-tile.big{ width:84px !important; height:84px !important; margin-bottom:6px !important; }
+.mil-card .mil-w{ font-size:clamp(24px, 7vw, 30px) !important; }
+.mil-ipa{ display:inline-block !important; font-size:13.5px !important; margin-top:2px !important; }
+.mil-speak{ display:inline-grid !important; vertical-align:middle; margin:0 0 0 6px !important; width:30px !important; height:30px !important; }
+.mil-speak svg{ width:22px !important; height:22px !important; }
+.mil-qbar{ margin:10px -16px 10px !important; }
+#milQbar{ padding:10px 28px !important; font-size:15.5px !important; }
+.mil-ans{ gap:8px !important; }
+.mil-a .hx-in{ min-height:44px !important; padding:8px 26px !important; font-size:15px !important; }
+.mil-foot{ margin-top:10px !important; }
+.mil-card p{ font-size:clamp(16px, 4.4vw, 19px) !important; }
+
+/* ===================== Vòng 13: màu thương hiệu AZ (đỏ – đen – trắng) + font tiếng Việt ===================== */
+.gx{ --gx-font:"Be Vietnam Pro","Inter",Arial,sans-serif !important; --gold:#ff3b3b; --az:#E02020; --az-d:#8f0a1c; --ink:#111;
+  background:radial-gradient(120% 55% at 50% 0%, #3a0b0b 0%, #161010 45%, #0a0707 100%) !important; letter-spacing:0; }
+.gx, .gx *{ font-family:var(--gx-font); }
+.gx::before{ background:
+  radial-gradient(circle at 50% 12%, transparent 0 96px, rgba(224,32,32,.6) 98px 101px, transparent 103px 128px, rgba(255,255,255,.16) 130px 131px, transparent 133px 170px, rgba(224,32,32,.25) 172px 173px, transparent 175px),
+  radial-gradient(circle at 12% 6%, rgba(255,255,255,.5) 0 2px, transparent 3px), radial-gradient(circle at 30% 3%, rgba(255,255,255,.4) 0 2px, transparent 3px), radial-gradient(circle at 70% 4%, rgba(255,255,255,.4) 0 2px, transparent 3px), radial-gradient(circle at 88% 7%, rgba(255,255,255,.5) 0 2px, transparent 3px),
+  linear-gradient(180deg, transparent 70%, rgba(224,32,32,.16)) !important; }
+/* logo */
+.mil-hero::before{ background:radial-gradient(circle, rgba(24,18,18,.96) 0 55%, transparent 56%), conic-gradient(from 0deg, rgba(224,32,32,0) 0 8deg, rgba(224,32,32,.7) 8deg 10deg, rgba(224,32,32,0) 10deg 22deg) !important;
+  box-shadow:0 0 0 3px rgba(224,32,32,.55), 0 0 40px rgba(224,32,32,.35) !important; }
+.mil-hero .mil-logo small{ color:#ff4d4d !important; font-weight:800 !important; }
+.mil-hero .mil-logo b{ letter-spacing:.02em !important; background:linear-gradient(180deg,#ffffff 0%,#ffffff 55%,#ffd9d9 100%) !important; -webkit-background-clip:text !important; background-clip:text !important;
+  filter:drop-shadow(0 3px 0 #8f0a1c) drop-shadow(0 0 16px rgba(224,32,32,.55)) !important; }
+.mil-hero .mil-logo em{ color:rgba(255,255,255,.65) !important; font-weight:600 !important; }
+.mil-gem{ color:#E02020 !important; text-shadow:0 0 12px rgba(224,32,32,.9) !important; }
+/* quyền trợ giúp: huy chương đỏ */
+.mil-life .ll-ic{ color:#fff !important; background:radial-gradient(circle at 35% 30%, #ff7a7a, #E02020 55%, #8f0a1c) !important;
+  box-shadow:0 4px 0 #5c0610, 0 0 0 3px rgba(224,32,32,.3), 0 0 16px rgba(224,32,32,.4) !important; }
+@keyframes llGlow{ 50%{ box-shadow:0 4px 0 #5c0610, 0 0 0 5px rgba(224,32,32,.35), 0 0 24px rgba(224,32,32,.6); } }
+.mil-life small{ color:rgba(255,255,255,.85) !important; font-weight:600 !important; }
+/* thang điểm */
+.mil-ladder li{ background:#1c1616 !important; color:rgba(255,255,255,.55) !important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.14) !important; font-weight:600 !important; }
+.mil-ladder li b{ color:#fff !important; font-weight:700 !important; }
+.mil-ladder li.safe{ box-shadow:inset 0 0 0 1.5px #fff !important; } .mil-ladder li.safe b{ color:#fff !important; }
+.mil-ladder li.done{ background:#2a1a1a !important; color:rgba(255,255,255,.35) !important; } .mil-ladder li.done b{ color:rgba(255,255,255,.45) !important; }
+.mil-ladder li.cur{ background:linear-gradient(180deg,#ff3b3b,#c10f1f) !important; }
+.mil-pts{ color:#fff !important; font-weight:800 !important; }
+.mil-time .tf{ stroke:#E02020 !important; } .mil-time.low .tf{ stroke:#fff !important; }
+.mil-mc p, .mil-help{ background:#1c1616 !important; border:1px solid rgba(255,255,255,.12) !important; color:#fff !important; font-weight:500 !important; line-height:1.45 !important; }
+/* thanh lục giác đen – viền trắng */
+.hx, .mil-a{ background:linear-gradient(180deg,#ffffff,#9a9a9a) !important; }
+.hx-in, .mil-a .hx-in{ background:linear-gradient(180deg,#231d1d,#0f0c0c) !important; color:#fff !important; }
+.mil-qbar::before{ background:linear-gradient(90deg, transparent, #E02020 15%, #E02020 85%, transparent) !important; box-shadow:0 0 10px rgba(224,32,32,.8) !important; }
+#milQbar{ font-weight:700 !important; line-height:1.4 !important; }
+.mil-a .hx-in{ font-weight:600 !important; line-height:1.4 !important; }
+.mil-a i{ color:#ff3b3b !important; font-weight:800 !important; }
+.mil-a.sel{ background:linear-gradient(180deg,#ffffff,#ffffff) !important; } .mil-a.sel .hx-in{ background:#ffffff !important; color:#111 !important; } .mil-a.sel i{ color:#E02020 !important; }
+.mil-a.ok{ background:linear-gradient(180deg,#c8ffd9,#1e9a5a) !important; } .mil-a.ok .hx-in{ background:linear-gradient(180deg,#22b25a,#127336) !important; color:#fff !important; } .mil-a.ok i{ color:#fff !important; }
+.mil-a.no{ background:linear-gradient(180deg,#ffc2c2,#E02020) !important; } .mil-a.no .hx-in{ background:linear-gradient(180deg,#E02020,#8f0a1c) !important; color:#fff !important; } .mil-a.no i{ color:#fff !important; }
+.mil-card .mil-w{ font-weight:800 !important; letter-spacing:-.01em; }
+.mil-card .mil-vn{ font-weight:700 !important; line-height:1.4 !important; }
+.mil-card p{ font-weight:600 !important; line-height:1.45 !important; }
+.fc-head b, .fc-head em{ letter-spacing:0 !important; }
+.mil-stop b, .gx-deck b, .mil-deck2 b{ color:#ff4d4d !important; }
+.mil-k{ text-transform:none !important; letter-spacing:0 !important; font-size:15px !important; color:#ff4d4d !important; }
+.gx-end h3 b{ background:linear-gradient(180deg,#ffffff,#ffd0d0) !important; -webkit-background-clip:text !important; background-clip:text !important; filter:drop-shadow(0 3px 0 #8f0a1c); }
+.mil-sum, .mil-quote{ font-weight:500 !important; line-height:1.5 !important; }
+.mil-bars i{ background:linear-gradient(180deg,#ff6b6b,#E02020) !important; } .mil-bars small{ color:#ff4d4d !important; }
+.mil-speak{ color:#E02020 !important; }
+/* Ghép cặp */
+.mt-c.vi .mt-face{ background:linear-gradient(180deg,#231d1d,#0f0c0c) !important; box-shadow:0 0 0 2px rgba(255,255,255,.85), 0 6px 0 #000 !important; }
+.mt-t{ font-weight:600 !important; line-height:1.35 !important; letter-spacing:0 !important; }
+.mt-c.en .mt-t{ font-weight:800 !important; }
+.mt-logo b{ letter-spacing:.02em !important; } .mt-logo em{ letter-spacing:.12em !important; }
+.mt-combo{ color:#ff4d4d !important; }
+.mt-c.sel .mt-face{ box-shadow:0 0 0 4px #fff, 0 9px 0 #8f0a1c !important; }
+.mt-say span{ background:#1c1616 !important; border:1px solid rgba(255,255,255,.12); font-weight:500 !important; line-height:1.45; }
+/* ---- chế độ sáng ---- */
+.gx.gx-light{ background:radial-gradient(120% 55% at 50% 0%, #ffe0e0 0%, #fff6f6 45%, #ffffff 100%) !important; color:#111 !important; }
+.gx.gx-light::before{ opacity:.45; }
+.gx-light .mil-hero::before{ background:radial-gradient(circle, #fff 0 55%, transparent 56%), conic-gradient(from 0deg, rgba(224,32,32,0) 0 8deg, rgba(224,32,32,.6) 8deg 10deg, rgba(224,32,32,0) 10deg 22deg) !important; }
+.gx-light .mil-hero .mil-logo b{ background:linear-gradient(180deg,#ff4d4d,#E02020 55%,#8f0a1c) !important; -webkit-background-clip:text !important; background-clip:text !important; filter:drop-shadow(0 3px 0 rgba(0,0,0,.18)) !important; }
+.gx-light .mil-hero .mil-logo em{ color:#666 !important; }
+.gx-light .mil-life small{ color:#333 !important; }
+.gx-light .mil-ladder li{ background:#fff !important; color:#888 !important; box-shadow:inset 0 0 0 1px #e8e0e0 !important; }
+.gx-light .mil-ladder li b{ color:#111 !important; }
+.gx-light .mil-ladder li.safe{ box-shadow:inset 0 0 0 1.5px #111 !important; }
+.gx-light .mil-ladder li.done{ background:#f3eeee !important; } .gx-light .mil-ladder li.done b{ color:#999 !important; }
+.gx-light .mil-ladder li.cur, .gx-light .mil-ladder li.cur b{ color:#fff !important; }
+.gx-light .mil-pts, .gx-light .mil-bar b{ color:#111 !important; }
+.gx-light .mil-mc p, .gx-light .mil-help, .gx-light .mt-say span{ background:#fff !important; color:#111 !important; border-color:#eee !important; }
+.gx-light .hx, .gx-light .mil-a{ background:linear-gradient(180deg,#E02020,#8f0a1c) !important; }
+.gx-light #milQbar{ background:#111 !important; color:#fff !important; }
+.gx-light .mil-a .hx-in{ background:#fff !important; color:#111 !important; }
+.gx-light .mil-a.sel .hx-in{ background:#111 !important; color:#fff !important; } .gx-light .mil-a.sel{ background:#111 !important; }
+.gx-light .mil-a.ok .hx-in, .gx-light .mil-a.no .hx-in{ color:#fff !important; }
+.gx-light .mt-c.vi .mt-face{ background:#111 !important; box-shadow:0 0 0 2px #111, 0 6px 0 #444 !important; }
+.gx-light .mt-logo b, .gx-light .mt-time{ color:#111 !important; }
+.gx-light .gx-end h3 b{ background:linear-gradient(180deg,#ff4d4d,#E02020 60%,#8f0a1c) !important; -webkit-background-clip:text !important; background-clip:text !important; filter:none; }
+.gx-light .mil-k{ color:#E02020 !important; }
+.gx-light .mil-ladder li.cur{ background:linear-gradient(180deg,#ff3b3b,#c10f1f) !important; box-shadow:0 0 14px rgba(224,32,32,.5) !important; }
+
+/* v30: loa trong thẻ điền từ · xáo chữ · xem lại ở dạng chọn */
+.recall-hint-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.recall-hint-row .recall-hint-chip{ margin-top:10px; }
+.recall-say{ margin-top:10px; flex:none; width:36px; height:36px; border-radius:50%; border:0; background:var(--red,#E02020); color:#fff; display:grid; place-items:center; font-size:15px; cursor:pointer; box-shadow:0 3px 0 var(--red-ink,#9b0f14); transition:transform .15s; }
+.recall-say:active{ transform:translateY(2px); box-shadow:0 1px 0 var(--red-ink,#9b0f14); }
+.hint-scr{ text-align:center; margin:-4px 0 14px; animation:scrIn .25s ease; }
+.hint-scr[hidden]{ display:none !important; }
+.hint-scr .scr-lab{ display:block; font:700 12px var(--sx-font, inherit); color:var(--ink-soft); margin-bottom:8px; }
+.hint-scr .scr-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:7px; }
+.hint-scr .scr-t{ min-width:40px; height:44px; padding:0 8px; border-radius:12px; border:2px solid var(--red,#E02020); background:var(--paper,#fff); color:var(--ink,#111); font:800 19px var(--sx-font, inherit); cursor:pointer; box-shadow:0 3px 0 rgba(224,32,32,.35); transition:transform .12s, opacity .15s; }
+.hint-scr .scr-t:hover{ transform:translateY(-2px); }
+.hint-scr .scr-t.used{ opacity:.22; transform:scale(.9); pointer-events:none; box-shadow:none; }
+@keyframes scrIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:none; } }
+.alt-tools{ display:flex; justify-content:center; margin-top:14px; }
+.alt-tools .hint-btn{ border-radius:99px; font-family:var(--sx-font); font-weight:800; padding:7px 14px; background:var(--paper); box-shadow:0 2px 0 var(--line); }
+#hintScrBtn:disabled{ opacity:.5; cursor:default; }
+
+.qm-dev-btn, .qm-dev{ display:none !important; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -1492,7 +2001,7 @@ body.qv-lock{ overflow:hidden; }
 <script>window.AZ_COURSE={id:"giaotiep",key:"azvocab_v1_communication1500",name:"Giao Tiếp Căn Bản"};</script>
 <script src="./az-core.js" defer></script>
 
-<script>/* Cổng test đầu vào: chưa làm test thì quay về trang chủ */try{var _p=JSON.parse(localStorage.getItem("az_vocab_profile")||"null");if(!(_p&&_p.phone)){location.replace("./?test=1");}}catch(e){}</script>
+<script>try{var _p=JSON.parse(localStorage.getItem("az_vocab_profile")||"null");if(!(_p&&_p.phone)){location.replace("./?test=1");}}catch(e){}</script>
 
     <a class="mark" href="./index.html" aria-label="Về trang chủ AZEnglish Vocab Arena">AZ</a>
     <div class="masthead-text">
@@ -1711,20 +2220,32 @@ body.qv-lock{ overflow:hidden; }
       </div>
       <button class="q-reco" id="qReco" type="button"></button>
       <div class="q-games">
-        <button class="q-game" id="modeSprint" data-game="sprint" type="button">
+        <button class="q-game q-game-new" id="modeMil" data-game="mil" type="button">
+          <span class="q-game-ic gi-crown" data-gi="crown"></span>
+          <b class="q-game-name">Ai Là Triệu Phú</b>
+          <span class="q-game-meta">tới +100 XP</span>
+          <span class="q-game-best"><i data-ic="trophy"></i><b id="milBestInline">--</b></span>
+        </button>
+        <button class="q-game q-game-new" id="modeMt" data-game="mt" type="button">
+          <span class="q-game-ic gi-bolt" data-gi="bolt"></span>
+          <b class="q-game-name">Ghép Cặp Thần Tốc</b>
+          <span class="q-game-meta">~1 phút</span>
+          <span class="q-game-best"><i data-ic="trophy"></i><b id="mtBestInline">--</b></span>
+        </button>
+        <button class="q-game" id="modeSprint" data-game="sprint" type="button" hidden>
           <span class="q-game-ic gi-wand" data-gi="wand"></span>
           <b class="q-game-name">Phù Thủy &amp; Bạch Tuyết</b>
           <span class="q-game-meta">+40 XP</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="sprintBestInline">--</b></span>
         </button>
-        <button class="q-game" id="modeChase" data-game="chase" type="button">
+        <button class="q-game" id="modeChase" data-game="chase" type="button" hidden>
           <span class="q-game-ic gi-tiles" data-gi="tiles"></span>
           <b class="q-game-name">Người Đẹp &amp; Quái Vật</b>
           <span class="q-game-meta">+25 XP/câu</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="chaseBestInline">--</b></span>
         </button>
-        <button class="q-game" id="modeRace" data-game="race" type="button">
-          <span class="q-game-ic gi-keys" data-gi="keys"></span>
+        <button class="q-game q-game-has-art" id="modeRace" data-game="race" type="button">
+          <img class="q-game-art" src="zombie-cover.jpg" alt="Zombie học sinh AZ với thanh máu HP 15% đang dồn một bạn học sinh vào góc lớp" width="200" height="200" loading="lazy">
           <b class="q-game-name">Trốn Thoát Zombie</b>
           <span class="q-game-meta">+40 XP</span>
           <span class="q-game-best"><i data-ic="trophy"></i><b id="raceBestInline">--</b></span>
@@ -1877,7 +2398,7 @@ body.qv-lock{ overflow:hidden; }
         <div class="recall-text">
           <p class="recall-meaning" id="recallMeaning"></p>
           <p class="recall-sub" id="recallSub">Gõ lại từ tiếng Anh tương ứng</p>
-          <span class="recall-hint-chip hidden" id="recallHintChip"></span>
+          <span class="recall-hint-row"><span class="recall-hint-chip hidden" id="recallHintChip"></span><button class="recall-say" id="recallSay" type="button" aria-label="Nghe phát âm từ" title="Nghe phát âm"><i data-ic="speaker"></i></button></span>
           <p class="recall-example hidden" id="recallExample"></p>
           <p class="recall-example-vi hidden" id="recallExampleVi"></p>
         </div>
@@ -1894,8 +2415,10 @@ body.qv-lock{ overflow:hidden; }
         <button class="hint-btn" id="reviewWordBtn" type="button"><i data-ic="history"></i> Xem lại từ</button>
         <button class="hint-btn" id="hintAudio" type="button"><i data-ic="speaker"></i> Nghe lại</button>
         <button class="hint-btn" id="hintFirst" type="button"><i data-ic="bulb"></i> Gợi ý</button>
+        <button class="hint-btn" id="hintScrBtn" type="button"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h3.5c2 0 3.3 1 4.5 2.8l2 3.4c1.2 1.8 2.5 2.8 4.5 2.8H21"/><path d="M3 17h3.5c1.5 0 2.6-.6 3.6-1.7"/><path d="M14 8.7c1-1.1 2-1.7 3.5-1.7H21"/><path d="M18.5 4.5L21 7l-2.5 2.5M18.5 14.5L21 17l-2.5 2.5"/></svg> Xáo chữ</button>
       </div>
       <p class="hint-reveal" id="hintReveal"></p>
+      <div class="hint-scr" id="hintScr" hidden></div>
 
       <div class="check-row">
         <button class="submit-btn" id="submitBtn" type="button">Kiểm tra</button>
@@ -1942,6 +2465,58 @@ body.qv-lock{ overflow:hidden; }
     </div>
   </section>
 
+  <!-- ===== AI LÀ TRIỆU PHÚ ===== -->
+  <div class="gx gx-mil" id="gxMil" hidden role="dialog" aria-label="Ai Là Triệu Phú">
+    <div class="gx-in">
+      <div class="gx-top">
+        <button class="gx-x" type="button" aria-label="Thoát">✕</button>
+        <button class="gx-theme" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
+        <span class="gx-spacer"></span>
+      </div>
+      <div class="mil-hero"><span class="mil-gem">◆</span><div class="mil-logo"><small>Ai là</small><b>TRIỆU PHÚ</b><em>Từ vựng · AZEnglish</em></div><span class="mil-gem">◆</span></div>
+      <div class="mil-life">
+        <button data-l="f5050" type="button" title="Bỏ 2 đáp án sai"><span class="ll-ic"><b>50</b><i></i><b>50</b></span><small>Loại 2 đáp án</small></button>
+        <button data-l="ask" type="button" title="Hỏi khán giả của Lumina"><span class="ll-ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.4 3-5.3 6-5.3s5.4 1.9 6 5.3"/><circle cx="17" cy="9" r="2.6"/><path d="M15.8 13.9c2.6-.4 4.6 1.2 5.2 4.1"/></svg></span><small>Hỏi khán giả</small></button>
+        <button data-l="swap" type="button" title="Đổi câu hỏi"><span class="ll-ic"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/></svg></span><small>Đổi câu hỏi</small></button>
+      </div>
+      <div id="milPlay">
+        <ol class="mil-ladder" id="milLadder"></ol>
+        <div class="mil-bar">
+          <span>Câu <b id="milQn">1</b>/<span id="milQtot">15</span></span>
+          <b class="mil-pts"><span id="milPts">100</span> điểm</b>
+          <span class="mil-time" id="milTime"><svg viewBox="0 0 36 36"><circle class="tb" cx="18" cy="18" r="15"/><circle class="tf" id="milRing" cx="18" cy="18" r="15"/></svg><b id="milSec">30</b></span>
+        </div>
+        <div class="mil-mc"><img src="./lion-head.webp" alt=""><p id="milSay"></p></div>
+        <div class="mil-card" id="milCard"><div class="fc-head"><b><i>AZ</i>English</b><em>Flashcard</em></div><small id="milQk"></small><p id="milQ"></p><button class="mil-speak" id="milSpeak" type="button" aria-label="Nghe phát âm"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L13 19V5L7.5 9.5z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button></div>
+        <div class="mil-qbar"><div class="hx"><div class="hx-in" id="milQbar"></div></div></div>
+        <div class="mil-help" id="milHelp" hidden></div>
+        <div class="mil-ans" id="milAns"></div>
+        <div class="mil-foot"><button class="mil-stop" id="milStop" type="button"><svg class="ui-i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5.5" width="3.5" height="13" rx="1"/><rect x="14" y="5.5" width="3.5" height="13" rx="1"/></svg> Dừng cuộc chơi · giữ <b id="milKeep">0</b> điểm</button><span class="gx-deck" id="milDeck"></span></div>
+      </div>
+      <div class="gx-end" id="milEnd" hidden></div>
+    </div>
+  </div>
+
+  <!-- ===== GHÉP CẶP THẦN TỐC ===== -->
+  <div class="gx gx-mt" id="gxMt" hidden role="dialog" aria-label="Ghép Cặp Thần Tốc">
+    <div class="gx-in">
+      <div class="gx-top">
+        <button class="gx-x" type="button" aria-label="Thoát">✕</button>
+        <button class="gx-theme" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
+        <div class="mt-logo"><b>GHÉP CẶP</b><em>THẦN TỐC ⚡</em></div>
+        <div class="mt-best"><img class="fe fe-i" src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f3c6.webp" alt=""> <b id="mtBest">--</b></div>
+      </div>
+      <div id="mtPlay">
+        <div class="mt-hud"><b class="mt-time"><span id="mtTime">0.0</span>s</b><span class="mt-combo" id="mtCombo"></span></div>
+        <p class="mt-say"><img src="./lion-head.webp" alt=""><span id="mtSay"></span></p>
+        <div class="mt-grid" id="mtGrid"></div>
+        <p class="gx-deck" id="mtDeck"></p>
+        <div class="mt-count" id="mtCount" hidden>3</div>
+      </div>
+      <div class="gx-end" id="mtEnd" hidden></div>
+    </div>
+  </div>
+
   <canvas id="sprintParticleCanvas" style="position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:250;"></canvas>
 
   <div class="pause-overlay hidden" id="pauseOverlay">
@@ -1959,6 +2534,7 @@ body.qv-lock{ overflow:hidden; }
   <!-- RACE BRIEFING SCREEN -->
   <section class="panel hidden" id="raceBriefing">
     <h2>🧟 Sắp vào: Chặn Đứng Zombie</h2>
+    <img class="race-cover" src="zombie-cover.jpg" alt="Lớp học AZ World bị zombie tấn công" width="200" height="200">
     <p class="desc">Mỗi lượt hiện 1 cụm từ tiếng Anh kèm nghĩa — gõ lại đúng y hệt cụm từ đó trước khi zombie chạm đáy để tiêu diệt nó. Bạn chỉ có 2 mạng (❤️❤️); càng về sau tốc độ càng dồn dập, hết mạng trước khi diệt đủ 20 zombie là thua.</p>
     <div class="btn-row">
       <button class="btn-ghost" id="raceBriefingBackBtn" type="button"><i data-ic="arrL"></i> Về màn hình chọn</button>
@@ -2850,7 +3426,7 @@ button, input, select, textarea{ font-family:inherit; }
     return VISUAL_PALETTE[Math.abs(hash) % VISUAL_PALETTE.length];
   }
   function paintWordVisual(el, word){
-    el.textContent = word.e || TOPIC_EMOJI[word.t] || "✳️";
+    el.innerHTML = fe(word.e || TOPIC_EMOJI[word.t] || "✳️", "wv");
     var pal = visualColorFor(word);
     el.style.background = pal.bg;
     el.style.borderColor = pal.border;
@@ -3187,7 +3763,7 @@ button, input, select, textarea{ font-family:inherit; }
       }else{
         utter.lang = "vi-VN";
       }
-      utter.rate = qmExcited ? 1.04 : 1.0;          // chậm lại một chút cho tự nhiên, ấm áp
+      utter.rate = 1.1;                              // nhanh hơn chút cho tươi, đỡ lề mề
       utter.pitch = qmExcited ? 1.16 : 1.08;
       window.speechSynthesis.speak(utter);
     }catch(e){}
@@ -3828,8 +4404,9 @@ button, input, select, textarea{ font-family:inherit; }
     answerInput.disabled = false;
     submitBtn.disabled = false;
 
-    plannedMethod = qmPlan(word);
-    toRecallBtn.innerHTML = qmLab(qmCtaLabel(plannedMethod));
+    plannedMethod = qmReviewMid || qmPlan(word);
+    toRecallBtn.innerHTML = qmLab(qmReviewMid ? "Quay lại thử thách →" : qmCtaLabel(plannedMethod));
+    qmReviewMid = null; qmScrReset();
     updateStatsUI();
     sxBoostRender(null);
     speak(word.w);
@@ -3844,7 +4421,7 @@ button, input, select, textarea{ font-family:inherit; }
   function showRecallPhase(){
     var word = currentWord();
     currentPhase = "recall"; setTimeout(sxTimerStart, 0);
-    var qmMid = plannedMethod || pickMethod(word); plannedMethod = null;
+    var qmMid = plannedMethod || pickMethod(word); plannedMethod = null; qmCurMid = qmMid;
     if(qmMid !== "type"){ showAltMethod(word, qmMid); return; }
     recallPhase.classList.remove("alt-on");
     qmRecallStart = Date.now();
@@ -3876,7 +4453,7 @@ button, input, select, textarea{ font-family:inherit; }
     hintReveal.textContent = "";
     hintUsedThisWord = false;
     hintRevealedPositions = [];
-    document.querySelector(".hint-row").classList.remove("hidden");
+    document.querySelector(".hint-row").classList.remove("hidden"); qmScrReset();
     studyPhase.classList.add("hidden");
     recallPhase.classList.remove("hidden");
     setTimeout(function(){ answerInput.focus(); }, 30);
@@ -3885,7 +4462,7 @@ button, input, select, textarea{ font-family:inherit; }
   studyAudioBtn.addEventListener("click", function(){ speak(currentWord().w); });
   toRecallBtn.addEventListener("click", showRecallPhase);
   var reviewWordBtn = document.getElementById("reviewWordBtn");
-  reviewWordBtn.addEventListener("click", function(){ renderCurrent(); });
+  reviewWordBtn.addEventListener("click", qmReviewWord);
   hintAudio.addEventListener("click", function(){ speak(currentWord().w); });
   hintFirst.addEventListener("click", function(){
     var word = currentWord();
@@ -4316,6 +4893,396 @@ button, input, select, textarea{ font-family:inherit; }
     fetch("./push-config.json", { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){ if(j && j.vapidPublic){ rmdCfg = j; rmdCardRender(); } }).catch(function(){});
   })();
 
+
+
+  // ===== Emoji 3D (Fluent Emoji 3D · MIT) — thay emoji mặc định của máy =====
+  var FE_BASE = "https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/";
+  function feNames(e){ var cps = Array.from(String(e)).map(function(c){ return c.codePointAt(0).toString(16); }), a = cps.join("-"), b = cps.filter(function(x){ return x !== "fe0f"; }).join("-"), out = [a]; if(b !== a) out.push(b); if(cps.length === 1) out.push(a + "-fe0f"); return out; }
+  function fe(e, cls){ if(!e) return ""; var n = feNames(e); return '<img class="fe ' + (cls || "") + '" src="' + FE_BASE + n[0] + '.webp" data-alt="' + n.slice(1).join("|") + '" data-e="' + qmEsc(e) + '" alt="" draggable="false" decoding="async" onerror="feErr(this)">'; }
+  window.feErr = function(img){ var alt = (img.getAttribute("data-alt") || "").split("|").filter(Boolean); if(alt.length){ img.setAttribute("data-alt", alt.slice(1).join("|")); img.src = FE_BASE + alt[0] + ".webp"; } else { var sp = document.createElement("span"); sp.className = img.className + " fe-txt"; sp.textContent = img.getAttribute("data-e"); img.replaceWith(sp); } };
+
+  // ===== Pháo hoa + tiếng nổ + giọng chúc mừng (giống AZ Live) =====
+  var gxFwCv = null, gxFwP = [], gxFwRaf = 0, gxFwUntil = 0, GX_FW_COLS = ["#e0102b", "#ffffff", "#f2b705", "#1d6fa5", "#1e7a4c", "#ff8a3d"];
+  function gxFwSound(){
+    try{ var ac = getCtx(); if(!ac) return; var t = ac.currentTime;
+      var o = ac.createOscillator(), g = ac.createGain(); o.type = "sine"; o.frequency.setValueAtTime(420, t); o.frequency.exponentialRampToValueAtTime(1500, t + .55);
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.045, t + .1); g.gain.exponentialRampToValueAtTime(.0001, t + .6); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + .62);
+      var len = 1.4, buf = ac.createBuffer(1, ac.sampleRate * len, ac.sampleRate), d = buf.getChannelData(0);
+      for(var x = 0; x < d.length; x++){ var q = x / d.length; d[x] = (Math.random() * 2 - 1) * Math.pow(1 - q, 2.4) * (q < .01 ? q / .01 : 1); }
+      var sN = ac.createBufferSource(), f = ac.createBiquadFilter(), g2 = ac.createGain(); f.type = "lowpass"; f.frequency.value = 1400; sN.buffer = buf; g2.gain.value = .38; sN.connect(f); f.connect(g2); g2.connect(ac.destination); sN.start(t + .6);
+    }catch(e){}
+  }
+  function gxBoom(v){ try{ var a = new Audio("./fireworks.mp3"); a.volume = v || .75; var pr = a.play(); if(pr && pr.catch) pr.catch(gxFwSound); }catch(e){ gxFwSound(); } }
+  function gxFireworks(ms, perSec){
+    if(!gxFwCv){ gxFwCv = document.createElement("canvas"); gxFwCv.className = "gx-fw"; gxFwCv.setAttribute("aria-hidden", "true"); document.body.appendChild(gxFwCv); }
+    var cv = gxFwCv, dpr = Math.min(2, window.devicePixelRatio || 1);
+    if(cv.width !== Math.round(innerWidth * dpr)){ cv.width = Math.round(innerWidth * dpr); cv.height = Math.round(innerHeight * dpr); }
+    gxFwUntil = Math.max(gxFwUntil, Date.now() + ms);
+    var pick = function(){ return GX_FW_COLS[Math.floor(Math.random() * GX_FW_COLS.length)]; };
+    var launch = function(){ var x = (.12 + Math.random() * .76) * cv.width, y = (.1 + Math.random() * .32) * cv.height; gxFwP.push({ rocket:true, x:x, y:cv.height, vy:-(cv.height - y) / 36, life:36, c1:pick(), c2:pick() }); };
+    launch(); var iv = setInterval(function(){ if(Date.now() > gxFwUntil) return clearInterval(iv); launch(); if(Math.random() < .35) setTimeout(launch, 160); }, 1000 / (perSec || 2));
+    if(gxFwRaf) return;
+    var ctx = cv.getContext("2d");
+    var step = function(){
+      ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = "rgba(0,0,0,.2)"; ctx.fillRect(0, 0, cv.width, cv.height); ctx.globalCompositeOperation = "lighter";
+      var born = [];
+      gxFwP = gxFwP.filter(function(p){
+        if(p.rocket){ p.y += p.vy; p.life--; ctx.globalAlpha = 1; ctx.fillStyle = "#fff8e0"; ctx.fillRect(p.x - 1.5 * dpr, p.y, 3 * dpr, 12 * dpr);
+          if(p.life > 0) return true;
+          for(var i = 0; i < 80; i++){ var a = Math.PI * 2 * i / 80 + Math.random() * .08, sp = (1.8 + Math.random() * 4.2) * dpr; born.push({ x:p.x, y:p.y, vx:Math.cos(a) * sp, vy:Math.sin(a) * sp, c:i % 2 ? p.c1 : p.c2, life:55 + Math.random() * 35 }); }
+          return false; }
+        p.vx *= .984; p.vy = p.vy * .984 + .055 * dpr; p.x += p.vx; p.y += p.vy; p.life--;
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 60)); ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, 2.3 * dpr, 0, 6.3); ctx.fill();
+        return p.life > 0; });
+      gxFwP = gxFwP.concat(born); ctx.globalAlpha = 1;
+      if(gxFwP.length || Date.now() < gxFwUntil) gxFwRaf = requestAnimationFrame(step); else { gxFwRaf = 0; ctx.clearRect(0, 0, cv.width, cv.height); }
+    };
+    gxFwRaf = requestAnimationFrame(step);
+  }
+  function gxChampion(){
+    gxFireworks(7000, 2.4); celebrate(true); gxBoom(.75); setTimeout(function(){ gxBoom(.6); }, 1600);
+    try{ playFanfare(true); }catch(e){}
+    try{ var v = new Audio("./lumina-champion.mp3"); v.volume = 1; setTimeout(function(){ var pr = v.play(); if(pr && pr.catch) pr.catch(function(){}); }, 1300); }catch(e){}
+  }
+  function gxBurst(el){
+    var r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for(var i = 0; i < 12; i++){ var p = document.createElement("i"); p.className = "gx-spark"; var a = Math.PI * 2 * i / 12, d = 40 + Math.random() * 30;
+      p.style.left = cx + "px"; p.style.top = cy + "px"; p.style.setProperty("--tx", Math.cos(a) * d + "px"); p.style.setProperty("--ty", Math.sin(a) * d + "px"); p.style.background = GX_FW_COLS[i % GX_FW_COLS.length];
+      document.body.appendChild(p); setTimeout(function(x){ return function(){ x.remove(); }; }(p), 700); }
+  }
+  // =====================================================================
+  // ĐẤU TRƯỜNG MỚI: Ai Là Triệu Phú + Ghép Cặp Thần Tốc (bộ bài không lặp)
+  // =====================================================================
+  // ---- Bộ bài: từ trả lời đúng rời bộ, chỉ quay lại khi đã ôn hết 1 vòng ----
+  function gdKey(id){ return "azq_deck_" + id; }
+  function gdLoad(id){ try{ var d = JSON.parse(localStorage.getItem(gdKey(id)) || "null"); if(d && d.cleared) return d; }catch(e){} return { cleared:[], round:1 }; }
+  function gdSave(id, d){ try{ localStorage.setItem(gdKey(id), JSON.stringify(d)); }catch(e){} }
+  function gdStatus(id){
+    var d = gdLoad(id), all = qLearnedPool(), cl = {}; d.cleared.forEach(function(w){ cl[w] = 1; });
+    var left = all.filter(function(w){ return !cl[w.w]; });
+    return { d:d, all:all, left:left, done:all.length - left.length };
+  }
+  // Lấy n từ: từ còn trong bộ (chưa gặp lâu nhất lên trước); thiếu thì bù từ đã ôn (ghi chú "ôn lại")
+  function gdDraw(id, n){
+    var st = gdStatus(id), newRound = false;
+    if(!st.left.length && st.all.length){ st.d.cleared = []; st.d.round = (st.d.round || 1) + 1; gdSave(id, st.d); st = gdStatus(id); newRound = true; }
+    var pick = qFresh(st.left).slice(0, n), extra = [];
+    if(pick.length < n){ var have = {}; pick.forEach(function(w){ have[w.w] = 1; }); extra = qFresh(st.all.filter(function(w){ return !have[w.w]; })).slice(0, n - pick.length); }
+    return { words: pick.concat(extra), fresh: pick.length, newRound: newRound, round: st.d.round || 1 };
+  }
+  function gdClear(id, w){ var d = gdLoad(id); if(d.cleared.indexOf(w.w) < 0){ d.cleared.push(w.w); gdSave(id, d); } }
+  function gdChip(id){ var st = gdStatus(id); return st.all.length ? '<svg class="ui-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7.5 4.5 4 4.8v13c3.5-.3 6 .2 8 1.7 2-1.5 4.5-2 8-1.7v-13c-3.5-.3-6 .2-8 1.7z"/><path d="M12 6.5v13"/></svg>' + " Vòng " + (st.d.round || 1) + " · còn <b>" + st.left.length + "/" + st.all.length + "</b> từ chưa ôn" : ""; }
+  function gxDistract(w, kind, n){
+    var key = function(x){ return kind === "m" ? x.m : x.w; }, ans = key(w), seen = {}, out = [];
+    seen[String(ans).toLowerCase()] = 1;
+    var pool = shuffle(qLearnedPool().slice()).concat(shuffle(WORDS.filter(function(x){ return x.p === w.p; })).slice(0, 80), shuffle(WORDS.slice()).slice(0, 80));
+    for(var i = 0; i < pool.length && out.length < n; i++){ var k = String(key(pool[i]) || "").toLowerCase(); if(!k || seen[k]) continue; seen[k] = 1; out.push(pool[i]); }
+    return out;
+  }
+  function gxXp(n, why){ if(n <= 0) return; meta.xp += n; saveMeta(meta); renderStreakAndXp(); try{ bumpTodayProgress(); }catch(e){} try{ renderQuest(); }catch(e){} }
+  function gxTone(seq){ seq.forEach(function(t){ playTone(t[0], t[1], t[2] || "triangle", t[3] || 0); }); }
+  function gxThemeApply(){ var t = document.documentElement.getAttribute("data-theme") || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    Array.prototype.forEach.call(document.querySelectorAll(".gx"), function(g){ g.classList.toggle("gx-light", t === "light"); }); }
+  function gxOpen(el){ gxThemeApply(); el.hidden = false; document.body.classList.add("gx-lock"); }
+  document.addEventListener("click", function(e){ if(e.target.closest(".gx-theme")){ var tb = document.getElementById("themeBtn"); if(tb) tb.click(); setTimeout(gxThemeApply, 30); } });
+  function gxClose(el){ el.hidden = true; document.body.classList.remove("gx-lock"); try{ renderQuest(); }catch(e){} }
+  var GX_SHAPES = ["A", "B", "C", "D"];
+
+  // ---------------------------- AI LÀ TRIỆU PHÚ ----------------------------
+  var MIL_LADDER = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000];
+  var MIL_SAY = {
+    start: ["Chào mừng tới Ai Là Triệu Phú bản AZ! Lumina làm MC, mỏ hơi hỗn, chịu khó nghe nha 😏", "Ngồi ghế nóng rồi đó! Run chưa? Lumina thì không run, Lumina chỉ cà khịa thôi 😎"],
+    pick: ["Chắc chưa? Chạm lần nữa là chốt, không quay đầu đâu nha 🤨", "Ồ, tự tin dữ ha… chạm lần nữa để chốt đi!", "Lumina hồi hộp giùm bạn luôn á 😬 Chạm lần nữa để chốt."],
+    lock: ["Đã chốt! Cả khán phòng nín thở…", "Chốt đơn! Hồi hộp quá trời quá đất…", "Ok chốt. Để xem nào…"],
+    right: ["Chính xác! Ủa sao giỏi vậy, ai cho phép? 😏", "Đúng rồi! Tiền về tài khoản nè 💸", "Chuẩn không cần chỉnh! Next!", "Qua câu này rồi, đừng có kiêu nha 😎", "Đỉnh nóc kịch trần luôn!"],
+    wrong: ["Toang rồi ông giáo ạ 😭", "Ui, sai mất tiêu… Lumina tiếc 3 giây rồi thôi 🫠", "Hụt rồi! Từ này lần sau là của bạn, hứa đó."],
+    timeout: "Hết giờ! Đứng hình lâu quá vậy bạn ơi 🫠",
+    f5050: "Lumina xoá giùm 2 đáp án sai, còn lại tự lo nha 😌",
+    swap: "Đổi câu cho nè. Câu kia khó quá đúng không? Khỏi giấu 😏",
+    stop: "Dừng đúng lúc cũng là một loại trí tuệ 🧠 Giữ điểm về nhà!",
+    win: "TRIỆU PHÚ TỪ VỰNG LÀ ĐÂY!!! Lumina xin chữ ký trước nha 🏆"
+  };
+  var mil = null, milTimerId = null;
+  function milEl(id){ return document.getElementById(id); }
+  function milFmt(n){ return n.toLocaleString("vi-VN"); }
+  function milSay(t){ var el = milEl("milSay"); el.textContent = t; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+  function milBuild(w, level, total){
+    var r = level / Math.max(1, total - 1), types = ["mean", "word"];
+    if(r > 0.3 && w.s && w.s.indexOf("___") >= 0) types.push("cloze");
+    if(r > 0.45) types.push("listen");
+    if(r > 0.6 && w.s && w.s.indexOf("___") >= 0) types.push("cloze");
+    var t = qmPick(types), kind = (t === "mean" || t === "listen") ? "m" : "w";
+    var opts = shuffle([w].concat(gxDistract(w, kind, 3))).map(function(x){ return { label: kind === "m" ? x.m : x.w, ok: x === w }; });
+    var pic = '<span class="mil-tile">' + fe(w.e || TOPIC_EMOJI[w.t] || "", "mil-pic") + "</span>";
+    var q = t === "mean" ? { k:"Nghĩa của từ này là gì?", h: pic + '<b class="mil-w">' + qmEsc(w.w) + "</b>" + (w.ipa ? '<span class="mil-ipa">/' + qmEsc(w.ipa) + "/</span>" : "") }
+          : t === "word" ? { k:"Từ tiếng Anh nào có nghĩa là…", h: pic + '<span class="mil-vn">“' + qmEsc(w.m) + '”</span>' }
+          : t === "cloze" ? { k:"Điền từ còn thiếu vào câu", h: qmEsc(w.s).replace("___", '<span class="mil-blank">______</span>') }
+          : { k:"Nghe và chọn nghĩa đúng", h: '<span class="mil-tile big">' + fe("🎧", "mil-pic") + "</span>" };
+    return { w:w, t:t, q:q, opts:opts };
+  }
+  function milStart(){
+    var lp = qLearnedPool();
+    if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới vào ghế nóng được nha 😏"); return; }
+    var total = Math.min(15, lp.length), dr = gdDraw("mil", total + 6);
+    mil = { total: total, ladder: MIL_LADDER.slice(15 - total), words: dr.words, used: 0, level: 0, sel: -1, locked: false, life: { f5050:1, ask:1, swap:1 }, cleared: 0, newRound: dr.newRound };
+    mil.safe = [total - 11, total - 6].filter(function(x){ return x >= 0; });
+    milEl("milEnd").hidden = true; milEl("milPlay").hidden = false;
+    Array.prototype.forEach.call(document.querySelectorAll("#gxMil [data-l]"), function(b){ b.disabled = false; b.classList.remove("used"); });
+    gxOpen(milEl("gxMil"));
+    milSay(dr.newRound ? "Bạn đã ôn hết cả bộ từ rồi! Vòng mới bắt đầu, tăng độ khó nè 🔥" : qmPick(MIL_SAY.start));
+    gxTone([[98, .5, "sine"], [196, .18, "triangle", .05], [262, .16, "triangle", .3], [330, .16, "triangle", .48], [392, .18, "triangle", .66], [523, .5, "triangle", .84]]);
+    setTimeout(function(){ speakReactionVi("Chào mừng bạn đến với Ai Là Triệu Phú, phiên bản A Z English! Lumina là người dẫn chương trình. Ngồi vững nha!"); }, 900);
+    mil.welcome = true;
+    milNext();
+  }
+  function milLadderRender(){
+    var h = "";
+    for(var i = mil.total - 1; i >= 0; i--){
+      var cls = (i === mil.level ? " cur" : "") + (i < mil.level ? " done" : "") + (mil.safe.indexOf(i) >= 0 ? " safe" : "");
+      h += '<li class="' + cls + '"><span>' + (i + 1) + '</span><b>' + milFmt(mil.ladder[i]) + "</b></li>";
+    }
+    milEl("milLadder").innerHTML = h;
+    var cur = milEl("milLadder").querySelector(".cur"); if(cur && cur.scrollIntoView) cur.scrollIntoView({ block:"nearest", inline:"center" });
+    milEl("milQn").textContent = mil.level + 1; milEl("milQtot").textContent = mil.total;
+    milEl("milPts").textContent = milFmt(mil.ladder[mil.level]);
+    milEl("milKeep").textContent = milFmt(mil.level ? mil.ladder[mil.level - 1] : 0);
+    milEl("milDeck").innerHTML = gdChip("mil");
+  }
+  function milNext(){
+    var w = mil.words[mil.used++] || qmPick(qLearnedPool());
+    mil.cur = milBuild(w, mil.level, mil.total); mil.sel = -1; mil.locked = false;
+    milLadderRender();
+    var c = mil.cur;
+    milEl("milQk").textContent = c.q.k; milEl("milQ").innerHTML = c.q.h; milEl("milQbar").textContent = c.q.k;
+    milEl("milSpeak").hidden = !(c.t === "listen" || c.t === "mean");
+    milEl("milHelp").hidden = true;
+    milEl("milAns").innerHTML = c.opts.map(function(o, i){ return '<button class="mil-a" data-i="' + i + '" type="button"><span class="hx-in"><i>' + GX_SHAPES[i] + '.</i><span class="' + (c.t === "mean" || c.t === "listen" ? "vi" : "en") + '">' + qmEsc(o.label) + "</span></span></button>"; }).join("");
+    var card = milEl("milCard"); card.classList.remove("in"); void card.offsetWidth; card.classList.add("in");
+    var first = mil.welcome; mil.welcome = false;
+    if(c.t === "listen" || c.t === "mean") setTimeout(function(){ speak(c.w.w); }, first ? 6200 : 300);
+    milTimer(first ? 36 : 30);
+  }
+  function milTimer(sec){
+    clearInterval(milTimerId); var end = Date.now() + sec * 1000, ring = milEl("milRing");
+    milTimerId = setInterval(function(){
+      if(!mil || mil.locked) return;
+      var left = end - Date.now(), s = Math.max(0, Math.ceil(left / 1000));
+      milEl("milSec").textContent = s; ring.style.strokeDashoffset = (94.25 * (1 - Math.max(0, left) / (sec * 1000))).toFixed(2);
+      milEl("milTime").classList.toggle("low", s <= 5);
+      if(s <= 5 && s > 0 && left % 1000 > 900) playTone(880, .05, "square");
+      if(left <= 0){ clearInterval(milTimerId); milSay(MIL_SAY.timeout); milReveal(-1); }
+    }, 100);
+  }
+  function milTap(i){
+    if(!mil || mil.locked) return;
+    var btns = milEl("milAns").children;
+    if(mil.sel !== i){ mil.sel = i; Array.prototype.forEach.call(btns, function(b, j){ b.classList.toggle("sel", j === i); }); milSay(qmPick(MIL_SAY.pick)); playTone(660, .06); return; }
+    mil.locked = true; btns[i].classList.add("lock"); milSay(qmPick(MIL_SAY.lock));
+    gxTone([[220, .25, "sine"], [247, .25, "sine", .3], [277, .25, "sine", .6], [311, .35, "sine", .9]]);
+    setTimeout(function(){ milReveal(i); }, 1500);
+  }
+  function milReveal(i){
+    clearInterval(milTimerId); mil.locked = true;
+    var btns = milEl("milAns").children, ok = i >= 0 && mil.cur.opts[i].ok, ci = -1;
+    mil.cur.opts.forEach(function(o, j){ if(o.ok) ci = j; });
+    Array.prototype.forEach.call(btns, function(b, j){ b.disabled = true; if(j === ci) b.classList.add("ok"); else if(j === i) b.classList.add("no"); });
+    if(ok){
+      gdClear("mil", mil.cur.w); mil.cleared++; try{ qMarkSeen([mil.cur.w]); }catch(e){}
+      chimeCorrect(); milSay(qmPick(MIL_SAY.right)); speak(mil.cur.w.w, "happy");
+      if(mil.level === mil.total - 1){ setTimeout(function(){ milEnd("win"); }, 1300); return; }
+      var safeHit = mil.safe.indexOf(mil.level) >= 0;
+      mil.level++;
+      if(safeHit){ celebrate(false); gxFireworks(1800, 2); gxBoom(.5); milSay("Mốc an toàn! " + milFmt(mil.ladder[mil.level - 1]) + " điểm đã nằm chắc trong túi 💰"); }
+      setTimeout(milNext, 1600);
+    }else{
+      chimeWrong(); if(i >= 0) milSay(qmPick(MIL_SAY.wrong));
+      setTimeout(function(){ milEnd("lose"); }, 1900);
+    }
+  }
+  function milLife(k){
+    if(!mil || mil.locked || !mil.life[k]) return;
+    mil.life[k] = 0; var b = document.querySelector('#gxMil [data-l="' + k + '"]'); b.disabled = true; b.classList.add("used");
+    var btns = milEl("milAns").children;
+    if(k === "f5050"){
+      var wrongs = []; mil.cur.opts.forEach(function(o, j){ if(!o.ok) wrongs.push(j); });
+      shuffle(wrongs).slice(0, 2).forEach(function(j){ btns[j].classList.add("gone"); btns[j].disabled = true; });
+      milSay(MIL_SAY.f5050);
+    }else if(k === "ask"){
+      var ci = 0, live = []; mil.cur.opts.forEach(function(o, j){ if(o.ok) ci = j; if(!btns[j].classList.contains("gone")) live.push(j); });
+      var sure = Math.random() < 0.85, top = sure ? ci : qmPick(live.filter(function(j){ return j !== ci; }).concat([ci])), rest = 100, pct = {};
+      pct[top] = 45 + Math.floor(Math.random() * 30); rest -= pct[top];
+      live.filter(function(j){ return j !== top; }).forEach(function(j, n, arr){ var v = n === arr.length - 1 ? rest : Math.floor(Math.random() * rest * 0.7); pct[j] = v; rest -= v; });
+      milEl("milHelp").innerHTML = '<b>🦁 Lumina khảo sát khán giả:</b><div class="mil-bars">' + [0, 1, 2, 3].map(function(j){ var v = pct[j] || 0; return '<span><i style="height:' + Math.max(4, v) + '%"></i><em>' + v + "%</em><small>" + GX_SHAPES[j] + "</small></span>"; }).join("") + "</div>";
+      milEl("milHelp").hidden = false;
+      milSay("Đa số nghiêng về " + GX_SHAPES[top] + "… nhưng khán giả từng sai đó nha 🙃");
+    }else if(k === "swap"){
+      milSay(MIL_SAY.swap); mil.level = mil.level; milNext();
+    }
+  }
+  function milEnd(kind){
+    clearInterval(milTimerId);
+    var won = kind === "win", stop = kind === "stop", keep = 0;
+    if(won) keep = mil.ladder[mil.total - 1];
+    else if(stop) keep = mil.level ? mil.ladder[mil.level - 1] : 0;
+    else { mil.safe.forEach(function(sx){ if(mil.level > sx) keep = mil.ladder[sx]; }); }
+    var xp = 10 + mil.cleared * 5 + (won ? 100 : 0);
+    gxXp(xp);
+    var best = +(localStorage.getItem("azq_best_mil") || 0), isRec = keep > best;
+    if(isRec){ try{ localStorage.setItem("azq_best_mil", String(keep)); }catch(e){} }
+    milBestInline();
+    milEl("milPlay").hidden = true;
+    milEl("milEnd").innerHTML =
+      '<div class="mil-trophy">' + fe(won ? "🏆" : stop ? "💼" : keep ? "💰" : "😵", "fe-big") + "</div>" +
+      '<p class="mil-k">' + (won ? "Triệu phú từ vựng!" : stop ? "Dừng cuộc chơi" : "Kết thúc lượt chơi") + "</p>" +
+      '<h3><b>' + milFmt(keep) + "</b> điểm" + (isRec ? ' <em>Kỷ lục mới!</em>' : "") + "</h3>" +
+      '<p class="mil-sum">Vượt qua <b>' + (mil.level + (won ? 1 : 0)) + "/" + mil.total + '</b> câu · dọn được <b>' + mil.cleared + " từ</b> khỏi bộ ôn · <b>+" + xp + " XP</b></p>" +
+      '<p class="mil-quote">“' + (won ? MIL_SAY.win : stop ? MIL_SAY.stop : qmPick(["Không sao, lần sau ngồi ghế nóng lâu hơn nha 😏", "Thua keo này ta bày keo khác! Vô lại liền đi 🔥", "Lumina tin bạn sẽ quay lại phục thù. Nhanh lên nha!"])) + '”</p>' +
+      '<p class="mil-deck2">' + gdChip("mil") + "</p>" +
+      '<div class="gx-btns"><button class="gx-btn ghost" data-act="close" type="button">Về Đấu trường</button><button class="gx-btn" data-act="again" type="button">Chơi lại ▶</button></div>';
+    milEl("milEnd").hidden = false;
+    if(won){ gxChampion(); }
+    else { if(isRec){ gxFireworks(3500, 2.2); gxBoom(.6); celebrate(true); } else if(keep){ celebrate(false); }
+      speakReactionVi(stop ? MIL_SAY.stop : "Toang rồi! Vô lại phục thù liền đi."); }
+  }
+  function milBestInline(){ var b = document.getElementById("milBestInline"), v = +(localStorage.getItem("azq_best_mil") || 0); if(b) b.textContent = v ? (v >= 1000 ? Math.round(v / 1000) + "K" : v) : "--"; }
+
+  // -------------------------- GHÉP CẶP THẦN TỐC ---------------------------
+  var MT_SAY = {
+    combo: ["Combo! Tay nhanh hơn người yêu cũ trở mặt 😎", "Ủa nhanh dữ vậy? Ai cho phép? 🔥", "Đang vào form rồi đó, quẩy tiếp!"],
+    miss: ["Ơ kìa, ghép bừa hả? +1 giây phạt 😤", "Sai cặp rồi! Nhìn kỹ lại coi 👀", "Không phải cặp đó đâu bạn ơi 🙃"],
+    fast: "Thần tốc! Lumina phải xin chữ ký 🤩", mid: "Nhanh đó! Thêm xíu nữa là chạm kỷ lục 💪", slow: "Ổn áp! Lần sau nhanh hơn nha, rùa → thỏ 🐢🐇"
+  };
+  var mt = null, mtTick = null;
+  function mtEl(id){ return document.getElementById(id); }
+  function mtStart(){
+    var lp = qLearnedPool();
+    if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
+    var dr = gdDraw("mt", 6), words = dr.words.slice(0, 6), cards = [];
+    words.forEach(function(w, k){ cards.push({ k:k, side:"en", t:w.w, w:w }); cards.push({ k:k, side:"vi", t:w.m, w:w }); });
+    mt = { words:words, cards:shuffle(cards), sel:null, matched:0, pen:0, combo:0, t0:0, run:false, fresh:dr.fresh, newRound:dr.newRound };
+    mtEl("mtEnd").hidden = true; mtEl("mtPlay").hidden = false;
+    mtEl("mtGrid").classList.remove("up");
+    mtEl("mtGrid").innerHTML = mt.cards.map(function(c, i){ return '<button class="mt-c ' + c.side + '" data-i="' + i + '" type="button" disabled style="--d:' + (i * 0.06).toFixed(2) + 's"><span class="mt-in"><span class="mt-back"><b>AZ</b></span><span class="mt-face">' +
+      (c.side === "en" ? '<em>EN</em><span class="mt-tile">' + fe(c.w.e || TOPIC_EMOJI[c.w.t] || "", "mt-pic") + "</span>" : "") + '<span class="mt-t">' + qmEsc(c.t) + "</span></span></span></button>"; }).join("");
+    mtEl("mtTime").textContent = "0.0"; mtEl("mtCombo").textContent = ""; mtEl("mtDeck").innerHTML = gdChip("mt");
+    var b = +(localStorage.getItem("azq_best_mt") || 0); mtEl("mtBest").textContent = b ? (b / 1000).toFixed(1) + "s" : "--";
+    mtEl("mtSay").textContent = dr.newRound ? "Ôn hết cả bộ rồi! Vòng mới nè 🔥" : "Ghép 6 cặp nhanh nhất có thể. Sẵn sàng chưa? 😏";
+    gxOpen(mtEl("gxMt"));
+    var cd = mtEl("mtCount"), n = 4; cd.hidden = false; cd.textContent = "Sẵn sàng?";
+    gxTone([[523, .12], [659, .12, "triangle", .12], [784, .25, "triangle", .24]]);
+    speakReactionVi(dr.newRound ? "Ôn hết cả bộ rồi! Chào mừng tới vòng mới của Ghép Cặp Thần Tốc!" : "Chào mừng tới Ghép Cặp Thần Tốc! Ghép thật nhanh nha, ba, hai, một!");
+    var iv = setInterval(function(){
+      n--; if(n > 3) return; if(n > 0){ cd.textContent = n; playTone(523, .1); cd.classList.remove("pop"); void cd.offsetWidth; cd.classList.add("pop"); return; }
+      clearInterval(iv); cd.textContent = "Quẩy!"; gxTone([[784, .18], [1046, .25, "triangle", .1]]);
+      setTimeout(function(){ cd.hidden = true; }, 450);
+      mtEl("mtGrid").classList.add("up");
+      Array.prototype.forEach.call(mtEl("mtGrid").children, function(c){ c.disabled = false; });
+      mt.t0 = performance.now(); mt.run = true;
+      clearInterval(mtTick); mtTick = setInterval(function(){ if(mt && mt.run) mtEl("mtTime").textContent = ((performance.now() - mt.t0 + mt.pen) / 1000).toFixed(1); }, 50);
+    }, 750);
+  }
+  function mtTap(i){
+    if(!mt || !mt.run) return;
+    var c = mt.cards[i], el = mtEl("mtGrid").children[i];
+    if(c.side === "en") speak(c.w.w);
+    if(mt.sel === null){ mt.sel = i; el.classList.add("sel"); playTone(600, .05); return; }
+    if(mt.sel === i){ el.classList.remove("sel"); mt.sel = null; return; }
+    var a = mt.cards[mt.sel], ael = mtEl("mtGrid").children[mt.sel];
+    if(a.side === c.side){ ael.classList.remove("sel"); mt.sel = i; el.classList.add("sel"); playTone(600, .05); return; }
+    if(a.k === c.k){
+      mt.combo++; mt.matched++; mt.sel = null;
+      [ael, el].forEach(function(x){ x.classList.remove("sel"); x.classList.add("ok"); x.disabled = true; });
+      gxBurst(ael); gxBurst(el);
+      setTimeout(function(){ ael.classList.add("gone"); el.classList.add("gone"); }, 380);
+      gdClear("mt", c.w); try{ qMarkSeen([c.w]); }catch(e){}
+      playTone(660 + mt.combo * 90, .09); playTone(990 + mt.combo * 90, .12, "triangle", .07);
+      if(mt.combo >= 2){ mtEl("mtCombo").innerHTML = fe("🔥", "fe-i") + " Combo x" + mt.combo; mtEl("mtCombo").classList.remove("pop"); void mtEl("mtCombo").offsetWidth; mtEl("mtCombo").classList.add("pop"); if(mt.combo === 3 || mt.combo === 5) mtEl("mtSay").textContent = qmPick(MT_SAY.combo); }
+      if(mt.matched === 6) setTimeout(mtEnd, 520);
+    }else{
+      mt.combo = 0; mt.pen += 1000; mtEl("mtCombo").textContent = "+1s phạt ⏱"; mtEl("mtSay").textContent = qmPick(MT_SAY.miss);
+      [ael, el].forEach(function(x){ x.classList.remove("sel"); x.classList.add("bad"); });
+      setTimeout(function(){ ael.classList.remove("bad"); el.classList.remove("bad"); }, 450);
+      mt.sel = null; chimeWrong();
+    }
+  }
+  function mtEnd(){
+    mt.run = false; clearInterval(mtTick);
+    var ms = Math.round(performance.now() - mt.t0 + mt.pen), s = ms / 1000, best = +(localStorage.getItem("azq_best_mt") || 0), isRec = !best || ms < best;
+    if(isRec){ try{ localStorage.setItem("azq_best_mt", String(ms)); }catch(e){} }
+    mtBestInline();
+    var stars = s <= 20 ? 3 : s <= 35 ? 2 : 1, xp = 10 + stars * 5 + (isRec ? 10 : 0);
+    gxXp(xp);
+    mtEl("mtPlay").hidden = true;
+    mtEl("mtEnd").innerHTML = '<div class="mt-stars">' + [1, 2, 3].map(function(k){ return '<i class="' + (k <= stars ? "on" : "") + '" style="--d:' + (k * .15) + 's">' + fe("⭐") + "</i>"; }).join("") + "</div>" +
+      '<h3><b>' + s.toFixed(1) + "s</b>" + (isRec ? " <em>Kỷ lục mới!</em>" : "") + "</h3>" +
+      '<p class="mil-sum">Ghép xong <b>6 cặp</b>' + (mt.pen ? " · phạt <b>" + (mt.pen / 1000) + "s</b>" : " · không sai cặp nào 👏") + " · <b>+" + xp + " XP</b></p>" +
+      '<p class="mil-quote">“' + (isRec && best ? "Phá kỷ lục cũ " + (best / 1000).toFixed(1) + "s luôn! Ai cản nổi? 🚀" : stars === 3 ? MT_SAY.fast : stars === 2 ? MT_SAY.mid : MT_SAY.slow) + "”</p>" +
+      '<div class="mt-done">' + mt.words.map(function(w){ return '<span><b>' + qmEsc(w.w) + "</b>" + qmEsc(w.m) + "</span>"; }).join("") + "</div>" +
+      '<p class="mil-deck2">' + gdChip("mt") + "</p>" +
+      '<div class="gx-btns"><button class="gx-btn ghost" data-act="close" type="button">Về Đấu trường</button><button class="gx-btn" data-act="again" type="button">6 từ tiếp ▶</button></div>';
+    mtEl("mtEnd").hidden = false;
+    if(isRec) gxChampion(); else if(stars === 3){ gxFireworks(3500, 2.2); gxBoom(.6); celebrate(true); } else celebrate(false);
+  }
+  function mtBestInline(){ var b = document.getElementById("mtBestInline"), v = +(localStorage.getItem("azq_best_mt") || 0); if(b) b.textContent = v ? (v / 1000).toFixed(1) + "s" : "--"; }
+
+  (function(){
+    var gm = document.getElementById("gxMil"), gt = document.getElementById("gxMt"); if(!gm || !gt) return;
+    document.getElementById("modeMil").addEventListener("click", function(){ if(document.getElementById("qArena").classList.contains("locked")) return; milStart(); });
+    document.getElementById("modeMt").addEventListener("click", function(){ if(document.getElementById("qArena").classList.contains("locked")) return; mtStart(); });
+    gm.addEventListener("click", function(e){
+      var a = e.target.closest(".mil-a"); if(a){ milTap(+a.dataset.i); return; }
+      var l = e.target.closest("[data-l]"); if(l){ milLife(l.dataset.l); return; }
+      if(e.target.closest("#milSpeak")){ speak(mil.cur.w.w); return; }
+      if(e.target.closest("#milStop")){ if(mil && !mil.locked){ milSay(MIL_SAY.stop); milEnd("stop"); } return; }
+      var act = e.target.closest("[data-act]"); if(act){ if(act.dataset.act === "again") milStart(); else gxClose(gm); return; }
+      if(e.target.closest(".gx-x")){ clearInterval(milTimerId); gxClose(gm); }
+    });
+    gt.addEventListener("click", function(e){
+      var c = e.target.closest(".mt-c"); if(c){ mtTap(+c.dataset.i); return; }
+      var act = e.target.closest("[data-act]"); if(act){ if(act.dataset.act === "again") mtStart(); else gxClose(gt); return; }
+      if(e.target.closest(".gx-x")){ if(mt) mt.run = false; clearInterval(mtTick); gxClose(gt); }
+    });
+    milBestInline(); mtBestInline();
+  })();
+
+
+  // ---- v30: xem lại giữ nguyên thử thách · nút loa · gợi ý xáo chữ ----
+  var qmReviewMid = null, qmCurMid = null;
+  function qmReviewWord(){
+    if(!session || feedback.classList.contains("show")) return;
+    var ab = document.getElementById("altMethod"); if(ab && ab._kh){ document.removeEventListener("keydown", ab._kh); ab._kh = null; }
+    qmReviewMid = qmCurMid; renderCurrent();
+  }
+  document.getElementById("recallSay").addEventListener("click", function(){ speak(currentWord().w); });
+  var hintScr = document.getElementById("hintScr"), hintScrBtn = document.getElementById("hintScrBtn");
+  function qmScrReset(){ hintScr.hidden = true; hintScr.innerHTML = ""; hintScrBtn.disabled = false; }
+  function qmScrSync(){
+    if(hintScr.hidden) return;
+    var typed = answerInput.value.toLowerCase().split(""), tiles = hintScr.querySelectorAll(".scr-t");
+    Array.prototype.forEach.call(tiles, function(t){ t.classList.remove("used"); });
+    typed.forEach(function(ch){
+      for(var i = 0; i < tiles.length; i++){ if(!tiles[i].classList.contains("used") && tiles[i].dataset.c === ch){ tiles[i].classList.add("used"); break; } }
+    });
+  }
+  hintScrBtn.addEventListener("click", function(){
+    var w = currentWord().w, letters = w.toLowerCase().split("").filter(function(c){ return c !== " " && c !== "-"; });
+    var mix = shuffle(letters.slice()), tries = 0;
+    while(letters.length > 1 && mix.join("") === letters.join("") && tries++ < 8) mix = shuffle(letters.slice());
+    hintUsedThisWord = true; hintScrBtn.disabled = true;
+    hintScr.innerHTML = '<span class="scr-lab">Chạm chữ theo đúng thứ tự:</span><div class="scr-row">' +
+      mix.map(function(c){ return '<button class="scr-t" type="button" data-c="' + c + '">' + c.toUpperCase() + '</button>'; }).join("") + "</div>";
+    hintScr.hidden = false; qmScrSync();
+  });
+  hintScr.addEventListener("click", function(e){
+    var t = e.target.closest(".scr-t"); if(!t || t.classList.contains("used") || answerInput.disabled) return;
+    var w = currentWord().w;
+    while(answerInput.value.length < w.length && (w[answerInput.value.length] === " " || w[answerInput.value.length] === "-")) answerInput.value += w[answerInput.value.length];
+    if(answerInput.value.length >= w.length) return;
+    answerInput.value += t.dataset.c;
+    answerInput.dispatchEvent(new Event("input"));
+  });
+  answerInput.addEventListener("input", qmScrSync);
+
   function showFeedback(word, correct){
     answerInput.disabled = true;
     submitBtn.disabled = true;
@@ -4336,7 +5303,7 @@ button, input, select, textarea{ font-family:inherit; }
     nextBtn.innerHTML = qmLab(session.queue.length > 0 ? "Câu tiếp theo →" : "Xem kết quả →");
     updateStatsUI();
     sxBoostRender(correct);
-    document.querySelector(".hint-row").classList.add("hidden");
+    document.querySelector(".hint-row").classList.add("hidden"); qmScrReset();
   }
 
   nextBtn.addEventListener("click", function(){
@@ -4487,6 +5454,8 @@ button, input, select, textarea{ font-family:inherit; }
   };
   // Icon game 48px — mỗi game một cơ chế chơi
   var QGI = {
+    crown:'<svg viewBox="0 0 48 48" class="gi"><path d="M8 34 5 14l11 9 8-14 8 14 11-9-3 20z"/><path d="M9 40h30"/><circle class="spk s1" cx="24" cy="6" r="2"/></svg>',
+    bolt:'<svg viewBox="0 0 48 48" class="gi"><rect x="4" y="9" width="17" height="13" rx="3"/><rect x="27" y="26" width="17" height="13" rx="3"/><path class="spk s1" d="M27 8 21 22h7l-6 14"/></svg>',
     wand:'<svg viewBox="0 0 48 48" class="gi"><g class="wand"><path d="M11 37 29 19" stroke-width="5"/><path class="tip" d="M27 21l5-5" stroke-width="5"/></g><path class="spk s1" d="M36 7v8M32 11h8"/><path class="spk s2" d="M41 23v5M38.5 25.5h5"/><path class="spk s3" d="M21 7v5M18.5 9.5h5"/></svg>',
     tiles:'<svg viewBox="0 0 48 48" class="gi"><g class="t1"><rect x="4" y="15" width="19" height="15" rx="4"/><path d="M9 22.5h9"/></g><g class="t2"><rect x="25" y="15" width="19" height="15" rx="4"/><path d="M30 22.5h9"/></g><path class="slot" d="M7 37h34"/></svg>',
     keys:'<svg viewBox="0 0 48 48" class="gi"><path class="line" d="M7 10h24"/><path class="caret" d="M35 5v10"/><rect class="k k1" x="3" y="20" width="13" height="15" rx="3.5"/><rect class="k k2" x="17.5" y="20" width="13" height="15" rx="3.5"/><rect class="k k3" x="32" y="20" width="13" height="15" rx="3.5"/><path d="M9.5 41h29" stroke-width="2.4" opacity=".5"/></svg>'
@@ -4561,8 +5530,8 @@ button, input, select, textarea{ font-family:inherit; }
 
   // Game gợi ý — mỗi luật trả về điểm; thêm luật mới (theo lỗi sai, chủ đề...) vào ARENA_RULES
   var ARENA_GAMES = [
-    { id:"sprint", btn:"modeSprint", emoji:"wand", name:"Phù Thủy & Bạch Tuyết", time:"~2 phút", xp:"thắng +40 XP", best:"sprintBestInline", why:"Luyện phản xạ nhận nghĩa từ" },
-    { id:"chase",  btn:"modeChase",  emoji:"tiles", name:"Người Đẹp & Quái Vật",  time:"~3 phút", xp:"+25 XP/câu",   best:"chaseBestInline",  why:"Ghép cụm từ để nhớ cách dùng" },
+    { id:"mil",    btn:"modeMil",    emoji:"crown", name:"Ai Là Triệu Phú",       time:"~5 phút", xp:"tới +100 XP",  best:"milBestInline",    why:"15 câu leo thang — ngồi ghế nóng ôn sâu" },
+    { id:"mt",     btn:"modeMt",     emoji:"bolt",  name:"Ghép Cặp Thần Tốc",     time:"~1 phút", xp:"+25 XP",       best:"mtBestInline",     why:"Ôn nhanh 6 từ trong 1 phút" },
     { id:"race",   btn:"modeRace",   emoji:"keys",  name:"Trốn Thoát Zombie",      time:"~3 phút", xp:"thắng +40 XP", best:"raceBestInline",   why:"Gõ nhanh để nhớ mặt chữ" }
   ];
   var ARENA_RULES = [
@@ -7203,6 +8172,9 @@ button, input, select, textarea{ font-family:inherit; }
     currentRecallMode = "alt"; hintUsedThisWord = false;
     answerInput.disabled = true; submitBtn.disabled = true;
     if(mid === "tlp" || mid === "tls") qmRenderTiles(word, mid, altBox); else qmRenderChoice(word, mid, altBox);
+    var qmTools = document.createElement("div"); qmTools.className = "alt-tools";
+    qmTools.innerHTML = '<button class="hint-btn" type="button">' + ic("review") + ' Xem lại từ</button>';
+    qmTools.firstChild.addEventListener("click", qmReviewWord); altBox.appendChild(qmTools);
     studyPhase.classList.add("hidden"); recallPhase.classList.remove("hidden");
   }
   function qmRenderChoice(word, mid, altBox){
