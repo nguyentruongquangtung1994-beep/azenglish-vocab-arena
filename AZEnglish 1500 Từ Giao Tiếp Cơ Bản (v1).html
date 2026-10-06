@@ -6631,7 +6631,7 @@ body.gx-lock #motivateToast{ display:none !important; }
     var note = document.querySelector(".q-hero .azc-auto"), metaRow = document.getElementById("qMeta");
     if(note && metaRow){
       var bs = note.querySelectorAll("b");
-      if(bs.length === 2) note.textContent = bs[0].textContent + " · " + bs[1].textContent + " từ/buổi";
+      if(bs.length === 2) note.textContent = bs[0].textContent + " · " + bs[1].textContent + "/buổi";
       metaRow.insertBefore(note, metaRow.firstChild);
     }
   });

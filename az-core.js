@@ -337,7 +337,7 @@
       }, 300);
     }
     if(hero){
-      var note = el(zoned ? '<p class="azc-auto">🎯 Theo bài test của bạn: <b>' + size + ' từ</b>/buổi. Trình độ cao? Mở bản đồ → <b>Thi vượt vùng</b>.</p>'
+      var note = el(zoned ? '<p class="azc-auto">🎯 Theo bài test: <b>' + size + ' từ</b>/buổi</p>'
         : '<p class="azc-auto">🎯 Theo bài test của bạn: cấp độ <b>' + (lv || "tất cả") + '</b> · <b>' + size + ' từ</b>/buổi. Muốn đổi? Mở “Tuỳ chỉnh”.</p>');
       var cta = hero.querySelector(".home-cta, .hero-cta");
       if(cta && cta.parentNode) cta.parentNode.insertBefore(note, cta.nextSibling); else hero.appendChild(note);
