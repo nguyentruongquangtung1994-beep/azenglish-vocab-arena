@@ -3774,6 +3774,19 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
 .zb-fc .zb-en{ word-break:normal !important; overflow-wrap:normal !important; }
 .zb-fc .zb-en.l2{ font-size:23px !important; } .zb-fc .zb-en.l3{ font-size:19px !important; }
 
+/* ===== v39 ===== */
+.gx-mt .mt-grid.c4 .mt-c, .gx-mt .mt-grid.c4 .mt-in{ min-height:92px !important; }
+.gx-mt .mt-grid.c4 .mt-face{ padding:14px 4px 6px !important; overflow:hidden; gap:2px; }
+.gx-mt .mt-grid.c4 .mt-c.en .mt-tile{ width:38px !important; height:38px !important; border-radius:12px !important; margin:0 auto 2px !important; }
+.gx-mt .mt-grid.c4 .mt-tile .mt-pic{ width:30px !important; height:30px !important; }
+.gx-mt .mt-grid.c4 .mt-face em{ top:4px; left:5px; font-size:7.5px; padding:1px 4px; }
+.gx-mt .mt-grid.c4 .mt-t{ font-size:12.5px !important; line-height:1.2 !important; word-break:normal; overflow-wrap:anywhere; hyphens:auto; }
+.gx-mt .mt-grid.c4 .mt-c.en .mt-t{ font-size:13px !important; }
+/* Zombie: gõ nhầm → cả hàng chớp đỏ rồi xoá cả từ */
+.gx-zb .zb-boxes.wipe{ animation:sxShake .35s ease; }
+.gx-zb .zb-boxes.wipe i.f{ color:#ff4d4d !important; border-color:#ff4d4d !important; }
+.zb-newtag{ display:inline-block; margin-left:6px; padding:1px 7px; border-radius:99px; background:#f5c542; color:#3a2400; font:900 10px var(--gx-font); letter-spacing:.06em; vertical-align:middle; }
+
 .level-chip.active[data-level="B2"]{ border-color:var(--lvl-c1); color:var(--lvl-c1); background:var(--lvl-c1-bg); }
 .lvl-badge.B2{ background:linear-gradient(180deg,#ff7a7a,#c4161c) !important; color:#fff; }
 </style>
@@ -3854,6 +3867,19 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     var s = st[w.w]; return s && (s.correct > 0 || s.wrong > 0);
   });
   WORDS.length = 0; keep.forEach(function(w){ WORDS.push(w); });
+  window.azMergeCustom = function(){
+    var cw = []; try{ cw = JSON.parse(localStorage.getItem("az_custom_words") || "[]") || []; }catch(e){}
+    var have = {}, added = []; WORDS.forEach(function(w){ have[w.w.toLowerCase()] = 1; });
+    cw.forEach(function(c){
+      if(!c || !c.w || !c.m) return; var w = String(c.w).trim(); if(!w || have[w.toLowerCase()]) return;
+      var sx = String(c.s || ""), re = new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      sx = sx && re.test(sx) ? sx.replace(re, "___") : "";
+      var o = { w:w, p:"", m:String(c.m).trim(), lvl:"A1", t:c.t || "mine", ipa:"", s:sx, sv:"", e:"✍️", custom:true };
+      WORDS.push(o); have[w.toLowerCase()] = 1; added.push(o);
+    });
+    return added;
+  };
+  window.azMergeCustom();
   window.qmTT = function(w){ return String(w.w).replace(/\s*\([^)]*\)/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim(); };
   window.qmTypeable = function(w){ return /^[a-z][a-z' -]*$/i.test(window.qmTT(w)); };
   window.AZQ = { KEY:KEY, ZONES:ZONES, NAMES:NAMES, GATE_RATIO:GATE_RATIO, LEGACY_IVL:LEGACY_IVL, ORDER:ORDER, zi:zi, limit:limit, remembered:remembered, zoneKey:zoneKey, justKey:justKey };
@@ -3864,6 +3890,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   "use strict";
 
   var TOPIC_EMOJI = {
+    mine:"✍️",
     office:"🗂️", meeting:"🤝", hr:"🧑‍💼", finance:"💰", banking:"🏦",
     marketing:"📣", sales:"🛍️", shipping:"📦", manufacturing:"🏭", legal:"⚖️",
     travel:"✈️", hotel:"🏨", dining:"🍽️", tech:"💻", realestate:"🏢",
@@ -4077,6 +4104,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   var SESSION_SIZE_KEY = STORAGE_KEY + "_sessionsize";
   var sessionSize = parseInt(localStorage.getItem(SESSION_SIZE_KEY), 10) || BATCH_NEW;
   var TOPIC_LABEL_VI = {
+    mine:"Từ của tôi",
     office:"Văn phòng & hành chính", meeting:"Họp & giao tiếp công việc",
     hr:"Nhân sự & tuyển dụng", finance:"Tài chính & kế toán", banking:"Ngân hàng",
     marketing:"Marketing & quảng cáo", sales:"Bán hàng & bán lẻ", shipping:"Vận chuyển & kho vận",
@@ -4634,6 +4662,15 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   var topicSelect = document.getElementById("topicSelect");
   var topicChipGrid = document.getElementById("topicChipGrid");
   var topicMoreBtn = document.getElementById("topicMoreBtn");
+  window.AZ_TOPICS = { labels:TOPIC_LABEL_VI, emoji:TOPIC_EMOJI, words:function(){ var c = {}; WORDS.forEach(function(w){ c[w.t] = (c[w.t] || 0) + 1; }); return c; } };
+  window.addEventListener("az-custom-words", function(){
+    var a = window.azMergeCustom ? window.azMergeCustom() : [];
+    if(!a.length) return;
+    ensureStateDefaults(); saveState(state);
+    try{ refreshScoreboard(); }catch(e){} try{ updateHomeCta(); }catch(e){}
+    var t = a[0].t, lab = TOPIC_LABEL_VI[t] || t;
+    qmToast("✍️ Đã thêm " + a.length + " từ vào chủ đề “" + lab + "” — buổi học mới sẽ dạy những từ này trước!");
+  });
   (function buildTopicOptions(){
     var counts = {};
     WORDS.forEach(function(w){ counts[w.t] = (counts[w.t] || 0) + 1; });
@@ -5368,7 +5405,10 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
       var sN = ac.createBufferSource(), f = ac.createBiquadFilter(), g2 = ac.createGain(); f.type = "lowpass"; f.frequency.value = 1400; sN.buffer = buf; g2.gain.value = .38; sN.connect(f); f.connect(g2); g2.connect(ac.destination); sN.start(t + .6);
     }catch(e){}
   }
-  function gxBoom(v){ try{ var a = new Audio("./fireworks.mp3"); a.volume = v || .75; var pr = a.play(); if(pr && pr.catch) pr.catch(gxFwSound); }catch(e){ gxFwSound(); } }
+  window.__gxAud = [];
+  function gxHush(){ try{ speechSynthesis.cancel(); }catch(e){} (window.__gxAud || []).forEach(function(a){ try{ a.pause(); }catch(e){} }); window.__gxAud = []; try{ if(qmClip) qmClip.pause(); }catch(e){} gxFwUntil = 0; gxFwP = []; }
+  function gxOn(){ return document.body.classList.contains("gx-lock"); }
+  function gxBoom(v){ if(!gxOn()) return; try{ var a = new Audio("./fireworks.mp3"); window.__gxAud.push(a); a.volume = v || .75; var pr = a.play(); if(pr && pr.catch) pr.catch(gxFwSound); }catch(e){ gxFwSound(); } }
   function gxFireworks(ms, perSec){
     if(!gxFwCv){ gxFwCv = document.createElement("canvas"); gxFwCv.className = "gx-fw"; gxFwCv.setAttribute("aria-hidden", "true"); document.body.appendChild(gxFwCv); }
     var cv = gxFwCv, dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -5396,9 +5436,9 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     gxFwRaf = requestAnimationFrame(step);
   }
   function gxChampion(){
-    gxFireworks(7000, 2.4); celebrate(true); gxBoom(.75); setTimeout(function(){ gxBoom(.6); }, 1600);
+    gxFireworks(7000, 2.4); celebrate(true); gxBoom(.75); setTimeout(function(){ if(gxOn()) gxBoom(.6); }, 1600);
     try{ playFanfare(true); }catch(e){}
-    try{ var v = new Audio("./lumina-champion.mp3"); v.volume = 1; v.playbackRate = 1.1; v.preservesPitch = true; setTimeout(function(){ var pr = v.play(); if(pr && pr.catch) pr.catch(function(){}); }, 1300); }catch(e){}
+    try{ var v = new Audio("./lumina-champion.mp3"); window.__gxAud.push(v); v.volume = 1; v.playbackRate = 1.1; v.preservesPitch = true; setTimeout(function(){ if(!gxOn()) return; var pr = v.play(); if(pr && pr.catch) pr.catch(function(){}); }, 1300); }catch(e){}
   }
   function gxBurst(el){
     var r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -5410,7 +5450,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   // ĐẤU TRƯỜNG MỚI: Ai Là Triệu Phú + Ghép Cặp Thần Tốc (bộ bài không lặp)
   // =====================================================================
   // ---- Bộ bài: từ trả lời đúng rời bộ, chỉ quay lại khi đã ôn hết 1 vòng ----
-  function gdKey(id){ return "azq_toeic_deck_" + id; }
+  function gdKey(id){ return "azq_toeic_deck_arena"; }
   function gdLoad(id){ try{ var d = JSON.parse(localStorage.getItem(gdKey(id)) || "null"); if(d && d.cleared) return d; }catch(e){} return { cleared:[], round:1 }; }
   function gdSave(id, d){ try{ localStorage.setItem(gdKey(id), JSON.stringify(d)); }catch(e){} }
   function gdStatus(id){
@@ -5442,7 +5482,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     Array.prototype.forEach.call(document.querySelectorAll(".gx"), function(g){ g.classList.toggle("gx-light", t === "light"); }); }
   function gxOpen(el){ try{ if(document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); }catch(e){} gxFwUntil = 0; gxFwP = []; gxThemeApply(); el.hidden = false; document.body.classList.add("gx-lock"); }
   document.addEventListener("click", function(e){ if(e.target.closest(".gx-theme")){ var tb = document.getElementById("themeBtn"); if(tb) tb.click(); setTimeout(gxThemeApply, 30); } });
-  function gxClose(el){ el.hidden = true; document.body.classList.remove("gx-lock"); try{ renderQuest(); }catch(e){} }
+  function gxClose(el){ el.hidden = true; document.body.classList.remove("gx-lock"); gxHush(); try{ zbTick(false); }catch(e){} try{ clearInterval(milTimerId); clearInterval(mtTick); clearInterval(pzTimer); }catch(e){} try{ renderQuest(); }catch(e){} }
   var GX_SHAPES = ["A", "B", "C", "D"];
 
   // ---------------------------- AI LÀ TRIỆU PHÚ ----------------------------
@@ -5488,7 +5528,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     gxOpen(milEl("gxMil"));
     milSay(dr.newRound ? "Bạn đã ôn hết cả bộ từ rồi! Vòng mới bắt đầu, tăng độ khó nè 🔥" : qmPick(MIL_SAY.start));
     gxTone([[98, .5, "sine"], [196, .18, "triangle", .05], [262, .16, "triangle", .3], [330, .16, "triangle", .48], [392, .18, "triangle", .66], [523, .5, "triangle", .84]]);
-    setTimeout(function(){ speakReactionVi("Chào mừng bạn đến với Ai Là Triệu Phú, phiên bản A Z English! Lumina là người dẫn chương trình. Ngồi vững nha!"); }, 900);
+    setTimeout(function(){ if(!milEl("gxMil").hidden) speakReactionVi("Chào mừng bạn đến với Ai Là Triệu Phú, phiên bản A Z English! Lumina là người dẫn chương trình. Ngồi vững nha!"); }, 900);
     mil.welcome = true;
     milNext();
   }
@@ -5516,7 +5556,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     milEl("milAns").innerHTML = c.opts.map(function(o, i){ return '<button class="mil-a" data-i="' + i + '" type="button"><span class="hx-in"><i>' + GX_SHAPES[i] + '.</i><span class="' + (c.t === "mean" || c.t === "listen" ? "vi" : "en") + '">' + qmEsc(o.label) + "</span></span></button>"; }).join("");
     var card = milEl("milCard"); card.classList.remove("in"); void card.offsetWidth; card.classList.add("in");
     var first = mil.welcome; mil.welcome = false;
-    if(c.t === "listen" || c.t === "mean") setTimeout(function(){ speak(c.w.w); }, first ? 6200 : 300);
+    if(c.t === "listen" || c.t === "mean") setTimeout(function(){ if(mil && mil.cur === c && !milEl("gxMil").hidden) speak(c.w.w); }, first ? 6200 : 300);
     milTimer(first ? 36 : 30);
   }
   function milTimer(sec){
@@ -5749,6 +5789,11 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
     var need = ZB_ROUNDS * ZB_PER, focus = window.qGameFocus; window.qGameFocus = null;
     var dr = gdDraw("zb", need + 12), words = (focus && focus.length ? shuffle(focus.filter(zbOk)) : dr.words.filter(zbOk)).slice(0, need);
+    if(!(focus && focus.length) && lp.length < 40){
+      var fresh = WORDS.filter(function(w){ var st0 = state[w.w]; return zbOk(w) && st0 && !st0.correct && !st0.wrong; }).slice(0, 30);
+      var nNew = Math.min(fresh.length, Math.round(need / 2)), mix = shuffle(words.slice(0, need - nNew)).concat(shuffle(fresh).slice(0, nNew).map(function(w){ return Object.assign({ zbNew:true }, w); }));
+      words = shuffle(mix);
+    }
     if(words.length < need){ var have = {}; words.forEach(function(w){ have[w.w] = 1; }); words = words.concat(qFresh(lp.filter(function(w){ return zbOk(w) && !have[w.w]; })).slice(0, need - words.length)); }
     while(words.length < need && words.length) words.push(words[words.length % Math.max(1, words.length)]);
     if(opts.endless){ var base = shuffle(lp.filter(zbOk)); words = []; while(words.length < 400 && base.length) words = words.concat(shuffle(base.slice())); }
@@ -5799,7 +5844,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     zbEl("zbEn").className = "zb-en zb-typing" + (w.w.length > 15 ? " l3" : w.w.length > 11 ? " l2" : "");
     zbEl("zbIpa").textContent = w.ipa ? "/" + w.ipa + "/" : "";
     var pos = w.p ? ({ n:"danh từ", v:"động từ", adj:"tính từ", adv:"trạng từ", phr:"cụm từ", int:"thán từ", prep:"giới từ", pron:"đại từ" }[w.p] || w.p) : "";
-    zbEl("zbVi").innerHTML = (pos ? "<em>" + pos + "</em> " : "") + qmEsc(w.m.charAt(0).toUpperCase() + w.m.slice(1));
+    zbEl("zbVi").innerHTML = (w.zbNew ? '<span class="zb-newtag">MỚI</span> ' : "") + (pos ? "<em>" + pos + "</em> " : "") + qmEsc(w.m.charAt(0).toUpperCase() + w.m.slice(1));
     var nL = w.w.replace(/[^a-z]/gi, "").length, nW = w.w.trim().split(/\s+/).length;
     zbEl("zbQbar").innerHTML = "Gõ lại thật nhanh · <b>" + nL + "</b> chữ cái" + (nW > 1 ? " · " + nW + " từ" : "");
     zbEl("zbBoxes").classList.toggle("sm", w.w.length > 11);
@@ -5818,16 +5863,19 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   }
   // Gõ sai: chữ sai hiện đỏ ở ô đang gõ rồi tự xoá để gõ lại (giống Đoán từ của AZ Live)
   function zbBadClear(){ clearTimeout(zb.badT); if(zb.badI != null){ var b = zbEl("zbBoxes").children[zb.badI]; if(b){ b.classList.remove("bad"); } zb.badI = null; zbPaint(); } }
+  function zbWipe(){ clearTimeout(zb.badT); zb.wipe = false; zb.badI = null; zb.typed = ""; var bx = zbEl("zbBoxes"); bx.classList.remove("wipe"); Array.prototype.forEach.call(bx.children, function(c){ c.classList.remove("bad"); }); zbPaint(); }
   function zbBad(k){
     zbBadClear();
-    var i = zb.typed.length, b = zbEl("zbBoxes").children[i];
+    var i = zb.typed.length, bx = zbEl("zbBoxes"), b = bx.children[i];
     if(b){ b.textContent = String(k).toUpperCase(); b.className = "bad"; zb.badI = i; }
+    bx.classList.remove("wipe"); void bx.offsetWidth; bx.classList.add("wipe");
     playTone(180, .07, "square");
-    var zo = zb; zb.badT = setTimeout(function(){ if(zb === zo) zbBadClear(); }, 450);
+    zb.wipe = true; var zo = zb; zb.badT = setTimeout(function(){ if(zb === zo && zb.wipe) zbWipe(); }, 550);
   }
   function zbKey(k){
     if(!zb || !zb.run) return;
     if(zb.lock){ if(k !== "back") (zb.q = zb.q || []).push(k); return; }     // đang chuyển từ: giữ phím lại, không nuốt
+    if(zb.wipe){ zbWipe(); if(k === "back") return; }                   // vừa gõ nhầm: xoá cả từ rồi mới nhận phím mới
     zbBadClear();
     var w = zbCur().w, n = zb.typed.length;
     if(k === "back"){ zb.typed = zb.typed.replace(/[\-']*.$/, ""); playKeyClick(true); zbPaint(); return; }
@@ -6357,7 +6405,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   });
 
   modeDue.addEventListener("click", function(){ beginSession(shuffle(dueWords(selectedLevel)).slice(0, sessionSize), "due"); });
-  modeNew.addEventListener("click", function(){ beginSession(shuffle(newWords(selectedLevel).slice(0, sessionSize)), "new"); });
+  modeNew.addEventListener("click", function(){ var nw = newWords(selectedLevel); nw = nw.filter(function(w){ return w.custom; }).concat(nw.filter(function(w){ return !w.custom; })); beginSession(shuffle(nw.slice(0, sessionSize)), "new"); });
   modeMissed.addEventListener("click", function(){ beginSession(missedWords(selectedLevel), "missed"); });
 
   document.getElementById("homeCtaBtn").addEventListener("click", function(){

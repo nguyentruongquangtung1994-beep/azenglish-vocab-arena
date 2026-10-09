@@ -706,6 +706,70 @@
     font:700 11.5px var(--font-body); color:var(--ink); background:var(--paper-2);
     border:1.5px solid var(--line-strong); border-radius:99px; padding:4px 10px;
   }
+/* AZ-TEST-UI v1 */
+#pt, #pf{ --tu-red:#E02020; --tu-ink:#1a1210; font-family:"Be Vietnam Pro","Nunito",Arial,sans-serif; }
+#pt{ background:radial-gradient(120% 60% at 50% -10%, #ffe1e1 0%, #fff6f2 45%, #fffaf6 100%) !important; }
+#pt .fe3{ display:inline-block; width:1.25em; height:1.25em; vertical-align:-.28em; object-fit:contain; }
+#pt .fe3.big{ width:64px; height:64px; vertical-align:middle; }
+/* thanh tiến độ + đếm */
+#pt .pt-bar{ height:14px !important; border-radius:99px; background:#f3e6e3 !important; }
+#pt .pt-bar i{ background:linear-gradient(90deg,#E02020,#ff7a4d) !important; box-shadow:0 0 10px rgba(224,32,32,.45); }
+#pt .pt-count{ font:900 13px "Be Vietnam Pro",sans-serif !important; color:#E02020 !important; }
+#pt .pt-close{ border-radius:50% !important; background:#fff !important; box-shadow:0 3px 0 #ecd9d5; }
+#pt .pt-cheer{ display:flex; align-items:center; gap:8px; font:800 13px "Be Vietnam Pro",sans-serif !important; color:#E02020 !important; }
+#pt .pt-cheer::before{ content:""; flex:none; width:28px; height:28px; background:url(./lion-head.webp) center/contain no-repeat; animation:tuBob 2.4s ease-in-out infinite; }
+#pt .pt-cheer:empty::before{ display:none; }
+@keyframes tuBob{ 50%{ transform:translateY(-3px) rotate(-6deg); } }
+#pt .pt-inner > *{ animation:tuIn .38s cubic-bezier(.22,1.2,.36,1) both; }
+@keyframes tuIn{ from{ opacity:0; transform:translateY(14px) scale(.98); } }
+/* kicker + tiêu đề */
+#pt .pt-kicker{ font:900 12px "Be Vietnam Pro",sans-serif !important; letter-spacing:.08em; color:#E02020 !important; }
+#pt .skill-tag{ display:inline-flex; align-items:center; gap:4px; padding:4px 10px !important; background:#111 !important; color:#fff !important; font:800 11.5px "Be Vietnam Pro",sans-serif !important; }
+#pt .pt-q{ font:800 clamp(21px,5vw,27px)/1.3 "Be Vietnam Pro",sans-serif !important; color:#1a1210; }
+#pt .pt-q .blank{ min-width:70px !important; border-bottom:4px solid #E02020 !important; background:rgba(224,32,32,.07); border-radius:4px 4px 0 0; }
+#pt .pt-hint{ font:600 13.5px "Be Vietnam Pro",sans-serif !important; }
+/* thẻ câu hỏi kiểu Flashcard */
+#pt .tu-card{ position:relative; margin:4px 0 16px; padding:12px 16px 16px; background:#fff; border:5px solid #E02020; border-radius:20px; box-shadow:0 14px 30px -16px rgba(224,32,32,.6); }
+#pt .tu-card .tu-head{ display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; margin-bottom:10px; border-bottom:1.5px solid #f3d0d0; font:900 14px "Be Vietnam Pro",sans-serif; }
+#pt .tu-card .tu-head b i{ font-style:normal; color:#E02020; } #pt .tu-card .tu-head em{ font:800 italic 11px "Be Vietnam Pro",sans-serif; color:#E02020; }
+#pt .tu-card .tu-skill{ float:right; margin:0 0 6px 12px; width:72px; height:72px; border-radius:20px; display:grid; place-items:center; background:radial-gradient(circle at 50% 40%,#fff,#fff1f1 75%); }
+#pt .tu-card .tu-skill .fe3{ width:54px; height:54px; animation:tuBob 2.6s ease-in-out infinite; }
+#pt .tu-card .pt-q{ margin:0 0 4px; } #pt .tu-card .pt-hint{ margin:0; }
+#pt .passage{ background:#fffaf3 !important; border:2px dashed #f0cfc8 !important; border-radius:16px !important; font-family:"Lora",serif !important; }
+#pt .listen-btn{ border-radius:18px !important; background:linear-gradient(180deg,#ff5a5a,#E02020) !important; color:#fff !important; border:0 !important; box-shadow:0 5px 0 #8f0a1c !important; font-weight:800 !important; }
+#pt .listen-btn .li .fe3{ width:30px; height:30px; }
+/* đồng hồ */
+#pt .qtimer .tt{ height:10px !important; border-radius:99px; background:#f3e6e3 !important; }
+#pt .qtimer .tt i{ background:linear-gradient(90deg,#111,#444) !important; }
+#pt .qtimer.low .tt i{ background:#E02020 !important; animation:tuBeat .6s ease-in-out infinite; }
+#pt .qtimer b{ font:900 13px "Be Vietnam Pro",sans-serif !important; }
+@keyframes tuBeat{ 50%{ opacity:.55; } }
+/* đáp án: ô màu kiểu Kahoot giống phần học */
+#pt .opts.two .opt:not(.dunno){ position:relative; min-height:64px; padding:12px 12px 12px 46px !important; border:0 !important; border-radius:16px !important; color:#fff !important; font:800 15px/1.3 "Be Vietnam Pro",sans-serif !important; text-align:left; box-shadow:0 5px 0 rgba(0,0,0,.28) !important; transition:transform .12s, filter .15s; }
+#pt .opts.two .opt.k0{ background:#E02020 !important; } #pt .opts.two .opt.k1{ background:#1d6fa5 !important; }
+#pt .opts.two .opt.k2{ background:#d4930c !important; } #pt .opts.two .opt.k3{ background:#1e8a4c !important; }
+#pt .opts.two .opt .tu-sh{ position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px; border-radius:8px; display:grid; place-items:center; background:rgba(255,255,255,.22); }
+#pt .opts.two .opt .tu-sh svg{ width:14px; height:14px; fill:#fff; }
+#pt .opts.two .opt:hover:not(:disabled){ transform:translateY(-2px); filter:brightness(1.06); }
+#pt .opts.two .opt:active:not(:disabled){ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.28) !important; }
+#pt .opts.two.chosen .opt:not(.picked), #pt .opts.two .opt:disabled:not(.picked){ opacity:.4; }
+#pt .opts.two .opt.picked{ box-shadow:0 0 0 4px #ffd34a, 0 5px 0 rgba(0,0,0,.28) !important; transform:scale(1.03); }
+#pt .opt.dunno{ border-radius:99px !important; background:#fff !important; }
+/* thẻ "về bạn" + màn mở đầu */
+#pt .opt.nc-card, #pt .opts:not(.two) .opt:not(.dunno){ border-radius:18px !important; border:2px solid #f0dcd8 !important; background:#fff !important; box-shadow:0 4px 0 #ecd9d5 !important; font-family:"Be Vietnam Pro",sans-serif !important; font-weight:700 !important; }
+#pt .opt .oe .fe3, #pt .opt.nc-card .oe .fe3{ width:38px; height:38px; vertical-align:middle; }
+#pt .opt.nc-card.picked, #pt .opts:not(.two) .opt.picked{ border-color:#E02020 !important; background:#fff1f1 !important; box-shadow:0 0 0 3px rgba(224,32,32,.18), 0 4px 0 #E02020 !important; }
+#pt .ti-bub{ background:#fff !important; border:2px solid #f3d0d0 !important; border-radius:18px 18px 18px 6px !important; box-shadow:0 8px 20px -14px rgba(224,32,32,.6); font-weight:600; }
+#pt .ti-list li{ border-radius:16px !important; background:#fff !important; border:2px solid #f3e1dd !important; box-shadow:0 4px 0 #f0e2de; }
+#pt .ti-list li i{ display:grid !important; place-items:center; width:40px; height:40px; border-radius:12px; background:#fff1f1; font-style:normal; }
+#pt .ti-list li i .fe3{ width:28px; height:28px; }
+#pt .ti-go{ border-radius:18px !important; background:linear-gradient(180deg,#ff4a4a,#E02020) !important; box-shadow:0 6px 0 #8f0a1c !important; font:900 18px "Be Vietnam Pro",sans-serif !important; animation:tuPulse 1.6s ease-in-out infinite; }
+@keyframes tuPulse{ 50%{ transform:scale(1.03); } }
+/* màn kết quả */
+#pt .skills .sk .se .fe3, #pf .skills .sk .se .fe3{ width:40px; height:40px; animation:tuBob 2.6s ease-in-out infinite; }
+#pt .skills .sk, #pf .skills .sk{ border-radius:18px !important; box-shadow:0 4px 0 #f0e2de; }
+#pf .fe3{ display:inline-block; width:1.25em; height:1.25em; vertical-align:-.28em; object-fit:contain; }
+@media (prefers-reduced-motion: reduce){ #pt *, #pt *::before{ animation:none !important; } }
 </style>
 </head>
 <body>
@@ -1853,5 +1917,47 @@
     window.addEventListener("pageshow", function(e){ if(e.persisted){ busy = false; ov.hidden = true; ov.classList.remove("on", "talking"); } });
   })();
 </script>
+<script>/* AZ-TEST-UI v1: emoji 3D + đáp án ô màu + thẻ câu hỏi + tiếng chạm */
+(function(){
+  var FE = "https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/";
+  var RE = /(\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic}️?)*)/gu;
+  function names(e){ var cps = Array.from(e).map(function(c){ return c.codePointAt(0).toString(16); }), a = cps.join("-"), b = cps.filter(function(x){ return x !== "fe0f"; }).join("-"), out = [a]; if(b !== a) out.push(b); if(cps.length === 1) out.push(a + "-fe0f"); return out; }
+  window.tuFeErr = function(img){ var alt = (img.getAttribute("data-alt") || "").split("|").filter(Boolean); if(alt.length){ img.setAttribute("data-alt", alt.slice(1).join("|")); img.src = FE + alt[0] + ".webp"; } else { var sp = document.createElement("span"); sp.textContent = img.getAttribute("data-e"); img.replaceWith(sp); } };
+  function feImg(e, cls){ var n = names(e); return '<img class="fe3 ' + (cls || "") + '" src="' + FE + n[0] + '.webp" data-alt="' + n.slice(1).join("|") + '" data-e="' + e + '" alt="" draggable="false" onerror="tuFeErr(this)">'; }
+  function conv(root){
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode:function(n){ var p = n.parentNode; if(!p || /^(SCRIPT|STYLE|TEXTAREA|INPUT|OPTION)$/.test(p.nodeName) || p.closest(".fe3")) return NodeFilter.FILTER_REJECT; RE.lastIndex = 0; return RE.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP; } });
+    var list = []; while(walker.nextNode()) list.push(walker.currentNode);
+    list.forEach(function(n){ var span = document.createElement("span"); span.innerHTML = n.nodeValue.replace(/[&<>]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;" }[c]; }).replace(RE, function(m){ return feImg(m); }); n.parentNode.replaceChild(span, n); });
+  }
+  var SH = ['<svg viewBox="0 0 24 24"><path d="M12 3l9.5 17h-19z"/></svg>', '<svg viewBox="0 0 24 24"><path d="M12 2l10 10-10 10L2 12z"/></svg>', '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/></svg>', '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>'];
+  var SKILLE = { "Nghe":"🎧", "Đọc hiểu":"📖", "Ngữ pháp":"✍️", "Từ vựng":"🔤", "Chuyên ngành":"💼" };
+  function decorate(box){
+    // đáp án 4 lựa chọn → ô màu + ký hiệu
+    Array.prototype.forEach.call(box.querySelectorAll(".opts.two"), function(g){
+      Array.prototype.forEach.call(g.querySelectorAll(".opt:not(.dunno)"), function(b, i){ if(b.querySelector(".tu-sh")) return; b.classList.add("k" + (i % 4)); b.insertAdjacentHTML("afterbegin", '<span class="tu-sh" aria-hidden="true">' + SH[i % 4] + "</span>"); });
+    });
+    // câu hỏi kiểm tra → thẻ Flashcard có hình kỹ năng
+    var q = box.querySelector(".pt-q"), tag = box.querySelector(".skill-tag");
+    if(q && tag && !box.querySelector(".tu-card")){
+      var sk = (tag.textContent || "").replace(RE, "").trim(), e = SKILLE[sk] || "📝";
+      var card = document.createElement("div"); card.className = "tu-card";
+      card.innerHTML = '<div class="tu-head"><b><i>AZ</i>English</b><em>Placement Test</em></div><span class="tu-skill">' + feImg(e) + "</span>";
+      var hint = box.querySelector(".pt-hint"); q.parentNode.insertBefore(card, q); card.appendChild(q); if(hint) card.appendChild(hint);
+    }
+    conv(box);
+  }
+  var ac = null;
+  function tone(f, d, type){ try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); var t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain(); o.type = type || "triangle"; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.07, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + .02); }catch(e){} }
+  function boot(){
+    ["ptInner", "pfInner"].forEach(function(id){
+      var box = document.getElementById(id); if(!box) return;
+      var busy = false;
+      new MutationObserver(function(){ if(busy) return; busy = true; try{ decorate(box); }finally{ busy = false; } }).observe(box, { childList:true, subtree:true });
+      box.addEventListener("click", function(e){ var b = e.target.closest(".opt, .ti-go, .listen-btn"); if(!b || b.disabled) return; tone(b.classList.contains("ti-go") ? 784 : 660, .09); setTimeout(function(){ tone(990, .08); }, 70); }, true);
+    });
+    var ch = document.getElementById("ptCheer"); if(ch) new MutationObserver(function(){ conv(ch); }).observe(ch, { childList:true, characterData:true, subtree:true });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();</script>
 </body>
 </html>

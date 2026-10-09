@@ -413,6 +413,12 @@
       return m.length >= 2 ? { w:m[0].trim(), m:m.slice(1).join(" - ").trim() } : null;
     }).filter(function(x){ return x && x.w && x.m; });
   }
+  function topicSelect(){
+    var T = window.AZ_TOPICS; if(!T) return "";
+    var cnt = T.words ? T.words() : {}, keys = Object.keys(T.labels);
+    keys.sort(function(x, y){ return x === "mine" ? -1 : y === "mine" ? 1 : String(T.labels[x]).localeCompare(String(T.labels[y]), "vi"); });
+    return '<select class="azm-input" data-f="t" aria-label="Chủ đề">' + keys.map(function(k){ return '<option value="' + k + '">' + (T.emoji[k] || "✳️") + " " + esc(T.labels[k]) + (cnt[k] && k !== "mine" ? " (" + cnt[k] + " từ)" : "") + "</option>"; }).join("") + "</select>";
+  }
   function openMine(){
     var mine = loadMine(), due = dueMine(mine);
     var body = el('<div>' +
@@ -420,7 +426,7 @@
       '<p class="azm-note" style="margin-top:6px">Chọn đúng từ theo nghĩa trong 10 giây, rồi tự đánh giá độ nhớ để hệ thống hẹn ngày ôn lại. Từ tự nhập <b>không tính điểm xếp hạng</b>.</p>' +
       '<div class="azm-sec">Thêm từ mới</div>' +
       '<div class="azm-grid"><div class="azm-grid2"><input class="azm-input" data-f="w" placeholder="Từ / cụm từ tiếng Anh" /><input class="azm-input" data-f="m" placeholder="Nghĩa tiếng Việt" /></div>' +
-      '<input class="azm-input" data-f="s" placeholder="Câu ví dụ (không bắt buộc)" /><button class="azm-ghost" type="button" data-act="add">➕ Thêm từ</button></div>' +
+      '<input class="azm-input" data-f="s" placeholder="Câu ví dụ (không bắt buộc)" />' + topicSelect() + '<button class="azm-ghost" type="button" data-act="add">➕ Thêm vào lộ trình</button></div>' +
       '<div class="azm-sec">Dán nhanh nhiều từ</div>' +
       '<textarea class="azm-input" data-f="bulk" placeholder="Mỗi dòng một từ, dạng:&#10;take off - cất cánh&#10;deadline - hạn chót"></textarea>' +
       '<button class="azm-ghost" type="button" data-act="bulk" style="width:100%;margin-top:8px">📋 Thêm tất cả</button>' +
@@ -437,16 +443,16 @@
       if(!list.length) return 0;
       var cur = loadMine(), seen = {}; cur.forEach(function(c){ seen[c.w.toLowerCase()] = 1; });
       var added = 0;
-      list.forEach(function(x){ if(seen[x.w.toLowerCase()]) return; seen[x.w.toLowerCase()] = 1; cur.push({ id:Date.now().toString(36) + Math.random().toString(36).slice(2, 6), w:x.w, m:x.m, s:x.s || "", ivl:0, ease:2.5, reps:0, due:0, created:Date.now() }); added++; });
-      saveMine(cur); return added;
+      list.forEach(function(x){ if(seen[x.w.toLowerCase()]) return; seen[x.w.toLowerCase()] = 1; cur.push({ t:x.t || "mine", id:Date.now().toString(36) + Math.random().toString(36).slice(2, 6), w:x.w, m:x.m, s:x.s || "", ivl:0, ease:2.5, reps:0, due:0, created:Date.now() }); added++; });
+      saveMine(cur); try{ window.dispatchEvent(new Event("az-custom-words")); }catch(e){} return added;
     }
     body.querySelector('[data-act="add"]').addEventListener("click", function(){
       var w = body.querySelector('[data-f="w"]'), m = body.querySelector('[data-f="m"]'), s = body.querySelector('[data-f="s"]');
       if(!w.value.trim() || !m.value.trim()){ (w.value.trim() ? m : w).focus(); return; }
-      addMany([{ w:w.value.trim(), m:m.value.trim(), s:s.value.trim() }]); w.value = m.value = s.value = ""; w.focus(); openMine();
+      var tp = body.querySelector('[data-f="t"]'); addMany([{ w:w.value.trim(), m:m.value.trim(), s:s.value.trim(), t:tp ? tp.value : "mine" }]); w.value = m.value = s.value = ""; w.focus(); openMine();
     });
     body.querySelector('[data-act="bulk"]').addEventListener("click", function(){
-      var ta = body.querySelector('[data-f="bulk"]'), n = addMany(parseBulk(ta.value));
+      var ta = body.querySelector('[data-f="bulk"]'), tp2 = body.querySelector('[data-f="t"]'), n = addMany(parseBulk(ta.value).map(function(x){ x.t = tp2 ? tp2.value : "mine"; return x; }));
       if(n){ openMine(); } else ta.focus();
     });
     body.querySelector('[data-act="review"]').addEventListener("click", function(){ startReview(); });
