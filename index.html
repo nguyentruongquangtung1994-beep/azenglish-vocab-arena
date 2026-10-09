@@ -770,6 +770,136 @@
 #pt .skills .sk, #pf .skills .sk{ border-radius:18px !important; box-shadow:0 4px 0 #f0e2de; }
 #pf .fe3{ display:inline-block; width:1.25em; height:1.25em; vertical-align:-.28em; object-fit:contain; }
 @media (prefers-reduced-motion: reduce){ #pt *, #pt *::before{ animation:none !important; } }
+/* AZ-HOME-UI v1 */
+.hu-fe{ display:inline-block; width:1.3em; height:1.3em; object-fit:contain; vertical-align:-.3em; }
+/* nav: icon nét thống nhất */
+.nav-link .hu-ic{ width:16px; height:16px; flex:none; }
+.profile-chip.on{ display:inline-flex !important; align-items:center; gap:7px; padding:5px 12px 5px 5px !important; }
+.profile-chip .hu-av{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:linear-gradient(145deg,#ff5a5a,#c4161c); color:#fff; font:800 12px var(--font-display, inherit); box-shadow:0 2px 0 #8f0a1c; }
+/* chip "10.000+ từ vựng / A1→C1 / Ôn ngắt quãng" */
+.hero-proof .hp-ic{ background:#fff !important; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+.hero-proof .hp-ic .hu-fe{ width:18px; height:18px; vertical-align:middle; }
+.hero-proof .hp-ic svg{ display:none; }
+.hero-cta2 .hu-ic{ width:17px; height:17px; vertical-align:-3px; margin-right:6px; }
+/* thẻ khoá học */
+.section-title{ display:flex; align-items:center; gap:10px; }
+.section-title::before{ content:""; width:6px; height:24px; border-radius:6px; background:linear-gradient(180deg,#ff5a5a,#E02020); }
+.card-icon .hu-big{ width:62%; max-width:72px; height:auto; aspect-ratio:1; object-fit:contain; filter:drop-shadow(0 8px 10px rgba(0,0,0,.15)); animation:huBob 2.8s ease-in-out infinite; }
+.card:hover .card-icon .hu-big{ transform:scale(1.08) rotate(-6deg); }
+.card-icon{ display:grid !important; place-items:center; }
+@keyframes huBob{ 50%{ transform:translateY(-5px); } }
+.progress-meta .hu-zone{ display:inline-flex; align-items:center; gap:4px; font-weight:800; color:var(--ink); }
+.progress-fill{ transition:width .8s cubic-bezier(.22,1,.36,1); }
+.cards > #grammar{ grid-column:1 / -1; }
+/* bục vinh danh: Lumina cổ vũ cạnh bục */
+.azp-lumi.hu-lumi{ display:block !important; width:110px !important; right:-128px !important; bottom:-6px !important; }
+.azp-lumi.hu-lumi b{ top:-26px !important; left:auto !important; right:-6px; font-size:12px !important; padding:4px 8px; border-radius:10px 10px 10px 2px; background:#fff; color:#E02020; box-shadow:0 3px 10px rgba(0,0,0,.12); white-space:nowrap; font-family:var(--font-display, inherit); }
+@media (max-width:760px){ .azp-lumi.hu-lumi{ display:none !important; } }
+/* chân trang */
+.contact-strip.hu-foot{ display:grid !important; grid-template-columns:auto 1fr auto; align-items:center; gap:14px; padding:18px 20px !important; border-radius:22px; background:#111 !important; color:#fff !important; border:0 !important; }
+.hu-foot .hf-logo{ width:46px; height:46px; border-radius:14px; display:grid; place-items:center; background:#E02020; font:900 17px var(--font-display, inherit); color:#fff; box-shadow:0 4px 0 #8f0a1c; }
+.hu-foot b{ display:block; font:800 16px var(--font-display, inherit); } .hu-foot small{ display:block; opacity:.7; font-size:12.5px; margin-top:2px; }
+.hu-foot .hf-acts{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.hu-foot .hf-acts a{ display:inline-flex; align-items:center; gap:6px; padding:10px 14px; border-radius:14px; font:800 13.5px var(--font-display, inherit); text-decoration:none; }
+.hu-foot .hf-zalo{ background:#0068ff; color:#fff; box-shadow:0 4px 0 #003f9e; } .hu-foot .hf-tel{ background:#fff; color:#111; box-shadow:0 4px 0 #bbb; }
+@media (max-width:640px){ .contact-strip.hu-foot{ grid-template-columns:auto 1fr; } .hu-foot .hf-acts{ grid-column:1 / -1; justify-content:stretch; } .hu-foot .hf-acts a{ flex:1; justify-content:center; } }
+@media (max-width:1560px){ .nav-stat-cap{ display:none !important; } .nav-link{ padding-left:10px !important; padding-right:10px !important; } .nav-links{ gap:2px !important; } }
+@media (max-width:1280px){ .nav-link .hu-ic, .nav-link > svg.micon{ display:none; } }
+.azp-lumi.hu-lumi b{ font-size:13px !important; font-weight:800; }
+@media (max-width:480px){ .profile-chip .hu-nm{ display:none; } .profile-chip.on{ padding:5px !important; } }
+@media (prefers-reduced-motion: reduce){ .card-icon .hu-big{ animation:none; } }
+/* AZ-HOME-UI v2 */
+/* chữ rõ hơn (giao diện sáng) */
+:root:not([data-theme="dark"]){ --ink:#1c130d; --ink-soft:#4a3d34; --ink-faint:#74665b; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --ink-soft:#d9c6b7; --ink-faint:#b09d8e; } }
+body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
+.progress-meta{ font-size:12px !important; font-weight:600; }
+.card-stats{ font-size:13px !important; font-weight:800 !important; }
+.badge{ font-weight:800 !important; }
+.hero-proof span{ font-weight:700 !important; color:var(--ink) !important; font-size:14px !important; }
+/* 3 chip: nút bóng giống game + chuyển động */
+.hero-proof > span{ gap:9px !important; padding:5px 15px 5px 5px !important; background:#fff !important; border:1.5px solid #f1e3d8 !important; box-shadow:0 3px 0 #f1e3d8, 0 10px 20px -16px rgba(224,32,32,.5) !important; animation:huChipIn .6s cubic-bezier(.3,1.6,.5,1) both; transition:transform .2s, box-shadow .2s; }
+.hero-proof > span:nth-child(2){ animation-delay:.12s; } .hero-proof > span:nth-child(3){ animation-delay:.24s; }
+.hero-proof > span:hover{ transform:translateY(-3px); box-shadow:0 6px 0 #f1e3d8, 0 14px 24px -14px rgba(224,32,32,.55) !important; }
+@keyframes huChipIn{ from{ opacity:0; transform:translateY(14px) scale(.85); } }
+.hero-proof .hp-ic{ width:32px !important; height:32px !important; border-radius:50% !important; display:grid !important; place-items:center; flex:none; color:#fff !important; }
+.hero-proof .hp-ic .hu-fe{ display:none !important; }
+.hero-proof .hp-ic svg{ display:block !important; width:17px !important; height:17px !important; stroke-width:2.4; }
+.hero-proof .hp1 .hp-ic{ background:radial-gradient(circle at 35% 30%, #ff8a8a, #E02020 55%, #a3121a) !important; box-shadow:0 2px 0 #7d0d13 !important; }
+.hero-proof .hp2 .hp-ic{ background:radial-gradient(circle at 35% 30%, #fff, #ffecec 60%, #ffcfcf) !important; box-shadow:0 0 0 1.5px rgba(224,32,32,.3), 0 2px 0 rgba(224,32,32,.35) !important; animation:huGlowR 2.4s ease-in-out infinite; }
+.hero-proof .hp3 .hp-ic{ background:radial-gradient(circle at 35% 30%, #ff9c8a, #ff4a3a 55%, #d0201a) !important; box-shadow:0 2px 0 #9e1712 !important; }
+.hero-proof .hp2 svg rect{ fill:#E02020; stroke:none; transform-box:fill-box; transform-origin:50% 100%; animation:huBar 2.4s ease-in-out infinite; }
+.hero-proof .hp2 svg .b2{ animation-delay:.15s; } .hero-proof .hp2 svg .b3{ animation-delay:.3s; }
+@keyframes huBar{ 0%,100%{ transform:scaleY(1); } 20%{ transform:scaleY(.6); } 45%{ transform:scaleY(1.08); } 60%{ transform:scaleY(1); } }
+@keyframes huGlowR{ 50%{ box-shadow:0 0 0 1.5px rgba(224,32,32,.3), 0 2px 0 rgba(224,32,32,.35), 0 0 14px rgba(224,32,32,.4); } }
+.hero-proof .hu-lv{ display:inline-flex; align-items:center; gap:3px; }
+.hero-proof .hu-lv b{ padding:3px 9px; border-radius:9px; font-family:var(--font-display) !important; font-size:14px !important; font-weight:800 !important; line-height:1.2; }
+.hero-proof .hu-lv .l1{ background:#fff; box-shadow:inset 0 0 0 1.5px #111; color:#111 !important; } .hero-proof .hu-lv .l2{ background:#E02020; color:#fff !important; box-shadow:0 2px 0 #a3121a; }
+.hero-proof .hu-lv i{ font-style:normal; font-weight:900; color:#E02020 !important; animation:huArr 1.2s ease-in-out infinite; }
+.hero-proof .hu-lv i:nth-of-type(2){ animation-delay:.15s; } .hero-proof .hu-lv i:nth-of-type(3){ animation-delay:.3s; }
+@keyframes huArr{ 0%,100%{ opacity:.2; } 50%{ opacity:1; } }
+.hero-proof .hp1 svg{ animation:huBook 2.6s ease-in-out infinite; transform-origin:50% 90%; }
+
+.hero-proof .hp3 svg{ animation:huSpin 3.2s cubic-bezier(.6,0,.4,1) infinite; }
+@keyframes huBook{ 0%,60%,100%{ transform:none; } 70%{ transform:rotate(-12deg) translateY(-1px); } 80%{ transform:rotate(10deg); } 90%{ transform:rotate(-4deg); } }
+@keyframes huAim{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(.8); } }
+@keyframes huGold{ 50%{ box-shadow:0 2px 0 #8a5a08, 0 0 0 4px rgba(245,197,66,.35), 0 0 16px rgba(245,197,66,.6) !important; } }
+@keyframes huSpin{ 0%,30%{ transform:rotate(0); } 70%,100%{ transform:rotate(360deg); } }
+.hero-proof .hu-num{ display:inline; font-variant-numeric:tabular-nums; color:#E02020 !important; font-weight:800 !important; }
+.section-title{ font-weight:800 !important; font-size:23px !important; }
+/* headline */
+.hu-kick{ display:inline-flex; align-items:center; gap:8px; margin:0 0 14px; padding:6px 14px 6px 8px; border-radius:99px; background:#fff; border:1.5px solid #f3d0d0; box-shadow:0 6px 16px -10px rgba(224,32,32,.5); font:700 13px var(--font-body); color:var(--ink); }
+.hu-kick .hu-dot{ position:relative; width:10px; height:10px; border-radius:50%; background:#E02020; }
+.hu-kick .hu-dot::after{ content:""; position:absolute; inset:-5px; border-radius:50%; border:2px solid #E02020; animation:huPing 1.6s ease-out infinite; }
+@keyframes huPing{ from{ transform:scale(.5); opacity:1; } to{ transform:scale(1.6); opacity:0; } }
+.hu-kick b{ color:#E02020; } .hu-kick i{ font-style:normal; } .hu-kick .hu-dot{ flex:none; }
+.hero-title{ font-weight:800 !important; letter-spacing:-.01em; }
+.hero-title .accent{ position:relative; display:inline-block; white-space:nowrap; background:linear-gradient(90deg,#E02020,#ff5a3c 60%,#E02020); -webkit-background-clip:text; background-clip:text; color:transparent !important; min-width:2ch; }
+.hero-title .hu-caret{ display:inline-block; width:4px; height:.82em; margin-left:4px; vertical-align:-.04em; border-radius:2px; background:#E02020; animation:huCaret .9s steps(1) infinite; }
+@keyframes huCaret{ 50%{ opacity:0; } }
+.hero-title .hu-ul{ position:absolute; left:0; right:0; bottom:-.16em; width:100%; height:.32em; overflow:visible; pointer-events:none; }
+.hero-title .hu-ul path{ fill:none; stroke:#ffb8b8; stroke-width:7; stroke-linecap:round; stroke-dasharray:420; stroke-dashoffset:420; }
+.hero-title .hu-ul.go path{ animation:huDraw .8s cubic-bezier(.65,0,.35,1) forwards; }
+@keyframes huDraw{ to{ stroke-dashoffset:0; } }
+.hero-title .hu-emo{ display:inline-block; width:.9em; height:.9em; margin-left:.18em; vertical-align:-.08em; animation:huPop .5s cubic-bezier(.3,1.7,.5,1) both, huBob2 2.4s ease-in-out .5s infinite; }
+@keyframes huPop{ from{ transform:scale(0) rotate(-30deg); } }
+@keyframes huBob2{ 50%{ transform:translateY(-6px) rotate(6deg); } }
+.hero-sub{ display:none !important; }
+/* menu trên sinh động */
+.topnav{ position:sticky; top:0; z-index:60; gap:14px !important; margin-left:calc(50% - min(50vw - 12px, 690px)); margin-right:calc(50% - min(50vw - 12px, 690px)); padding:12px 12px !important; background:color-mix(in srgb, var(--paper, #fffaf5) 84%, transparent); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); border-bottom-color:transparent !important; border-radius:0 0 20px 20px; box-shadow:0 12px 26px -22px rgba(36,26,18,.55); }
+@media (min-width:761px) and (max-width:1180px){ .profile-chip .hu-nm{ display:none !important; } }
+@media (min-width:761px) and (max-width:1100px){ .brand-text{ display:none !important; } }
+@media (min-width:761px) and (max-width:900px){ .nav-stat{ display:none !important; } .nav-links .nav-link{ font-size:13px !important; padding:7px 8px !important; } }
+.mark{ transition:transform .3s cubic-bezier(.3,1.7,.5,1); } .brand:hover .mark{ transform:rotate(-8deg) scale(1.08); }
+.nav-links{ flex:0 1 auto !important; margin:0 auto; gap:2px !important; padding:5px; border-radius:18px; background:#fff; border:1.5px solid #f1e3d8; box-shadow:0 8px 20px -14px rgba(224,32,32,.35); }
+[data-theme="dark"] .nav-links{ background:var(--paper-2); border-color:var(--line); }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .nav-links{ background:var(--paper-2); border-color:var(--line); } }
+.nav-links .nav-link{ font-weight:700 !important; color:var(--ink) !important; transition:background .2s, color .2s, transform .2s; }
+.nav-links .nav-link:hover{ background:#fff0ee; color:#E02020 !important; transform:translateY(-1px); }
+.nav-links .nav-link.active{ background:#E02020 !important; color:#fff !important; box-shadow:0 3px 0 #a3121a; }
+.nav-links .nav-link.test-link{ color:#E02020 !important; }
+.nav-link .hu-nv{ width:30px !important; height:30px !important; flex:none; border-radius:50%; display:grid !important; place-items:center; box-shadow:inset 0 -2px 0 rgba(0,0,0,.06), 0 2px 6px -2px rgba(0,0,0,.15); transition:transform .25s cubic-bezier(.3,1.7,.5,1); }
+.nav-link .hu-nv img{ width:21px; height:21px; animation:huNvBob 3s ease-in-out infinite; }
+.nav-link .hu-nv{ background:radial-gradient(circle at 35% 30%, #fff, #ffecec 60%, #ffd2d2); box-shadow:0 0 0 1.5px rgba(224,32,32,.22), 0 2px 0 rgba(224,32,32,.25) !important; }
+.nav-link:hover .hu-nv{ box-shadow:0 0 0 2px #E02020, 0 0 12px rgba(224,32,32,.35) !important; }
+.nav-link .hu-nv.c2 img{ animation-delay:.4s; } .nav-link .hu-nv.c3 img{ animation-delay:.8s; } .nav-link .hu-nv.c4 img{ animation-delay:1.2s; } .nav-link .hu-nv.c5 img{ animation-delay:1.6s; }
+@keyframes huNvBob{ 0%,70%,100%{ transform:none; } 78%{ transform:translateY(-3px) rotate(-8deg); } 88%{ transform:translateY(0) rotate(6deg); } }
+.nav-link:hover .hu-nv{ transform:scale(1.12) rotate(-6deg); }
+.nav-link:hover .hu-nv img{ animation:huNvJump .5s cubic-bezier(.3,1.7,.5,1); }
+@keyframes huNvJump{ 40%{ transform:translateY(-5px) scale(1.15); } }
+.nav-links .nav-link.active .hu-nv{ background:#fff; box-shadow:0 2px 0 #a3121a; }
+@media (max-width:1280px){ .nav-link .hu-nv{ display:none !important; } }
+/* dải đấu trường */
+.hu-arena{ display:flex; align-items:center; gap:12px; margin-top:18px; padding:10px 14px 10px 10px; border-radius:18px; background:#111; color:#fff; width:max-content; max-width:100%; box-shadow:0 10px 24px -14px rgba(0,0,0,.6); text-decoration:none; }
+.hu-arena .hu-thumbs{ display:flex; }
+.hu-arena .hu-thumbs img{ width:42px; height:42px; border-radius:12px; object-fit:cover; border:2px solid #111; box-shadow:0 0 0 2px #E02020; margin-left:-10px; transition:transform .2s; }
+.hu-arena .hu-thumbs img:first-child{ margin-left:0; }
+.hu-arena:hover .hu-thumbs img{ transform:translateY(-3px); }
+.hu-arena .hu-thumbs img:nth-child(2){ transition-delay:.05s; } .hu-arena .hu-thumbs img:nth-child(3){ transition-delay:.1s; }
+.hu-arena b{ display:block; font:800 14px var(--font-display); } .hu-arena small{ display:block; font:600 12px var(--font-body); opacity:.75; }
+.hu-arena .hu-new{ margin-left:4px; padding:2px 8px; border-radius:99px; background:#E02020; font:800 10px var(--font-body); letter-spacing:.06em; }
+@media (max-width:480px){ .hu-arena{ width:100%; } .hu-kick .hu-k2{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .hero-proof > span, .hero-proof .hp-ic, .hero-proof svg{ animation:none !important; } .hu-kick .hu-dot::after, .hero-title .hu-caret, .hero-title .hu-emo{ animation:none; } .hero-title .hu-ul path{ stroke-dashoffset:0; } }
 </style>
 </head>
 <body>
@@ -1956,6 +2086,158 @@
       box.addEventListener("click", function(e){ var b = e.target.closest(".opt, .ti-go, .listen-btn"); if(!b || b.disabled) return; tone(b.classList.contains("ti-go") ? 784 : 660, .09); setTimeout(function(){ tone(990, .08); }, 70); }, true);
     });
     var ch = document.getElementById("ptCheer"); if(ch) conv(ch); if(ch) new MutationObserver(function(){ conv(ch); }).observe(ch, { childList:true, characterData:true, subtree:true });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();</script>
+<script>/* AZ-HOME-UI v1 */
+(function(){
+  var FE = "https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/";
+  function hex(e){ return Array.from(e).map(function(c){ return c.codePointAt(0).toString(16); }).join("-"); }
+  function fe(e, cls){ return '<img class="' + (cls || "hu-fe") + '" src="' + FE + hex(e) + '.webp" alt="" draggable="false" onerror="this.outerHTML=\'<span>' + e + '</span>\'">'; }
+  var IC = {
+    game:'<svg class="hu-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-3.96 3.43l-.73 5.1a2.5 2.5 0 0 0 4.36 1.98L8 13.9h8l1.63 1.61a2.5 2.5 0 0 0 4.36-1.98l-.73-5.1A4 4 0 0 0 17.3 5z"/></svg>',
+    target:'<svg class="hu-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>',
+    route:'<svg class="hu-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5"/></svg>'
+  };
+  var NAMES = { toeic:"TOEIC 2500 Từ Vựng", ielts:"IELTS 3000 Từ & Cụm Từ" };
+  var EMO = { giaotiep:"🎤", toeic:"💼", ielts:"🎓", career:"🛠️", grammar:"📘" };
+  var ZN = ["Làng Khởi Hành", "Rừng Thì Thầm", "Hải Cảng Giao Lưu", "Thung Lũng Hành Trình", "Đỉnh Núi Tự Tin", "Vương Quốc Thành Thạo"];
+  function J(k){ try{ return JSON.parse(localStorage.getItem(k) || "null"); }catch(e){ return null; } }
+  function progress(card){
+    var key = card.getAttribute("data-storage-key"), total = +card.getAttribute("data-total") || 0, st = key && J(key), n = 0, done = 0;
+    if(st) for(var k in st){ var s = st[k]; if(k !== "recentWords" && s && typeof s === "object" && (s.correct > 0 || s.wrong > 0)){ n++; if(s.ivl >= 21) done++; } }
+    var z = 0; try{ z = parseInt(localStorage.getItem(key + "_zone") || "0", 10) || 0; }catch(e){}
+    return { n:n, done:done, total:total, zone:z };
+  }
+  function run(){
+    // nav
+    Array.prototype.forEach.call(document.querySelectorAll(".nav-link"), function(a){
+      var t = a.textContent.trim();
+      if(/Game$/.test(t) && !a.querySelector(".hu-ic")){ a.innerHTML = IC.game + "Game"; }
+      if(/Kiểm tra trình độ/.test(t) && !a.querySelector(".hu-ic")){ a.innerHTML = IC.target + "Kiểm tra trình độ"; }
+    });
+    // chip hero
+    [["hp1", "📚"], ["hp2", "🎯"], ["hp3", "🔁"]].forEach(function(x){ var ic = document.querySelector(".hero-proof ." + x[0] + " .hp-ic"); if(ic && !ic.querySelector(".hu-fe")) ic.insertAdjacentHTML("beforeend", fe(x[1])); });
+    // thẻ khoá học
+    Array.prototype.forEach.call(document.querySelectorAll(".cards .card"), function(card){
+      var id = card.getAttribute("data-course") || card.id, t = card.querySelector(".card-title");
+      if(NAMES[id] && t) t.textContent = NAMES[id];
+      var ic = card.querySelector(".card-icon"); if(ic && EMO[id] && !ic.querySelector(".hu-big")) ic.innerHTML = fe(EMO[id], "hu-big");
+      if(!card.getAttribute("data-storage-key")) return;
+      var p = progress(card), cnt = card.querySelector(".progress-count"), pe = card.querySelector(".progress-pct"), fill = card.querySelector(".progress-fill");
+      if(p.n > 0){
+        var pct = p.total ? Math.max(1, Math.min(100, Math.round(p.n / p.total * 100))) : 0;
+        if(fill) fill.style.width = pct + "%";
+        if(cnt) cnt.innerHTML = "Đã học <b>" + p.n.toLocaleString("vi-VN") + "</b> từ · <span class=\"hu-zone\">" + fe("🗺️") + " " + ZN[Math.min(p.zone, 5)] + "</span>";
+        if(pe) pe.textContent = pct + "%";
+      }
+    });
+    // nút chính: tiến độ thật thay "0 từ đã thuộc"
+    var cta = document.getElementById("heroCta");
+    if(cta && /Học tiếp|Bắt đầu/.test(cta.textContent)){
+      var card = Array.prototype.find.call(document.querySelectorAll(".card[data-course]"), function(c){ return c.getAttribute("href") === cta.getAttribute("href"); });
+      if(card){
+        var id = card.getAttribute("data-course"), p = progress(card), meta = J(card.getAttribute("data-storage-key") + "_meta") || {};
+        var lbl = cta.querySelector(".lbl"), sm = cta.querySelector("small");
+        if(lbl && NAMES[id]) lbl.firstChild.textContent = lbl.firstChild.textContent.replace(/:.*/, ": " + NAMES[id]);
+        if(sm && p.n > 0) sm.textContent = "Đã học " + p.n.toLocaleString("vi-VN") + " từ · " + ZN[Math.min(p.zone, 5)] + ((meta.dayStreak || 0) > 1 ? " · 🔥 " + meta.dayStreak + " ngày" : "") + " · 15 phút hôm nay";
+      }
+    }
+    var c2 = document.getElementById("heroCta2"); if(c2 && /Hồ sơ/.test(c2.textContent) && !c2.querySelector(".hu-ic")) c2.innerHTML = IC.route + "Hồ sơ &amp; lộ trình của tôi";
+    // chân trang
+    var cs = document.querySelector(".contact-strip");
+    if(cs && !cs.classList.contains("hu-foot")){
+      cs.classList.add("hu-foot");
+      cs.innerHTML = '<span class="hf-logo">AZ</span><span><b>Cần tư vấn lộ trình phù hợp?</b><small>AZEnglish — Making English Your Second Language</small></span>' +
+        '<span class="hf-acts"><a class="hf-zalo" href="https://zalo.me/0971882096" target="_blank" rel="noopener">' + fe("💬") + ' Chat Zalo</a><a class="hf-tel" href="tel:0971882096">' + fe("📞") + " 0971 882 096</a></span>";
+    }
+  }
+  function chip(){
+    var c = document.getElementById("profileChip"); if(!c || !c.classList.contains("on") || c.querySelector(".hu-av")) return;
+    var name = c.textContent.replace(/👤/g, "").split("·")[0].trim(), lv = c.querySelector("b");
+    c.innerHTML = '<span class="hu-av">' + (name.charAt(0) || "A").toUpperCase() + '</span><span class="hu-nm">' + name.replace(/[&<>]/g, "") + (lv ? " · <b>" + lv.textContent + "</b>" : "") + "</span>";
+  }
+  function lumi(){
+    Array.prototype.forEach.call(document.querySelectorAll(".azp-lumi:not(.hu-lumi)"), function(l){
+      l.classList.add("hu-lumi"); var img = l.querySelector("img"); if(img) img.src = "./game/assets/lion.webp"; var b = l.querySelector("b"); if(b) b.textContent = "Cố lên nào! 🔥";
+    });
+  }
+  function boot(){
+    run(); chip(); lumi();
+    var pc = document.getElementById("profileChip"); if(pc) new MutationObserver(chip).observe(pc, { childList:true });
+    new MutationObserver(function(){ lumi(); }).observe(document.body, { childList:true, subtree:true });
+    setTimeout(run, 1200);
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();</script>
+<script>/* AZ-HOME-UI v2: headline */
+(function(){
+  var FE = "https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/";
+  function hex(e){ return Array.from(e).map(function(c){ return c.codePointAt(0).toString(16); }).join("-"); }
+  var LINES = [["vui như chơi game", "🥳"], ["nhớ lâu như in", "💡"], ["nói tự tin hơn", "😎"]];
+  function boot(){
+    var h = document.querySelector(".hero-title"), acc = h && h.querySelector(".accent"), copy = document.querySelector(".hero-copy");
+    if(!h || !acc || h.querySelector(".hu-caret")) return;
+    // nhãn nhấp nháy phía trên tiêu đề
+    var k = document.createElement("div"); k.className = "hu-kick";
+    k.innerHTML = '<span class="hu-dot"></span><span>Vocab Arena · <b>4 lộ trình</b> · <b>3 game</b><i class="hu-k2"> · mỗi ngày 15 phút</i></span>';
+    h.parentNode.insertBefore(k, h);
+    // phụ đề rõ ý hơn
+    // menu trên: nút tròn đỏ bóng giống nút trợ giúp trong game
+    var P = {
+      home:'<path d="M4 11 12 4l8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/>',
+      book:'<path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 0 0 1.5-1.5v-13Z"/>',
+      gram:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M9 7h7M9 11h5"/>',
+      game:'<path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-3.96 3.43l-.73 5.1a2.5 2.5 0 0 0 4.36 1.98L8 13.9h8l1.63 1.61a2.5 2.5 0 0 0 4.36-1.98l-.73-5.1A4 4 0 0 0 17.3 5z"/>',
+      target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>'
+    };
+    var NV = [[/Trang chủ/, "🏡", "c1"], [/Chương trình/, "📚", "c2"], [/Ngữ pháp/, "✏️", "c3"], [/Game$/, "🎮", "c4"], [/Kiểm tra/, "🎯", "c5"]];
+    Array.prototype.forEach.call(document.querySelectorAll(".nav-links .nav-link"), function(a){
+      if(a.classList.contains("nav-live") || a.querySelector(".hu-nv")) return;
+      var t = a.textContent.trim(), m = NV.filter(function(x){ return x[0].test(t); })[0]; if(!m) return;
+      var old = a.querySelector("svg"); if(old) old.remove(); else a.textContent = t.replace(/^\S+\s/, "");
+      var im = document.createElement("span"); im.className = "hu-ic hu-nv " + m[2]; im.setAttribute("aria-hidden", "true"); im.innerHTML = '<img alt="" src="' + FE + hex(m[1]) + '.webp">'; a.insertBefore(im, a.firstChild);
+    });
+    // dòng đỏ đổi câu + gạch chân + emoji 3D
+    acc.textContent = "";
+    var txt = document.createElement("span"), caret = document.createElement("span"); caret.className = "hu-caret";
+    acc.appendChild(txt);
+    acc.insertAdjacentHTML("beforeend", '<svg class="hu-ul" viewBox="0 0 400 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 80 4, 160 18, 240 9 S 360 6, 396 12"/></svg>');
+    acc.after(caret);
+    var emo = document.createElement("img"); emo.className = "hu-emo"; emo.alt = ""; caret.after(emo);
+    var ul = acc.querySelector(".hu-ul");
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, i = 0;
+    function show(line, done){
+      emo.style.visibility = "hidden"; ul.classList.remove("go");
+      var n = 0, t = setInterval(function(){
+        n++; txt.textContent = line[0].slice(0, n);
+        if(n >= line[0].length){ clearInterval(t); emo.src = FE + hex(line[1]) + ".webp"; emo.style.visibility = "visible"; emo.style.animation = "none"; void emo.offsetWidth; emo.style.animation = ""; void ul.getBoundingClientRect(); ul.classList.add("go"); setTimeout(done, 2600); }
+      }, reduce ? 0 : 55);
+    }
+    function erase(line, done){ var n = line[0].length, t = setInterval(function(){ n--; txt.textContent = line[0].slice(0, n); if(n <= 0){ clearInterval(t); done(); } }, 28); }
+    function loop(){ var line = LINES[i % LINES.length]; show(line, function(){ if(reduce) return; erase(line, function(){ i++; loop(); }); }); }
+    loop();
+    // A1 → C1 thành bậc thang cấp độ
+    var hp2 = document.querySelector(".hero-proof .hp2");
+    if(hp2 && !hp2.querySelector(".hu-lv")){
+      Array.prototype.forEach.call(hp2.childNodes, function(n){ if(n.nodeType === 3 && /A1/.test(n.nodeValue)){ var w = document.createElement("span"); w.className = "hu-lv"; w.innerHTML = '<b class="l1">A1</b><i>›</i><i>›</i><i>›</i><b class="l2">C1</b>'; n.replaceWith(w); } });
+      var ic2 = hp2.querySelector(".hp-ic svg"); if(ic2) ic2.outerHTML = '<svg viewBox="0 0 24 24"><rect class="b1" x="4" y="13" width="4" height="7" rx="1"/><rect class="b2" x="10" y="9" width="4" height="11" rx="1"/><rect class="b3" x="16" y="4" width="4" height="16" rx="1"/></svg>';
+    }
+    // đếm số 0 → 3000+
+    var hp1 = document.querySelector(".hero-proof .hp1");
+    if(hp1){ Array.prototype.forEach.call(hp1.childNodes, function(n){ if(n.nodeType === 3 && /10\.000\+/.test(n.nodeValue)){
+      var sp = document.createElement("span"); sp.className = "hu-num"; sp.textContent = reduce ? "3000+" : "0";
+      var wrap = document.createElement("span"); wrap.appendChild(sp); wrap.appendChild(document.createTextNode(n.nodeValue.replace(/\s*10\.000\+\s*/, " "))); n.replaceWith(wrap);
+      if(!reduce){ var t0 = performance.now(); (function tick(now){ var k = Math.min(1, (now - t0) / 1400), v = Math.round(3000 * (1 - Math.pow(1 - k, 3)));
+        sp.textContent = v + (k >= 1 ? "+" : ""); if(k < 1) requestAnimationFrame(tick); })(t0); }
+    } }); }
+    // dải đấu trường có ảnh 3 game
+    var acts = document.querySelector(".hero-actions");
+    if(acts && !document.querySelector(".hu-arena")){
+      var a = document.createElement("a"); a.className = "hu-arena"; a.href = (document.getElementById("heroCta") || {}).href || "#courses";
+      a.innerHTML = '<span class="hu-thumbs"><img src="./mil-cover.jpg" alt=""><img src="./mt-cover.jpg" alt=""><img src="./zb-cover.jpg" alt=""></span><span><b>Đấu trường từ vựng <span class="hu-new">MỚI</span></b><small>Ai Là Triệu Phú · Ghép Cặp · Thoát Khỏi Zombie</small></span>';
+      acts.after(a);
+    }
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
