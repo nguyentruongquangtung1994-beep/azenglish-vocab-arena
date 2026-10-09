@@ -1951,11 +1951,11 @@
   function boot(){
     ["ptInner", "pfInner"].forEach(function(id){
       var box = document.getElementById(id); if(!box) return;
-      var busy = false;
+      var busy = false; try{ decorate(box); }catch(e){}
       new MutationObserver(function(){ if(busy) return; busy = true; try{ decorate(box); }finally{ busy = false; } }).observe(box, { childList:true, subtree:true });
       box.addEventListener("click", function(e){ var b = e.target.closest(".opt, .ti-go, .listen-btn"); if(!b || b.disabled) return; tone(b.classList.contains("ti-go") ? 784 : 660, .09); setTimeout(function(){ tone(990, .08); }, 70); }, true);
     });
-    var ch = document.getElementById("ptCheer"); if(ch) new MutationObserver(function(){ conv(ch); }).observe(ch, { childList:true, characterData:true, subtree:true });
+    var ch = document.getElementById("ptCheer"); if(ch) conv(ch); if(ch) new MutationObserver(function(){ conv(ch); }).observe(ch, { childList:true, characterData:true, subtree:true });
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
 })();</script>
