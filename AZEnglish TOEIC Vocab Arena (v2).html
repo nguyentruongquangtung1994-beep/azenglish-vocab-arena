@@ -6022,9 +6022,42 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     });
     document.addEventListener("keydown", function(e){
       if(g.hidden || !zb || e.metaKey || e.ctrlKey || e.altKey) return;
-      var k = e.key === "Backspace" ? "back" : String(e.key || "").toLowerCase();
-      if(k === "back" || /^[a-z' -]$/.test(k)){ e.preventDefault(); zbKey(k); var b = g.querySelector('.zb-k[data-k="' + (k === " " ? " " : k) + '"]'); if(b){ b.classList.remove("hit"); void b.offsetWidth; b.classList.add("hit"); } }
+      var k = e.key === "Backspace" ? "back" : String(e.key || "");
+      if(k !== "back" && k.length !== 1) return;
+      e.preventDefault();
+      if(k === "back"){ ime.bs++; ime.old = ime.scr.slice(-1) + ime.old; ime.scr = ime.scr.slice(0, -1); clearTimeout(ime.t); ime.t = setTimeout(imeFlush, 35); return; }
+      if(ime.bs || ime.out || /[^\x00-\x7f]/.test(k)){ ime.out += k; clearTimeout(ime.t); ime.t = setTimeout(imeFlush, 35); return; }
+      imeFeed(k);
     });
+    // ---- bộ gõ tiếng Việt: hiểu ngược phím bị nuốt ----
+    var ime = { scr:"", bs:0, out:"", t:0, told:false, old:"" };
+    function imeFeed(k){
+      ime.scr = (ime.scr + k).slice(-24);
+      var kk = k.toLowerCase(); if(!/^[a-z' -]$/.test(kk)) return;
+      zbKey(kk); var b = g.querySelector('.zb-k[data-k="' + kk + '"]'); if(b){ b.classList.remove("hit"); void b.offsetWidth; b.classList.add("hit"); }
+    }
+    function imeBase(x){ return x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase(); }
+    function imeMarks(x){ var m = {}; x.normalize("NFD").replace(/[\u0300-\u036f]/g, function(c, i, s){ var key = c === "\u0302" ? "^" + imeBase(s.charAt(i - 1)) : c; m[key] = (m[key] || 0) + 1; return c; }); m.d = (x.match(/[đĐ]/g) || []).length; return m; }
+    function imeGuess(old, now){
+      var bo = imeBase(old), bn = imeBase(now);
+      if(bn.length > bo.length && bn.indexOf(bo) === 0) return bn.slice(bo.length);   // bộ gõ trả lại chữ thường + phím vừa bấm
+      if(bn !== bo) return "";
+      var mo = imeMarks(old), mn = imeMarks(now), MAP = { "\u0301":"s", "\u0300":"f", "\u0309":"r", "\u0303":"x", "\u0323":"j", "\u0306":"w", "\u031b":"w" };
+      for(var key in mn){ if(mn[key] > (mo[key] || 0)){ if(key === "d") return "d"; if(key.charAt(0) === "^") return key.charAt(1); if(MAP[key]) return MAP[key]; } }
+      for(var key2 in mo){ if((mo[key2] || 0) > (mn[key2] || 0)){ if(MAP[key2]) return MAP[key2]; if(key2.charAt(0) === "^") return key2.charAt(1); if(key2 === "d") return "d"; } }   // gõ lại lần 2 để bỏ dấu
+      return "";
+    }
+    function imeFlush(){
+      var bs = ime.bs, out = ime.out; ime.bs = 0; ime.out = "";
+      var old = ime.old; ime.old = "";
+      if(!out){ for(var i = 0; i < bs; i++) imeFeed2back(); return; }                    // Backspace thật của người học
+      if(!bs && !/[^\x00-\x7f]/.test(out)){ out.split("").forEach(imeFeed); return; }  // chỉ là gõ nhanh, không phải bộ gõ
+      var miss = imeGuess(old, out);
+      ime.scr = (ime.scr + out).slice(-24);
+      if(miss) miss.split("").forEach(function(c){ if(/^[a-z' -]$/.test(c)){ zbKey(c); } });
+      if(!ime.told && zb){ ime.told = true; setTimeout(function(){ if(zb && zb.run) zbSay("Máy đang bật gõ tiếng Việt — game tự sửa giúp rồi, nhưng chuyển sang E (Ctrl+Shift) gõ sẽ mượt hơn nha ⌨️"); }, 1100); }
+    }
+    function imeFeed2back(){ zbKey("back"); var b = g.querySelector('.zb-k[data-k="back"]'); if(b){ b.classList.remove("hit"); void b.offsetWidth; b.classList.add("hit"); } }
     var mr = document.getElementById("modeRace");
     if(mr) mr.addEventListener("click", function(e){ e.stopImmediatePropagation(); if(document.getElementById("qArena").classList.contains("locked")) return; zbStart(); }, true);
     zbBestInline();
