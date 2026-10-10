@@ -83,12 +83,12 @@
         if(useBeacon && navigator.sendBeacon) navigator.sendBeacon(API, new Blob([body], { type:"text/plain;charset=utf-8" }));
         else fetch(API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).catch(function(){});
       }catch(e){}
-      try{ sessionStorage.removeItem("az_core_lb"); }catch(e){}
+      try{ localStorage.removeItem("az_core_lb"); }catch(e){}
     });
   }
   trackXp();
   setInterval(trackXp, 4000);
-  setInterval(function(){ flushXp(false); }, 30000);
+  setInterval(function(){ flushXp(false); }, 120000);
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "hidden"){ trackXp(); flushXp(true); } });
   window.addEventListener("pagehide", function(){ trackXp(); flushXp(true); });
   setTimeout(function(){ flushXp(false); }, 2500);
@@ -202,10 +202,10 @@
   /* ---------- Bảng xếp hạng ---------- */
   var PERIOD = { week:"Tuần này", month:"Tháng này", quarter:"Quý này" };
   function fetchBoard(cb){
-    try{ var c = JSON.parse(sessionStorage.getItem("az_core_lb") || "null"); if(c && Date.now() - c.t < 60000) return cb(c.d); }catch(e){}
+    try{ var c = JSON.parse(localStorage.getItem("az_core_lb") || "null"); if(c && Date.now() - c.t < 300000) return cb(c.d); }catch(e){}
     ensureUid(function(id){
       fetch(API + "?lb=1&me=" + encodeURIComponent(id)).then(function(r){ return r.json(); }).then(function(d){
-        try{ sessionStorage.setItem("az_core_lb", JSON.stringify({ t:Date.now(), d:d })); }catch(e){}
+        try{ localStorage.setItem("az_core_lb", JSON.stringify({ t:Date.now(), d:d })); }catch(e){}
         cb(d);
       }).catch(function(){ cb(null); });
     });
@@ -717,7 +717,7 @@
     }
     mountStrip();
     window.AZCore = { openBoard:openBoard, openNotebook:COURSE ? openNotebook : null, openMine:openMine,
-      fetchBoard:function(cb){ try{ sessionStorage.removeItem("az_core_lb"); }catch(e){} fetchBoard(cb); },
+      fetchBoard:function(cb){ fetchBoard(cb); },
       syncXp:function(){ trackXp(); flushXp(false); } };
   });
 })();

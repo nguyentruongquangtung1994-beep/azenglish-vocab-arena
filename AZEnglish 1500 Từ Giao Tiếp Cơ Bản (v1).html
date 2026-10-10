@@ -2,6 +2,18 @@
 <meta name="google" content="notranslate" />
 <script>document.documentElement.lang = "vi"; document.documentElement.setAttribute("translate", "no");</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<!-- AZ-SHARE v43 -->
+<meta name="description" content="3000+ từ giao tiếp dùng hằng ngày theo chủ đề, có hình, phát âm, ôn đúng lúc sắp quên và 3 game đấu trường." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AZEnglish" />
+<meta property="og:title" content="3000 Từ Giao Tiếp Căn Bản — AZEnglish Vocab Arena" />
+<meta property="og:description" content="3000+ từ giao tiếp dùng hằng ngày theo chủ đề, có hình, phát âm, ôn đúng lúc sắp quên và 3 game đấu trường." />
+<meta property="og:url" content="https://nguyentruongquangtung1994-beep.github.io/azenglish-vocab-arena/AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20%28v1%29.html" />
+<meta property="og:image" content="https://nguyentruongquangtung1994-beep.github.io/azenglish-vocab-arena/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="vi_VN" />
+<meta name="twitter:card" content="summary_large_image" />
 <title>AZEnglish 3000 Từ Giao Tiếp Căn Bản</title>
 <link rel="manifest" href="./manifest-1500.json" />
 <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
@@ -5191,7 +5203,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function sxNum(id, html){ var el = document.getElementById(id); if(el.innerHTML === html) return; el.innerHTML = html; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); }
   function sxBoostRender(lastOk){
     var Z = window.AZQ; if(!Z) return;
-    var zi = Z.zi, goal = typeof DAILY_GOAL === "number" ? DAILY_GOAL : 25, today = (meta.todayKey === todayStamp() ? meta.todayCount : 0) || 0;
+    var zi = Z.zi, goal = typeof sessionSize === "number" && sessionSize > 0 ? sessionSize : (typeof DAILY_GOAL === "number" ? DAILY_GOAL : 25), today = (meta.todayKey === todayStamp() ? meta.todayCount : 0) || 0;
     var pct = Math.min(100, Math.round(today / goal * 100));
     document.getElementById("sxGoalRing").style.setProperty("--p", pct);
     document.getElementById("sxGoalN").textContent = pct >= 100 ? "✓" : pct + "%";
@@ -5271,7 +5283,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function nagRender(){
     var el = document.getElementById("nagBanner"); if(!el) return;
     var today = todayStamp(), hidden = false; try{ hidden = localStorage.getItem(NAG_KEY) === String(today); }catch(e){}
-    var cnt = meta.todayKey === today ? (meta.todayCount || 0) : 0, goal = typeof DAILY_GOAL === "number" ? DAILY_GOAL : 25, streak = meta.dayStreak || 0;
+    var cnt = meta.todayKey === today ? (meta.todayCount || 0) : 0, goal = typeof sessionSize === "number" && sessionSize > 0 ? sessionSize : (typeof DAILY_GOAL === "number" ? DAILY_GOAL : 25), streak = meta.dayStreak || 0;
     var learnedYesterday = meta.lastActiveDay === today - 1, h = new Date().getHours(), t = "", l = "", go = "Học 5 phút";
     if(cnt >= goal){ t = "Xong mục tiêu rồi, flex đi! 😎"; l = qmPick(["Chuỗi 🔥 " + streak + " ngày rồi đó, khoe nhẹ cho đám bạn coi chơi.", "Hôm nay bạn là main character. Học thêm thì càng đỉnh nóc kịch trần!"]); go = "Học thêm"; }
     else if(cnt > 0){ t = "Mới " + cnt + "/" + goal + " từ thôi á? 🤨"; l = qmPick(["Lumina biết bạn làm được hơn mà, quẩy nốt " + (goal - cnt) + " từ đi!", "Đang hay mà dừng là cụt hứng lắm nha. Thêm xíu nữa thôi!"]); go = "Học tiếp"; }
