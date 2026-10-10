@@ -3630,7 +3630,7 @@ body.gx-lock #motivateToast{ display:none !important; }
 @keyframes gxShake{ 0%,70%,100%{ transform:rotate(0); } 75%{ transform:rotate(-4deg); } 85%{ transform:rotate(4deg); } 95%{ transform:rotate(-2deg); } }
 .gx-pulse{ animation:gxPulse 1.4s ease-in-out infinite; }
 @keyframes gxPulse{ 50%{ transform:scale(1.04); box-shadow:0 5px 0 #8f0a1c, 0 0 0 6px rgba(224,32,32,.25); } }
-.zb-inf-btn{ display:block; width:100%; margin-top:10px; background:linear-gradient(180deg,#2b2b2b,#111) !important; box-shadow:0 5px 0 #000, inset 0 0 0 2px #E02020 !important; }
+.zb-inf-btn{ display:block; width:100%; margin-top:10px; background:linear-gradient(180deg,#fff,#fff1f1) !important; color:#E02020 !important; box-shadow:0 5px 0 #f3c4c4, inset 0 0 0 2px #E02020 !important; }
 .mt-grid.c4{ grid-template-columns:repeat(4,1fr) !important; gap:7px !important; }
 .mt-grid.c4 .mt-c, .mt-grid.c4 .mt-in{ min-height:80px !important; }
 .mt-grid.c4 .mt-t{ font-size:12px !important; } .mt-grid.c4 .mt-pic{ width:28px !important; height:28px !important; }
@@ -5526,7 +5526,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     var lp = qLearnedPool();
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới vào ghế nóng được nha 😏"); return; }
     var total = Math.min(15, lp.length), dr = gdDraw("mil", total + 6);
-    mil = { total: total, ladder: MIL_LADDER.slice(15 - total), words: dr.words, used: 0, level: 0, sel: -1, locked: false, life: { f5050:1, ask:1, swap:1 }, cleared: 0, newRound: dr.newRound };
+    mil = { total: total, ladder: MIL_LADDER.slice(15 - total), words: milSort(dr.words), used: 0, level: 0, sel: -1, locked: false, life: { f5050:1, ask:1, swap:1 }, cleared: 0, newRound: dr.newRound };
     mil.safe = [total - 11, total - 6].filter(function(x){ return x >= 0; });
     milEl("milEnd").hidden = true; milEl("milPlay").hidden = false;
     Array.prototype.forEach.call(document.querySelectorAll("#gxMil [data-l]"), function(b){ b.disabled = false; b.classList.remove("used"); });
@@ -5562,8 +5562,11 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     var card = milEl("milCard"); card.classList.remove("in"); void card.offsetWidth; card.classList.add("in");
     var first = mil.welcome; mil.welcome = false;
     if(c.t === "listen" || c.t === "mean") setTimeout(function(){ if(mil && mil.cur === c && !milEl("gxMil").hidden) speak(c.w.w); }, first ? 6200 : 300);
-    milTimer(first ? 36 : 30);
+    if(!first && (mil.level === 5 || mil.level === 10)) milSay("⏱ Tăng độ khó! Từ câu này mỗi câu chỉ còn " + milSec() + " giây 🔥");
+    milTimer(first ? 36 : milSec());
   }
+  function milSec(){ var r = mil.level / Math.max(1, mil.total - 1); return Math.round(30 - r * 18); }
+  function milSort(ws){ var RK = { A1:0, A2:1, B1:2, B2:3, C1:4, C2:5 }; return ws.slice().sort(function(a, b){ return ((RK[a.lvl] || 0) - (RK[b.lvl] || 0)) || (String(a.w).length - String(b.w).length); }); }
   function milTimer(sec){
     clearInterval(milTimerId); var end = Date.now() + sec * 1000, ring = milEl("milRing");
     milTimerId = setInterval(function(){
@@ -5766,7 +5769,11 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   // =====================================================================
   // v31 · THOÁT KHỎI ZOMBIE (thay game cũ) — gõ đúng từ để chạy thoát
   // =====================================================================
-  var ZB_ROUNDS = 3, ZB_PER = 6, ZB_SPEED = [0.052, 0.07, 0.092];   // tốc độ zombie áp sát (khoảng cách/giây)
+  var ZB_ROUNDS = 3, ZB_PER = 6, ZB_SPEED = [0.052, 0.07, 0.092, 0.108, 0.124], ZB_MUL = 1;
+  function zbLvl(){ return Math.min(7, Math.max(1, +(localStorage.getItem("azq_zb_lvl") || 1))); }
+  function zbRoundsFor(l){ return l >= 5 ? 5 : l >= 3 ? 4 : 3; }
+  function zbBestKey(){ return "azq_best_zb" + (ZB_ROUNDS === 3 ? "" : "_r" + ZB_ROUNDS); }
+  ZB_ROUNDS = zbRoundsFor(zbLvl());   // tốc độ zombie áp sát (khoảng cách/giây)
   var ZB_SAY = {
     start: ["Zombie AZ đói chữ lắm rồi đó. Gõ đúng là chạy thoát, gõ sai là… thôi khỏi nói 😏", "Chạy đi chờ chi! Mỗi từ gõ đúng là một bước thoát thân 🏃"],
     ok: ["Ngon! Zombie hít khói 💨", "Chuẩn không cần chỉnh!", "Gõ vậy ai đuổi kịp 😎", "Đúng rồi! Chạy tiếp lẹ!"],
@@ -5790,6 +5797,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function zbOk(w){ return /^[a-z][a-z' -]*$/i.test(w.w) && w.w.length <= 16; }
   function zbStart(opts){
     opts = opts || {};
+    var zl = zbLvl(); ZB_ROUNDS = zbRoundsFor(zl); ZB_MUL = 1 + (zl - 1) * .06;
     var lp = qLearnedPool();
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
     var need = ZB_ROUNDS * ZB_PER, focus = window.qGameFocus; window.qGameFocus = null;
@@ -5803,9 +5811,9 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(words.length < need){ var have = {}; words.forEach(function(w){ have[w.w] = 1; }); words = words.concat(qFresh(lp.filter(function(w){ return zbOk(w) && !have[w.w]; })).slice(0, need - words.length)); }
     while(words.length < need && words.length) words.push(words[words.length % Math.max(1, words.length)]);
     if(opts.endless){ var base = shuffle(lp.filter(zbOk)); words = []; while(words.length < 400 && base.length) words = words.concat(shuffle(base.slice())); }
-    zb = { endless:!!opts.endless, infBest:+(localStorage.getItem("azq_best_zb_inf") || 0), froze:0, freezeUntil:0, words:words, i:0, lives:3, combo:0, best:0, dist:.62, typed:"", miss:0, hint:[0, 0, 0], el:0, run:false, done:[], newRound:dr.newRound, bitAt:0 };
+    zb = { lvl:zl, endless:!!opts.endless, infBest:+(localStorage.getItem("azq_best_zb_inf") || 0), froze:0, freezeUntil:0, words:words, i:0, lives:3, combo:0, best:0, dist:.62, typed:"", miss:0, hint:[0, 0, 0], el:0, run:false, done:[], newRound:dr.newRound, bitAt:0 };
     zbEl("zbEnd").hidden = true; zbEl("zbPlay").hidden = false; zbEl("gxZb").classList.remove("zb-over");
-    var b = +(localStorage.getItem("azq_best_zb") || 0); zbEl("zbBest").textContent = b ? Math.round(b / 1000) + "s" : "--";
+    var b = +(localStorage.getItem(zbBestKey()) || 0); zbEl("zbBest").textContent = b ? Math.round(b / 1000) + "s" : "--";
     zbEl("zbDeck").innerHTML = gdChip("zb");
     zbSay(dr.newRound ? "Ôn hết cả bộ rồi! Vòng mới, zombie mới 🔥" : qmPick(ZB_SAY.start));
     gxOpen(zbEl("gxZb"));
@@ -5829,10 +5837,10 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function zbSay(t){ var s = zbEl("zbSay"); s.textContent = t; s.classList.remove("pop", "hide"); void s.offsetWidth; s.classList.add("pop"); clearTimeout(zbSayT); zbSayT = setTimeout(function(){ s.classList.add("hide"); }, 2600); }
   function zbCur(){ return zb.words[zb.i]; }
   function zbRound(){ var r = Math.floor(zb.i / ZB_PER); return zb.endless ? r : Math.min(ZB_ROUNDS - 1, r); }
-  function zbSpeed(){ var r = zbRound(); return ZB_SPEED[Math.min(2, r)] + Math.max(0, r - 2) * .007; }
+  function zbSpeed(){ var r = zbRound(); return (ZB_SPEED[Math.min(4, r)] + Math.max(0, r - 4) * .007) * ZB_MUL; }
   function zbHud(){
     zbEl("zbHearts").innerHTML = [0, 1, 2].map(function(k){ return '<i class="' + (k < zb.lives ? "on" : "") + '">' + fe("❤️", "zb-h") + "</i>"; }).join("");
-    zbEl("zbRound").textContent = zb.endless ? "∞ Màn " + (zbRound() + 1) : "Màn " + (zbRound() + 1) + "/" + ZB_ROUNDS;
+    zbEl("zbRound").textContent = zb.endless ? "∞ Màn " + (zbRound() + 1) : "Cấp " + zb.lvl + " · Màn " + (zbRound() + 1) + "/" + ZB_ROUNDS;
     zbEl("zbProg").textContent = zb.endless ? (zb.i + 1) + (zb.infBest ? " · KL " + zb.infBest : "") : Math.min(zb.i + 1, zb.words.length) + "/" + zb.words.length;
     zbEl("zbCombo").innerHTML = zb.combo >= 2 ? fe("🔥", "fe-i") + " Combo x" + zb.combo : "";
     var lad = zbEl("zbLadder");
@@ -5974,10 +5982,10 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   }
   function zbEnd(won){
     if(!zb) return; zb.run = false; cancelAnimationFrame(zbRaf); zbTick(false);
-    var ms = Math.round(zb.el), best = +(localStorage.getItem("azq_best_zb") || 0), isRec = won && !zb.endless && (!best || ms < best);
+    var ms = Math.round(zb.el), best = +(localStorage.getItem(zbBestKey()) || 0), isRec = won && !zb.endless && (!best || ms < best);
     if(zb.endless && zb.i > zb.infBest){ try{ localStorage.setItem("azq_best_zb_inf", String(zb.i)); }catch(e){} }
-    if(isRec){ try{ localStorage.setItem("azq_best_zb", String(ms)); }catch(e){} }
-    zbBestInline(); var nb = +(localStorage.getItem("azq_best_zb") || 0); zbEl("zbBest").textContent = nb ? Math.round(nb / 1000) + "s" : "--";
+    if(isRec){ try{ localStorage.setItem(zbBestKey(), String(ms)); }catch(e){} }
+    zbBestInline(); var nb = +(localStorage.getItem(zbBestKey()) || 0); zbEl("zbBest").textContent = nb ? Math.round(nb / 1000) + "s" : "--";
     var okN = zb.done.filter(function(x){ return x.ok; }).length, xp = zb.endless ? 10 + okN * 2 : won ? 40 + zb.lives * 5 + (isRec ? 10 : 0) : 5 + okN;
     gxXp(xp);
     var miss = zb.done.filter(function(x){ return !x.ok; }).map(function(x){ return x.w; });
@@ -6000,6 +6008,9 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(zb.endless){ near = "Chạy vô tận: <b>" + zb.i + " từ</b>" + (zb.i > zb.infBest ? " — <b>kỷ lục mới!</b> 🚀" : zb.infBest - zb.i <= 5 ? " — chỉ thiếu <b>" + (zb.infBest - zb.i + 1) + " từ</b> để phá kỷ lục " + zb.infBest + "!" : " · kỷ lục " + zb.infBest); }
     else if(won && best && !isRec && ms - best < 8000) near = "Chỉ chậm hơn kỷ lục <b>" + ((ms - best) / 1000).toFixed(1) + "s</b> — thử lại là phá liền!";
     else if(!won && zb.words.length - zb.i <= 6) near = "Chỉ còn <b>" + (zb.words.length - zb.i) + " từ</b> nữa là thoát rồi! Tiếc ghê 😭";
+    if(won && !zb.endless && zb.lvl < 7){ try{ localStorage.setItem("azq_zb_lvl", String(zb.lvl + 1)); }catch(e){} var nr = zbRoundsFor(zb.lvl + 1);
+      near = "🆙 <b>LÊN CẤP " + (zb.lvl + 1) + "</b> — zombie chạy nhanh hơn" + (nr > ZB_ROUNDS ? " & thêm <b>1 màn</b> (" + nr + " màn)" : "") + "! 🧟💨"; }
+    else if(won && !zb.endless && zb.lvl >= 7) near = "👑 <b>Cấp tối đa</b> — bạn là vua thoát zombie! Thử <b>Chạy vô tận</b> đi.";
     gxAfterGame("zb", { won:won && !zb.endless, combo:zb.best, okN:okN, near:near }, zbEl("zbEnd"));
   }
   // Trận Boss mở cổng dùng 3 game mới: thắng thì đóng game rồi phá cổng
@@ -6007,7 +6018,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(typeof qmBoss === "undefined" || qmBoss !== game) return;
     if(won){ setTimeout(function(){ gxClose(el); questOnEnd(true, game); }, 2600); } else questOnEnd(false, game);
   }
-  function zbBestInline(){ var b = document.getElementById("raceBestInline"), v = +(localStorage.getItem("azq_best_zb") || 0); if(b) b.textContent = v ? Math.round(v / 1000) + "s" : "--"; }
+  function zbBestInline(){ var b = document.getElementById("raceBestInline"), v = +(localStorage.getItem(zbBestKey()) || 0); if(b) b.textContent = v ? Math.round(v / 1000) + "s" : "--"; }
   (function(){
     var g = document.getElementById("gxZb"); if(!g) return;
     var rows = ["qwertyuiop", "asdfghjkl", "zxcvbnm", "'- "];
