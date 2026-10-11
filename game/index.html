@@ -374,6 +374,10 @@ body.creator .ov-handle{position:fixed;bottom:12vh;left:calc(50% - min(50vw,28.1
 .go .ar .ico{width:18px;height:18px}
 .go:hover .ar,.go:focus-visible .ar{transform:translateX(3px)}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* AZ-BRIGHT v44 */
+:root:not([data-theme="dark"]) .seg button[aria-pressed="true"]{ background:#E02020 !important; border-color:#E02020 !important; color:#fff !important; }
+:root:not([data-theme="dark"]) .rechint{ background:rgba(255,255,255,.95) !important; color:#1c130d !important; box-shadow:0 6px 18px -8px rgba(224,32,32,.45); }
 </style>
 </head>
 <body>
@@ -1091,7 +1095,7 @@ paintSound();
 
 /* light / dark */
 const themeBtn = document.getElementById('theme-btn'), darkMQ = matchMedia('(prefers-color-scheme: dark)');
-let themePref = store.get('azgame.theme', null);
+let themePref = store.get('azgame.theme', null) || 'light';
 const effTheme = () => themePref || (darkMQ.matches ? 'dark' : 'light');
 function applyTheme() {
   if (themePref) document.documentElement.setAttribute('data-theme', themePref);

@@ -928,6 +928,25 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
 #pt .qtimer .tt{ background:#ffe6e6 !important; }
 #pt .qtimer .tt i{ background:linear-gradient(90deg,#ff7a5c,#E02020) !important; }
 #pt .qtimer.low .tt i{ background:linear-gradient(90deg,#E02020,#a3121a) !important; }
+
+/* AZ-BRIGHT v44 */
+:root:not([data-theme="dark"]) .live-card{ background:linear-gradient(150deg,#fff 0%,#fff4f2 55%,#ffe6e6 100%) !important; color:#1c130d !important; box-shadow:0 18px 40px -26px rgba(224,32,32,.55), inset 0 0 0 1.5px #f3c9c9 !important; }
+:root:not([data-theme="dark"]) .live-card .lv-tag{ background:#ffe9e9 !important; color:#E02020 !important; }
+:root:not([data-theme="dark"]) .live-card .lv-title{ color:#1c130d !important; } :root:not([data-theme="dark"]) .live-card .lv-title span{ color:#E02020 !important; }
+:root:not([data-theme="dark"]) .live-card .lv-txt p{ color:#4a3d34 !important; }
+:root:not([data-theme="dark"]) .live-card .lv-go.alt{ background:#fff !important; color:#E02020 !important; box-shadow:0 4px 0 #f3c4c4, inset 0 0 0 2px #E02020 !important; }
+:root:not([data-theme="dark"]) .live-card svg rect[fill="#2e221b"]{ fill:#fff; stroke:#E02020; }
+:root:not([data-theme="dark"]) .live-card .lv-l{ fill:#7a6c62 !important; } :root:not([data-theme="dark"]) .live-card .lv-pin{ fill:#1c130d !important; }
+:root:not([data-theme="dark"]) .live-card .lv-beam{ fill:#ffd9d9 !important; opacity:.55; }
+:root:not([data-theme="dark"]) .live-card svg path{ stroke-color:#cbb6a6; }
+
+/* AZ-SCALE v46: ô đồng ý */
+#pt .consent{ display:block; margin-top:4px; }
+#pt .consent .cb{ display:flex; gap:10px; align-items:flex-start; font:600 13px/1.45 "Be Vietnam Pro",sans-serif; color:#4a3d34; cursor:pointer; }
+#pt .consent input{ flex:none; width:20px; height:20px; margin-top:1px; accent-color:#E02020; }
+#pt .consent a{ color:#E02020; font-weight:800; } #pt .consent em{ display:block; font-style:normal; color:#7a6c62; font-size:12px; margin-top:2px; }
+#pt .consent .msg{ display:none; color:#E02020; font:700 12.5px "Be Vietnam Pro",sans-serif; margin:6px 0 0 30px; }
+#pt .consent.err .msg{ display:block; } #pt .consent.err .cb{ color:#E02020; }
 </style>
 </head>
 <body>
@@ -1201,7 +1220,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     }
     var saved = null;
     try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
-    applyTheme(saved);
+    applyTheme(saved || "light");
     var themeBtn = document.getElementById("themeBtn");
     if(themeBtn){
       themeBtn.addEventListener("click", function(){
@@ -1239,6 +1258,21 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
   (function(){
     // Lead webhook: deployment Apps Script dùng chung ("TOEIC LEADS"), định tuyến theo source → tab "AZ Vocab Arena Leads".
     var LEAD_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzD1v2aekzEeyMBQ-2uD-2TRHBN9xX0__V6aAU5YZ4BFhlO4D9WEZtXr7CcwM4Gc2j1/exec";
+    // AZ-SCALE v46: hàng chờ lead — lưu trước, gửi sau; mạng/Sheet lỗi thì thử lại lần mở trang sau / khi có mạng
+    (function(){
+      var OB = "az_lead_outbox", busy = false;
+      function get(){ try{ return JSON.parse(localStorage.getItem(OB) || "[]") || []; }catch(e){ return []; } }
+      function put(a){ try{ localStorage.setItem(OB, JSON.stringify(a.slice(-20))); }catch(e){} }
+      function flush(){
+        var q = get(); if(busy || !q.length || (navigator.onLine === false)) return; busy = true;
+        var item = q[0], tries = (item._t || 0) + 1;
+        fetch(LEAD_WEBHOOK_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(item.d) })
+          .then(function(){ var a = get(); a.shift(); put(a); busy = false; if(a.length) setTimeout(flush, 800); })
+          .catch(function(){ var a = get(); if(a[0]) a[0]._t = tries; put(a); busy = false; if(tries < 4) setTimeout(flush, 3000 * tries); });
+      }
+      window.azLeadSend = function(lead){ var a = get(); a.push({ d:lead }); put(a); flush(); };
+      window.addEventListener("online", flush); setTimeout(flush, 1500);
+    })();
     var LEAD_SOURCE = "AZ-Vocab-Arena";
     var CONTACT_PHONE = "0971882096";
     var LEADS_KEY = "az_vocab_leads";
@@ -1743,6 +1777,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
           '<div class="field" id="fName"><label for="ldName">Họ và tên</label><input id="ldName" autocomplete="name" placeholder="Nguyễn Văn A" /><div class="msg">Vui lòng nhập họ tên.</div></div>' +
           '<div class="field" id="fPhone"><label for="ldPhone">Số điện thoại (Zalo)</label><input id="ldPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx" /><div class="msg">Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).</div></div>' +
           '<div class="field" id="fEmail"><label for="ldEmail">Email <em>(không bắt buộc)</em></label><input id="ldEmail" type="email" inputmode="email" autocomplete="email" placeholder="ban@gmail.com" /><div class="msg">Email chưa đúng định dạng.</div></div>' +
+          '<label class="field consent" id="fConsent"><span class="cb"><input id="ldConsent" type="checkbox" /> <span>Tôi đồng ý để AZEnglish dùng thông tin trên để gửi kết quả và tư vấn lộ trình học, theo <a href="./chinh-sach-bao-mat.html" target="_blank" rel="noopener">Chính sách bảo mật</a>. <em>Dưới 16 tuổi: nhờ bố mẹ đồng ý giúp nhé.</em></span></span><div class="msg">Bạn cần đồng ý để AZEnglish gửi kết quả cho bạn.</div></label>' +
           '<button class="hero-cta btn-full" type="submit"><span class="lbl">Xem bản tư vấn của tôi →</span></button>' +
           '<p class="privacy">🔒 Thông tin chỉ dùng để AZEnglish gửi kết quả và tư vấn lộ trình học miễn phí. Không chia sẻ cho bên thứ ba.</p>' +
         '</form>';
@@ -1750,6 +1785,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         box.querySelector("#ldName").value = profile.name || "";
         box.querySelector("#ldPhone").value = profile.phone || "";
         box.querySelector("#ldEmail").value = profile.email || "";
+        if(profile.consent) box.querySelector("#ldConsent").checked = true;
       }
       box.querySelector("#leadForm").addEventListener("submit", function(e){ e.preventDefault(); submitLead(box, sc); });
     }
@@ -1762,7 +1798,8 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
       box.querySelector("#fName").classList.toggle("err", !okName);
       box.querySelector("#fPhone").classList.toggle("err", !okPhone);
       box.querySelector("#fEmail").classList.toggle("err", !okEmail);
-      if(!(okName && okPhone && okEmail)) return;
+      var okConsent = box.querySelector("#ldConsent").checked; box.querySelector("#fConsent").classList.toggle("err", !okConsent);
+      if(!(okName && okPhone && okEmail && okConsent)) return;
 
       var rec = recommend(state.needs.goal, sc.idx);
       var test = {
@@ -1774,7 +1811,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         timeouts: state.timeouts
       };
       var tests = lsJSON(TESTS_KEY) || []; tests.push(test); lsSet(TESTS_KEY, JSON.stringify(tests));
-      profile = { name:name, phone:phone, email:email, level:sc.level, correct:sc.correct, goal:state.needs.goal, rec:rec, at:test.at };
+      profile = { name:name, phone:phone, email:email, level:sc.level, correct:sc.correct, goal:state.needs.goal, rec:rec, at:test.at, consent:test.at };
       lsSet(PROFILE_KEY, JSON.stringify(profile));
 
       var params = new URLSearchParams(location.search);
@@ -1787,10 +1824,10 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         industry: indName, career: sc.career ? sc.career.score + "/" + sc.career.total : "", timeouts: state.timeouts,
         answers: state.answers.map(function(x, i){ return (i + 1) + x.s + LEVELS[x.l] + (x.ok ? "✓" : "✗"); }).join(" "),
         utm_source: params.get("utm_source") || "", utm_medium: params.get("utm_medium") || "", utm_campaign: params.get("utm_campaign") || "",
-        referrer: document.referrer || "", submittedAt: test.at
+        referrer: document.referrer || "", submittedAt: test.at, consent: "Đồng ý chính sách bảo mật lúc " + test.at
       };
       var leads = lsJSON(LEADS_KEY) || []; leads.push(lead); lsSet(LEADS_KEY, JSON.stringify(leads));
-      try{ fetch(LEAD_WEBHOOK_URL, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body: JSON.stringify(lead) }).catch(function(){}); }catch(err){}
+      window.azLeadSend(lead);
       state.result = test;
       paintProfile();
       paintLock();
@@ -2175,7 +2212,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     var cs = document.querySelector(".contact-strip");
     if(cs && !cs.classList.contains("hu-foot")){
       cs.classList.add("hu-foot");
-      cs.innerHTML = '<span class="hf-logo">AZ</span><span><b>Cần tư vấn lộ trình phù hợp?</b><small>AZEnglish — Making English Your Second Language</small></span>' +
+      cs.innerHTML = '<span class="hf-logo">AZ</span><span><b>Cần tư vấn lộ trình phù hợp?</b><small>AZEnglish — Making English Your Second Language · <a href="./chinh-sach-bao-mat.html" style="color:inherit;text-decoration:underline">Chính sách bảo mật</a></small></span>' +
         '<span class="hf-acts"><a class="hf-zalo" href="https://zalo.me/0971882096" target="_blank" rel="noopener">' + fe("💬") + ' Chat Zalo</a><a class="hf-tel" href="tel:0971882096">' + fe("📞") + " 0971 882 096</a></span>";
     }
   }
@@ -2262,7 +2299,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     var acts = document.querySelector(".hero-actions");
     if(acts && !document.querySelector(".hu-arena")){
       var a = document.createElement("a"); a.className = "hu-arena"; a.href = (document.getElementById("heroCta") || {}).href || "#courses";
-      a.innerHTML = '<span class="hu-thumbs"><img src="./mil-cover.jpg" alt=""><img src="./mt-cover.jpg" alt=""><img src="./zb-cover.jpg" alt=""></span><span><b>Đấu trường từ vựng <span class="hu-new">MỚI</span></b><small>Ai Là Triệu Phú · Ghép Cặp · Thoát Khỏi Zombie</small></span><span class="hu-play"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>';
+      a.innerHTML = '<span class="hu-thumbs"><img src="./mil-cover.jpg" alt=""><img src="./mt-cover.jpg" alt=""><img src="./zb-cover.jpg" alt=""></span><span><b>Đấu trường từ vựng <span class="hu-new">MỚI</span></b><small>Triệu Phú Từ Vựng · Ghép Cặp · Thoát Khỏi Zombie</small></span><span class="hu-play"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>';
       acts.after(a);
     }
   }

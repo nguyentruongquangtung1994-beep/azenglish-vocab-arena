@@ -78,17 +78,17 @@
     if(!pending || !profile || !profile.phone) return;
     ensureUid(function(id){
       var body = JSON.stringify({ source:"AZ-Vocab-XP", uid:id, name:displayName(), level:profile.level || "", delta:pending });
-      lsSet("az_core_xp_pending", "0");
+      var done = function(){ lsSet("az_core_xp_pending", String(Math.max(0, (+lsGet("az_core_xp_pending") || 0) - pending))); };   // AZ-SCALE v46: chỉ trừ khi đã gửi
       try{
-        if(useBeacon && navigator.sendBeacon) navigator.sendBeacon(API, new Blob([body], { type:"text/plain;charset=utf-8" }));
-        else fetch(API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).catch(function(){});
+        if(useBeacon && navigator.sendBeacon){ if(navigator.sendBeacon(API, new Blob([body], { type:"text/plain;charset=utf-8" }))) done(); }
+        else fetch(API, { method:"POST", mode:"no-cors", headers:{ "Content-Type":"text/plain;charset=utf-8" }, body:body }).then(done).catch(function(){});
       }catch(e){}
       try{ localStorage.removeItem("az_core_lb"); }catch(e){}
     });
   }
   trackXp();
   setInterval(trackXp, 4000);
-  setInterval(function(){ flushXp(false); }, 120000);
+  setTimeout(function(){ flushXp(false); setInterval(function(){ flushXp(false); }, 120000); }, Math.round(Math.random() * 60000));   // lệch giờ gửi giữa các máy
   document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "hidden"){ trackXp(); flushXp(true); } });
   window.addEventListener("pagehide", function(){ trackXp(); flushXp(true); });
   setTimeout(function(){ flushXp(false); }, 2500);

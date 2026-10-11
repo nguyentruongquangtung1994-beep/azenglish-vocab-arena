@@ -1843,7 +1843,7 @@
     }
     var saved = null;
     try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
-    applyTheme(saved);
+    applyTheme(saved || "light");
     var themeBtn = document.getElementById("themeBtn");
     themeBtn.addEventListener("click", function(){
       var current = document.documentElement.getAttribute("data-theme");

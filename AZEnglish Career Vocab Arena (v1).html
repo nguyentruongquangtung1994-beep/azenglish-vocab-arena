@@ -1140,6 +1140,33 @@
   .q-after[hidden]{ display:none; }
   .q-after .xp{ padding:3px 10px; border-radius:99px; background:color-mix(in srgb, var(--ember) 18%, transparent); color:var(--ember); font:800 15px var(--font-display); }
   .q-after b{ color:var(--red); }
+
+/* AZ-BRIGHT v44 */
+:root:not([data-theme="dark"]) .motivate-toast, :root:not([data-theme="dark"]) .qm-toast{ background:#fff !important; color:#1c130d !important; box-shadow:0 12px 30px -12px rgba(224,32,32,.45), inset 0 0 0 1.5px #f3c4c4 !important; }
+:root:not([data-theme="dark"]) .q-reco{ background:linear-gradient(120deg,#fff 0%,#fff1f1 100%) !important; color:#1c130d !important; box-shadow:0 4px 0 #f3c4c4, inset 0 0 0 1.5px #f3c4c4 !important; }
+:root:not([data-theme="dark"]) .q-reco .w{ color:#4a3d34 !important; opacity:1 !important; } :root:not([data-theme="dark"]) .q-reco .k{ color:#E02020 !important; }
+:root:not([data-theme="dark"]) .q-reco .e.q-game-ic{ background:var(--c, #E02020) !important; color:#fff !important; }
+:root:not([data-theme="dark"]) .sx-timer:not(.low):not(.off){ background:#fff !important; color:#E02020 !important; box-shadow:0 3px 0 #f3c4c4, inset 0 0 0 2px #f3c4c4 !important; }
+:root:not([data-theme="dark"]) .alt-check, :root:not([data-theme="dark"]) .submit-btn, :root:not([data-theme="dark"]) .rmd-go{ background:#E02020 !important; color:#fff !important; }
+:root:not([data-theme="dark"]) .rmd-card.on .rmd-go{ background:#1e9a5a !important; }
+:root:not([data-theme="dark"]) .q-name{ background:#E02020 !important; color:#fff !important; }
+/* Triệu Phú Từ Vựng: thanh câu hỏi + đáp án đang chọn */
+:root:not([data-theme="dark"]) #milQbar{ background:linear-gradient(180deg,#ff5a4a,#E02020) !important; color:#fff !important; }
+:root:not([data-theme="dark"]) .mil-a.sel, :root:not([data-theme="dark"]) .gx-light .mil-a.sel{ background:#E02020 !important; }
+:root:not([data-theme="dark"]) .mil-a.sel .hx-in, :root:not([data-theme="dark"]) .gx-light .mil-a.sel .hx-in{ background:linear-gradient(180deg,#ff5a4a,#E02020) !important; color:#fff !important; }
+:root:not([data-theme="dark"]) .mil-a.sel i{ color:#fff !important; }
+/* Ghép Cặp: thẻ nghĩa tiếng Việt hồng nhạt thay vì đen */
+:root:not([data-theme="dark"]) .mt-c.vi:not(.ok) .mt-face, :root:not([data-theme="dark"]) .gx-light .mt-c.vi:not(.ok) .mt-face{ background:linear-gradient(180deg,#fff7f7,#ffe1e1) !important; color:#1c130d !important; box-shadow:0 0 0 2px #E02020, 0 6px 0 #f1b2b2 !important; }
+:root:not([data-theme="dark"]) .mt-c.vi:not(.ok) .mt-t{ color:#1c130d !important; }
+/* Zombie */
+:root:not([data-theme="dark"]) #zbQbar{ background:linear-gradient(180deg,#ff5a4a,#E02020) !important; color:#fff !important; }
+:root:not([data-theme="dark"]) #zbQbar b{ color:#ffe36b !important; }
+:root:not([data-theme="dark"]) .zb-boxes.reveal i.f{ background:#E02020 !important; color:#fff !important; box-shadow:0 4px 0 #a3121a !important; }
+/* Thi vượt vùng */
+:root:not([data-theme="dark"]) .pz-entry{ background:linear-gradient(120deg,#fff,#fff1f1) !important; color:#1c130d !important; box-shadow:0 4px 0 #f3c4c4, inset 0 0 0 1.5px #f3c4c4 !important; }
+:root:not([data-theme="dark"]) .pz-a.k1{ background:#ff6a3d !important; box-shadow:0 5px 0 #c43f16 !important; }
+:root:not([data-theme="dark"]) .pz-a.k3{ background:#f08a24 !important; box-shadow:0 5px 0 #b45f0c !important; }
+:root:not([data-theme="dark"]) .gx-light .pz-dots i.cur{ background:#E02020 !important; }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -2054,7 +2081,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
   }
   var savedTheme = null;
   try{ savedTheme = localStorage.getItem("azvocab_index_theme") || localStorage.getItem(STORAGE_KEY + "_theme"); }catch(e){}
-  applyTheme(savedTheme);
+  applyTheme(savedTheme || "light");
   themeBtn.addEventListener("click", function(){
     var current = document.documentElement.getAttribute("data-theme");
     var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -5346,7 +5373,7 @@ var WORDS = [{"w":"computer","p":"n","m":"máy tính","lvl":"A2","t":"it","ipa":
 
   var fbApp = initializeApp(firebaseConfig);
   var fbAuth = getAuth(fbApp);
-  var fbDb = getFirestore(fbApp);
+  var fbDb = getFirestore(fbApp, "default");   // AZ-SCALE v46: database "(default)" không tồn tại
 
   window.__az_firebase = {
     db: fbDb, doc: doc, setDoc: setDoc, getDocs: getDocs,
