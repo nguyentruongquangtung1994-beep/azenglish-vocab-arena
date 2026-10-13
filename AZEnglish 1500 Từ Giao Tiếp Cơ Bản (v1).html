@@ -1990,6 +1990,18 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
 #hintScrBtn:disabled{ opacity:.5; cursor:default; }
 
 .qm-dev-btn, .qm-dev{ display:none !important; }
+
+/* v41 · Học: câu tiếng Việt thay câu tiếng Anh điền khuyết */
+#recallPhase .alt-vsent{ display:block; margin-bottom:8px; }
+#recallPhase .alt-vfill{ display:inline-block; padding:0 .35em; margin:0 .08em; border-radius:10px; background:#E02020; color:#fff; font-weight:900; line-height:1.35; box-shadow:0 3px 0 #8f0a1c; }
+#recallPhase .alt-vfill::first-letter{ text-transform:none; }
+/* v41 · Ghép Cặp: thẻ lật đồng loạt (bỏ độ trễ xếp bài khi đang chơi) + đúng = xanh lá, không còn nền đen */
+.gx-mt .mt-grid.mem .mt-in, .gx-mt .mt-c.open .mt-in, .gx-mt .mt-c.ok .mt-in{ transition-delay:0s !important; }
+.gx.gx-mt .mt-grid .mt-c.ok .mt-face{ background:linear-gradient(180deg,#3ad67f,#1fa356) !important; border-color:#1fa356 !important; color:#fff !important; box-shadow:0 0 0 3px #b8ffcf, 0 6px 0 #146b3e !important; }
+.gx.gx-mt .mt-grid .mt-c.ok .mt-t, .gx.gx-mt .mt-grid .mt-c.ok em{ color:#fff !important; }
+.gx.gx-mt .mt-grid .mt-c.ok{ animation:mtOkPop .4s ease .3s !important; }
+@keyframes mtOkPop{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.1); } }
+@media (prefers-reduced-motion: reduce){ .gx.gx-mt .mt-grid .mt-c.ok{ animation:none !important; } }
 </style>
 
 <canvas id="globeCanvas" aria-hidden="true"></canvas>
@@ -5494,7 +5506,32 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   // ĐẤU TRƯỜNG MỚI: Triệu Phú Từ Vựng + Ghép Cặp Thần Tốc (bộ bài không lặp)
   // =====================================================================
   // ---- Bộ bài: từ trả lời đúng rời bộ, chỉ quay lại khi đã ôn hết 1 vòng ----
-  function gdKey(id){ return "azq_deck_arena"; }
+  function gdKey(id){ return "azq_deck_arena_" + id; }   // v41: mỗi game một bộ bài riêng
+  // v41 · từ vừa chơi bị khoá vài ván (vòng nhớ theo game) để ván sau không lặp lại
+  var GD_RING = { mil:40, mt:30, zb:60 };
+  function gdRecentGet(id){ try{ return JSON.parse(localStorage.getItem("azq_recent_" + id) || "[]") || []; }catch(e){ return []; } }
+  function gdRecent(id, list){
+    var r = gdRecentGet(id);
+    (list || []).forEach(function(w){ if(!w || !w.w) return; var k = r.indexOf(w.w); if(k >= 0) r.splice(k, 1); r.push(w.w); });
+    r = r.slice(-(GD_RING[id] || 40)); try{ localStorage.setItem("azq_recent_" + id, JSON.stringify(r)); }catch(e){}
+  }
+  // Từ mới (chưa học) để bù khi kho từ đã học còn ít — xáo ngẫu nhiên, ưu tiên từ chưa từng ra trong game
+  function gdNewPool(n, exclude, hard){
+    var RK = { A1:0, A2:1, B1:2, B2:3, C1:4, C2:5 }, myLv = 9, ex = exclude || {};
+    try{ var pf = JSON.parse(localStorage.getItem("az_vocab_profile") || "null"); if(pf && pf.level && RK[String(pf.level).slice(0, 2)] != null) myLv = RK[String(pf.level).slice(0, 2)]; }catch(e){}
+    var c = WORDS.filter(function(w){ var st0 = state[w.w]; return !w.custom && w.t !== "mine" && !ex[w.w] && st0 && !st0.correct && !st0.wrong && (RK[w.lvl] == null || RK[w.lvl] <= Math.max(1, myLv)); });
+    if(hard){ var top = 0; c.forEach(function(w){ top = Math.max(top, RK[w.lvl] || 0); }); var hc = c.filter(function(w){ return (RK[w.lvl] || 0) >= top; }); if(hc.length >= n) c = hc; }
+    return qFresh(c).slice(0, n).map(function(w){ return Object.assign({ gdNew:true }, w); });
+  }
+  // Ghi nhận học: trả lời đúng trong game = 1 lần ôn (từ mới vào lịch ôn, từ đến hạn được dời lịch)
+  function gxLearn(w){
+    try{
+      var st = state[w.w]; if(!st) return;
+      var wasNew = !(st.correct > 0 || st.wrong > 0), due = !wasNew && st.due <= todayStamp();
+      if(wasNew || due){ scheduleCorrect(st, false); st.correct = (st.correct || 0) + 1; bumpTodayProgress(); }
+      markMethod(w, "mat"); saveState(state);
+    }catch(e){}
+  }
   function gdLoad(id){ try{ var d = JSON.parse(localStorage.getItem(gdKey(id)) || "null"); if(d && d.cleared) return d; }catch(e){} return { cleared:[], round:1 }; }
   function gdSave(id, d){ try{ localStorage.setItem(gdKey(id), JSON.stringify(d)); }catch(e){} }
   function gdStatus(id){
@@ -5503,11 +5540,17 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     return { d:d, all:all, left:left, done:all.length - left.length };
   }
   // Lấy n từ: từ còn trong bộ (chưa gặp lâu nhất lên trước); thiếu thì bù từ đã ôn (ghi chú "ôn lại")
-  function gdDraw(id, n){
-    var st = gdStatus(id), newRound = false;
+  function gdDraw(id, n, opt){
+    opt = opt || {};
+    var st = gdStatus(id), newRound = false, rec = {};
+    gdRecentGet(id).forEach(function(k){ rec[k] = 1; });
     if(!st.left.length && st.all.length){ st.d.cleared = []; st.d.round = (st.d.round || 1) + 1; gdSave(id, st.d); st = gdStatus(id); newRound = true; }
-    var pick = qFresh(st.left).slice(0, n), extra = [];
-    if(pick.length < n){ var have = {}; pick.forEach(function(w){ have[w.w] = 1; }); extra = qFresh(st.all.filter(function(w){ return !have[w.w]; })).slice(0, n - pick.length); }
+    var pick = qFresh(st.left.filter(function(w){ return !rec[w.w]; })).slice(0, n), have = {}, extra = [];
+    pick.forEach(function(w){ have[w.w] = 1; });
+    function add(list){ list.forEach(function(w){ if(pick.length + extra.length < n && !have[w.w]){ have[w.w] = 1; extra.push(w); } }); }
+    if(pick.length < n) add(qFresh(st.all.filter(function(w){ return !rec[w.w]; })));                       // từ đã ôn nhưng không vừa chơi
+    if(pick.length + extra.length < n && opt.allowNew !== false && st.all.length < 40){ var ex = {}; st.all.forEach(function(w){ ex[w.w] = 1; }); add(gdNewPool(n - pick.length - extra.length, ex)); }   // kho ít → bù từ mới
+    if(pick.length + extra.length < n) add(qFresh(st.all));                                                  // hết cách mới dùng lại từ vừa chơi
     return { words: pick.concat(extra), fresh: pick.length, newRound: newRound, round: st.d.round || 1 };
   }
   function gdClear(id, w){ var d = gdLoad(id); if(d.cleared.indexOf(w.w) < 0){ d.cleared.push(w.w); gdSave(id, d); } }
@@ -5547,25 +5590,47 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function milEl(id){ return document.getElementById(id); }
   function milFmt(n){ return n.toLocaleString("vi-VN"); }
   function milSay(t){ var el = milEl("milSay"); el.textContent = t; el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+  // v41 · 3 vòng: câu 1-5 Anh→Việt (dễ) · câu 6-10 Việt→Anh / nghe (đáp án nhiễu cùng từ loại) · câu 11-15 điền từ vào câu (nhiễu cùng chủ đề, gần giống mặt chữ)
+  function milTier(level){ return level < 5 ? 0 : level < 10 ? 1 : 2; }
+  function milDistract(w, kind, tier){
+    if(tier === 0) return gxDistract(w, kind, 3);
+    var key = function(x){ return kind === "m" ? x.m : x.w; }, seen = {}, out = [];
+    seen[String(key(w)).toLowerCase()] = 1;
+    var wl = String(w.w).toLowerCase(), ml = String(w.m).toLowerCase(), L = wl.length;
+    var cand = WORDS.filter(function(x){ return x.p === w.p || x.t === w.t; }).map(function(x){
+      var xw = String(x.w).toLowerCase();
+      return { x:x, sc:(x.p === w.p ? 2 : 0) + (tier >= 2 && x.t === w.t ? 3 : 0) + (tier >= 2 && Math.abs(xw.length - L) <= 2 ? 1 : 0) + (tier >= 2 && kind === "w" && xw.charAt(0) === wl.charAt(0) ? 1 : 0) + Math.random() * 1.5 };
+    }).sort(function(a, b){ return b.sc - a.sc; }).map(function(o){ return o.x; }).concat(shuffle(WORDS.slice()).slice(0, 80));
+    for(var i = 0; i < cand.length && out.length < 3; i++){
+      var k = String(key(cand[i]) || "").toLowerCase();
+      if(!k || seen[k] || String(cand[i].w).toLowerCase() === wl || String(cand[i].m).toLowerCase() === ml) continue;
+      seen[k] = 1; out.push(cand[i]);
+    }
+    return out;
+  }
   function milBuild(w, level, total){
-    var r = level / Math.max(1, total - 1), types = ["mean", "word"];
-    if(r > 0.3 && w.s && w.s.indexOf("___") >= 0) types.push("cloze");
-    if(r > 0.45) types.push("listen");
-    if(r > 0.6 && w.s && w.s.indexOf("___") >= 0) types.push("cloze");
+    var tier = milTier(level), hasS = w.s && w.s.indexOf("___") >= 0;
+    var types = tier === 0 ? ["mean"] : tier === 1 ? ["word", "word", "listen"] : (hasS ? ["cloze", "cloze", "word"] : ["word"]);
     var t = qmPick(types), kind = (t === "mean" || t === "listen") ? "m" : "w";
-    var opts = shuffle([w].concat(gxDistract(w, kind, 3))).map(function(x){ return { label: kind === "m" ? x.m : x.w, ok: x === w }; });
+    var opts = shuffle([w].concat(milDistract(w, kind, tier))).map(function(x){ return { label: kind === "m" ? x.m : x.w, ok: x === w }; });
     var pic = '<span class="mil-tile">' + fe(w.e || TOPIC_EMOJI[w.t] || "", "mil-pic") + "</span>";
     var q = t === "mean" ? { k:"Nghĩa của từ này là gì?", h: pic + '<b class="mil-w">' + qmEsc(w.w) + "</b>" + (w.ipa ? '<span class="mil-ipa">/' + qmEsc(w.ipa) + "/</span>" : "") }
           : t === "word" ? { k:"Từ tiếng Anh nào có nghĩa là…", h: pic + '<span class="mil-vn">“' + qmEsc(w.m) + '”</span>' }
           : t === "cloze" ? { k:"Điền từ còn thiếu vào câu", h: qmEsc(w.s).replace("___", '<span class="mil-blank">______</span>') }
           : { k:"Nghe và chọn nghĩa đúng", h: '<span class="mil-tile big">' + fe("🎧", "mil-pic") + "</span>" };
+    if(w.gdNew) q.k += " · ✨ Từ mới";
     return { w:w, t:t, q:q, opts:opts };
   }
   function milStart(){
     var lp = qLearnedPool();
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới vào ghế nóng được nha 😏"); return; }
-    var total = Math.min(15, lp.length), dr = gdDraw("mil", total + 6);
-    mil = { total: total, ladder: MIL_LADDER.slice(15 - total), words: milSort(dr.words), used: 0, level: 0, sel: -1, locked: false, life: { f5050:1, ask:1, swap:1 }, cleared: 0, newRound: dr.newRound };
+    var total = 15, dr = gdDraw("mil", 19, { allowNew:false }), L = milSort(dr.words), ex = {};
+    lp.forEach(function(w){ ex[w.w] = 1; });
+    var easy = L.slice(0, Math.min(10, L.length)), hardL = L.slice(easy.length, easy.length + 3), needN = total - easy.length - hardL.length;
+    var nw = gdNewPool(needN + 3, ex, true);                                  // vòng cuối: thêm từ mới khó hơn
+    var slots = easy.concat(milSort(hardL.concat(nw.slice(0, needN))));
+    while(slots.length < total) slots.push(qmPick(lp));
+    mil = { total: total, ladder: MIL_LADDER.slice(0), slots: slots, spares: L.slice(easy.length + hardL.length).concat(nw.slice(needN)), level: 0, sel: -1, locked: false, life: { f5050:1, ask:1, swap:1 }, cleared: 0, newRound: dr.newRound };
     mil.safe = [total - 11, total - 6].filter(function(x){ return x >= 0; });
     milEl("milEnd").hidden = true; milEl("milPlay").hidden = false;
     Array.prototype.forEach.call(document.querySelectorAll("#gxMil [data-l]"), function(b){ b.disabled = false; b.classList.remove("used"); });
@@ -5589,8 +5654,9 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     milEl("milKeep").textContent = milFmt(mil.level ? mil.ladder[mil.level - 1] : 0);
     milEl("milDeck").innerHTML = gdChip("mil");
   }
-  function milNext(){
-    var w = mil.words[mil.used++] || qmPick(qLearnedPool());
+  function milNext(swap){
+    var w = (swap === true ? mil.spares.shift() : mil.slots[mil.level]) || qmPick(qLearnedPool());
+    gdRecent("mil", [w]);
     mil.cur = milBuild(w, mil.level, mil.total); mil.sel = -1; mil.locked = false;
     milLadderRender();
     var c = mil.cur;
@@ -5601,7 +5667,8 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     var card = milEl("milCard"); card.classList.remove("in"); void card.offsetWidth; card.classList.add("in");
     var first = mil.welcome; mil.welcome = false;
     if(c.t === "listen" || c.t === "mean") setTimeout(function(){ if(mil && mil.cur === c && !milEl("gxMil").hidden) speak(c.w.w); }, first ? 6200 : 300);
-    if(!first && (mil.level === 5 || mil.level === 10)) milSay("⏱ Tăng độ khó! Từ câu này mỗi câu chỉ còn " + milSec() + " giây 🔥");
+    if(!first && mil.level === 5) milSay("⚡ VÒNG 2 · Nhìn nghĩa tiếng Việt → chọn từ tiếng Anh, đáp án nhiễu khó hơn · " + milSec() + " giây/câu 🔥");
+    if(!first && mil.level === 10) milSay("🔥 VÒNG CUỐI · Điền từ vào câu + từ khó · chỉ " + milSec() + " giây/câu. Run chưa? 😏");
     milTimer(first ? 36 : milSec());
   }
   function milSec(){ var r = mil.level / Math.max(1, mil.total - 1); return Math.round(30 - r * 18); }
@@ -5632,7 +5699,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     mil.cur.opts.forEach(function(o, j){ if(o.ok) ci = j; });
     Array.prototype.forEach.call(btns, function(b, j){ b.disabled = true; if(j === ci) b.classList.add("ok"); else if(j === i) b.classList.add("no"); });
     if(ok){
-      gdClear("mil", mil.cur.w); mil.cleared++; try{ qMarkSeen([mil.cur.w]); }catch(e){}
+      gdClear("mil", mil.cur.w); mil.cleared++; try{ qMarkSeen([mil.cur.w]); }catch(e){} gxLearn(mil.cur.w);
       chimeCorrect(); milSay(qmPick(MIL_SAY.right)); speak(mil.cur.w.w, "happy");
       var m1 = mil; if(mil.level === mil.total - 1){ setTimeout(function(){ if(mil === m1) milEnd("win"); }, 1300); return; }
       var safeHit = mil.safe.indexOf(mil.level) >= 0;
@@ -5662,7 +5729,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
       milEl("milHelp").hidden = false;
       milSay("Đa số nghiêng về " + GX_SHAPES[top] + "… nhưng khán giả từng sai đó nha 🙃");
     }else if(k === "swap"){
-      milSay(MIL_SAY.swap); mil.level = mil.level; milNext();
+      milSay(MIL_SAY.swap); milNext(true);
     }
   }
   function milEnd(kind){
@@ -5708,13 +5775,14 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
   function mtStart(){
     var lp = qLearnedPool();
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
-    var N = mtPairs(), dr = gdDraw("mt", N + 8), seenM = {}, words = dr.words.filter(function(w){ var k = String(w.m).toLowerCase(); if(seenM[k]) return false; seenM[k] = 1; return true; }).slice(0, N), cards = [];
+    var N = mtPairs(), dr = gdDraw("mt", N + 2), seenM = {}, words = dr.words.filter(function(w){ var k = String(w.m).toLowerCase(); if(seenM[k]) return false; seenM[k] = 1; return true; }).slice(0, N), cards = [];
+    gdRecent("mt", words);
     words.forEach(function(w, k){ cards.push({ k:k, side:"en", t:w.w, w:w }); cards.push({ k:k, side:"vi", t:w.m, w:w }); });
     mt = { lim:(mtLvl() >= 4 ? mtMemLim(words.length) : words.length * 5 + 4), mem:mtLvl() >= 4, n:words.length, lvl:mtLvl(), words:words, cards:shuffle(cards), sel:null, matched:0, pen:0, combo:0, t0:0, run:false, fresh:dr.fresh, newRound:dr.newRound };
     mtEl("mtEnd").hidden = true; mtEl("mtPlay").hidden = false;
     mtEl("mtGrid").classList.remove("up");
     mtEl("mtGrid").innerHTML = mt.cards.map(function(c, i){ return '<button class="mt-c ' + c.side + '" data-i="' + i + '" type="button" disabled style="--d:' + (i * 0.06).toFixed(2) + 's"><span class="mt-in"><span class="mt-back"><b>AZ</b></span><span class="mt-face">' +
-      (c.side === "en" ? '<em>EN</em><span class="mt-tile">' + fe(c.w.e || TOPIC_EMOJI[c.w.t] || "", "mt-pic") + "</span>" : "") + '<span class="mt-t">' + qmEsc(c.t) + "</span></span></span></button>"; }).join("");
+      (c.side === "en" ? '<em>' + (c.w.gdNew ? "MỚI" : "EN") + '</em><span class="mt-tile">' + fe(c.w.e || TOPIC_EMOJI[c.w.t] || "", "mt-pic") + "</span>" : "") + '<span class="mt-t">' + qmEsc(c.t) + "</span></span></span></button>"; }).join("");
     mtEl("mtGrid").classList.toggle("c4", words.length > 6);
     mtEl("mtTime").textContent = (mtLvl() >= 4 ? mtMemLim(words.length) : words.length * 5 + 4).toFixed(1); mtEl("mtGrid").classList.toggle("many", words.length >= 10); mtEl("mtGrid").classList.remove("mem"); mtEl("mtTime").parentNode.classList.remove("low"); mtEl("mtCombo").textContent = ""; mtEl("mtDeck").innerHTML = gdChip("mt");
     var b = +(localStorage.getItem(mtKey()) || 0); mtEl("mtBest").textContent = b ? (b / 1000).toFixed(1) + "s" : "--";
@@ -5749,7 +5817,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
       [ael, el].forEach(function(x){ x.classList.remove("sel"); x.classList.add("ok"); x.disabled = true; });
       gxBurst(ael); gxBurst(el);
       setTimeout(function(){ ael.classList.add("gone"); el.classList.add("gone"); }, 380);
-      gdClear("mt", c.w); try{ qMarkSeen([c.w]); }catch(e){}
+      gdClear("mt", c.w); try{ qMarkSeen([c.w]); }catch(e){} gxLearn(c.w);
       playTone(660 + mt.combo * 90, .09); playTone(990 + mt.combo * 90, .12, "triangle", .07);
       if(mt.combo >= 2){ mtEl("mtCombo").innerHTML = fe("🔥", "fe-i") + " Combo x" + mt.combo + (mt.combo >= 3 ? " · +1s" : ""); mtEl("mtCombo").classList.remove("pop"); void mtEl("mtCombo").offsetWidth; mtEl("mtCombo").classList.add("pop"); if(mt.combo === 3 || mt.combo === 5) mtEl("mtSay").textContent = qmPick(MT_SAY.combo); }
       var t0m = mt; if(mt.matched === mt.n) setTimeout(function(){ if(mt === t0m) mtEnd(); }, 520);
@@ -5840,16 +5908,18 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     var lp = qLearnedPool();
     if(lp.length < Q_GAME_MIN){ qmToast("Học thêm vài từ nữa mới chơi được nha 😏"); return; }
     var need = ZB_ROUNDS * ZB_PER, focus = window.qGameFocus; window.qGameFocus = null;
-    var dr = gdDraw("zb", need + 12), words = (focus && focus.length ? shuffle(focus.filter(zbOk)) : dr.words.filter(zbOk)).slice(0, need);
+    var dr = gdDraw("zb", need + 12, { allowNew:false }), words = (focus && focus.length ? shuffle(focus.filter(zbOk)) : dr.words.filter(zbOk)).slice(0, need);
     if(!(focus && focus.length) && lp.length < 40){
       var RK = { A1:0, A2:1, B1:2, B2:3, C1:4, C2:5 }, myLv = 9; try{ var pf = JSON.parse(localStorage.getItem("az_vocab_profile") || "null"); if(pf && pf.level && RK[String(pf.level).slice(0, 2)] != null) myLv = RK[String(pf.level).slice(0, 2)]; }catch(e){}
-      var fresh = WORDS.filter(function(w){ var st0 = state[w.w]; return zbOk(w) && !w.custom && w.t !== "mine" && (RK[w.lvl] == null || RK[w.lvl] <= myLv) && st0 && !st0.correct && !st0.wrong; }).slice(0, 30);
+      var zbRec = {}; gdRecentGet("zb").forEach(function(k){ zbRec[k] = 1; });
+      var fresh = qFresh(WORDS.filter(function(w){ var st0 = state[w.w]; return zbOk(w) && !zbRec[w.w] && !w.custom && w.t !== "mine" && (RK[w.lvl] == null || RK[w.lvl] <= myLv) && st0 && !st0.correct && !st0.wrong; })).slice(0, 30);   // v41: xáo ngẫu nhiên, không còn 30 từ đầu danh sách cố định
       var nNew = Math.min(fresh.length, Math.round(need / 2)), mix = shuffle(words.slice(0, need - nNew)).concat(shuffle(fresh).slice(0, nNew).map(function(w){ return Object.assign({ zbNew:true }, w); }));
       words = shuffle(mix);
     }
     if(words.length < need){ var have = {}; words.forEach(function(w){ have[w.w] = 1; }); words = words.concat(qFresh(lp.filter(function(w){ return zbOk(w) && !have[w.w]; })).slice(0, need - words.length)); }
     while(words.length < need && words.length) words.push(words[words.length % Math.max(1, words.length)]);
     if(opts.endless){ var base = shuffle(lp.filter(zbOk)); words = []; while(words.length < 400 && base.length) words = words.concat(shuffle(base.slice())); }
+    if(!opts.endless) gdRecent("zb", words);
     zb = { lvl:zl, endless:!!opts.endless, infBest:+(localStorage.getItem("azq_best_zb_inf") || 0), froze:0, freezeUntil:0, words:words, i:0, lives:3, combo:0, best:0, dist:.62, typed:"", miss:0, hint:[0, 0, 0], el:0, run:false, done:[], newRound:dr.newRound, bitAt:0 };
     zbEl("zbEnd").hidden = true; zbEl("zbPlay").hidden = false; zbEl("gxZb").classList.remove("zb-over");
     var b = +(localStorage.getItem(zbBestKey()) || 0); zbEl("zbBest").textContent = b ? Math.round(b / 1000) + "s" : "--";
@@ -5962,7 +6032,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
       zb.dist = Math.min(1, zb.dist + .2 + Math.min(zb.combo, 5) * .03);
       card.classList.add("ok"); gxBurst(card); playTone(660 + Math.min(zb.combo, 6) * 80, .09); playTone(990 + Math.min(zb.combo, 6) * 80, .12, "triangle", .07);
       zbEl("zbStage").classList.remove("push"); void zbEl("zbStage").offsetWidth; zbEl("zbStage").classList.add("push");
-      zb.done.push({ w:w, ok:zb.miss < 2 }); if(zb.miss < 2){ gdClear("zb", w); } try{ qMarkSeen([w]); }catch(e){}
+      zb.done.push({ w:w, ok:zb.miss < 2 }); if(zb.miss < 2){ gdClear("zb", w); gxLearn(w); } try{ qMarkSeen([w]); }catch(e){}
       zbSay(zb.combo >= 3 && zb.combo % 3 === 0 ? qmPick(ZB_SAY.combo) : qmPick(ZB_SAY.ok));
       setTimeout(function(){ speak(w.w, "happy"); }, 80);
       var zc = zb; setTimeout(function(){ if(zb === zc) zbNext(); }, 320);
@@ -6244,11 +6314,11 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(a.k === c.k && a.side !== c.side){
       mt.combo++; mt.matched++; if(mt.combo >= 3){ mt.pen -= 1000; mt.bonus = (mt.bonus || 0) + 1; }
       [ael, el].forEach(function(x){ x.classList.add("ok"); x.disabled = true; });
-      setTimeout(function(){ ael.classList.add("gone"); el.classList.add("gone"); }, 420);
-      gxBurst(ael); gxBurst(el); gdClear("mt", c.w); try{ qMarkSeen([c.w]); }catch(e){}
+      setTimeout(function(){ ael.classList.add("gone"); el.classList.add("gone"); }, 800);   // chờ thẻ thứ 2 lật xong mới biến mất
+      gxBurst(ael); gxBurst(el); gdClear("mt", c.w); try{ qMarkSeen([c.w]); }catch(e){} gxLearn(c.w);
       playTone(660 + mt.combo * 90, .09); playTone(990 + mt.combo * 90, .12, "triangle", .07);
       mtEl("mtCombo").innerHTML = mt.combo >= 2 ? fe("🔥", "fe-i") + " Combo x" + mt.combo + (mt.combo >= 3 ? " · +1s" : "") : "";
-      var t0m = mt; if(mt.matched === mt.n) setTimeout(function(){ if(mt === t0m) mtEnd(); }, 650);
+      var t0m = mt; if(mt.matched === mt.n) setTimeout(function(){ if(mt === t0m) mtEnd(); }, 1000);
     }else{
       mt.combo = 0; mt.miss = (mt.miss || 0) + 1; mt.memLock = true; mtEl("mtCombo").textContent = "";
       if(mt.miss % 3 === 1) mtEl("mtSay").textContent = qmPick(["Sai rồi, nhớ kỹ vị trí nha 👀", "Ơ, thẻ kia nằm đâu ta? 🤔", "Trí nhớ cá vàng hả? 😏"]);
@@ -9315,7 +9385,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
     if(mid === "mcm"){ prompt = '<span class="alt-wrow"><span class="alt-word">' + qmEsc(word.w) + '</span><button class="alt-say" type="button" aria-label="Nghe phát âm">' + ic("speaker") + '</button></span>' + (word.ipa ? '<span class="alt-ipa">/' + qmEsc(word.ipa) + '/</span>' : ""); sub = "Chọn nghĩa đúng của từ này"; setTimeout(function(){ speak(word.w); }, 150); }
     else if(mid === "mcw"){ prompt = '<span class="alt-vn">' + qmEsc(word.m) + '</span>'; sub = "Chọn từ tiếng Anh tương ứng"; }
     else if(mid === "lis"){ prompt = '<button class="alt-play" id="altPlay" type="button">' + ic("speaker") + ' Nghe lại</button>'; sub = "Nghe và chọn nghĩa đúng"; setTimeout(function(){ speak(word.w); }, 150); }
-    else { prompt = '<span class="alt-cloze">' + clozeHTML(word.s) + '</span><span class="alt-wrow"><span class="alt-vn small">' + qmEsc(word.m) + '</span><button class="alt-say sm" type="button" aria-label="Nghe phát âm từ">' + ic("speaker") + '</button></span>'; sub = "Chọn từ điền vào chỗ trống"; }
+    else { prompt = '<span class="alt-cloze alt-vsent">' + qmEsc(word.s).replace("___", '<span class="alt-vfill">' + qmEsc(word.m) + '</span>') + '</span>'; sub = "Chọn từ tiếng Anh cho phần tô đỏ"; }   // v42: nghĩa tiếng Việt nằm ngay trong chỗ trống, tô đỏ
     var SH = ['<svg viewBox="0 0 24 24"><path d="M12 4.5l8.5 15h-17z"/></svg>', '<svg viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></svg>', '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/></svg>', '<svg viewBox="0 0 24 24"><rect x="4.5" y="4.5" width="15" height="15" rx="2.5"/></svg>'];
     altBox.innerHTML = qmTag(mid) + '<div class="alt-prompt">' + prompt + '<p class="alt-sub">' + sub + '</p></div><div class="alt-opts live">' +
       opts.map(function(o, i){ var lg = Math.max.apply(null, String(o.label).split(/\s+/).map(function(x){ return x.length; })); return '<button class="alt-opt k' + i + '" data-i="' + i + '" type="button"><span class="sh" aria-hidden="true">' + SH[i] + '</span><span class="tx' + (lg > 9 ? " long" : "") + '"' + (kind === "word" ? ' lang="en"' : "") + '>' + qmEsc(o.label) + '</span></button>'; }).join("") + '</div>';
@@ -9331,6 +9401,7 @@ body.gx-lock #motivateToast, body.gx-lock .qm-toast{ display:none !important; }
         document.removeEventListener("keydown", altBox._kh);
         altBox.querySelector(".alt-opts").classList.add("done"); qmPop();
         var i = +b.dataset.i, ok = opts[i].ok;
+        if(mid === "clz" || mid === "mcw"){ try{ speak(word.w); }catch(e){} }   // đọc tiếng Anh SAU khi chọn, không lộ đáp án
         b.classList.add(ok ? "right" : "wrong");
         Array.prototype.forEach.call(btns, function(x, j){ x.disabled = true; if(!ok && opts[j].ok) x.classList.add("right"); });
         setTimeout(function(){ resolveAnswer(word, ok, mid); }, ok ? 260 : 650);
