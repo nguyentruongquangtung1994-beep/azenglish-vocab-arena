@@ -2059,6 +2059,7 @@
 
     Object.keys(GX_DATA).forEach(renderTopicBadge);
     renderOverview();
+    window.gxRefreshBadges = function(){ progress = loadProgress(); Object.keys(GX_DATA).forEach(renderTopicBadge); renderOverview(); };
   })();
 
   (function(){
@@ -2482,6 +2483,252 @@ html[data-theme="dark"] .ga-opt.sel, html[data-theme="dark"] .ga-opt.lock{ backg
   $("gaMilBtn").addEventListener("click", milStart);
   $("gaRevBtn").addEventListener("click", revStart);
   renderStats();
+})();
+</script>
+
+<!-- ===== v2 · GIAO DIỆN HỌC GIỐNG BỘ TỪ VỰNG (màn hình chính + buổi học từng câu) ===== -->
+<style>
+.gs-hero{ position:relative; overflow:hidden; background:var(--paper-2); border:1.5px solid var(--line); border-radius:22px; box-shadow:0 2px 0 var(--line); padding:20px 20px 16px; margin:4px 0 2px; }
+.gs-top{ display:flex; align-items:flex-end; gap:12px; }
+.gs-txt{ flex:1; min-width:0; padding-bottom:6px; }
+.gs-eye{ margin:0 0 4px; font:800 12px var(--font-body); letter-spacing:.08em; text-transform:uppercase; color:var(--red); }
+.gs-title{ margin:0; font:800 clamp(26px,6vw,34px)/1.1 var(--font-display); color:var(--ink); }
+.gs-count{ margin:6px 0 0; font-size:14px; color:var(--ink-soft); } .gs-count b{ font:800 18px var(--font-display); color:var(--ink); margin-right:6px; }
+.gs-lion{ flex:none; width:88px; margin-bottom:-16px; }
+.gs-lion .azl-rig{ width:88px; display:block; }
+.gs-bar{ height:14px; border-radius:99px; background:var(--paper-3, #fdf3e4); overflow:hidden; margin:14px 0 12px; box-shadow:inset 0 1px 2px rgba(0,0,0,.06); }
+.gs-bar i{ display:block; height:100%; width:0; border-radius:99px; background:var(--red); transition:width .9s cubic-bezier(.22,1,.36,1); }
+.gs-cta{ width:100%; border:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:68px; border-radius:18px; background:var(--red); color:#fff; box-shadow:0 6px 0 var(--red-ink); font:800 22px var(--font-display); transition:transform .15s, filter .15s; }
+.gs-cta small{ font:600 13px var(--font-body); opacity:.9; }
+.gs-cta:hover{ transform:translateY(-2px); filter:brightness(1.05); } .gs-cta:active{ transform:translateY(3px); box-shadow:0 2px 0 var(--red-ink); }
+.gs-meta{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.gs-meta button{ border:1.5px solid var(--line); background:var(--paper); color:var(--ink); border-radius:99px; padding:7px 14px; font:700 13px var(--font-body); cursor:pointer; }
+.gs-lib-h{ margin:22px 0 0; font:800 20px var(--font-display); color:var(--ink); }
+/* chọn chủ điểm */
+.gs-sheet-bg{ position:fixed; inset:0; z-index:480; background:rgba(20,12,8,.5); }
+.gs-sheet{ position:fixed; left:50%; bottom:0; z-index:490; transform:translateX(-50%); width:min(560px,100%); max-height:86vh; overflow-y:auto; background:var(--paper); border-radius:22px 22px 0 0; padding:16px 16px 24px; box-shadow:0 -10px 30px rgba(0,0,0,.2); }
+.gs-sheet[hidden], .gs-sheet-bg[hidden]{ display:none; }
+.gs-sheet-h{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; } .gs-sheet-h h3{ margin:0; font:800 19px var(--font-display); color:var(--ink); }
+.gs-sheet-h button{ width:36px; height:36px; border-radius:50%; border:0; background:var(--paper-2); color:var(--ink); font-size:16px; cursor:pointer; }
+.gs-fam{ margin:14px 0 6px; font:800 13px var(--font-body); color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; }
+.gs-tp{ width:100%; display:flex; align-items:center; gap:10px; text-align:left; border:1.5px solid var(--line); background:var(--paper-2); color:var(--ink); border-radius:14px; padding:10px 12px; margin:0 0 6px; cursor:pointer; font:600 14px/1.3 var(--font-body); }
+.gs-tp:hover{ border-color:var(--red); }
+.gs-tp .n{ flex:1; min-width:0; } .gs-tp .lv{ flex:none; font-size:11px; font-weight:800; padding:2px 8px; border-radius:99px; background:var(--lvl-b1-bg); color:var(--lvl-b1); }
+.gs-tp .lv.t1{ background:var(--lvl-b2-bg); color:var(--lvl-b2); } .gs-tp .lv.t2{ background:var(--lvl-c1-bg); color:var(--lvl-c1); }
+.gs-tp .st{ flex:none; font-size:12px; font-weight:800; color:var(--ink-soft); } .gs-tp .st.ok{ color:#1e7a4c; }
+/* buổi học */
+html.gs-on .stack > *:not(.masthead):not(#gsStudy){ display:none !important; }
+html.gs-on .azl{ display:none !important; }
+#gsStudy[hidden]{ display:none; }
+.gs-panel{ background:var(--paper-2); border:1.5px solid var(--line); border-radius:22px; box-shadow:0 2px 0 var(--line); padding:16px; display:flex; flex-direction:column; gap:12px; }
+.gs-row{ display:flex; align-items:center; gap:8px; }
+.gs-x{ width:46px; height:46px; border-radius:50%; border:0; background:var(--paper); color:var(--red); font-size:19px; font-weight:800; cursor:pointer; box-shadow:0 3px 10px rgba(224,16,43,.12); }
+.gs-chip{ display:flex; align-items:center; gap:6px; min-width:0; flex:1; padding:6px 12px; border-radius:99px; background:var(--paper); box-shadow:0 3px 10px rgba(224,16,43,.08); font:700 12.5px var(--font-body); color:var(--ink); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.gs-chip .lv{ flex:none; padding:2px 8px; border-radius:99px; background:#1e9a5a; color:#fff; font-size:11px; font-weight:800; }
+.gs-chip .lv.t1{ background:#1d6fa5; } .gs-chip .lv.t2{ background:var(--red); }
+.gs-chip span.t{ overflow:hidden; text-overflow:ellipsis; }
+.gs-timer{ flex:none; display:flex; align-items:center; gap:6px; padding:5px 12px 5px 6px; border-radius:99px; background:var(--paper); box-shadow:0 0 0 2px #ffd3d3, 0 3px 10px rgba(224,16,43,.1); font:800 15px var(--font-display); color:var(--red); }
+.gs-timer i{ width:24px; height:24px; border-radius:50%; background:conic-gradient(#ffc93c calc(var(--p,100) * 1%), #fde9c4 0); -webkit-mask:radial-gradient(circle, transparent 7px, #000 8px); mask:radial-gradient(circle, transparent 7px, #000 8px); }
+.gs-timer.low{ color:#fff; background:var(--red); }
+.gs-prog{ display:flex; align-items:center; gap:10px; }
+.gs-prog .b{ flex:1; height:12px; border-radius:99px; background:var(--paper); overflow:hidden; box-shadow:inset 0 1px 2px rgba(0,0,0,.06); }
+.gs-prog .b i{ display:block; height:100%; width:0; background:var(--red); border-radius:99px; transition:width .4s ease; }
+.gs-prog span{ font:800 13px var(--font-body); color:var(--ink-soft); white-space:nowrap; } .gs-prog em{ font-style:normal; color:var(--red); }
+.gs-tag{ align-self:center; display:flex; align-items:center; gap:6px; padding:5px 12px; border-radius:99px; background:var(--paper); border:1.5px solid var(--line); font:700 12.5px var(--font-body); color:var(--ink); }
+.gs-tag b{ font-weight:800; }
+.gs-q{ background:var(--paper); border:1.5px solid var(--line); border-radius:20px; padding:22px 18px; text-align:center; }
+.gs-q p{ margin:0; font:800 clamp(20px,5.6vw,26px)/1.45 var(--font-display); color:var(--ink); text-wrap:balance; }
+.gs-q u{ text-decoration:none; display:inline-block; min-width:72px; height:1.15em; vertical-align:-.12em; border-radius:8px; background:var(--red-bg, #fde6e8); box-shadow:inset 0 -3px 0 var(--red); }
+.gs-q small{ display:block; margin-top:10px; font:700 13px var(--font-body); color:var(--ink-soft); }
+.gs-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.gs-o{ border:0; border-radius:18px; min-height:72px; padding:12px 14px; display:flex; align-items:center; gap:10px; text-align:left; cursor:pointer; color:#fff; font:800 clamp(15px,4.2vw,17px)/1.25 var(--font-body); box-shadow:0 5px 0 rgba(0,0,0,.22); transition:transform .1s, opacity .2s, filter .15s; }
+.gs-o.k0{ background:#d42f41; } .gs-o.k1{ background:#2b6ea6; } .gs-o.k2{ background:#c4800f; } .gs-o.k3{ background:#2a7a53; }
+.gs-o .sh{ flex:none; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.2); display:grid; place-items:center; }
+.gs-o .sh svg{ width:17px; height:17px; fill:#fff; }
+.gs-o:hover:not(:disabled){ transform:translateY(-2px); filter:brightness(1.06); } .gs-o:active:not(:disabled){ transform:translateY(3px); box-shadow:0 2px 0 rgba(0,0,0,.22); }
+.gs-opts.done .gs-o:not(.right):not(.wrong){ opacity:.4; }
+.gs-o.right{ background:#1e9a5a !important; box-shadow:0 5px 0 #146b3e, 0 0 0 3px rgba(30,154,90,.3); opacity:1 !important; }
+.gs-o.wrong{ background:#8f0a1c !important; animation:gsShake .35s ease; }
+@keyframes gsShake{ 25%{ transform:translateX(-6px); } 75%{ transform:translateX(6px); } }
+@media (max-width:420px){ .gs-opts{ grid-template-columns:1fr; } .gs-o{ min-height:58px; } }
+.gs-fb{ border-radius:16px; padding:12px 14px; font-size:14px; line-height:1.5; background:#fde6e8; color:#5c0610; border:1.5px solid #f6b8bf; }
+.gs-fb.ok{ background:#e7f4ec; color:#14532d; border-color:#b6dfc6; }
+.gs-fb b{ font-weight:800; }
+.gs-tools{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+.gs-tools button{ border:1.5px solid var(--line); background:var(--paper); color:var(--ink); border-radius:99px; padding:8px 14px; font:700 13px var(--font-body); cursor:pointer; }
+.gs-next{ border:0; border-radius:18px; min-height:56px; background:var(--red); color:#fff; font:800 18px var(--font-display); box-shadow:0 5px 0 var(--red-ink); cursor:pointer; }
+.gs-next[hidden]{ display:none; }
+.gs-end{ text-align:center; display:flex; flex-direction:column; gap:10px; }
+.gs-end .stars{ font-size:40px; letter-spacing:6px; } .gs-end .stars i{ font-style:normal; opacity:.25; } .gs-end .stars i.on{ opacity:1; }
+.gs-end h3{ margin:0; font:800 26px var(--font-display); color:var(--ink); } .gs-end h3 b{ color:var(--red); }
+.gs-end p{ margin:0; color:var(--ink-soft); font-size:14px; line-height:1.5; }
+.gs-end .row{ display:flex; gap:10px; } .gs-end .row button{ flex:1; }
+.gs-ghost{ border:1.5px solid var(--line); background:var(--paper); color:var(--ink); border-radius:18px; min-height:56px; font:800 16px var(--font-display); cursor:pointer; }
+/* lý thuyết trong buổi học */
+.gs-theory .g-body{ display:block !important; padding:0 !important; }
+.gs-theory .g-body h4:last-of-type, .gs-theory .gx-list{ display:none !important; }
+@media (prefers-reduced-motion: reduce){ .gs-o.wrong{ animation:none; } .gs-bar i, .gs-prog .b i{ transition:none; } }
+</style>
+<script>
+(function(){
+  "use strict";
+  var KEY = "azgrammar_v1", LAST_KEY = KEY + "_last", PROG_KEY = "azgrammar_progress_v1", SEC = 30, GOAL = 20;
+  var SH = ['<svg viewBox="0 0 24 24"><path d="M12 4.5l8.5 15h-17z"/></svg>', '<svg viewBox="0 0 24 24"><path d="M12 3l9 9-9 9-9-9z"/></svg>', '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/></svg>', '<svg viewBox="0 0 24 24"><rect x="4.5" y="4.5" width="15" height="15" rx="2.5"/></svg>'];
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
+  function shuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function lj(k, d){ try{ var v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; }catch(e){ return d; } }
+  function dayNum(){ return Math.floor((Date.now() + 7 * 3600e3) / 864e5); }
+  var TN = ["Cơ bản", "Trung cấp", "Nâng cao"];
+
+  // ---------- danh mục chủ điểm (đọc từ thẻ thư viện) ----------
+  var TOPICS = [], BY = {};
+  Array.prototype.forEach.call(document.querySelectorAll(".g-card"), function(card){
+    var l = card.querySelector(".gx-list"); if(!l) return;
+    var b = card.querySelector(".lvl-badge"), h = card.querySelector(".g-title"), lv = b ? b.textContent.trim() : "";
+    var prev = card.previousElementSibling; while(prev && !prev.classList.contains("fam-head")) prev = prev.previousElementSibling;
+    var famH = prev ? prev.querySelector("h2") : null;
+    var t = { id:l.dataset.topic, card:card, tier:/Nâng cao/i.test(lv) ? 2 : /Trung cấp/i.test(lv) ? 1 : 0,
+      title:h ? h.textContent.replace(/\s+/g, " ").trim() : "Chủ điểm " + l.dataset.topic,
+      fam:famH ? famH.childNodes[0].textContent.trim() : "" };
+    TOPICS.push(t); BY[t.id] = t;
+  });
+  function prog(){ return lj(PROG_KEY, {}); }
+  function suggest(){
+    var p = prog(), last = localStorage.getItem(LAST_KEY);
+    if(last && BY[last] && !(p[last] && p[last].mastered)) return BY[last];
+    for(var i = 0; i < TOPICS.length; i++){ var q = p[TOPICS[i].id]; if(!(q && q.mastered)) return TOPICS[i]; }
+    return TOPICS[Math.floor(Math.random() * TOPICS.length)];
+  }
+
+  // ---------- màn hình chính ----------
+  var stack = document.querySelector(".stack"), mh = document.querySelector(".masthead");
+  var hero = document.createElement("section"); hero.className = "gs-hero"; hero.id = "gsHero";
+  hero.innerHTML = '<div class="gs-top"><div class="gs-txt"><p class="gs-eye">Nhiệm vụ hôm nay</p><h2 class="gs-title">Chinh phục ' + GOAL + ' câu</h2><p class="gs-count"><b id="gsCnt">0/' + GOAL + '</b><span id="gsSub"></span></p></div>' +
+    '<span class="gs-lion" aria-hidden="true"><span class="azl-rig"><img class="tl" src="./lion-tail.webp" alt=""><img src="./lion-base.webp" alt="" width="323" height="520"><span class="azl-hd"><img src="./lion-head.webp" alt=""><i class="azl-lid l"></i><i class="azl-lid r"></i></span></span></span></div>' +
+    '<div class="gs-bar"><i id="gsBar"></i></div>' +
+    '<button class="gs-cta" id="gsGo" type="button"><span>▶ Tiếp tục</span><small id="gsGoSub"></small></button>' +
+    '<div class="gs-meta"><button id="gsPick" type="button">📋 Chọn chủ điểm</button><button id="gsLib" type="button">📚 Thư viện lý thuyết</button></div>';
+  if(mh) mh.after(hero);
+  // xếp lại: nhiệm vụ → thống kê → đấu trường → THƯ VIỆN (lý thuyết cũ)
+  var st = document.querySelector(".ga-stats"), dl = document.querySelector(".ga-day"), ar = document.querySelector(".ga-arena");
+  if(st){ hero.after(st); st.after(dl); dl.after(ar); }
+  var libH = document.createElement("h2"); libH.className = "gs-lib-h"; libH.id = "gsLibH"; libH.textContent = "📚 Thư viện ngữ pháp";
+  var intro = document.querySelector(".intro"); if(intro) intro.before(libH);
+  var ov = $("gxOverview"); if(ov && intro) intro.after(ov);
+
+  function renderHero(){
+    var m = lj(KEY + "_meta", {}), d = dayNum(), n = m.todayKey === d ? (m.todayCount || 0) : 0, s = suggest(), p = prog(), done = TOPICS.filter(function(t){ return p[t.id] && p[t.id].mastered; }).length;
+    $("gsCnt").textContent = Math.min(n, 999) + "/" + GOAL; $("gsBar").style.width = Math.min(100, n / GOAL * 100) + "%";
+    $("gsSub").textContent = n >= GOAL ? "🎉 Đạt mục tiêu — học tiếp vẫn được cộng XP!" : "câu đúng · đã nắm vững " + done + "/" + TOPICS.length + " chủ điểm";
+    $("gsGoSub").textContent = s ? s.title + " · 20 câu · ~6 phút" : "";
+    hero.dataset.topic = s ? s.id : "";
+  }
+  $("gsGo").addEventListener("click", function(){ var t = BY[hero.dataset.topic] || suggest(); if(t) start(t); });
+  $("gsLib").addEventListener("click", function(){ libH.scrollIntoView({ behavior:"smooth", block:"start" }); });
+
+  // ---------- chọn chủ điểm (tự chọn hoàn toàn, không khoá) ----------
+  var bg = document.createElement("div"); bg.className = "gs-sheet-bg"; bg.hidden = true;
+  var sh = document.createElement("div"); sh.className = "gs-sheet"; sh.hidden = true; sh.setAttribute("role", "dialog");
+  document.body.appendChild(bg); document.body.appendChild(sh);
+  function openPick(){
+    var p = prog(), h = '<div class="gs-sheet-h"><h3>Chọn chủ điểm</h3><button type="button" data-c="1" aria-label="Đóng">✕</button></div>', fam = null;
+    TOPICS.forEach(function(t){
+      if(t.fam !== fam){ fam = t.fam; h += '<p class="gs-fam">' + esc(fam) + "</p>"; }
+      var q = p[t.id], stx = q ? (q.mastered ? "🏆" : q.bestFirstScore + "/20") : "";
+      h += '<button class="gs-tp" type="button" data-t="' + t.id + '"><span class="n">' + esc(t.title) + '</span><span class="lv t' + t.tier + '">' + TN[t.tier] + '</span><span class="st' + (q && q.mastered ? " ok" : "") + '">' + stx + "</span></button>";
+    });
+    sh.innerHTML = h; bg.hidden = sh.hidden = false; sh.scrollTop = 0;
+  }
+  function closePick(){ bg.hidden = sh.hidden = true; }
+  $("gsPick").addEventListener("click", openPick); bg.addEventListener("click", function(){ closePick(); if(S && S.cur && S.cur.paused){ S.cur.paused = false; if(S.cur.answered && $("gsNext").hidden) next(); } });
+  sh.addEventListener("click", function(e){ if(e.target.closest("[data-c]")){ closePick(); return; } var b = e.target.closest("[data-t]"); if(b){ closePick(); start(BY[b.dataset.t]); } });
+
+  // ---------- buổi học: 20 câu, từng câu một ----------
+  var view = document.createElement("div"); view.id = "gsStudy"; view.hidden = true; if(mh) mh.after(view);
+  var S = null, tmr = null;
+  function start(t){
+    try{ localStorage.setItem(LAST_KEY, t.id); }catch(e){}
+    var qs = window.GX_DATA[t.id] || [];
+    S = { t:t, queue:shuffle(qs.map(function(_, i){ return i; })).map(function(i){ return { i:i, retry:false }; }), total:qs.length, done:0, first:{}, right:0, streak:0, best:0, xp0:(lj(KEY + "_meta", {}).xp || 0) };
+    view.hidden = false; document.documentElement.classList.add("gs-on"); window.scrollTo(0, 0); next();
+  }
+  function stop(){ clearInterval(tmr); S = null; view.hidden = true; document.documentElement.classList.remove("gs-on"); renderHero(); }
+  function next(){
+    clearInterval(tmr);
+    var cur = S.queue[0]; if(!cur){ finish(); return; }
+    var q = window.GX_DATA[S.t.id][cur.i], order = shuffle([0, 1, 2, 3]); S.cur = { item:cur, q:q, order:order, ans:order.indexOf(q.a), answered:false };
+    var pct = Math.round(S.done / S.total * 100);
+    view.innerHTML = '<div class="gs-panel">' +
+      '<div class="gs-row"><button class="gs-x" type="button" data-a="stop" aria-label="Thoát buổi học">✕</button><span class="gs-chip"><span class="lv t' + S.t.tier + '">' + TN[S.t.tier] + '</span><span class="t">' + esc(S.t.title) + '</span></span><span class="gs-timer" id="gsT"><i style="--p:100"></i><span>' + SEC + "s</span></span></div>" +
+      '<div class="gs-prog"><span class="b"><i style="width:' + pct + '%"></i></span><span>' + (cur.retry ? "Ôn lại" : "Câu " + (S.done + 1) + "/" + S.total) + ' · <em>🔥 ' + S.streak + "</em></span></div>" +
+      '<span class="gs-tag">✏️ <b>' + (cur.retry ? "Làm lại câu sai" : "Trắc nghiệm") + "</b> · Ngữ pháp</span>" +
+      '<div class="gs-q"><p>' + esc(q.q).replace(/_{2,}/g, "<u></u>") + "</p><small>Chọn đáp án đúng điền vào chỗ trống</small></div>" +
+      '<div class="gs-opts" id="gsOpts">' + order.map(function(o, k){ return '<button class="gs-o k' + k + '" type="button" data-k="' + k + '"><span class="sh" aria-hidden="true">' + SH[k] + "</span><span>" + esc(q.opts[o]) + "</span></button>"; }).join("") + "</div>" +
+      '<div id="gsFb"></div><button class="gs-next" id="gsNext" type="button" hidden>Tiếp tục →</button>' +
+      '<div class="gs-tools"><button type="button" data-a="theory">📖 Xem lý thuyết</button></div></div>';
+    var end = Date.now() + SEC * 1000, s0 = S;
+    tmr = setInterval(function(){
+      if(S !== s0 || !S.cur || S.cur.answered) return clearInterval(tmr);
+      var left = Math.max(0, end - Date.now()), el = $("gsT"); if(!el) return;
+      el.querySelector("i").style.setProperty("--p", (left / (SEC * 1000) * 100).toFixed(1)); el.querySelector("span").textContent = Math.ceil(left / 1000) + "s"; el.classList.toggle("low", left < 5000);
+      if(left <= 0){ clearInterval(tmr); answer(-1); }
+    }, 200);
+  }
+  function answer(k){
+    var c = S.cur; if(c.answered) return; c.answered = true; clearInterval(tmr);
+    var ok = k === c.ans, btns = view.querySelectorAll(".gs-o"), item = c.item;
+    $("gsOpts").classList.add("done");
+    Array.prototype.forEach.call(btns, function(b, j){ b.disabled = true; if(j === c.ans) b.classList.add("right"); else if(j === k) b.classList.add("wrong"); });
+    try{ document.dispatchEvent(new CustomEvent("gx:answer", { detail:{ topic:S.t.id, src:item.i, ok:ok, retry:item.retry, el:btns[k >= 0 ? k : c.ans] } })); }catch(e){}
+    S.queue.shift();
+    if(!item.retry){ S.done++; S.first[item.i] = ok; if(ok) S.right++; }
+    if(ok){ S.streak++; S.best = Math.max(S.best, S.streak); }
+    else { S.streak = 0; if(!item.retry) S.queue.push({ i:item.i, retry:true }); }
+    var fb = $("gsFb");
+    if(ok){ fb.innerHTML = '<div class="gs-fb ok">✅ <b>Chính xác!</b> ' + esc(c.q.ex) + "</div>"; var s0 = S; setTimeout(function(){ if(S === s0 && !S.cur.paused) next(); }, 1500); }
+    else { fb.innerHTML = '<div class="gs-fb">' + (k < 0 ? "⏰ <b>Hết giờ!</b> " : "❌ <b>Chưa đúng.</b> ") + "Đáp án: <b>" + esc(c.q.opts[c.q.a]) + "</b>. " + esc(c.q.ex) + (item.retry ? "" : "<br><small>Câu này sẽ được hỏi lại cuối buổi.</small>") + "</div>"; $("gsNext").hidden = false; }
+  }
+  function finish(){
+    clearInterval(tmr);
+    var p = prog(), id = S.t.id, prev = p[id] || { bestFirstScore:0, mastered:false }, wasM = !!prev.mastered, mastered = S.right === S.total;
+    prev.bestFirstScore = Math.max(prev.bestFirstScore || 0, S.right); if(mastered) prev.mastered = true; p[id] = prev;
+    try{ localStorage.setItem(PROG_KEY, JSON.stringify(p)); }catch(e){}
+    try{ document.dispatchEvent(new CustomEvent("gx:round", { detail:{ topic:id, retry:false, wrong:S.total - S.right, newMastered:mastered && !wasM } })); }catch(e){}
+    try{ if(window.gxRefreshBadges) window.gxRefreshBadges(); }catch(e){}
+    var stars = S.right >= S.total ? 3 : S.right >= S.total * .75 ? 2 : S.right >= S.total * .5 ? 1 : 0;
+    var xp = (lj(KEY + "_meta", {}).xp || 0) - S.xp0, nx = null;
+    for(var i = TOPICS.indexOf(S.t) + 1; i < TOPICS.length + TOPICS.indexOf(S.t); i++){ var t = TOPICS[i % TOPICS.length]; if(!(p[t.id] && p[t.id].mastered)){ nx = t; break; } }
+    view.innerHTML = '<div class="gs-panel gs-end"><div class="stars">' + [1, 2, 3].map(function(k){ return '<i class="' + (k <= stars ? "on" : "") + '">⭐</i>'; }).join("") + "</div>" +
+      "<h3>Đúng <b>" + S.right + "/" + S.total + "</b> câu</h3>" +
+      "<p>" + esc(S.t.title) + " · chuỗi đúng dài nhất <b>" + S.best + "</b> · <b>+" + xp + " XP</b></p>" +
+      "<p>" + (mastered ? "🏆 Bạn đã <b>nắm vững</b> chủ điểm này!" : "Kỷ lục chủ điểm: <b>" + prev.bestFirstScore + "/20</b> — đúng cả 20 câu ngay lần đầu để nắm vững.") + "</p>" +
+      '<div class="row"><button class="gs-ghost" type="button" data-a="again">🔁 Học lại</button>' + (nx ? '<button class="gs-next" type="button" data-a="nx" data-t="' + nx.id + '">Chủ điểm tiếp →</button>' : "") + "</div>" +
+      '<button class="gs-ghost" type="button" data-a="stop">Về trang chủ</button></div>';
+    S.ended = true;
+  }
+  function theory(){
+    if(!S || !S.cur) return; S.cur.paused = true;
+    var body = S.t.card.querySelector(".g-body"); var clone = body ? body.cloneNode(true) : document.createElement("div");
+    sh.innerHTML = '<div class="gs-sheet-h"><h3>' + esc(S.t.title) + '</h3><button type="button" data-c="1" aria-label="Đóng">✕</button></div><div class="gs-theory"></div>';
+    sh.querySelector(".gs-theory").appendChild(clone); bg.hidden = sh.hidden = false; sh.scrollTop = 0;
+  }
+  view.addEventListener("click", function(e){
+    var o = e.target.closest(".gs-o"); if(o && S && S.cur){ answer(+o.dataset.k); return; }
+    if(e.target.closest("#gsNext")){ next(); return; }
+    var a = e.target.closest("[data-a]"); if(!a) return;
+    if(a.dataset.a === "stop") stop(); else if(a.dataset.a === "theory") theory();
+    else if(a.dataset.a === "again") start(S.t); else if(a.dataset.a === "nx") start(BY[a.dataset.t]);
+  });
+  // đóng lý thuyết → nếu câu đã trả lời đúng thì đi tiếp
+  sh.addEventListener("click", function(e){ if(e.target.closest("[data-c]") && S && S.cur && S.cur.paused){ S.cur.paused = false; if(S.cur.answered && !view.querySelector(".gs-next:not([hidden])#gsNext")) next(); } });
+  document.addEventListener("keydown", function(e){
+    if(!S || S.ended || !S.cur || !sh.hidden) return;
+    if(!S.cur.answered && /^[1-4]$/.test(e.key)) answer(+e.key - 1);
+    else if(S.cur.answered && e.key === "Enter" && !$("gsNext").hidden) next();
+  });
+  document.addEventListener("gx:answer", function(){ setTimeout(renderHero, 50); });
+  renderHero();
 })();
 </script>
 
