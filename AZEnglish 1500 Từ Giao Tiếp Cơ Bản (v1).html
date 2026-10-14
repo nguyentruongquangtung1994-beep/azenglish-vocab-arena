@@ -1993,6 +1993,8 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
 
 /* v41 · Học: câu tiếng Việt thay câu tiếng Anh điền khuyết */
 #recallPhase .alt-vsent{ display:block; margin-bottom:8px; }
+.sx-day{ justify-content:center; margin:10px 0 0 !important; font-size:12.5px !important; }
+.sx-day:empty{ display:none; }
 #recallPhase .alt-vfill{ display:inline-block; padding:0 .35em; margin:0 .08em; border-radius:10px; background:#E02020; color:#fff; font-weight:900; line-height:1.35; box-shadow:0 3px 0 #8f0a1c; }
 #recallPhase .alt-vfill::first-letter{ text-transform:none; }
 /* v41 · Ghép Cặp: thẻ lật đồng loạt (bỏ độ trễ xếp bài khi đang chơi) + đúng = xanh lá, không còn nền đen */
@@ -2477,6 +2479,7 @@ img.fe{ display:inline-block; width:1.25em; height:1.25em; max-width:none !impor
       <div class="sx-stat streak"><span class="sx-ico fl">🔥</span><span class="sx-sv"><b class="sx-num" id="sxStreakN">0</b><small>Ngày liên tiếp</small></span></div>
       <div class="sx-stat xp"><span class="sx-ico xp">⚡</span><span class="sx-sv"><b class="sx-num" id="sxXpN">0</b><small>Điểm XP</small></span></div>
     </div>
+    <p class="azc-day sx-day" aria-live="polite"></p>
     <div class="sx-next" id="sxNext"></div>
     <div class="sx-cheer"><img class="sx-ava" id="sxAva" src="./char-1.png" alt=""><p class="sx-say" id="sxSay"></p></div>
   </section>
