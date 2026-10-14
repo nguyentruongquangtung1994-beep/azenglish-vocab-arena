@@ -247,6 +247,8 @@
   .gx-overview-fill{ height:100%; width:0%; background:var(--green); transition:width .4s ease; }
   .gx-overview-text{ font-size:13px; color:var(--ink-soft); line-height:1.5; margin:0; }
 </style>
+<script>window.AZ_COURSE={id:"grammar",key:"azgrammar_v1",name:"Ngữ Pháp",lite:true};</script>
+<script src="./az-core.js" defer></script>
 </head>
 <body>
 
@@ -256,7 +258,7 @@
     <a class="mark" href="./index.html">AZ</a>
     <div class="masthead-text">
       <div class="masthead-title">Ngữ Pháp AZEnglish</div>
-      <div class="masthead-sub">Tra cứu ngữ pháp · 46 chủ điểm</div>
+      <div class="masthead-sub">46 chủ điểm · Đấu trường · cộng XP đua top</div>
     </div>
     <a class="home-link" href="./index.html">← Trang chủ</a>
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">◐</button>
@@ -1999,6 +2001,7 @@
         showRetryButton(topicNum, list, wrongSrc);
       }else{
         var p2 = progress[topicNum] || {};
+        var wasMastered = !!p2.mastered;
         p2.mastered = true;
         if(p2.bestFirstScore == null) p2.bestFirstScore = 20;
         progress[topicNum] = p2;
@@ -2006,6 +2009,7 @@
         renderTopicBadge(topicNum);
         renderOverview();
       }
+      try{ document.dispatchEvent(new CustomEvent("gx:round", { detail:{ topic:topicNum, retry:!!st.isRetry, wrong:wrongSrc.length, newMastered:!wrongSrc.length && typeof wasMastered !== "undefined" && !wasMastered } })); }catch(e){}
     }
 
     function updateGxScore(list){
@@ -2028,6 +2032,7 @@
       if(item.dataset.state) return;
       var isCorrect = opt.dataset.letter === item.dataset.answer;
       item.dataset.state = isCorrect ? "correct" : "wrong";
+      try{ var lst0 = item.closest(".gx-list"), tp0 = lst0 && lst0.dataset.topic; document.dispatchEvent(new CustomEvent("gx:answer", { detail:{ topic:tp0, src:+item.dataset.srcIndex, ok:isCorrect, retry:!!(roundState[tp0] && roundState[tp0].isRetry), el:opt } })); }catch(e){}
       opt.classList.add(isCorrect ? "correct" : "wrong");
       if(!isCorrect){
         var correctOpt = item.querySelector('.gx-opt[data-letter="' + item.dataset.answer + '"]');
@@ -2130,6 +2135,354 @@
 
     showTiles();
   })();
+</script>
+
+<!-- ===== v1 · ĐẤU TRƯỜNG NGỮ PHÁP (XP · chuỗi ngày · Triệu Phú · Ôn câu sai) ===== -->
+<style>
+.ga-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:4px 0 0; }
+.ga-stat{ display:flex; align-items:center; gap:8px; padding:10px; border-radius:16px; background:var(--paper-2); border:1.5px solid var(--line); box-shadow:0 2px 0 var(--line); min-width:0; }
+.ga-stat b{ display:block; font:800 20px/1 var(--font-display); color:var(--ink); }
+.ga-stat small{ display:block; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft); margin-top:3px; line-height:1.2; }
+.ga-ring{ --p:0; flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; font:800 10px var(--font-body); color:var(--red);
+  background:radial-gradient(closest-side, var(--paper-2) 74%, transparent 75% 100%), conic-gradient(var(--red) calc(var(--p) * 1%), var(--line) 0); }
+.ga-ic{ flex:none; width:36px; height:36px; border-radius:12px; display:grid; place-items:center; font-size:19px; background:var(--paper); }
+.ga-day{ justify-content:center; margin:8px 0 0 !important; }
+.ga-day:empty{ display:none; }
+.azc-strip .azc-day{ display:none !important; }
+.ga-arena{ margin:14px 0 4px; padding:14px; border-radius:20px; background:var(--paper-2); border:1.5px solid var(--line); box-shadow:0 2px 0 var(--line); }
+.ga-arena h3{ margin:0 0 10px; font:800 17px var(--font-display); color:var(--ink); }
+.ga-games{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ga-game{ text-align:left; border:0; cursor:pointer; border-radius:18px; padding:14px; color:#fff; font-family:var(--font-body); display:flex; flex-direction:column; gap:4px; min-height:118px; position:relative; overflow:hidden; }
+.ga-game.mil{ background:linear-gradient(150deg,#ff3b3b,#E02020 45%,#8f0a1c); box-shadow:0 5px 0 #5c0610; }
+.ga-game.rev{ background:var(--paper); color:var(--ink); border:2.5px solid #E02020; box-shadow:0 5px 0 #f1b2b2; }
+.ga-game.rev em{ color:#E02020; }
+.ga-game:active{ transform:translateY(3px); }
+.ga-game .e{ font-size:28px; line-height:1; }
+.ga-game b{ font:800 16px/1.2 var(--font-display); }
+.ga-game span{ font-size:12px; opacity:.85; line-height:1.35; }
+.ga-game em{ font-style:normal; font-size:11.5px; font-weight:800; margin-top:auto; color:#ffd34a; }
+@media (max-width:420px){ .ga-games{ grid-template-columns:1fr; } .ga-game{ min-height:0; } .ga-stat{ flex-direction:column; text-align:center; padding:9px 4px; } }
+
+.ga-ov{ --gr:#E02020; --grd:#8f0a1c; position:fixed; inset:0; z-index:500; display:flex; justify-content:center; overflow-y:auto; background:radial-gradient(120% 55% at 50% 0%, #ffe0e0 0%, #fff6f6 45%, #fff 100%); color:#111; font-family:var(--font-body); }
+.ga-ov[hidden]{ display:none; }
+html.ga-lock, html.ga-lock body{ overflow:hidden; }
+.ga-in{ width:100%; max-width:560px; padding:14px 16px 28px; display:flex; flex-direction:column; gap:12px; }
+.ga-top{ display:flex; align-items:center; gap:8px; }
+.ga-x{ width:42px; height:42px; border-radius:50%; border:0; background:#fff; color:#111; font-size:17px; cursor:pointer; box-shadow:0 3px 10px rgba(224,32,32,.15); }
+.ga-title{ flex:1; font:800 15px var(--font-display); letter-spacing:.04em; color:var(--gr); }
+.ga-title small{ display:block; font:600 11.5px var(--font-body); color:#6b5c50; letter-spacing:0; }
+.ga-time{ width:46px; height:46px; border-radius:50%; display:grid; place-items:center; font:800 16px var(--font-display); background:#fff; color:var(--gr); border:3px solid var(--gr); }
+.ga-time.low{ background:var(--gr); color:#fff; animation:gaBeat .5s ease-in-out infinite; }
+@keyframes gaBeat{ 50%{ transform:scale(1.08); } }
+.ga-ladder{ display:flex; gap:5px; overflow-x:auto; padding:2px 0 4px; scrollbar-width:none; }
+.ga-ladder i{ flex:1 0 28px; height:30px; border-radius:9px; display:grid; place-items:center; font:800 11.5px var(--font-body); font-style:normal; background:#fff; color:#6b5c50; border:1.5px solid #f0e3e3; }
+.ga-ladder i.safe{ border:2px solid #111; color:#111; }
+.ga-ladder i.done{ background:#ffe6e6; color:var(--gr); border-color:#ffd0d0; }
+.ga-ladder i.cur{ background:var(--gr); color:#fff; border-color:var(--gr); box-shadow:0 3px 0 var(--grd); }
+.ga-pts{ display:flex; justify-content:space-between; font-size:12.5px; color:#6b5c50; }
+.ga-pts b{ color:var(--gr); font-weight:800; }
+.ga-tier{ align-self:center; padding:4px 14px; border-radius:99px; font:800 12px var(--font-body); color:#fff; background:#1e7a4c; }
+.ga-tier.t1{ background:#1d6fa5; } .ga-tier.t2{ background:var(--gr); }
+.ga-card{ background:#fff; color:#111; border:4px solid var(--gr); border-radius:20px; padding:20px 18px; text-align:center; box-shadow:0 10px 24px -14px rgba(224,32,32,.55); }
+.ga-card .k{ display:inline-block; font:800 12.5px var(--font-body); color:#fff; background:var(--gr); border-radius:8px; padding:4px 12px; margin:0 0 12px; }
+.ga-card .q{ font:800 clamp(19px,5.4vw,24px)/1.4 var(--font-display); margin:0; text-wrap:balance; }
+.ga-card .q u{ text-decoration:none; display:inline-block; min-width:64px; border-bottom:3px solid var(--gr); background:#ffe6e6; border-radius:6px 6px 0 0; }
+.ga-card .tp{ font-size:12px; color:#8a7d76; margin:10px 0 0; }
+.ga-opts{ display:grid; grid-template-columns:1fr; gap:9px; }
+.ga-opt{ border:2px solid var(--gr); border-radius:14px; padding:12px 16px; min-height:54px; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer; color:#111; background:#fff; font:700 16px/1.25 var(--font-body); box-shadow:0 3px 0 #f1b2b2; transition:transform .12s, opacity .2s, background .2s; }
+.ga-opt i{ flex:none; font:900 16px var(--font-display); font-style:normal; color:var(--gr); }
+.ga-opt.sel{ background:#fff1f1; box-shadow:0 0 0 3px #ffd34a, 0 3px 0 #f1b2b2; transform:translateY(-2px); }
+.ga-opt.lock{ background:#fff1f1; animation:gaBeat .45s ease-in-out infinite; }
+.ga-opt.ok{ background:#1fa356 !important; border-color:#1fa356; color:#fff; box-shadow:0 3px 0 #146b3e; }
+.ga-opt.ok i{ color:#fff; }
+.ga-opt.no{ background:var(--gr) !important; color:#fff; box-shadow:0 3px 0 var(--grd); }
+.ga-opt.no i{ color:#fff; }
+.ga-opt.gone{ opacity:.2; pointer-events:none; }
+.ga-opt:disabled{ cursor:default; }
+.ga-ll{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.ga-ll button{ border:0; border-radius:99px; padding:9px 14px; font:700 13px var(--font-body); color:#fff; background:var(--gr); box-shadow:0 3px 0 var(--grd); cursor:pointer; }
+.ga-ll button[data-l="stop"]{ background:#fff; color:#111; border:1.5px solid #e6dcd9; box-shadow:none; }
+.ga-ll button:disabled{ opacity:.3; cursor:default; text-decoration:line-through; }
+.ga-say{ min-height:40px; padding:10px 14px; border-radius:14px; background:#fff; border:1.5px solid #f3d0d0; color:#111; font-size:13.5px; line-height:1.45; }
+.ga-say b{ color:var(--gr); }
+.ga-next{ border:0; border-radius:16px; padding:14px; font:800 16px var(--font-display); color:#fff; background:var(--gr); box-shadow:0 5px 0 var(--grd); cursor:pointer; }
+.ga-next[hidden]{ display:none; }
+.ga-end{ text-align:center; display:flex; flex-direction:column; gap:10px; padding-top:20px; }
+.ga-end .big{ font-size:64px; line-height:1; }
+.ga-end h3{ margin:0; font:800 28px var(--font-display); } .ga-end h3 b{ color:var(--gr); }
+.ga-end p{ margin:0; color:#3a2f2a; font-size:14px; line-height:1.5; }
+.ga-end em{ font-style:normal; background:var(--gr); color:#fff; border-radius:99px; padding:2px 10px; font-size:12px; font-weight:800; margin-left:6px; }
+.ga-miss{ text-align:left; background:#fff; border:1.5px solid #f3d0d0; border-radius:16px; padding:12px 14px; font-size:13px; line-height:1.5; color:#111; }
+.ga-miss div + div{ margin-top:8px; padding-top:8px; border-top:1px solid #f3e3e3; }
+.ga-miss b{ color:var(--gr); }
+.ga-btns{ display:flex; gap:10px; } .ga-btns button{ flex:1; }
+.ga-ghost{ border:1.5px solid #e6dcd9; border-radius:16px; padding:14px; font:800 15px var(--font-display); color:#111; background:#fff; cursor:pointer; }
+/* Giao diện tối — giống Đấu trường bộ Giao Tiếp ở chế độ tối */
+html[data-theme="dark"] .ga-ov{ background:radial-gradient(120% 55% at 50% 0%, #4a0f14 0%, #1d0d0b 50%, #140909 100%); color:#fff; }
+html[data-theme="dark"] .ga-x, html[data-theme="dark"] .ga-time, html[data-theme="dark"] .ga-ladder i, html[data-theme="dark"] .ga-card, html[data-theme="dark"] .ga-opt, html[data-theme="dark"] .ga-say, html[data-theme="dark"] .ga-miss, html[data-theme="dark"] .ga-ghost, html[data-theme="dark"] .ga-ll button[data-l="stop"]{ background:#22100e; color:#fff; border-color:rgba(255,90,104,.45); }
+html[data-theme="dark"] .ga-card{ border-color:var(--gr); }
+html[data-theme="dark"] .ga-time{ color:#ff5a68; border-color:#ff5a68; }
+html[data-theme="dark"] .ga-ladder i.cur{ background:var(--gr); }
+html[data-theme="dark"] .ga-ladder i.done{ background:#3d1c1f; color:#ff8f98; }
+html[data-theme="dark"] .ga-ladder i.safe{ border-color:#fff; }
+html[data-theme="dark"] .ga-title small, html[data-theme="dark"] .ga-pts, html[data-theme="dark"] .ga-card .tp, html[data-theme="dark"] .ga-end p{ color:rgba(255,255,255,.7); }
+html[data-theme="dark"] .ga-opt{ box-shadow:0 3px 0 #000; } html[data-theme="dark"] .ga-opt i, html[data-theme="dark"] .ga-pts b, html[data-theme="dark"] .ga-say b, html[data-theme="dark"] .ga-miss b, html[data-theme="dark"] .ga-end h3 b{ color:#ff5a68; }
+html[data-theme="dark"] .ga-card .q u{ background:#3d1c1f; }
+html[data-theme="dark"] .ga-opt.sel, html[data-theme="dark"] .ga-opt.lock{ background:#3d1c1f; }
+.ga-toast{ position:fixed; left:50%; bottom:22px; z-index:600; transform:translateX(-50%); background:#111; color:#fff; padding:10px 16px; border-radius:14px; font-size:13.5px; box-shadow:0 10px 30px rgba(0,0,0,.3); max-width:calc(100vw - 32px); }
+.ga-xp{ position:fixed; z-index:600; pointer-events:none; font:800 16px var(--font-display); color:#1fa356; animation:gaFly .9s ease-out forwards; }
+@keyframes gaFly{ to{ transform:translateY(-40px); opacity:0; } }
+@media (prefers-reduced-motion: reduce){ .ga-time.low, .ga-opt.lock{ animation:none; } .ga-xp{ animation:none; opacity:0; } }
+</style>
+<script>
+(function(){
+  "use strict";
+  var KEY = "azgrammar_v1", META_KEY = KEY + "_meta", WRONG_KEY = KEY + "_wrong", REC_KEY = KEY + "_recent_mil", BEST_KEY = KEY + "_best_mil";
+  var GOAL = 20, LADDER = [100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000], SAFE = [4, 9];
+  var LETTERS = ["A", "B", "C", "D"];
+  function lj(k, d){ try{ var v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; }catch(e){ return d; } }
+  function ls(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
+  function shuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a){ return a[Math.floor(Math.random() * a.length)]; }
+  function dayNum(){ return Math.floor((Date.now() + 7 * 3600e3) / 864e5); }   // ngày theo giờ VN
+
+  // ---------- Cấp độ chủ điểm (đọc nhãn Cơ bản / Trung cấp / Nâng cao trên thẻ) ----------
+  var TIER = {}, TITLE = {};
+  Array.prototype.forEach.call(document.querySelectorAll(".g-card"), function(card){
+    var l = card.querySelector(".gx-list"), b = card.querySelector(".lvl-badge"), h = card.querySelector(".g-title"); if(!l) return;
+    var t = b ? b.textContent.trim() : "";
+    TIER[l.dataset.topic] = /Nâng cao/i.test(t) ? 2 : /Trung cấp/i.test(t) ? 1 : 0;
+    TITLE[l.dataset.topic] = h ? h.textContent.replace(/\s+/g, " ").trim() : "Chủ điểm " + l.dataset.topic;
+  });
+  var TIER_NAME = ["Cơ bản", "Trung cấp", "Nâng cao"];
+
+  // ---------- XP · chuỗi ngày · mục tiêu ngày ----------
+  var meta = lj(META_KEY, {}); meta.xp = meta.xp || 0;
+  function saveMeta(){ ls(META_KEY, meta); }
+  function touchDay(){
+    var d = dayNum();
+    if(meta.todayKey !== d){ meta.todayKey = d; meta.todayCount = 0; }
+    if(meta.lastDay !== d){ meta.streak = (meta.lastDay === d - 1) ? (meta.streak || 0) + 1 : 1; meta.lastDay = d; }
+  }
+  function addXp(n, anchor){
+    if(n <= 0) return; touchDay(); meta.xp += n; saveMeta(); renderStats();
+    try{ if(window.AZCore && AZCore.syncXp) setTimeout(AZCore.syncXp, 400); }catch(e){}
+    if(anchor && anchor.getBoundingClientRect){ var r = anchor.getBoundingClientRect(), f = document.createElement("div"); f.className = "ga-xp"; f.textContent = "+" + n + " XP"; f.style.left = (r.left + r.width / 2 - 24) + "px"; f.style.top = (r.top - 6) + "px"; document.body.appendChild(f); setTimeout(function(){ f.remove(); }, 950); }
+  }
+  function countCorrect(){ touchDay(); meta.todayCount = (meta.todayCount || 0) + 1; saveMeta(); renderStats(); if(meta.todayCount === GOAL) toast("🎯 Đạt mục tiêu " + GOAL + " câu đúng hôm nay! Học tiếp vẫn được cộng XP."); }
+  function renderStats(){
+    var d = dayNum(), today = meta.todayKey === d ? (meta.todayCount || 0) : 0, streak = (meta.lastDay === d || meta.lastDay === d - 1) ? (meta.streak || 0) : 0;
+    var ring = $("gaRing"); if(!ring) return;
+    ring.style.setProperty("--p", Math.min(100, Math.round(today / GOAL * 100))); ring.textContent = Math.min(100, Math.round(today / GOAL * 100)) + "%";
+    $("gaToday").innerHTML = today + '<span style="font-size:13px;opacity:.6">/' + GOAL + "</span>";
+    $("gaStreak").textContent = streak; $("gaXp").textContent = meta.xp.toLocaleString("vi-VN");
+    var wb = Object.keys(lj(WRONG_KEY, {})).length; $("gaWrongN").textContent = wb ? wb + " câu đang chờ ôn" : "Chưa có câu sai — giỏi quá!";
+    var best = +(lj(BEST_KEY, 0) || 0); $("gaMilBest").textContent = best ? "Kỷ lục: " + best.toLocaleString("vi-VN") + " điểm" : "Chưa có kỷ lục — thử ngay!";
+  }
+  var tt = null;
+  function toast(t){ var e = document.querySelector(".ga-toast"); if(!e){ e = document.createElement("div"); e.className = "ga-toast"; e.setAttribute("role", "status"); document.body.appendChild(e); } e.textContent = t; e.hidden = false; clearTimeout(tt); tt = setTimeout(function(){ e.hidden = true; }, 3800); }
+
+  // ---------- Âm thanh ----------
+  var ac = null;
+  function tone(f, d, type, delay){ try{ ac = ac || new (window.AudioContext || window.webkitAudioContext)(); var t = ac.currentTime + (delay || 0), o = ac.createOscillator(), g = ac.createGain(); o.type = type || "triangle"; o.frequency.value = f; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.18, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d + .05); }catch(e){} }
+  function sOk(){ tone(660, .12); tone(990, .18, "triangle", .1); }
+  function sNo(){ tone(220, .25, "sawtooth"); tone(165, .3, "sawtooth", .15); }
+
+  // ---------- Kho câu sai (từ Bài tập + Đấu trường) ----------
+  function wrongAdd(id){ var w = lj(WRONG_KEY, {}); w[id] = { n:((w[id] && w[id].n) || 0) + 1, ok:0 }; ls(WRONG_KEY, w); }
+  function wrongHit(id){ var w = lj(WRONG_KEY, {}); if(!w[id]) return; w[id].ok = (w[id].ok || 0) + 1; if(w[id].ok >= 2) delete w[id]; ls(WRONG_KEY, w); }
+  function qById(id){ var p = id.split(":"), q = (window.GX_DATA[p[0]] || [])[+p[1]]; return q ? { id:id, t:p[0], q:q } : null; }
+
+  // ---------- Bài tập trong thẻ chủ điểm → XP ----------
+  document.addEventListener("gx:answer", function(e){
+    var d = e.detail, id = d.topic + ":" + d.src;
+    if(d.ok){ countCorrect(); addXp(d.retry ? 5 : 10, d.el); wrongHit(id); }
+    else wrongAdd(id);
+    renderStats();
+  });
+  document.addEventListener("gx:round", function(e){
+    var d = e.detail;
+    if(!d.retry) addXp(20); if(d.newMastered){ addXp(50); toast("🏆 Nắm vững chủ điểm " + (TITLE[d.topic] || d.topic) + "! +50 XP"); }
+  });
+
+  // ---------- Khung giao diện ----------
+  var host = $("gxOverview");
+  var box = document.createElement("div");
+  box.innerHTML =
+    '<div class="ga-stats">' +
+      '<div class="ga-stat"><span class="ga-ring" id="gaRing">0%</span><span><b id="gaToday">0</b><small>Câu đúng hôm nay</small></span></div>' +
+      '<div class="ga-stat"><span class="ga-ic">🔥</span><span><b id="gaStreak">0</b><small>Ngày liên tiếp</small></span></div>' +
+      '<div class="ga-stat"><span class="ga-ic">⚡</span><span><b id="gaXp">0</b><small>Điểm XP</small></span></div>' +
+    '</div><p class="azc-day ga-day" aria-live="polite"></p>' +
+    '<section class="ga-arena" aria-label="Đấu trường Ngữ Pháp"><h3>⚔️ Đấu trường Ngữ Pháp</h3><div class="ga-games">' +
+      '<button class="ga-game mil" id="gaMilBtn" type="button"><span class="e">👑</span><b>Triệu Phú Ngữ Pháp</b><span>15 câu · khó dần Cơ bản → Trung cấp → Nâng cao · 3 quyền trợ giúp</span><em id="gaMilBest"></em></button>' +
+      '<button class="ga-game rev" id="gaRevBtn" type="button"><span class="e">🔁</span><b>Ôn câu sai</b><span>Gom câu bạn từng làm sai — đúng 2 lần liền là xong</span><em id="gaWrongN"></em></button>' +
+    '</div></section>';
+  if(host && host.parentNode){ while(box.firstChild) host.parentNode.insertBefore(box.firstChild, host.nextSibling ? host.nextSibling : null); }
+  // đặt đúng thứ tự: overview → stats → day → arena
+  (function(){ var s = document.querySelector(".ga-stats"), dl = document.querySelector(".ga-day"), ar = document.querySelector(".ga-arena"); if(host && s){ host.after(s); s.after(dl); dl.after(ar); } })();
+
+  var ov = document.createElement("div"); ov.className = "ga-ov"; ov.hidden = true; ov.setAttribute("role", "dialog"); ov.innerHTML = '<div class="ga-in" id="gaIn"></div>'; document.body.appendChild(ov);
+  function open(){ ov.hidden = false; document.documentElement.classList.add("ga-lock"); ov.scrollTop = 0; }
+  function close(){ ov.hidden = true; document.documentElement.classList.remove("ga-lock"); clearInterval(timer); game = null; renderStats(); }
+  ov.addEventListener("click", function(e){ if(e.target.closest(".ga-x") || e.target.closest('[data-a="close"]')) close(); });
+  document.addEventListener("keydown", function(e){ if(!ov.hidden && e.key === "Escape") close(); });
+
+  function qHTML(q){ return esc(q.q).replace(/_{2,}/g, "<u>&nbsp;</u>"); }
+
+  // ---------- TRIỆU PHÚ NGỮ PHÁP ----------
+  var game = null, timer = null;
+  var SAY = {
+    start:["Chào mừng tới Triệu Phú Ngữ Pháp! Lumina làm MC, mỏ hơi hỗn, chịu khó nghe nha 😏", "Ghế nóng đây rồi! Ngữ pháp có làm khó được bạn không ta? 😎"],
+    pick:["Chắc chưa? Chạm lần nữa là chốt nha 🤨", "Tự tin dữ ha… chạm lần nữa để chốt!"],
+    right:["Chính xác! Ngữ pháp chuẩn chỉnh 😏", "Đúng rồi! Tiền về tài khoản nè 💸", "Đỉnh! Qua câu này rồi, đừng kiêu nha 😎"],
+    wrong:["Toang rồi ông giáo ạ 😭", "Hụt mất rồi… xem giải thích để lần sau ăn điểm nha 🫠"]
+  };
+  function recent(){ return lj(REC_KEY, []); }
+  function pushRecent(id){ var r = recent(), k = r.indexOf(id); if(k >= 0) r.splice(k, 1); r.push(id); ls(REC_KEY, r.slice(-90)); }
+  function drawTier(tier, n, used){
+    var rec = {}; recent().forEach(function(x){ rec[x] = 1; });
+    var topics = shuffle(Object.keys(window.GX_DATA).filter(function(t){ return TIER[t] === tier; })), out = [], usedT = {};
+    function tryFill(allowRecent, allowSameTopic){
+      for(var pass = 0; pass < 3 && out.length < n; pass++) topics.forEach(function(t){
+        if(out.length >= n || (!allowSameTopic && usedT[t])) return;
+        var cands = shuffle(window.GX_DATA[t].map(function(_, i){ return t + ":" + i; })).filter(function(id){ return !used[id] && (allowRecent || !rec[id]); });
+        if(cands.length){ used[cands[0]] = 1; usedT[t] = 1; out.push(cands[0]); }
+      });
+    }
+    tryFill(false, false); tryFill(false, true); tryFill(true, true);
+    return out;
+  }
+  function milStart(){
+    var used = {}, ids = drawTier(0, 5, used).concat(drawTier(1, 5, used), drawTier(2, 5, used));
+    var spare = [drawTier(0, 1, used)[0], drawTier(1, 1, used)[0], drawTier(2, 1, used)[0]];
+    game = { ids:ids, spare:spare, lv:0, sel:-1, lock:false, life:{ f:1, a:1, s:1 }, miss:[], cleared:0 };
+    open(); milNext(true);
+    tone(262, .16); tone(330, .16, "triangle", .18); tone(392, .18, "triangle", .36); tone(523, .4, "triangle", .54);
+  }
+  function milSec(){ return Math.round(30 - (game.lv / 14) * 18); }
+  function milNext(first, swap){
+    clearInterval(timer);
+    var tier = game.lv < 5 ? 0 : game.lv < 10 ? 1 : 2;
+    if(swap){ var sp = game.spare[tier]; if(sp){ game.ids[game.lv] = sp; game.spare[tier] = null; } }
+    var it = qById(game.ids[game.lv]); if(!it){ milEnd("win"); return; }
+    pushRecent(it.id);
+    var order = shuffle([0, 1, 2, 3]); game.cur = { it:it, order:order, ans:order.indexOf(it.q.a) }; game.sel = -1; game.lock = false;
+    var lad = ""; for(var i = 0; i < 15; i++) lad += '<i class="' + (i < game.lv ? "done" : i === game.lv ? "cur" : "") + (SAFE.indexOf(i) >= 0 ? " safe" : "") + '">' + (i + 1) + "</i>";
+    var say = first ? pick(SAY.start) : game.lv === 5 ? "⚡ VÒNG 2 · Trung cấp — câu khó hơn, " + milSec() + " giây/câu 🔥" : game.lv === 10 ? "🔥 VÒNG CUỐI · Nâng cao — chỉ " + milSec() + " giây/câu. Run chưa? 😏" : swap ? "Đổi câu cho nè. Câu kia khó quá đúng không? 😏" : (game.say || "Chọn đáp án đúng — chạm 2 lần để chốt.");
+    $("gaIn").innerHTML =
+      '<div class="ga-top"><button class="ga-x" type="button" aria-label="Thoát">✕</button><div class="ga-title">TRIỆU PHÚ NGỮ PHÁP<small>Câu ' + (game.lv + 1) + '/15</small></div><div class="ga-time" id="gaTime">' + milSec() + "</div></div>" +
+      '<div class="ga-ladder">' + lad + "</div>" +
+      '<div class="ga-pts"><span>Câu này: <b>' + LADDER[game.lv].toLocaleString("vi-VN") + '</b> điểm</span><span>Đang giữ: <b>' + (game.lv ? LADDER[game.lv - 1] : 0).toLocaleString("vi-VN") + "</b></span></div>" +
+      '<span class="ga-tier t' + tier + '">Vòng ' + (tier + 1) + " · " + TIER_NAME[tier] + "</span>" +
+      '<div class="ga-card"><p class="k">Chọn đáp án đúng</p><p class="q">' + qHTML(it.q) + '</p><p class="tp">' + esc(TITLE[it.t] || "") + "</p></div>" +
+      '<div class="ga-opts">' + order.map(function(o, k){ return '<button class="ga-opt k' + k + '" data-k="' + k + '" type="button"><i>' + LETTERS[k] + "</i><span>" + esc(it.q.opts[o]) + "</span></button>"; }).join("") + "</div>" +
+      '<div class="ga-ll"><button data-l="f" type="button"' + (game.life.f ? "" : " disabled") + '>✂️ 50:50</button><button data-l="a" type="button"' + (game.life.a ? "" : " disabled") + '>🦁 Hỏi Lumina</button><button data-l="s" type="button"' + (game.life.s ? "" : " disabled") + '>🔄 Đổi câu</button><button data-l="stop" type="button">💼 Dừng</button></div>' +
+      '<div class="ga-say" id="gaSay">' + say + "</div>";
+    game.say = "";
+    var sec = first ? 36 : milSec(), end = Date.now() + sec * 1000, g0 = game; $("gaTime").textContent = sec;
+    timer = setInterval(function(){
+      if(game !== g0 || game.lock) return;
+      var left = Math.max(0, Math.ceil((end - Date.now()) / 1000)), el = $("gaTime"); if(!el) return;
+      el.textContent = left; el.classList.toggle("low", left <= 5);
+      if(left <= 5 && left > 0 && (end - Date.now()) % 1000 > 880) tone(880, .05, "square");
+      if(left <= 0){ clearInterval(timer); $("gaSay").textContent = "Hết giờ! Đứng hình lâu quá vậy bạn ơi 🫠"; milReveal(-1); }
+    }, 100);
+  }
+  function milTap(k){
+    if(!game || game.lock || game.mode) return;
+    var btns = document.querySelectorAll(".ga-opt");
+    if(game.sel !== k){ game.sel = k; Array.prototype.forEach.call(btns, function(b, j){ b.classList.toggle("sel", j === k); }); $("gaSay").textContent = pick(SAY.pick); tone(660, .06); return; }
+    game.lock = true; btns[k].classList.add("lock"); $("gaSay").textContent = "Đã chốt! Cả khán phòng nín thở…";
+    tone(220, .25, "sine"); tone(247, .25, "sine", .3); tone(277, .25, "sine", .6);
+    var g0 = game; setTimeout(function(){ if(game === g0) milReveal(k); }, 1300);
+  }
+  function milReveal(k){
+    clearInterval(timer); game.lock = true;
+    var btns = document.querySelectorAll(".ga-opt"), ok = k === game.cur.ans, it = game.cur.it;
+    Array.prototype.forEach.call(btns, function(b, j){ b.disabled = true; b.classList.remove("lock"); if(j === game.cur.ans) b.classList.add("ok"); else if(j === k) b.classList.add("no"); });
+    var g0 = game;
+    if(ok){
+      sOk(); game.cleared++; countCorrect(); wrongHit(it.id);
+      $("gaSay").innerHTML = pick(SAY.right) + "<br><b>💡</b> " + esc(it.q.ex);
+      if(game.lv === 14){ setTimeout(function(){ if(game === g0) milEnd("win"); }, 2200); return; }
+      var safeHit = SAFE.indexOf(game.lv) >= 0; game.lv++;
+      if(safeHit) game.say = "💰 Mốc an toàn! " + LADDER[game.lv - 1].toLocaleString("vi-VN") + " điểm đã nằm chắc trong túi.";
+      setTimeout(function(){ if(game === g0) milNext(); }, 2600);
+    }else{
+      sNo(); wrongAdd(it.id); game.miss.push(it);
+      $("gaSay").innerHTML = (k >= 0 ? pick(SAY.wrong) : "Hết giờ mất rồi 🫠") + "<br><b>💡</b> " + esc(it.q.ex);
+      setTimeout(function(){ if(game === g0) milEnd("lose"); }, 3200);
+    }
+  }
+  function milLife(l){
+    if(!game || game.lock) return;
+    if(l === "stop"){ milEnd("stop"); return; }
+    if(!game.life[l]) return; game.life[l] = 0;
+    var b = document.querySelector('.ga-ll [data-l="' + l + '"]'); if(b) b.disabled = true;
+    var btns = document.querySelectorAll(".ga-opt");
+    if(l === "f"){ shuffle([0, 1, 2, 3].filter(function(j){ return j !== game.cur.ans; })).slice(0, 2).forEach(function(j){ btns[j].classList.add("gone"); btns[j].disabled = true; }); $("gaSay").textContent = "Lumina xoá giùm 2 đáp án sai, còn lại tự lo nha 😌"; }
+    else if(l === "a"){ var ex = String(game.cur.it.q.ex || ""), hint = ex.split(/→|:|—/)[0].trim(); $("gaSay").innerHTML = "🦁 Lumina gợi ý: <b>" + esc(hint || ex.slice(0, 60)) + "</b>"; }
+    else if(l === "s"){ milNext(false, true); }
+  }
+  function milEnd(kind){
+    clearInterval(timer);
+    var won = kind === "win", stop = kind === "stop", keep = 0;
+    if(won) keep = LADDER[14]; else if(stop) keep = game.lv ? LADDER[game.lv - 1] : 0; else SAFE.forEach(function(s){ if(game.lv > s) keep = LADDER[s]; });
+    var xp = 10 + game.cleared * 5 + (won ? 100 : 0), best = +(lj(BEST_KEY, 0) || 0), rec = keep > best;
+    if(rec) ls(BEST_KEY, keep);
+    addXp(xp);
+    $("gaIn").innerHTML = '<div class="ga-top"><button class="ga-x" type="button" aria-label="Đóng">✕</button><div class="ga-title">TRIỆU PHÚ NGỮ PHÁP</div></div>' +
+      '<div class="ga-end"><div class="big">' + (won ? "🏆" : stop ? "💼" : keep ? "💰" : "😵") + "</div>" +
+      "<h3><b>" + keep.toLocaleString("vi-VN") + "</b> điểm" + (rec ? "<em>Kỷ lục mới!</em>" : "") + "</h3>" +
+      "<p>Vượt qua <b>" + (game.lv + (won ? 1 : 0)) + "/15</b> câu · <b>+" + xp + " XP</b></p>" +
+      "<p>“" + (won ? "TRIỆU PHÚ NGỮ PHÁP LÀ ĐÂY!!! Lumina xin chữ ký trước nha 🏆" : stop ? "Dừng đúng lúc cũng là một loại trí tuệ 🧠" : "Thua keo này ta bày keo khác! Vô lại liền đi 🔥") + "”</p>" +
+      (game.miss.length ? '<div class="ga-miss">' + game.miss.map(function(it){ return "<div><b>" + esc(TITLE[it.t] || "") + "</b><br>" + esc(it.q.q.replace(/_{2,}/g, "___")) + " → <b>" + esc(it.q.opts[it.q.a]) + "</b><br>💡 " + esc(it.q.ex) + "</div>"; }).join("") + "<div>Câu sai đã được thêm vào <b>Ôn câu sai</b>.</div></div>" : "") +
+      '<div class="ga-btns"><button class="ga-ghost" data-a="close" type="button">Về trang</button><button class="ga-next" id="gaAgain" type="button">Chơi lại ▶</button></div></div>';
+    $("gaAgain").addEventListener("click", milStart);
+    if(won || rec){ tone(523, .2); tone(659, .2, "triangle", .15); tone(784, .2, "triangle", .3); tone(1046, .5, "triangle", .45); }
+    game = { done:true };
+  }
+
+  // ---------- ÔN CÂU SAI ----------
+  function revStart(){
+    var w = lj(WRONG_KEY, {}), ids = Object.keys(w).sort(function(a, b){ return (w[b].n || 0) - (w[a].n || 0); });
+    if(!ids.length){ toast("Chưa có câu sai nào để ôn 🎉 Làm Bài tập hoặc chơi Triệu Phú trước nha!"); return; }
+    var list = shuffle(ids.slice(0, 15)).slice(0, 10).map(qById).filter(Boolean);
+    game = { mode:"rev", list:list, i:0, ok:0 }; open(); revNext();
+  }
+  function revNext(){
+    var it = game.list[game.i];
+    if(!it){ var xp = game.ok * 8; addXp(xp);
+      $("gaIn").innerHTML = '<div class="ga-top"><button class="ga-x" type="button" aria-label="Đóng">✕</button><div class="ga-title">ÔN CÂU SAI</div></div><div class="ga-end"><div class="big">' + (game.ok === game.list.length ? "🎉" : "💪") + "</div><h3>Đúng <b>" + game.ok + "/" + game.list.length + "</b></h3><p><b>+" + xp + " XP</b> · còn " + Object.keys(lj(WRONG_KEY, {})).length + " câu trong kho ôn (đúng 2 lần liền là xong).</p>" +
+        '<div class="ga-btns"><button class="ga-ghost" data-a="close" type="button">Về trang</button><button class="ga-next" id="gaAgain" type="button">Ôn tiếp ▶</button></div></div>';
+      $("gaAgain").addEventListener("click", revStart); game = { done:true }; return; }
+    var order = shuffle([0, 1, 2, 3]); game.cur = { it:it, ans:order.indexOf(it.q.a) }; game.answered = false;
+    $("gaIn").innerHTML = '<div class="ga-top"><button class="ga-x" type="button" aria-label="Thoát">✕</button><div class="ga-title">ÔN CÂU SAI<small>Câu ' + (game.i + 1) + "/" + game.list.length + "</small></div></div>" +
+      '<div class="ga-card"><p class="k">Lần trước bạn làm sai câu này</p><p class="q">' + qHTML(it.q) + '</p><p class="tp">' + esc(TITLE[it.t] || "") + "</p></div>" +
+      '<div class="ga-opts">' + order.map(function(o, k){ return '<button class="ga-opt k' + k + '" data-k="' + k + '" type="button"><i>' + LETTERS[k] + "</i><span>" + esc(it.q.opts[o]) + "</span></button>"; }).join("") + "</div>" +
+      '<div class="ga-say" id="gaSay">Chạm 1 lần để trả lời.</div><button class="ga-next" id="gaNext" type="button" hidden>Câu tiếp ▶</button>';
+    $("gaNext").addEventListener("click", function(){ game.i++; revNext(); });
+  }
+  function revTap(k){
+    if(game.answered) return; game.answered = true;
+    var ok = k === game.cur.ans, it = game.cur.it, btns = document.querySelectorAll(".ga-opt");
+    Array.prototype.forEach.call(btns, function(b, j){ b.disabled = true; if(j === game.cur.ans) b.classList.add("ok"); else if(j === k) b.classList.add("no"); });
+    if(ok){ sOk(); game.ok++; countCorrect(); wrongHit(it.id); } else { sNo(); wrongAdd(it.id); }
+    $("gaSay").innerHTML = (ok ? "✅ Chuẩn rồi!" : "❌ Chưa đúng — đáp án: <b>" + esc(it.q.opts[it.q.a]) + "</b>") + "<br><b>💡</b> " + esc(it.q.ex);
+    $("gaNext").hidden = false;
+  }
+
+  ov.addEventListener("click", function(e){
+    var o = e.target.closest(".ga-opt"); if(o && game){ if(game.mode === "rev") revTap(+o.dataset.k); else milTap(+o.dataset.k); return; }
+    var l = e.target.closest("[data-l]"); if(l && game && !game.mode) milLife(l.dataset.l);
+  });
+  $("gaMilBtn").addEventListener("click", milStart);
+  $("gaRevBtn").addEventListener("click", revStart);
+  renderStats();
+})();
 </script>
 
 </body>
