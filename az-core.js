@@ -9,7 +9,7 @@
 (function(){
   "use strict";
   var API = "https://script.google.com/macros/s/AKfycbzD1v2aekzEeyMBQ-2uD-2TRHBN9xX0__V6aAU5YZ4BFhlO4D9WEZtXr7CcwM4Gc2j1/exec";
-  var XP_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000", "azvocab_v1_career9"];
+  var XP_KEYS = ["azvocab_v1_communication1500", "azvocab_v2_toeic_a2b2", "azvocab_v2_ielts1000", "azvocab_v1_career9", "azgrammar_v1"];
   var DAILY_CAP = 300;
   var MASTERED_IVL = 21;
   var COURSE = window.AZ_COURSE || null;
@@ -727,7 +727,7 @@
     if(COURSE){
       document.body.insertBefore(el('<div class="azc-amb" aria-hidden="true"><i class="a"></i><i class="b"></i></div>'), document.body.firstChild);
       var mh = document.querySelector(".masthead"), anchor = document.getElementById("themeBtn");
-      if(mh){
+      if(mh && !COURSE.lite){   // lite (Ngữ Pháp): không có sổ từ
         var b1 = el('<button class="azc-btn" type="button" title="Sổ từ của tôi" aria-label="Sổ từ của tôi">📒</button>');
         var b2 = el('<button class="azc-btn" type="button" title="Từ của tôi" aria-label="Từ của tôi">✍️</button>');
         b1.addEventListener("click", openNotebook); b2.addEventListener("click", openMine);
@@ -737,7 +737,7 @@
       var mb = document.getElementById("musicBtn");
       function syncMusic(){ document.documentElement.classList.toggle("azc-music", !!(mb && mb.classList.contains("active"))); }
       if(mb){ mb.addEventListener("click", function(){ setTimeout(syncMusic, 0); }); syncMusic(); }
-      autoSetup();
+      if(!COURSE.lite) autoSetup();
       mountLion();
     }
     mountStrip();
