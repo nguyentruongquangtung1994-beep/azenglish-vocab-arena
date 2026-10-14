@@ -68,10 +68,29 @@
       var k = keys(), led = lsJSON("az_core_xpday") || {};
       if(led.k !== k.day) led = { k:k.day, v:0 };
       var allow = Math.max(0, Math.min(cur - seen, DAILY_CAP - led.v));
-      led.v += allow; lsSet("az_core_xpday", JSON.stringify(led));
+      led.v += allow; led.x = (led.x || 0) + (cur - seen - allow);   // x = XP luyện thêm (vượt trần, vẫn cộng XP cá nhân)
+      var hitCap = led.v >= DAILY_CAP && !led.n; if(hitCap) led.n = 1;
+      lsSet("az_core_xpday", JSON.stringify(led));
+      if(hitCap) setTimeout(capToast, 600);
       if(allow) lsSet("az_core_xp_pending", String((+lsGet("az_core_xp_pending") || 0) + allow));
     }
     lsSet("az_core_xp_seen", String(cur));
+    try{ renderDay(); }catch(e){}
+  }
+  /* v47 · Học không giới hạn: 300 XP/ngày chỉ là trần ĐIỂM ĐUA TOP */
+  function dayLedger(){ var led = lsJSON("az_core_xpday") || {}; return led.k === keys().day ? led : { v:0, x:0 }; }
+  function renderDay(){
+    var led = dayLedger(), v = Math.min(DAILY_CAP, led.v || 0), x = led.x || 0;
+    Array.prototype.forEach.call(document.querySelectorAll(".azc-day"), function(n){
+      n.innerHTML = '<span class="dv' + (v >= DAILY_CAP ? ' full' : '') + '">Điểm đua top hôm nay <b>' + v + '/' + DAILY_CAP + '</b></span>' +
+        (x > 0 ? '<span class="dx">+' + x + ' XP luyện thêm</span>' : '') + '<span class="du">♾️ Học không giới hạn</span>';
+    });
+  }
+  function capToast(){
+    var t = document.getElementById("azcCapToast");
+    if(!t){ t = el('<div id="azcCapToast" class="azc-cap" role="status"></div>'); document.body.appendChild(t); t.addEventListener("click", function(){ t.classList.remove("on"); }); }
+    t.innerHTML = '<b>🏆 Bạn đã đạt tối đa ' + DAILY_CAP + ' điểm đua top hôm nay!</b><span>Học tiếp vẫn được cộng XP cá nhân và ôn từ bình thường — không giới hạn.</span>';
+    t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove("on"); }, 7000);
   }
   function flushXp(useBeacon){
     var pending = +lsGet("az_core_xp_pending") || 0;
@@ -95,6 +114,11 @@
 
   /* ---------- CSS dùng chung ---------- */
   var CSS = ''
+  + '.azc-day{display:flex;flex-wrap:wrap;gap:6px 10px;width:100%;font-size:12px;color:var(--ink-soft);margin-top:2px}'
+  + '.azc-day span{white-space:nowrap}.azc-day b{color:var(--ink)}.azc-day .dv.full b{color:#1fa356}'
+  + '.azc-day .dx{color:#1fa356;font-weight:800}.azc-day .du{font-weight:700}'
+  + '.azc-cap{position:fixed;left:50%;bottom:22px;z-index:400;transform:translate(-50%,140%);opacity:0;transition:transform .35s,opacity .35s;max-width:min(440px,calc(100vw - 32px));background:#111;color:#fff;border-radius:16px;padding:12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:3px;font-size:13.5px;line-height:1.4;cursor:pointer}'
+  + '.azc-cap.on{transform:translate(-50%,0);opacity:1}.azc-cap b{font-size:14.5px}'
   + '.azc-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:100%;background:var(--paper-2);border:1.5px solid var(--line);border-radius:18px;padding:10px 14px;box-shadow:0 2px 0 var(--line);cursor:pointer;font-family:var(--font-body);color:var(--ink);text-align:left;font-size:13.5px}'
   + '.azc-strip:hover{border-color:var(--red)}'
   + '.azc-strip .t{font-family:var(--font-display);font-weight:800;font-size:14px;white-space:nowrap}'
@@ -248,11 +272,12 @@
     if(!COURSE) return renderPodium(node);
     node.innerHTML = '<span class="t">🏆 Top tuần</span><span class="ppl">Đang tải bảng xếp hạng…</span>';
     fetchBoard(function(d){
-      if(!d || !d.week){ node.innerHTML = '<span class="t">🏆 Đua top tuần</span><span class="ppl">Học để ghi tên mình lên bảng xếp hạng!</span>'; return; }
+      if(!d || !d.week){ node.innerHTML = '<span class="t">🏆 Đua top tuần</span><span class="ppl">Học để ghi tên mình lên bảng xếp hạng!</span><span class="azc-day"></span>'; renderDay(); return; }
       var top = d.week.top.slice(0, 3);
       node.innerHTML = '<span class="t">🏆 Top tuần</span><span class="ppl">' +
         (top.length ? top.map(function(p, i){ return '<span>' + MEDAL[i] + ' ' + esc(p.n) + ' <b>' + p.xp + '</b></span>'; }).join("") : '<span>Chưa ai ghi điểm tuần này — vào học để giành 🥇!</span>') +
-        '</span><span class="me">' + meLine(d.week) + ' · Xem bảng Tuần / Tháng / Quý ›</span>';
+        '</span><span class="me">' + meLine(d.week) + ' · Xem bảng Tuần / Tháng / Quý ›</span><span class="azc-day"></span>';
+      renderDay();
     });
   }
   function meLine(b){
@@ -261,7 +286,7 @@
   }
   function openBoard(){
     var body = el('<div><p class="azm-prize">🎁 Quán quân tuần nhận quà từ AZEnglish</p><div class="azm-tabs"><button type="button" data-p="week" class="on">Tuần</button><button type="button" data-p="month">Tháng</button><button type="button" data-p="quarter">Quý</button><button type="button" data-p="hall">🏅 Bảng vàng</button></div><div class="azm-list">Đang tải…</div>' +
-      '<p class="azm-note">Điểm = XP từ các lộ trình học (học từ mới, ôn đúng, chơi game), tối đa ' + DAILY_CAP + ' XP/ngày. Từ tự nhập không tính điểm. Tên hiển thị: <b>' + esc(displayName()) + '</b> · <a href="#" class="azc-nick" style="color:var(--red)">đổi biệt danh</a></p></div>');
+      '<p class="azm-note">Điểm = XP từ các lộ trình học (học từ mới, ôn đúng, chơi game), tối đa ' + DAILY_CAP + ' điểm đua top/ngày. <b>Học không giới hạn</b> — XP vượt trần vẫn cộng vào XP cá nhân của bạn. Từ tự nhập không tính điểm. Tên hiển thị: <b>' + esc(displayName()) + '</b> · <a href="#" class="azc-nick" style="color:var(--red)">đổi biệt danh</a></p></div>');
     var list = body.querySelector(".azm-list"), data = null, cur = "week";
     function draw(){
       if(!data){ list.innerHTML = '<p class="azm-note">Chưa tải được bảng xếp hạng. Kiểm tra kết nối mạng rồi thử lại.</p>'; return; }
