@@ -227,12 +227,12 @@ const BLANK_GIF="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAA
 function needFe(e){
   const n=FE_CHUNK[e];if(n==null||FE[e]||FE_LOAD[n])return;
   FE_LOAD[n]=fetch(`fe/${n}.json`).then(r=>r.json()).then(o=>{Object.assign(FE,o);
-    document.querySelectorAll("img[data-fw]").forEach(im=>{const u=FE[im.dataset.fw];if(u){im.src=u;im.removeAttribute("data-fw")}})
-  }).catch(()=>{document.querySelectorAll("img[data-fw]").forEach(im=>{if(FE_CHUNK[im.dataset.fw]===n)im.outerHTML=`<span class="${im.className.replace("fe","fe-n")}">${im.dataset.fw}</span>`})});
+    document.querySelectorAll("[data-fw]").forEach(el=>{const u=FE[el.dataset.fw];if(u)el.outerHTML=`<img class="${el.className.replace("fe-n","fe")}" src="${u}" alt="${el.dataset.fw}" draggable="false">`})
+  }).catch(()=>{delete FE_LOAD[n]});
 }
 function fe(e,cls=""){
   if(FE[e])return`<img class="fe ${cls}" src="${FE[e]}" alt="${e}" draggable="false">`;
-  if(FE_CHUNK[e]!=null&&!(FE_LOAD[FE_CHUNK[e]]&&FE_LOAD[FE_CHUNK[e]].failed)){needFe(e);return`<img class="fe ${cls}" data-fw="${e}" src="${BLANK_GIF}" alt="${e}" draggable="false">`}
+  if(FE_CHUNK[e]!=null&&!(FE_LOAD[FE_CHUNK[e]]&&FE_LOAD[FE_CHUNK[e]].failed)){needFe(e);return`<span class="fe-n ${cls}" data-fw="${e}">${e}</span>`}
   return`<span class="fe-n ${cls}">${e}</span>`;
 }
 
