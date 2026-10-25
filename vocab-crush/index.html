@@ -485,13 +485,13 @@ function renderInbox(){
   _renderMatches();
   $main.querySelector(".scroll").insertAdjacentHTML("afterbegin",inboxTabs());bindInboxTabs();
 }
-function inboxTabs(){return`<div class="itabs"><button data-it="new" class="${inboxTab==="new"?"on":""}">${fe(lab().rightIc)} ${lab().right} <small>${Object.keys(S.matches).length}</small></button><button data-it="ex" class="${inboxTab==="ex"?"on":""}">${fe(lab().leftIc)} Quay lại ${S.mode==="love"?"người cũ":"idol cũ"} <small>${S.ex.length}</small></button></div>`}
+function inboxTabs(){return`<div class="itabs"><button data-it="new" class="${inboxTab==="new"?"on":""}">${fe(lab().rightIc)} ${lab().right} <small>${Object.keys(S.matches).length}</small></button><button data-it="ex" class="${inboxTab==="ex"?"on":""}">${fe(lab().leftIc)} ${S.mode==="love"?"Người cũ":"Idol cũ"} <small>${S.ex.length}</small></button></div>`}
 function bindInboxTabs(){$main.querySelectorAll("[data-it]").forEach(b=>b.onclick=()=>{inboxTab=b.dataset.it;renderInbox()})}
 // Quay lại người cũ: xem lại từ đã quẹt trái (đã quen); muốn ôn thì "nối lại tình xưa" → thành lốp mới, nhắn tin ôn
 function renderEx(){
   const ids=S.ex.slice().reverse();
   $main.innerHTML=`<div class="view"><div class="scroll">${inboxTabs()}
-   <p class="hint" style="margin:0 0 10px">Những từ bạn đã quen. Chạm để xem lại nghĩa, ví dụ và nghe giọng.</p>
+   <p class="hint" style="margin:0 0 10px"><strong>Quay lại ${S.mode==="love"?"người cũ":"idol cũ"}:</strong> những từ bạn đã quen. Chạm để xem lại nghĩa, ví dụ và nghe giọng.</p>
    ${ids.length?`<div class="exgrid">${ids.map(i=>`<button class="exc" data-x="${i}"><div class="av" style="background:${grad(i)}">${fe(W[i].emo)}</div><div class="t"><b>${esc(W[i].w)}</b><span>${esc(W[i].vi)}</span></div></button>`).join("")}</div>`
      :`<p class="blank">Chưa có ${S.mode==="love"?"người cũ":"idol cũ"} nào.<br>Quẹt trái những từ bạn đã biết nhé ${lab().leftIc}</p>`}
   </div></div>`;
