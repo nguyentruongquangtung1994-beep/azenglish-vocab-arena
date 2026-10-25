@@ -605,6 +605,22 @@
   .gc-go{ display:inline-flex; align-items:center; gap:6px; min-height:46px; padding:0 20px; border-radius:14px; background:#e0102b; color:#fff; font:800 15.5px var(--font-display); box-shadow:0 4px 0 #8f0a1c; }
   .gc-lion{ position:absolute; right:-4px; bottom:-10px; width:38%; max-width:150px; height:auto; filter:drop-shadow(0 8px 12px rgba(0,0,0,.35)); transform-origin:50% 100%; animation:lvLion 3s ease-in-out infinite; }
   @media (max-width:760px){ .game-card{ display:block; } }
+  /* ô Vocab Crush (16+): hiện mọi màn hình, tông đêm hẹn hò */
+  .crush-card{ position:relative; display:flex; align-items:center; gap:14px; overflow:hidden; margin:0 0 18px; padding:20px 18px; border-radius:26px; color:#FBEFF5; text-decoration:none;
+    background:radial-gradient(120% 90% at 85% 10%,#5A1D45 0%,#241629 55%,#170D1C 100%); box-shadow:0 18px 40px -22px rgba(23,13,28,.8); isolation:isolate; }
+  .cc-txt{ flex:1; min-width:0; }
+  .cc-tag{ display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:99px; background:linear-gradient(90deg,#FF3D7F,#FF8A3D); color:#fff; font:800 11.5px var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+  .cc-age{ display:inline-grid; place-items:center; margin-left:6px; padding:4px 9px; border-radius:99px; border:1.5px solid #FFC94D; color:#FFC94D; font:800 11.5px var(--font-body); }
+  .cc-title{ margin:10px 0 4px; font:800 clamp(30px,8vw,42px)/1 var(--font-display); } .cc-title span{ background:linear-gradient(90deg,#FF3D7F,#FF8A3D); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .cc-txt p{ margin:0 0 14px; font-size:14.5px; line-height:1.45; color:#D9C6DC; max-width:46ch; }
+  .cc-go{ display:inline-flex; align-items:center; gap:6px; min-height:46px; padding:0 20px; border-radius:14px; background:linear-gradient(90deg,#FF3D7F,#FF8A3D); color:#fff; font:800 15.5px var(--font-display); box-shadow:0 6px 20px rgba(255,61,127,.45); }
+  .cc-art{ flex:none; display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .cc-art img{ width:84px; height:84px; filter:drop-shadow(0 10px 18px rgba(0,0,0,.4)); animation:ccBob 3s ease-in-out infinite; }
+  .cc-art img+img{ width:58px; height:58px; animation-delay:.6s; opacity:.9; }
+  @keyframes ccBob{ 50%{ transform:translateY(-6px) rotate(-5deg); } }
+  .crush-card:hover .cc-go{ transform:translateY(-1px); }
+  @media (max-width:420px){ .cc-art img{ width:64px; height:64px; } .cc-art img+img{ width:44px; height:44px; } }
+  @media (prefers-reduced-motion:reduce){ .cc-art img{ animation:none; } }
   @media (prefers-reduced-motion:reduce){ .gc-lion{ animation:none; } }
   @media (prefers-reduced-motion:reduce){ .nav-live::before,.nl-tiles i,.nl-dot{ animation:none !important; } .nl-tiles i{ opacity:1; } }
   .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
@@ -966,6 +982,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
       <a class="nav-link" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> Ngữ pháp</a>
       <a class="nav-link nav-live" href="./lop-hoc.html"><span class="nl-tiles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>AZ Live<span class="nl-dot" aria-hidden="true"></span></a>
       <a class="nav-link" href="./game/">🎮 Game</a>
+      <a class="nav-link" href="./vocab-crush/">💘 Vocab Crush <small style="font-weight:800;color:#e0102b">16+</small></a>
       <button class="nav-link test-link" type="button" data-open-test>🎯 Kiểm tra trình độ</button>
     </nav>
     <div class="nav-stat" id="navStat">
@@ -1045,6 +1062,15 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
       <span class="gc-go"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Chơi ngay</span>
     </div>
     <img class="gc-lion" src="./game/assets/lion.webp" alt="" width="150" height="241">
+  </a>
+  <a class="crush-card" href="./vocab-crush/" aria-label="Vocab Crush, game quẹt từ vựng dành cho người từ 16 tuổi">
+    <div class="cc-txt">
+      <span class="cc-tag">Mới · Game</span><span class="cc-age">16+</span>
+      <div class="cc-title">Vocab <span>Crush</span></div>
+      <p>Quẹt từ vựng như quẹt Tinder: từ quen là người yêu cũ, từ lạ là lốp mới. 3.000+ từ Giao tiếp, TOEIC, IELTS.</p>
+      <span class="cc-go"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Quẹt ngay</span>
+    </div>
+    <div class="cc-art" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f498.webp" alt="" width="84" height="84"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f940.webp" alt="" width="58" height="58"></div>
   </a>
   <div class="cards">
 
