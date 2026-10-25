@@ -628,6 +628,10 @@
   .kid-card .cc-go{ color:#0E2236; box-shadow:0 6px 20px rgba(54,226,180,.4); }
   .kid-card .cc-tag{ color:#0E2236; }
   .kid-card .cc-txt p{ color:#CFE6F0; }
+  .cc-langs{ display:flex; flex-wrap:wrap; gap:8px; }
+  .kid-card .cc-go{ text-decoration:none; }
+  .kid-card .cc-go-en{ background:#fff; color:#0E2236; box-shadow:0 6px 20px rgba(255,255,255,.25); }
+  .kid-card .cc-go:focus-visible{ outline:3px solid #FFC94D; outline-offset:2px; }
   @media (prefers-reduced-motion:reduce){ .gc-lion{ animation:none; } }
   @media (prefers-reduced-motion:reduce){ .nav-live::before,.nl-tiles i,.nl-dot{ animation:none !important; } .nl-tiles i{ opacity:1; } }
   .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
@@ -1080,15 +1084,18 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     </div>
     <div class="cc-art" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f498.webp" alt="" width="84" height="84"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f940.webp" alt="" width="58" height="58"></div>
   </a>
-  <a class="crush-card kid-card" href="./vocab-kids/" aria-label="Vocab Kid Flash Card, thẻ từ vựng cho bé">
+    <div class="crush-card kid-card" role="group" aria-label="Vocab Kid Flash Card, thẻ từ vựng cho bé">
     <div class="cc-txt">
       <span class="cc-tag">Mới · Cho bé</span>
       <div class="cc-title">Vocab <span>Kid</span></div>
-      <p>Flash card lật mặt, nghe giọng đọc, chơi đoán hình. 2.000+ từ dễ theo 30 chủ đề, có bản tiếng Việt và English.</p>
-      <span class="cc-go"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Học ngay</span>
+      <p>Flash card lật mặt, nghe giọng đọc, chơi đoán hình. 2.700+ từ chia Level A · B · C từ dễ đến khó.</p>
+      <div class="cc-langs">
+        <a class="cc-go" href="./vocab-kids/?lang=vi"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>🇻🇳 Tiếng Việt</a>
+        <a class="cc-go cc-go-en" href="./vocab-kids/?lang=en"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>🇬🇧 English</a>
+      </div>
     </div>
     <div class="cc-art" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f0cf.webp" alt="" width="84" height="84"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f9d2.webp" alt="" width="58" height="58"></div>
-  </a>
+  </div>
   <div class="cards">
 
     <a class="card t1" id="c-giaotiep" data-course="giaotiep" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
