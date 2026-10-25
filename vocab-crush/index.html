@@ -142,7 +142,7 @@ h2{font-size:20px;margin:6px 0 12px;display:flex;align-items:center;gap:6px}
 .seg button{flex:1;padding:9px 6px;border-radius:999px;font-weight:700;font-size:14px}
 .seg button.on{background:linear-gradient(90deg,var(--flame1),var(--flame2));color:#fff}
 .exs{display:flex;flex-wrap:wrap;gap:6px}
-.exs span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:13px;display:flex;align-items:center;gap:4px}
+.exs span,.exs button{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:13px;display:flex;align-items:center;gap:4px}
 
 /* tab dưới */
 nav{display:flex;border-top:1px solid var(--line);padding-block:6px max(8px,env(safe-area-inset-bottom,0px))}
@@ -176,6 +176,23 @@ nav .badge{position:absolute;top:2px;left:calc(50% + 8px);background:var(--flame
 .yr{width:100%;background:var(--panel);color:var(--text);border:2px solid var(--line);border-radius:14px;padding:12px 14px;font:700 16px var(--body);appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat}
 .olabel{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;text-align:left}
 
+.mpop{position:fixed;left:50%;top:calc(64px + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(420px,calc(100% - 32px));z-index:45;display:flex;gap:12px;align-items:center;padding:10px 14px 10px 10px;border-radius:18px;background:linear-gradient(90deg,var(--flame1),var(--flame2));color:#fff;box-shadow:0 12px 30px rgba(255,61,127,.45);cursor:pointer;animation:drop .35s cubic-bezier(.2,1.4,.4,1);transition:opacity .4s,transform .4s}
+.mpop.out{opacity:0;transform:translateX(-50%) translateY(-20px)}
+.mpop .av{width:46px;height:46px;font-size:26px;border:2px solid #fff}
+.mpop .t{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.mpop b{font-family:var(--script);font-weight:400;font-size:18px}
+.mpop span{font-size:15px}.mpop small{font-size:12px;opacity:.9}
+@keyframes drop{from{transform:translateX(-50%) translateY(-30px);opacity:0}}
+nav button.bump .ic{animation:bump .6s}
+@keyframes bump{30%{transform:scale(1.4) rotate(-10deg)}}
+.itabs{display:flex;background:var(--panel);border-radius:999px;padding:4px;gap:4px;border:1px solid var(--line);margin:4px 0 14px}
+.itabs button{flex:1;padding:9px 6px;border-radius:999px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px}
+.itabs button.on{background:linear-gradient(90deg,var(--flame1),var(--flame2));color:#fff}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.exc{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;gap:10px;align-items:center;text-align:left}
+.exc .av{width:40px;height:40px;font-size:22px}
+.exc b{display:block;font-size:15px}.exc span{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exc .t{min-width:0}
 .toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#fff;color:#1A0B1E;font-weight:800;padding:11px 16px;border-radius:14px;max-width:min(400px,calc(100% - 32px));text-align:center;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:pop .25s}
 @keyframes pop{from{transform:translateX(-50%) scale(.8);opacity:0}}
 .heart{position:fixed;z-index:55;font-size:28px;pointer-events:none;animation:rise 1.6s ease-out forwards}
@@ -447,20 +464,51 @@ function closeOv(o){o.remove();busy=false}
 function doMatch(i){
   const w=W[i];
   S.matches[i]={lvl:0,at:Date.now(),msgs:[{f:"w",t:`Hey 👋 cảm ơn đã quẹt phải. Tui là <em>${esc(w.w)}</em>, nghĩa là <em>${esc(w.vi)}</em>. Ví dụ nè: “${esc(w.ex)}” Nhớ kỹ nha, lát tui hỏi bài đó 😏`}]};
-  S.xp+=5;save();hud();buzz([30,60,30]);hearts(S.mode==="love"?["💞","💖","✨","💘"]:["🌟","⭐","✨","💖"]);
-  const o=overlay(`<div class="mt">${lab().title}</div><div class="pair"><div class="av" style="background:var(--panel2)">${fe("🫶")}</div><div class="av" style="background:${grad(i)}">${fe(w.emo)}</div></div>
-   <div><div class="word">${esc(w.w)}</div><div class="vi">${esc(w.vi)}</div></div>
-   <div class="ex">“${esc(w.ex)}”</div>
-   <div class="sass">${esc(line(S.mode==="love"?"match":"matchIdol"))}</div>
-   <div class="acts"><button class="btn" id="mChat">Nhắn tin ngay 💬</button><button class="btn ghost" id="mSay">${fe("🔊")} Nghe lại giọng ${esc(w.w)}</button><button class="btn ghost" id="mNext">Quẹt tiếp 🔥</button></div>`);
-  o.querySelector("#mSay").onclick=()=>say(w.w+"!");
-  o.querySelector("#mNext").onclick=()=>closeOv(o);
-  o.querySelector("#mChat").onclick=()=>{closeOv(o);chatWith=i;go("chat")};
+  S.xp+=5;save();hud();buzz([30,60,30]);
+  // Không dừng lại: chỉ báo nhẹ, học viên quẹt tiếp; muốn ôn thì vào Tin nhắn
+  pop(i);
+}
+function pop(i){
+  const w=W[i];document.querySelectorAll(".mpop").forEach(x=>x.remove());
+  const p=document.createElement("div");p.className="mpop";
+  p.innerHTML=`<div class="av" style="background:${grad(i)}">${fe(w.emo)}</div><div class="t"><b>${lab().title}</b><span><strong>${esc(w.w)}</strong> = ${esc(w.vi)}</span><small>${esc(line(S.mode==="love"?"match":"matchIdol"))}</small></div>`;
+  p.onclick=()=>{p.remove();chatWith=i;go("chat")};
+  document.body.appendChild(p);setTimeout(()=>p.classList.add("out"),2600);setTimeout(()=>p.remove(),3000);
+  const b=document.getElementById("tab-inbox");b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");
 }
 
 /* ---------- TIN NHẮN: chỉ ôn các từ lạ đã quẹt phải ---------- */
 function lastText(m){const l=m.msgs[m.msgs.length-1];return(l.f==="me"?"Bạn: ":"")+l.t.replace(/<[^>]+>/g,"")}
+let inboxTab="new";
 function renderInbox(){
+  if(inboxTab==="ex")return renderEx();
+  _renderMatches();
+  $main.querySelector(".scroll").insertAdjacentHTML("afterbegin",inboxTabs());bindInboxTabs();
+}
+function inboxTabs(){return`<div class="itabs"><button data-it="new" class="${inboxTab==="new"?"on":""}">${fe(lab().rightIc)} ${lab().right} <small>${Object.keys(S.matches).length}</small></button><button data-it="ex" class="${inboxTab==="ex"?"on":""}">${fe(lab().leftIc)} Quay lại ${S.mode==="love"?"người cũ":"idol cũ"} <small>${S.ex.length}</small></button></div>`}
+function bindInboxTabs(){$main.querySelectorAll("[data-it]").forEach(b=>b.onclick=()=>{inboxTab=b.dataset.it;renderInbox()})}
+// Quay lại người cũ: xem lại từ đã quẹt trái (đã quen); muốn ôn thì "nối lại tình xưa" → thành lốp mới, nhắn tin ôn
+function renderEx(){
+  const ids=S.ex.slice().reverse();
+  $main.innerHTML=`<div class="view"><div class="scroll">${inboxTabs()}
+   <p class="hint" style="margin:0 0 10px">Những từ bạn đã quen. Chạm để xem lại nghĩa, ví dụ và nghe giọng.</p>
+   ${ids.length?`<div class="exgrid">${ids.map(i=>`<button class="exc" data-x="${i}"><div class="av" style="background:${grad(i)}">${fe(W[i].emo)}</div><div class="t"><b>${esc(W[i].w)}</b><span>${esc(W[i].vi)}</span></div></button>`).join("")}</div>`
+     :`<p class="blank">Chưa có ${S.mode==="love"?"người cũ":"idol cũ"} nào.<br>Quẹt trái những từ bạn đã biết nhé ${lab().leftIc}</p>`}
+  </div></div>`;
+  bindInboxTabs();
+  $main.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>exSheet(+b.dataset.x));
+}
+function exSheet(i){
+  const w=W[i];say(w.w+"!");
+  const o=overlay(`<div class="pair"><div class="av" style="background:${grad(i)}">${fe(w.emo)}</div></div>
+   <div><div class="word">${esc(w.w)}</div><div style="color:var(--muted)">${esc(w.ipa)} ${w.pos?"· "+esc(w.pos):""}</div><div class="vi" style="margin-top:6px">${esc(w.vi)}</div></div>
+   <div class="ex">“${esc(w.ex)}”${w.exv?`<br><span style="font-style:normal">${esc(w.exv)}</span>`:""}</div>
+   <div class="acts"><button class="btn ghost" id="xSay">${fe("🔊")} Nghe lại</button><button class="btn" id="xBack">${fe(lab().rightIc)} Nối lại tình xưa (ôn lại từ này)</button><button class="btn ghost" id="xClose">Đóng</button></div>`);
+  o.querySelector("#xSay").onclick=()=>say(w.ex);
+  o.querySelector("#xClose").onclick=()=>closeOv(o);
+  o.querySelector("#xBack").onclick=()=>{S.ex=S.ex.filter(k=>k!==i);closeOv(o);doMatch(i);document.querySelectorAll(".mpop").forEach(x=>x.remove());chatWith=i;go("chat")};
+}
+function _renderMatches(){
   const ids=Object.keys(S.matches).map(Number).sort((a,b)=>S.matches[b].at-S.matches[a].at);
   const fresh=ids.filter(i=>S.matches[i].msgs.length===1);
   const conv=ids.filter(i=>S.matches[i].msgs.length>1);
@@ -529,12 +577,13 @@ function renderMe(){
    </div>
    <div class="set"><label>Bạn đang tìm</label><div class="seg" id="segMode"><button data-v="love">💘 Người yêu</button><button data-v="idol">⭐ Idol</button></div></div>
    <div class="set"><label>Độ hỗn</label><div class="seg" id="segSpice"><button data-v="mild">🧊 Hiền</button><button data-v="spicy">🌶️ Hơi hỗn</button><button data-v="toxic">🔥 Toxic</button></div></div>
-   <div class="set"><label>${lab().exList}</label><div class="exs">${S.ex.length?S.ex.map(i=>`<span>${fe(W[i].emo)} ${esc(W[i].w)}</span>`).join(""):`<span>Chưa có ai. Quẹt trái từ bạn đã biết nhé.</span>`}</div></div>
+   <div class="set"><label>${lab().exList}</label><div class="exs">${S.ex.length?S.ex.map(i=>`<button data-x="${i}">${fe(W[i].emo)} ${esc(W[i].w)}</button>`).join(""):`<span>Chưa có ai. Quẹt trái từ bạn đã biết nhé.</span>`}</div></div>
    <div class="set"><a class="btn ghost" href="${ARENA_URL}" style="display:block;text-align:center;text-decoration:none">${fe("🏟️")} Về Vocab Arena</a></div>
    <div class="set"><button class="btn ghost" id="reset" style="width:100%">${confirmReset?"Chắc chưa? Bấm lần nữa để xoá hết 💔":"Chia tay tất cả, quẹt lại từ đầu"}</button></div>
   </div></div>`;
   const seg=(id,key)=>document.querySelectorAll(`#${id} button`).forEach(b=>{b.classList.toggle("on",S[key]===b.dataset.v);b.onclick=()=>{S[key]=b.dataset.v;save();renderMe()}});
   seg("segMode","mode");seg("segSpice","spice");
+  $main.querySelectorAll(".exs [data-x]").forEach(x=>x.onclick=()=>exSheet(+x.dataset.x));
   document.getElementById("reset").onclick=()=>{if(!confirmReset){confirmReset=true;return renderMe()}
     const keep={mode:S.mode,spice:S.spice,streak:S.streak};S=Object.assign(fresh(),keep,{onboarded:true});buildDeck();confirmReset=false;save();toast("Đã chia tay tất cả. Làm lại cuộc đời 🌱");render()};
 }
