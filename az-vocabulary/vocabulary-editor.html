@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Biên tập AZ Vocabulary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/vocabulary.css">
+<style>
+.ed{max-width:1180px;margin:0 auto;padding:16px}
+.ed-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.ed-top select,.ed-top input[type=search]{min-height:44px;border:1px solid var(--line-2);border-radius:10px;padding:8px 10px;background:#fff}
+.ed-top input[type=search]{flex:1 1 180px}
+.ed-grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:820px){.ed-grid{grid-template-columns:1fr}}
+.ed-list{max-height:70vh;overflow:auto;padding:6px}
+.ed-list button{display:block;width:100%;text-align:left;min-height:44px;padding:8px 10px;border:0;border-radius:10px;background:none;cursor:pointer}
+.ed-list button[aria-current=true]{background:var(--navy);color:#fff}
+.ed-list button small{display:block;opacity:.7;font-size:12px}
+.ed-list .bad{color:var(--red)}
+.ed-form{padding:16px}
+.ed-form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ed-form .three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (max-width:560px){.ed-form .two,.ed-form .three{grid-template-columns:1fr}}
+.ed-form label{display:block;font-weight:600;font-size:13.5px;margin:10px 0 4px}
+.ed-form input,.ed-form select,.ed-form textarea{width:100%;min-height:42px;border:1px solid var(--line-2);border-radius:10px;padding:8px 10px;background:#fff;font-size:15px}
+.ed-form textarea{min-height:64px;resize:vertical}
+.ed-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ed-out{margin-top:12px;font-size:14px;white-space:pre-wrap}
+.ed-out.bad{color:var(--red-d)} .ed-out.good{color:var(--ok)}
+.ed-note{font-size:13.5px;color:var(--ink-2);margin-bottom:12px}
+.pv{margin-top:14px}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in" style="max-width:1180px"><a class="logo" href="vocabulary.html"><span class="mk">AZ</span><span><b>Biên tập AZ Vocabulary</b><small>Soạn và xuất file JSON học liệu</small></span></a></div></header>
+<main class="ed">
+  <p class="ed-note">Công cụ chỉ soạn và xuất file trên máy bạn — <b>không tự đăng lên website</b>. Xuất JSON xong, thay file trong thư mục <code>data/</code> của repository rồi đẩy lên GitHub (xem docs/VOCABULARY_README.md). Bản nháp được tự lưu trong trình duyệt này.</p>
+  <div class="ed-top">
+    <select id="eExam" aria-label="Bộ học liệu"><option value="toeic">TOEIC</option><option value="ielts">IELTS</option></select>
+    <button class="btn line" type="button" id="eLoad">Tải bản đang có trên web</button>
+    <label class="btn line file">Nhập file JSON<input type="file" id="eFile" accept="application/json,.json"></label>
+    <select id="eTopic" aria-label="Lọc chủ đề"></select>
+    <input type="search" id="eSearch" placeholder="Tìm từ, nghĩa, id…" aria-label="Tìm">
+  </div>
+  <div class="ed-top">
+    <button class="btn" type="button" id="eNew">Thêm mục mới</button>
+    <button class="btn navy" type="button" id="eCheck">Kiểm tra toàn bộ</button>
+    <button class="btn line" type="button" id="eExport">Xuất JSON</button>
+    <span class="muted small" id="eInfo"></span>
+  </div>
+  <div class="ed-out" id="eOut" role="status" aria-live="polite"></div>
+  <div class="ed-grid">
+    <nav class="card ed-list" id="eList" aria-label="Danh sách mục từ"></nav>
+    <section class="card ed-form" id="eForm" aria-label="Sửa mục từ"><p class="muted">Chọn một mục ở danh sách hoặc bấm "Thêm mục mới".</p></section>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/js/vocabulary-core.js"></script>
+<script src="assets/js/vocabulary-editor.js"></script>
+</body>
+</html>

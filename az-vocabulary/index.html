@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0F1B2D">
+<title>AZ Vocabulary · AZEnglish</title>
+<meta name="description" content="Luyện từ vựng TOEIC và IELTS theo chủ đề: nhìn từ, chọn nghĩa, tự chuyển thẻ, chữa bài khi xong lượt.">
+<meta property="og:title" content="AZ Vocabulary · Học thử 10 từ TOEIC / IELTS miễn phí">
+<meta property="og:description" content="Lướt thẻ từ vựng theo chủ đề, chữa bài và ôn lại từ sai. Một sản phẩm của AZEnglish.">
+<meta property="og:image" content="https://nguyentruongquangtung1994-beep.github.io/AZIELTS-trainer/og-azielts-v2.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/css/vocabulary.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="academy.html" aria-label="Về AZIELTS Academy"><span class="mk">AZ</span><span><b>AZ Vocabulary</b><small>TOEIC · IELTS</small></span></a>
+    <span class="sp"></span>
+    <span class="who" id="who"></span>
+  </div>
+</header>
+
+<main id="app" class="wrap" tabindex="-1">
+  <!-- Màn chọn bài -->
+  <section id="scrHome" class="scr" aria-labelledby="hHome">
+    <div id="loadState" class="state" role="status">Đang tải học liệu…</div>
+    <div id="homeBody" hidden>
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div id="resume"></div>
+      <div class="quick card" id="quick"></div>
+      <div class="status" id="status"></div>
+
+      <details class="setup card" id="setup">
+        <summary><span><b id="hHome">Tùy chỉnh lượt học</b><small>Chủ đề, độ khó, số từ, thời gian, âm thanh</small></span><span class="chev" aria-hidden="true"></span></summary>
+        <div class="setup-in">
+          <fieldset><legend>Chương trình</legend><div class="seg" id="fExam"></div></fieldset>
+          <fieldset><legend>Chủ đề</legend><div class="chips" id="fTopic"></div></fieldset>
+          <fieldset><legend>Độ khó <small>(mức học liệu do AZ phân loại, không quy đổi ra điểm thi)</small></legend><div class="seg" id="fLevel"></div></fieldset>
+          <fieldset><legend>Số từ mỗi lượt</legend><div class="seg" id="fCount"></div></fieldset>
+          <fieldset><legend>Chiều luyện</legend><div class="seg" id="fDir"></div></fieldset>
+          <fieldset><legend>Thời gian mỗi từ <small>(hết giờ tính là sai)</small></legend><div class="seg" id="fTimer"></div></fieldset>
+          <fieldset><legend>Âm thanh <small>(đọc bằng giọng có sẵn của thiết bị)</small></legend><div class="seg" id="fSound"></div></fieldset>
+          <fieldset><legend>Tốc độ chuyển thẻ</legend><div class="seg" id="fSpeed"></div></fieldset>
+          <div class="avail" id="avail" role="status" aria-live="polite"></div>
+        </div>
+      </details>
+
+      <footer class="foot">
+        <p>Học liệu là <b>bản thử do AZEnglish tự biên soạn</b>, đang chờ giáo viên duyệt nghĩa và độ tự nhiên. Không phải đề chính thức của ETS, IELTS, Cambridge hay IDP. Mức độ Cơ bản / Trung cấp / Nâng cao không quy đổi ra điểm TOEIC hay band IELTS.</p>
+        <p>Tiến độ chỉ lưu trên thiết bị và trình duyệt này, chưa đồng bộ giữa các thiết bị. <button type="button" class="link" id="openData">Xuất, nhập hoặc xoá tiến độ</button></p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- Màn học -->
+  <section id="scrLearn" class="scr" hidden aria-label="Lượt học">
+    <div class="lbar">
+      <button type="button" class="icon-btn" id="quit" aria-label="Thoát lượt, tiến độ vẫn được lưu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div class="lmeta"><b id="lTitle"></b><span id="lSub"></span></div>
+      <span class="lcount" id="lCount"></span>
+      <button type="button" class="icon-btn" id="mute" aria-pressed="false" aria-label="Tắt tiếng và tự đọc"></button>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Tiến độ lượt học" aria-valuemin="0" id="lBar"><i id="lFill"></i></div>
+    <div class="qwrap"><article class="qcard" id="qcard"></article></div>
+    <p class="hint" id="hint">Chạm vào nghĩa đúng · phím 1–4 · tự chuyển sang từ tiếp theo, chữa bài khi xong lượt</p>
+    <div class="sr" id="live" aria-live="polite"></div>
+  </section>
+
+  <!-- Màn kết quả -->
+  <section id="scrResult" class="scr" hidden aria-labelledby="rTitle"></section>
+</main>
+
+<dialog id="dlgData" aria-labelledby="dTitle">
+  <form method="dialog" class="dlg">
+    <h2 id="dTitle">Tiến độ trên thiết bị này</h2>
+    <p class="muted">Dữ liệu chỉ nằm trong trình duyệt này, chưa đồng bộ sang điện thoại hay máy khác. Muốn chuyển máy: xuất file ở máy cũ, nhập ở máy mới.</p>
+    <div class="dlg-sum" id="dSum"></div>
+    <div class="dlg-row">
+      <button type="button" class="btn line" id="dExport">Xuất tiến độ (JSON)</button>
+      <label class="btn line file">Nhập tiến độ<input type="file" id="dImport" accept="application/json,.json"></label>
+    </div>
+    <div id="dMsg" class="dlg-msg" role="status" aria-live="polite"></div>
+    <div id="dConflict" hidden class="dlg-box">
+      <p>Máy này đã có tiến độ. Bạn muốn xử lý thế nào?</p>
+      <div class="dlg-row"><button type="button" class="btn" id="dMerge">Gộp hai bản</button><button type="button" class="btn line" id="dReplace">Thay bằng file nhập</button></div>
+      <p class="muted small">Gộp: giữ mọi lượt đã học ở cả hai bản, mỗi từ lấy lần học gần nhất. Thay: xoá tiến độ trên máy, dùng file nhập.</p>
+    </div>
+    <div class="dlg-danger">
+      <button type="button" class="btn ghost-red" id="dClear">Xoá toàn bộ tiến độ</button>
+      <div id="dClearBox" hidden class="dlg-box"><p>Xoá hết lượt đã học, lịch ôn và chuỗi ngày trên máy này? Không hoàn tác được.</p><div class="dlg-row"><button type="button" class="btn" id="dClearYes">Xoá vĩnh viễn</button><button type="button" class="btn line" id="dClearNo">Giữ lại</button></div></div>
+    </div>
+    <div class="dlg-end"><button class="btn line" value="close">Đóng</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="assets/js/vocabulary-config.js"></script>
+<script src="assets/js/vocabulary-core.js"></script>
+<script src="assets/js/vocabulary-storage.js"></script>
+<script src="assets/js/vocabulary.js"></script>
+</body>
+</html>
