@@ -632,6 +632,14 @@
   .kid-card .cc-go{ text-decoration:none; }
   .kid-card .cc-go-en{ background:#fff; color:#0E2236; box-shadow:0 6px 20px rgba(255,255,255,.25); }
   .kid-card .cc-go:focus-visible{ outline:3px solid #FFC94D; outline-offset:2px; }
+  /* ô AZ Vocabulary: cùng khung, tông navy + đỏ AZ */
+  .crush-card.azv-card{ background:radial-gradient(120% 90% at 85% 10%,#2A3A5C 0%,#13213A 55%,#0B1424 100%); }
+  .azv-card .cc-tag,.azv-card .cc-go{ background:#D7192D; }
+  .azv-card .cc-title span{ background:linear-gradient(90deg,#FF5A6A,#F5C451); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .azv-card .cc-go{ box-shadow:0 6px 20px rgba(215,25,45,.45); }
+  .azv-card .cc-txt p{ color:#C9D2E0; }
+  .azv-card .cc-free{ display:inline-grid; place-items:center; margin-left:6px; padding:4px 9px; border-radius:99px; border:1.5px solid #F5C451; color:#F5C451; font:800 11.5px var(--font-body); }
+  .azv-card:focus-visible{ outline:3px solid #F5C451; outline-offset:2px; }
   @media (prefers-reduced-motion:reduce){ .gc-lion{ animation:none; } }
   @media (prefers-reduced-motion:reduce){ .nav-live::before,.nl-tiles i,.nl-dot{ animation:none !important; } .nl-tiles i{ opacity:1; } }
   .hf-btn{ width:100%; display:flex; align-items:center; gap:14px; margin:28px 0 18px; padding:16px 18px; border-radius:22px; cursor:pointer; text-align:left;
@@ -1096,6 +1104,15 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     </div>
     <div class="cc-art" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f0cf.webp" alt="" width="84" height="84"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f9d2.webp" alt="" width="58" height="58"></div>
   </div>
+  <a class="crush-card azv-card" href="./az-vocabulary/" aria-label="AZ Vocabulary, luyện từ vựng TOEIC và IELTS theo chủ đề, học thử 10 từ miễn phí">
+    <div class="cc-txt">
+      <span class="cc-tag">Mới · TOEIC · IELTS</span><span class="cc-free">Học thử 10 từ</span>
+      <div class="cc-title">AZ <span>Vocabulary</span></div>
+      <p>Nhìn từ, chọn nghĩa trong 8 giây, nghe phát âm. Học theo 20 chủ đề công việc và IELTS, hết lượt mới chữa bài và ôn lại từ sai.</p>
+      <span class="cc-go"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>Học ngay</span>
+    </div>
+    <div class="cc-art" aria-hidden="true"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f4da.webp" alt="" width="84" height="84"><img src="https://cdn.jsdelivr.net/npm/@lobehub/fluent-emoji-3d@1.1.0/assets/1f3af.webp" alt="" width="58" height="58"></div>
+  </a>
   <div class="cards">
 
     <a class="card t1" id="c-giaotiep" data-course="giaotiep" href="./AZEnglish%201500%20Tu%CC%9B%CC%80%20Giao%20Tie%CC%82%CC%81p%20Co%CC%9B%20Ba%CC%89n%20(v1).html" data-storage-key="azvocab_v1_communication1500" data-total="3000">
