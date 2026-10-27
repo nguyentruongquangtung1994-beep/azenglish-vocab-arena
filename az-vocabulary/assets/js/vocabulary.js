@@ -71,9 +71,14 @@
 
   function renderWho() {
     const a = S.academy(), w = $("who");
-    if (a.state === "active") fill(w, h("span", { class: "tag", text: TIER[a.tier] || "Thành viên" }), h("span", { class: "nm", text: a.name }));
-    else if (a.state === "expired") fill(w, h("span", { class: "tag", text: "Hết hạn dùng thử" }));
-    else fill(w, h("span", { class: "tag", text: "Học thử miễn phí" }));
+    const back = CFG.home ? h("a", { class: "back", href: CFG.home, text: "‹ " + (CFG.homeShort || "Trang chủ"), "aria-label": CFG.homeLabel || "Về trang chủ" }) : null;
+    if (a.state === "active") fill(w, h("span", { class: "tag", text: TIER[a.tier] || "Thành viên" }), h("span", { class: "nm", text: a.name }), back);
+    else if (a.state === "expired") fill(w, h("span", { class: "tag", text: "Hết hạn dùng thử" }), back);
+    else fill(w, h("span", { class: "tag", text: "Học thử miễn phí" }), back);
+  }
+  function goHome() {
+    if (!$("scrLearn").hidden) { quitLearn(); return; }
+    show("scrHome"); renderHome();
   }
 
   function segButtons(el, opts, cur, onPick) {
@@ -103,11 +108,13 @@
       fill(q, h("h1", { text: "Học nhanh 10 từ" }),
         h("p", { text: "Chọn chương trình là bắt đầu ngay. Mỗi từ chọn một nghĩa, thẻ tự chuyển; xong lượt mới chữa bài." }),
         h("div", { class: "pick2" }, C.EXAMS.map(e => h("button", { class: e === "toeic" ? "btn navy" : "btn", type: "button", onclick: () => { p.exam = e; p.topic = "all"; p.level = "all"; p.count = FREE_COUNT; save(); startMain(); } },
-          EXAM_NAME[e], h("small", { text: e === "toeic" ? "Công việc · đời sống" : "Speaking · Writing" })))));
+          h("span", { class: "emo", "aria-hidden": "true", text: e === "toeic" ? "💼" : "🎓" }), EXAM_NAME[e], h("small", { text: e === "toeic" ? "Công việc · đời sống" : "Speaking · Writing" })))));
     } else {
       fill(q, h("h1", { text: "Học nhanh " + p.count + " từ" }),
         h("div", { class: "sum" }, [EXAM_NAME[p.exam], topicName(p.exam, p.topic), p.level === "all" ? "Mọi mức" : C.LEVEL_VI[p.level], DIR_NAME[p.dir]].map(t => h("span", { text: t }))),
-        h("button", { class: "btn block", type: "button", onclick: () => startMain(), text: "Học ngay" }));
+        h("button", { class: "btn block", type: "button", onclick: () => startMain(), text: "Học ngay" }),
+        h("p", { class: "swap" }, h("button", { class: "link", type: "button", onclick: () => { p.exam = null; save(); renderHome(); window.scrollTo(0, 0); }, text: "Đổi TOEIC / IELTS" }), " · ",
+          h("button", { class: "link", type: "button", onclick: () => { const d = $("setup"); d.open = true; d.scrollIntoView({ block: "start", behavior: "smooth" }); }, text: "Tùy chỉnh lượt học" })));
     }
     // chuỗi ngày + lịch ôn
     const st = $("status"), due = C.dueIds(P.words, today()).filter(id => BYID[id]), strk = C.streak(P.days, today());
@@ -524,8 +531,10 @@
   }
 
   async function init() {
+    // logo = về màn chọn bài của AZ Vocabulary (lượt đang dở vẫn được lưu); link riêng để về Vocab Arena / Academy
     const logo = document.querySelector(".logo");
-    if (CFG.home) { logo.href = CFG.home; logo.setAttribute("aria-label", CFG.homeLabel || "Về trang chủ"); } else if (CFG.academy) logo.href = CFG.academy;
+    logo.href = "./"; logo.setAttribute("aria-label", "Về màn chọn bài AZ Vocabulary");
+    logo.addEventListener("click", e => { e.preventDefault(); goHome(); });
     bindGlobal(); bindData();
     const st = S.load(); P = st.progress;
     renderWho();
