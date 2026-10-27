@@ -591,6 +591,12 @@
   @media (max-width:1180px){ .nav-link{ padding:8px 9px; } .nav-links .micon{ display:none; } }
   /* ô AZ Live trong danh sách chương trình: chỉ hiện trên điện thoại (menu trên cùng bị ẩn) */
   .live-card{ display:none !important; }
+  /* Vocab Crush + AZ Vocabulary: máy tính dùng mục trên thanh menu, chỉ hiện thẻ trên điện thoại (menu bị ẩn dưới 760px) */
+  @media (min-width:761px){ .crush-card.vc-card, .crush-card.azv-card{ display:none !important; } }
+  @media (max-width:1500px){ .nav-link .nl-long, .nav-link .nl-age{ display:none; } }
+  @media (min-width:761px) and (max-width:1100px){ .nav-links{ min-width:0; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none; -webkit-mask-image:linear-gradient(90deg,#000 90%,transparent); mask-image:linear-gradient(90deg,#000 90%,transparent); } .nav-links::-webkit-scrollbar{ display:none; } }
+  @media (min-width:761px) and (max-width:1600px){ .nav-links .nav-link .hu-nv, .nav-links .nav-link .hu-ic, .nav-links .nav-link > svg.micon{ display:none !important; } .nav-links .nav-link{ padding-left:8px !important; padding-right:8px !important; gap:4px !important; } }
+  @media (min-width:761px) and (max-width:1180px){ .nav-links .nav-link{ font-size:13px !important; padding-left:4px !important; padding-right:4px !important; } .nl-tiles{ display:none !important; } }
   @media (max-width:760px){ .live-card{ display:grid !important; } }
   /* ô Game (Guess the Word): chỉ hiện trên điện thoại, cạnh ô AZ Live */
   .game-card{ display:none; position:relative; overflow:hidden; margin:0 0 18px; padding:20px 18px 22px; border-radius:26px; color:#241a12; text-decoration:none;
@@ -1001,7 +1007,8 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
       <a class="nav-link" href="./AZEnglish%20Ngu%CC%9B%CC%83%20Pha%CC%81p%20(v1).html"><svg class="micon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path></svg> Ngữ pháp</a>
       <a class="nav-link nav-live" href="./lop-hoc.html"><span class="nl-tiles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>AZ Live<span class="nl-dot" aria-hidden="true"></span></a>
       <a class="nav-link" href="./game/">🎮 Game</a>
-      <a class="nav-link" href="./vocab-crush/">💘 Vocab Crush <small style="font-weight:800;color:#e0102b">16+</small></a>
+      <a class="nav-link" href="./vocab-crush/">💘 Vocab Crush <small class="nl-age" style="font-weight:800;color:#e0102b">16+</small></a>
+      <a class="nav-link" href="./az-vocabulary/" title="AZ Vocabulary">📚 AZ Vocab<span class="nl-long">ulary</span></a>
       <a class="nav-link" href="./vocab-kids/">🃏 Vocab Kid</a>
       <button class="nav-link test-link" type="button" data-open-test>🎯 Kiểm tra trình độ</button>
     </nav>
@@ -1083,7 +1090,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
     </div>
     <img class="gc-lion" src="./game/assets/lion.webp" alt="" width="150" height="241">
   </a>
-  <a class="crush-card" href="./vocab-crush/" aria-label="Vocab Crush, game quẹt từ vựng dành cho người từ 16 tuổi">
+  <a class="crush-card vc-card" href="./vocab-crush/" aria-label="Vocab Crush, game quẹt từ vựng dành cho người từ 16 tuổi">
     <div class="cc-txt">
       <span class="cc-tag">Mới · Game</span><span class="cc-age">16+</span>
       <div class="cc-title">Vocab <span>Crush</span></div>
@@ -1843,7 +1850,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         '<form class="form-grid" id="leadForm" novalidate>' +
           '<div class="field" id="fName"><label for="ldName">Họ và tên</label><input id="ldName" autocomplete="name" placeholder="Nguyễn Văn A" /><div class="msg">Vui lòng nhập họ tên.</div></div>' +
           '<div class="field" id="fPhone"><label for="ldPhone">Số điện thoại (Zalo)</label><input id="ldPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx" /><div class="msg">Số điện thoại chưa đúng (10 số, bắt đầu bằng 0).</div></div>' +
-          '<div class="field" id="fEmail"><label for="ldEmail">Email <em>(không bắt buộc)</em></label><input id="ldEmail" type="email" inputmode="email" autocomplete="email" placeholder="ban@gmail.com" /><div class="msg">Email chưa đúng định dạng.</div></div>' +
+          '<div class="field" id="fEmail"><label for="ldEmail">Email <em>(nhận báo cáo chi tiết qua email)</em></label><input id="ldEmail" type="email" inputmode="email" autocomplete="email" placeholder="ban@gmail.com" /><div class="msg">Email chưa đúng định dạng.</div></div>' +
           '<label class="field consent" id="fConsent"><span class="cb"><input id="ldConsent" type="checkbox" /> <span>Tôi đồng ý để AZEnglish dùng thông tin trên để gửi kết quả và tư vấn lộ trình học, theo <a href="./chinh-sach-bao-mat.html" target="_blank" rel="noopener">Chính sách bảo mật</a>. <em>Dưới 16 tuổi: nhờ bố mẹ đồng ý giúp nhé.</em></span></span><div class="msg">Bạn cần đồng ý để AZEnglish gửi kết quả cho bạn.</div></label>' +
           '<button class="hero-cta btn-full" type="submit"><span class="lbl">Xem bản tư vấn của tôi →</span></button>' +
           '<p class="privacy">🔒 Thông tin chỉ dùng để AZEnglish gửi kết quả và tư vấn lộ trình học miễn phí. Không chia sẻ cho bên thứ ba.</p>' +
@@ -1893,6 +1900,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         utm_source: params.get("utm_source") || "", utm_medium: params.get("utm_medium") || "", utm_campaign: params.get("utm_campaign") || "",
         referrer: document.referrer || "", submittedAt: test.at, consent: "Đồng ý chính sách bảo mật lúc " + test.at
       };
+      if(email){ try{ lead.report = reportPayload(test); }catch(e){} }
       var leads = lsJSON(LEADS_KEY) || []; leads.push(lead); lsSet(LEADS_KEY, JSON.stringify(leads));
       window.azLeadSend(lead);
       state.result = test;
@@ -1943,6 +1951,25 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
       if(first === "giaotiep") second = t.goal === "toeic" ? "toeic" : t.goal === "ielts" ? "ielts" : t.goal === "career" ? "career" : (t.idx >= 2 ? "ielts" : "giaotiep");
       else second = first;
       return [first, first, second];
+    }
+    // Gói báo cáo gửi máy chủ để email cho học viên (Apps Script: vaSendReport_ trong apps-script-vocab-report.gs)
+    function reportPayload(t){
+      buildReport(t);
+      var x = t._rp, strip = function(v){ return String(v || "").replace(/<[^>]+>/g, ""); };
+      var ind = t.career ? (INDUSTRIES.filter(function(i){ return i[0] === t.career.ind; })[0] || [,,""])[2] : "";
+      var url = ""; try{ url = new URL(COURSES[t.rec].url, location.href).href; }catch(e){}
+      return {
+        level:t.level, levelName:x.info.name, vocab:x.info.vocab, levelDesc:strip(x.info.desc), correct:t.correct, total:t.total, idx:t.idx,
+        goal:t.goal, goalLabel:t.goalLabel, role:t.role, roleLabel:t.roleLabel, timeLabel:t.timeLabel, bySkill:t.bySkill, timeouts:t.timeouts || 0,
+        strong: x.strong.map(function(k){ return { name:SKILL[k.k].name, v:k.v, text:STRENGTH[k.k] }; }),
+        weak: x.weak.map(function(k){ return { name:SKILL[k.k].name, v:k.v, desc:WEAK[k.k].d,
+          actions: WEAK[k.k].a.map(function(a){ return a.replace("{focus}", GRAMMAR_FOCUS[t.idx]).replace("{wpd}", x.wpd); }) }; }),
+        wrong: (t.wrong || []).map(function(w){ return { s:w.s, lv:LEVELS[w.l], q:w.q, picked:w.picked || "", correct:w.correct }; }),
+        career: t.career ? { score:t.career.score, total:t.career.total, ind:ind } : null,
+        lv3:x.lv3, lv6:x.lv6, wpd:x.wpd, words6:x.words6.toLocaleString("vi-VN"),
+        phases: x.phases.map(function(p){ return { t:p.t, s:p.s, b:strip(p.b) }; }),
+        recName:COURSES[t.rec].name, recBlurb:COURSE_BLURB[t.rec] || "", recUrl:url
+      };
     }
     function buildReport(t){
       var info = LEVEL_INFO[t.level], wpd = WPD[t.time] || 10, gain = GAIN6[t.time] || 1;
@@ -1996,6 +2023,7 @@ body{ -webkit-font-smoothing:antialiased; overflow-x:clip; }
         { t:"Tháng 5 – 6 · Về đích 🏁", s: COURSE_EMOJI[plan[2]] + " " + COURSES[plan[2]].name,
           b:"Luyện đọc – nghe bấm giờ, lôi từ đã học ra viết và nói cho “nóng máy”. <b>Cuối tháng 6: làm lại bài test</b> — đích đến " + lv6 + " với ~" + words6.toLocaleString("vi-VN") + " từ trong túi 🎒." }
       ];
+      t._rp = { info:info, lv3:lv3, lv6:lv6, wpd:wpd, words6:words6, strong:strong, weak:weak, phases:phases };
       html += '<div class="rp-sec"><h4>🗓️ Lộ trình 6 tháng “độ” riêng cho bạn</h4>' +
         '<div class="proj"><div><b>' + t.level + '</b><span>Hiện tại</span></div><div><b>' + lv3 + '</b><span>Sau 3 tháng</span></div><div><b>' + lv6 + '</b><span>Sau 6 tháng</span></div></div>' +
         phases.map(function(p){ return '<div class="phase"><div class="ph-t">' + p.t + '</div><div class="ph-s">' + p.s + '</div><p>' + p.b + '</p></div>'; }).join("") +
