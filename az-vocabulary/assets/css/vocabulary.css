@@ -232,3 +232,13 @@ dialog::backdrop{background:rgba(15,27,45,.5)}
 .top-in{gap:8px}
 @media (max-width:420px){.who .back{font-size:13px}.logo small{display:none}.logo b{font-size:17px}.who .tag{font-size:11px;padding:3px 8px}}
 @media (max-width:359px){.who .tag{display:none}}
+
+/* cổng: 2 tab tạo tài khoản / đăng nhập */
+.gtabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:12px 0 4px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.gtabs button{min-height:44px;border:0;border-radius:999px;background:transparent;font:700 15px var(--f);color:var(--ink-2);cursor:pointer}
+.gtabs button[aria-pressed="true"]{background:var(--card);color:var(--red);box-shadow:0 2px 6px rgba(36,26,18,.12)}
+.gate .phone{margin:4px 0 0;font-size:15px}.gate .phone b{user-select:all}
+button.back{background:none;border:0;font:inherit;color:var(--red);font-weight:700;cursor:pointer}
+button.back.out{color:var(--ink-3);font-weight:600}
+@media (max-width:420px){.who .tag.guest{display:none}.who .nm{display:none}}
+.gate{scroll-margin-top:calc(72px + env(safe-area-inset-top,0px))}

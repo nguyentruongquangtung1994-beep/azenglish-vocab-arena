@@ -46,6 +46,8 @@
     return { state: active ? "active" : "expired", name: String(s.name || s.u), tier: s.tier || "", exp: s.exp || "" };
   }
   function saveAcademySession(s) { return set(ACAD, JSON.stringify(s)); }
+  function session() { try { return JSON.parse(get(ACAD) || "null"); } catch (e) { return null; } }
+  function logout() { del(ACAD); }
   function deviceId() {     // cùng định dạng với Academy để máy chủ đếm thiết bị thống nhất
     let d = get(DEV);
     if (!d) { d = "d" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); if (!set(DEV, d)) d = "nolocal"; }
@@ -71,5 +73,5 @@
   }
   const hasData = p => !!(p && (p.history.length || p.active || Object.keys(p.words).length));
 
-  root.AZVStore = { load, save, clear, freeUsed, markFreeUsed, academy, saveAcademySession, deviceId, exportFile, parseImport, hasData };
+  root.AZVStore = { load, save, clear, freeUsed, markFreeUsed, academy, saveAcademySession, session, logout, deviceId, exportFile, parseImport, hasData };
 })(typeof self !== "undefined" ? self : this);

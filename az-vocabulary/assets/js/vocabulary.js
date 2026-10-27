@@ -9,6 +9,7 @@
   const TIER = { trial: "Dùng thử", standard: "Standard", elite: "Elite" };
   const FREE_COUNT = 10, DUE_MAX = 30, MIN_GAP = 120;
 
+  let gateMode = "reg", loginOpen = false;   // tab của cổng: "reg" tạo tài khoản | "login" đăng nhập; loginOpen = khách tự mở form đăng nhập
   let ITEMS = [], BYID = {}, TOPICS = { toeic: [], ielts: [] }, P = null;
   let armed = {};
   // xác nhận bằng bấm lần 2 trong 4 giây (khung artifact và vài webview chặn hộp thoại xác nhận của trình duyệt)
@@ -72,9 +73,10 @@
   function renderWho() {
     const a = S.academy(), w = $("who");
     const back = CFG.home ? h("a", { class: "back", href: CFG.home, text: "‹ " + (CFG.homeShort || "Trang chủ"), "aria-label": CFG.homeLabel || "Về trang chủ" }) : null;
-    if (a.state === "active") fill(w, h("span", { class: "tag", text: TIER[a.tier] || "Thành viên" }), h("span", { class: "nm", text: a.name }), back);
-    else if (a.state === "expired") fill(w, h("span", { class: "tag", text: "Hết hạn dùng thử" }), back);
-    else fill(w, h("span", { class: "tag", text: "Học thử miễn phí" }), back);
+    const login = h("button", { class: "back", type: "button", onclick: openLogin, text: "Đăng nhập" });
+    if (a.state === "active") fill(w, h("span", { class: "tag", text: TIER[a.tier] || "Thành viên" }), h("span", { class: "nm", text: a.name }), h("button", { class: "back out", type: "button", onclick: logout, text: "Đăng xuất" }), back);
+    else if (a.state === "expired") fill(w, h("span", { class: "tag guest", text: "Hết hạn dùng thử" }), login, back);
+    else fill(w, h("span", { class: "tag guest", text: "Học thử miễn phí" }), login, back);
   }
   function goHome() {
     if (!$("scrLearn").hidden) { quitLearn(); return; }
@@ -102,8 +104,11 @@
     } else rs.replaceChildren();
     // khối học nhanh
     const q = $("quick");
+    if (access().full) loginOpen = false;
     if (locked()) {
       fill(q, gateCard("home"));
+    } else if (loginOpen) {
+      fill(q, gateCard("login"));
     } else if (!p.exam) {
       fill(q, h("h1", { text: "Học nhanh 10 từ" }),
         h("p", { text: "Chọn chương trình là bắt đầu ngay. Mỗi từ chọn một nghĩa, thẻ tự chuyển; xong lượt mới chữa bài." }),
@@ -415,12 +420,35 @@
   /* ---------- cổng mở khoá sau 10 từ miễn phí ---------- */
   function focusGate() { const f = document.querySelector(".gate input, .gate a"); const g = document.querySelector(".gate"); if (g) g.scrollIntoView({ block: "start", behavior: "smooth" }); if (f) setTimeout(() => f.focus({ preventScroll: true }), 300); }
   function gateCard(where) {
-    const acc = access(), academy = (CFG.academy || "academy.html") + "?next=" + encodeURIComponent(location.pathname);   // Academy chỉ chuyển về trang cùng tên miền
-    if (acc.acad.state === "expired") {
+    const acc = access();
+    if (where === "login") gateMode = "login";
+    if (acc.acad.state === "expired" && gateMode !== "login") {
       return h("div", { class: "card gate" }, h("h2", { text: "Tài khoản dùng thử đã hết hạn" }),
-        h("p", { class: "sub", text: "Bạn đã học xong lượt miễn phí. Để học tiếp AZ Vocabulary và các chương trình trong AZIELTS Academy, liên hệ AZEnglish để đăng ký khoá học hoặc gia hạn." }),
-        h("a", { class: "btn block", href: "tel:" + String(CFG.phone || "").replace(/\s/g, ""), text: "Gọi / Zalo " + (CFG.phone || "") }),
-        h("p", { class: "alt" }, h("a", { href: academy, text: "Đăng nhập tài khoản khác ở Academy" })));
+        h("p", { class: "sub", text: "Để học tiếp AZ Vocabulary và các chương trình trong AZIELTS Academy, liên hệ AZEnglish để đăng ký khoá học hoặc gia hạn." }),
+        h("p", { class: "phone" }, "Gọi / Zalo ", h("b", { text: CFG.phone || "" })),
+        h("p", { class: "alt" }, h("button", { class: "link", type: "button", onclick: () => switchGate("login"), text: "Đăng nhập tài khoản khác" })));
+    }
+    const tabs = h("div", { class: "gtabs", role: "group", "aria-label": "Chọn cách mở khoá" },
+      h("button", { type: "button", "aria-pressed": String(gateMode === "reg"), onclick: () => switchGate("reg"), text: "Tạo tài khoản" }),
+      h("button", { type: "button", "aria-pressed": String(gateMode === "login"), onclick: () => switchGate("login"), text: "Đăng nhập" }));
+    const closeLogin = where === "login" ? h("p", { class: "alt" }, h("button", { class: "link", type: "button", onclick: () => { loginOpen = false; gateMode = "reg"; renderHome(); }, text: "‹ Quay lại học thử" })) : null;
+    if (gateMode === "login") {
+      const lerr = h("p", { class: "err", role: "alert" });
+      const lf = {
+        u: h("input", { id: "gU", autocomplete: "username", autocapitalize: "off", spellcheck: "false", required: true, maxlength: "40" }),
+        pw: h("input", { id: "gLpw", type: "password", autocomplete: "current-password", required: true, maxlength: "64" })
+      };
+      const lbtn = h("button", { class: "btn block", type: "submit", text: "Đăng nhập và học tiếp" });
+      return h("div", { class: "card gate", id: "gate" },
+        h("h2", { text: where === "login" ? "Đăng nhập tài khoản AZIELTS Academy" : "Đăng nhập để học tiếp" }),
+        tabs,
+        h("p", { class: "sub", text: "Dùng đúng tên đăng nhập và mật khẩu của AZIELTS Academy. Tài khoản còn hạn sẽ mở toàn bộ AZ Vocabulary." }),
+        h("form", { novalidate: true, onsubmit: e => { e.preventDefault(); login(lf, lbtn, lerr); } },
+          h("label", { for: "gU", text: "Tên đăng nhập hoặc số điện thoại" }), lf.u,
+          h("label", { for: "gLpw", text: "Mật khẩu" }), lf.pw,
+          lerr, lbtn,
+          h("p", { class: "fine", text: "Quên mật khẩu? Liên hệ AZEnglish qua Zalo " + (CFG.phone || "") + " để được cấp lại." })),
+        closeLogin);
     }
     const err = h("p", { class: "err", role: "alert" });
     const f = {
@@ -439,10 +467,11 @@
       h("p", { class: "fine", text: "Tài khoản dùng chung với AZIELTS Academy. AZEnglish có thể liên hệ qua số điện thoại hoặc email để tư vấn lộ trình học." }));
     return h("div", { class: "card gate", id: "gate" },
       h("h2", { text: where === "home" ? "Bạn đã học xong 10 từ miễn phí" : "Mở khoá để học tiếp — miễn phí" }),
+      tabs,
       h("p", { class: "sub", text: "Tạo tài khoản AZIELTS Academy dùng thử 7 ngày, không cần thanh toán:" }),
       h("ul", null, h("li", { text: "Ôn lại từ sai và học lượt mới không giới hạn" }), h("li", { text: "Lượt 20 hoặc 30 từ, ôn theo lịch 1 · 3 · 7 ngày" }), h("li", { text: "Dùng thử các chương trình IELTS khác trong Academy" })),
       form,
-      h("p", { class: "alt" }, "Đã có tài khoản? ", h("a", { href: academy, text: "Đăng nhập ở Academy" })),
+      closeLogin,
       where === "home" && P.history.length ? h("p", { class: "alt" }, h("button", { class: "link", type: "button", onclick: () => showResult(P.history[P.history.length - 1].id), text: "Xem lại kết quả lượt vừa học" })) : null);
   }
   async function hashPw(u, p) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(u.trim().toLowerCase() + "|azacad|" + p)); let s = ""; new Uint8Array(b).forEach(x => { s += String.fromCharCode(x); }); return btoa(s); }
@@ -454,21 +483,63 @@
     if (!/^0\d{8,10}$/.test(phone)) { err.textContent = "Số điện thoại chưa đúng (ví dụ 0971882096)."; f.phone.focus(); return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.textContent = "Nhập email đúng định dạng."; f.email.focus(); return; }
     if (pw.length < 6) { err.textContent = "Mật khẩu cần ít nhất 6 ký tự."; f.pw.focus(); return; }
-    if (!CFG.api) { err.textContent = "Bản chạy thử này chưa nối máy chủ tài khoản. Hãy bấm \"Đăng nhập ở Academy\" để đăng ký."; return; }
+    if (!CFG.api) { err.textContent = "Bản chạy thử này chưa nối máy chủ tài khoản."; return; }
     btn.disabled = true; btn.textContent = "Đang tạo tài khoản…";
     try {
       const res = await fetch(CFG.api, { method: "POST", body: JSON.stringify({ t: "register", u: phone, ph: await hashPw(phone, pw), cls: "", name, phone, email, dev: S.deviceId() }) });
       const j = await res.json();
       if (j && j.ok && j.s) {
-        S.saveAcademySession(j.s);
-        toast("Đã mở khoá. Chúc bạn học tốt!");
-        if (!$("scrResult").hidden && P.history.length) showResult(P.history[P.history.length - 1].id); else { show("scrHome"); renderHome(); }
+        afterAuth(j.s, "Đã mở khoá. Chúc bạn học tốt!");
         return;
       }
       const m = (j && j.error) || "Không tạo được tài khoản.";
-      err.textContent = /đã có|tồn tại/i.test(m) ? m + " Nếu đây là số của bạn, hãy đăng nhập ở Academy." : m;
+      err.textContent = /đã có|tồn tại/i.test(m) ? m + " Nếu đây là số của bạn, chọn tab \"Đăng nhập\"." : m;
     } catch (e) { err.textContent = "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại."; }
     btn.disabled = false; btn.textContent = "Tạo tài khoản và học tiếp";
+  }
+
+  function switchGate(mode) {
+    gateMode = mode;
+    const g = document.querySelector(".gate");
+    if (g) { g.replaceWith(gateCard(!$("scrResult").hidden ? "result" : (loginOpen ? "login" : "home"))); focusGate(); }
+  }
+  function openLogin() {
+    if (!$("scrLearn").hidden) quitLearn();
+    loginOpen = true; gateMode = "login";
+    show("scrHome"); renderHome(); focusGate();
+  }
+  function afterAuth(sess, msg) {
+    S.saveAcademySession(sess);
+    loginOpen = false; gateMode = "reg";
+    toast(msg);
+    if (!$("scrResult").hidden && P.history.length) showResult(P.history[P.history.length - 1].id); else { show("scrHome"); renderHome(); }
+  }
+  // Đăng nhập bằng tài khoản Academy: cùng lệnh "login" và cùng cách băm mật khẩu như academy.html
+  async function login(f, btn, err) {
+    err.textContent = "";
+    let u = f.u.value.trim().toLowerCase();
+    const pw = f.pw.value;
+    if (/^[+\d][\d\s.-]{7,}$/.test(u)) u = normPhone(u);       // gõ số điện thoại có dấu cách / +84 vẫn nhận
+    if (!/^[a-z0-9._-]{3,40}$/.test(u)) { err.textContent = "Nhập tên đăng nhập (chữ không dấu, số) hoặc số điện thoại."; f.u.focus(); return; }
+    if (!pw) { err.textContent = "Nhập mật khẩu."; f.pw.focus(); return; }
+    if (!CFG.api) { err.textContent = "Bản chạy thử này chưa nối máy chủ tài khoản."; return; }
+    btn.disabled = true; btn.textContent = "Đang kiểm tra…";
+    try {
+      const ph = await hashPw(u, pw);
+      const res = await fetch(CFG.api, { method: "POST", body: JSON.stringify({ t: "login", u, ph, tph: ph, dev: S.deviceId() }) });
+      const j = await res.json();
+      if (j && j.ok && j.s) { afterAuth(j.s, "Đăng nhập thành công. Chúc bạn học tốt!"); return; }
+      err.textContent = (j && j.error) || "Không đăng nhập được.";
+    } catch (e) { err.textContent = "Không kết nối được máy chủ. Kiểm tra mạng rồi thử lại."; }
+    btn.disabled = false; btn.textContent = "Đăng nhập và học tiếp";
+  }
+  async function logout() {
+    if (!twice("logout", "Bấm \"Đăng xuất\" lần nữa để đăng xuất khỏi máy này.")) return;
+    const s = S.session();
+    S.logout();
+    if (!$("scrLearn").hidden) quitLearn();
+    show("scrHome"); renderHome(); toast("Đã đăng xuất.");
+    if (s && CFG.api) try { await fetch(CFG.api, { method: "POST", body: JSON.stringify({ t: "logout", u: s.u, tok: s.tok, dev: S.deviceId() }) }); } catch (e) {}
   }
 
   /* ---------- xuất / nhập / xoá tiến độ ---------- */
