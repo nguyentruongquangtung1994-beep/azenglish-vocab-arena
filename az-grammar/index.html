@@ -349,6 +349,68 @@ body.focus main{padding-bottom:120px}
 .mbar .track2 i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-2));border-radius:99px;transition:width .35s cubic-bezier(.2,.7,.2,1)}
 .panel{box-shadow:0 1px 0 var(--line),0 18px 40px -24px rgba(15,27,45,.25)}
 .panel.enter{animation:rise .32s cubic-bezier(.2,.7,.2,1) backwards}
+/* Bài học: thẻ quy tắc theo trạm, công thức tô màu, ví dụ/lỗi bấm để mở (01/11/2026) */
+.tlead{font-size:14.5px;margin:-4px 0 4px}
+.theory-cards{display:grid;gap:14px}
+.tcard{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;padding:18px 18px 18px 14px;border:1px solid var(--line);border-radius:var(--r-card);background:var(--bg)}
+.tcard:not(:last-child)::after{content:"";position:absolute;left:32px;top:58px;bottom:-15px;width:2px;background:repeating-linear-gradient(var(--line-2) 0 6px,transparent 6px 11px)}
+.tnum{width:38px;height:38px;border-radius:50%;background:var(--navy);color:var(--gold-2);display:grid;place-items:center;font:700 17px var(--serif);box-shadow:0 0 0 4px var(--gold-soft)}
+.tin{display:grid;gap:9px;min-width:0}
+.tin h3{font-size:18px}
+.tkind{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.tcard.k-note{background:var(--warn-soft);border-color:#EED9AE}
+.tcard.k-note .tkind{color:var(--warn)}
+.tcard.k-formula,.tcard.k-forms{border-color:var(--gold-2);background:linear-gradient(180deg,var(--gold-soft),var(--bg) 70%)}
+.tcard.k-examples .tnum{background:var(--ok)}
+.formula.fm{white-space:normal;font-family:var(--sans);display:grid;gap:8px;padding:14px}
+.fm .fl{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.ft{padding:4px 10px;border-radius:8px;font-weight:600;font-size:14.5px;line-height:1.35}
+.fs{background:rgba(110,168,255,.16);color:#C4DDFF;border:1px solid rgba(110,168,255,.42)}
+.fv{background:rgba(227,194,122,.17);color:#F5DC9C;border:1px solid rgba(227,194,122,.5)}
+.fo{background:rgba(255,255,255,.06);color:#F4E6C2;border:1px solid rgba(255,255,255,.16)}
+.fp{color:#7D8799;font-weight:700}
+.fsg{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-weight:800;font-size:14px;color:#fff;flex:none}
+.fsg.sp{background:var(--ok)}.fsg.sm{background:var(--red)}.fsg.sq{background:var(--gold)}
+.fe{color:#C9CFDA;font-style:italic;font-size:14px}
+.fx{color:#C9CFDA;font-size:14px}
+.tcard.azin .ft,.tcard.azin .fsg{animation:fpop .38s cubic-bezier(.2,.8,.3,1.3) backwards}
+.tcard.azin .fl .ft:nth-of-type(2){animation-delay:.06s}.tcard.azin .fl .ft:nth-of-type(3){animation-delay:.12s}.tcard.azin .fl .ft:nth-of-type(4){animation-delay:.18s}.tcard.azin .fl .ft:nth-of-type(n+5){animation-delay:.24s}
+@keyframes fpop{from{transform:translateY(6px) scale(.85);opacity:0}}
+.flip,.mistc{font:inherit;color:inherit;text-align:left;background:var(--bg);cursor:pointer;width:100%}
+.flip{display:grid;gap:4px;border:1px solid var(--line);transition:border-color .2s,box-shadow .2s}
+.flip:hover,.mistc:hover{border-color:var(--gold-2);box-shadow:0 6px 18px -12px rgba(15,27,45,.35)}
+.flip:not(.open) .vi,.mistc:not(.open) .mr,.mistc:not(.open) .why{display:none}
+.flip.open .vi,.mistc.open .mr,.mistc.open .why{animation:slin .35s cubic-bezier(.2,.7,.2,1) backwards}
+.peek{font-size:13px;font-weight:600;color:var(--gold)}
+.open>.peek{display:none}
+@keyframes slin{from{transform:translateX(18px);opacity:0}}
+.mlist{display:grid;gap:10px}
+.mistc{display:grid;gap:8px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-in)}
+.mistc b{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-right:8px;vertical-align:2px}
+.mistc .mw{font-weight:600;font-size:16px}
+.mistc .mw b{background:var(--red-soft);color:var(--red-d)}
+.mistc.open .mw{color:var(--ink-3);text-decoration:line-through;text-decoration-color:rgba(176,19,34,.55)}
+.mistc .mr{font-weight:600;font-size:16px;color:var(--ok)}
+.mistc .mr b{background:var(--ok-soft);color:var(--ok)}
+.mistc .why{color:var(--ink-2);font-size:14px}
+.route{list-style:none;margin:6px 0 2px;padding:0;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.route li{position:relative;flex:1 0 92px;display:grid;justify-items:center;text-align:center;gap:3px;padding:0 4px}
+.route li:not(:last-child)::after{content:"";position:absolute;top:15px;left:calc(50% + 18px);right:calc(-50% + 18px);height:2px;background:var(--line-2)}
+.route .rd{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--gold-soft);border:2px solid var(--gold-2);color:var(--navy);font-weight:700;font-size:13px}
+.route li:first-child .rd{background:var(--navy);color:var(--gold-2);border-color:var(--navy)}
+.route b{font-size:13px;line-height:1.25}
+.route small{font-size:12px;color:var(--ink-3)}
+@media (max-width:560px){
+.tcard{grid-template-columns:1fr;padding:14px;gap:8px}
+.tcard:not(:last-child)::after{display:none}
+.tnum{position:absolute;top:12px;right:12px;width:28px;height:28px;font-size:14px;box-shadow:none}
+.tin h3{padding-right:34px}
+.formula.fm{padding:12px 10px;gap:7px}
+.fm .fl{gap:4px}
+.ft{padding:3px 7px;font-size:13.5px}
+.fp{font-size:12px}
+.route li{flex-basis:78px}
+}
 @keyframes rise{from{transform:translateY(8px);opacity:.4}to{transform:none;opacity:1}}
 .opt .k{transition:background .15s,color .15s}
 .opt[aria-pressed="true"] .k{background:var(--navy);color:#fff}
@@ -801,6 +863,27 @@ body.focus main{padding-bottom:120px}
   function mark(en, hl) { var s = esc(en); (hl || []).forEach(function (x) { var e = esc(x); s = s.split(e).join("<mark>" + e + "</mark>"); }); return s; }
   function curTrack() { return (st.user && st.user.track && TRACK[st.user.track] && st.user.track !== "THPT") ? st.user.track : (st.track || "FOUND"); }
   function persist() { E.save(); }
+  var KIND_VI = { text: "Quy tắc", note: "Lưu ý", formula: "Công thức", table: "Bảng tóm tắt", usage: "Cách dùng", signal_words: "Dấu hiệu nhận biết", forms: "Công thức", examples: "Ví dụ" };
+  /* Công thức → chip màu: chủ ngữ (xanh) · động từ/trợ động từ (vàng) · phần còn lại (kem). (+)(−)(?) thành nhãn đầu dòng, "→ ví dụ" in nghiêng. */
+  var VERB = /^(V\b|V\d|V-|to V|be\b|am\b|is\b|are\b|was\b|were\b|been\b|being\b|have\b|has\b|had\b|haven't|hasn't|hadn't|will\b|won't|would\b|do\b|does\b|did\b|don't|doesn't|didn't|can\b|could\b|may\b|might\b|must\b|should\b|shall\b|get\b|used to|Am\b|Is\b|Are\b|Was\b|Were\b|Have\b|Has\b|Had\b|Do\b|Does\b|Did\b|Will\b|Can\b)/;
+  function tokCls(t) { t = t.trim(); return /^S\b|^S\s|chủ ngữ/.test(t) && !/^So\b|^Since\b|^Should\b/.test(t) ? "fs" : VERB.test(t) ? "fv" : "fo"; }
+  function fseg(seg) {
+    var sign = "", m = seg.match(/^\(([+−?-])\)\s*/);
+    if (m) { sign = '<span class="fsg s' + ({ "+": "p", "−": "m", "-": "m", "?": "q" }[m[1]]) + '">' + (m[1] === "-" ? "−" : m[1]) + '</span>'; seg = seg.slice(m[0].length); }
+    if (seg.indexOf(" + ") < 0 && !sign) return '<span class="fx">' + esc(seg) + '</span>';
+    return sign + seg.split(" + ").map(function (t) { return '<span class="ft ' + tokCls(t) + '">' + esc(t.trim()) + '</span>'; }).join('<span class="fp">+</span>');
+  }
+  function fmla(src) {
+    return '<div class="formula fm">' + String(src).split("\n").map(function (line) {
+      var ex = "", k = line.indexOf("→"); if (k >= 0) { ex = '<span class="fe">→ ' + esc(line.slice(k + 1).trim()) + '</span>'; line = line.slice(0, k); }
+      var rows = [], cur = [];
+      line.split(/\s{3,}|\s+·\s+/).filter(function (x) { return x.trim(); }).forEach(function (sg) { if (/^\([+−?-]\)/.test(sg.trim()) && cur.length) { rows.push(cur); cur = []; } cur.push(fseg(sg.trim())); });
+      if (cur.length) rows.push(cur);
+      if (!rows.length) rows.push([]);
+      rows[rows.length - 1].push(ex);
+      return rows.map(function (r) { return '<div class="fl">' + r.join(" ") + '</div>'; }).join("");
+    }).join("") + '</div>';
+  }
   function lvLabel(l) { return { new: "Chưa học", learning: "Đang học", fair: "Khá", mastered: "Vững" }[l]; }
 
   /* ---------- trạng thái lộ trình ---------- */
@@ -1094,39 +1177,52 @@ body.focus main{padding-bottom:120px}
       var L = plan.lesson, s = SKILL[opt.skill];
       box.appendChild(h('<div class="panel"><span class="stage">Mục tiêu hôm nay</span><p style="font-size:18px;font-weight:600">' + esc(L.objective_vi) + '</p>' +
         '<div class="chips"><span class="chip gold">' + L.est_minutes + ' phút</span><span class="chip">' + s.cefr_min + '–' + s.cefr_max + '</span><span class="chip">' + plan.items.filter(function (x) { return x.kind === "q" && x.counted; }).length + ' câu tính điểm</span><span class="chip">Đạt ' + plan.pass + '% mở ngày sau</span></div>' +
+        lessonRoute() +
         (s.prerequisites.length ? '<p class="muted">Nên học trước: ' + s.prerequisites.map(function (p) { return esc(SKILL[p].title_vi); }).join(", ") + '</p>' : '') +
         (L.review.status !== "approved" ? '<p class="note">Bài này là <b>bản nháp</b> do Claude soạn, đang chờ giáo viên AZ duyệt. Nếu thấy câu nào chưa ổn, bấm "Báo lỗi câu này" ở cuối câu hỏi.</p>' : '') +
         '<div class="acts main"><span></span><button class="btn" type="button">Bắt đầu</button></div></div>'));
       box.querySelector(".btn").onclick = next; box.firstChild.classList.add("enter");
     }
+    function lessonRoute() {   // các chặng của bài: Khởi động → Quy tắc → Luyện có gợi ý → … (gộp các mục liền nhau cùng tên)
+      var g = [];
+      plan.items.forEach(function (it) { if (it.kind === "intro") return; var lb = it.kind === "q" ? it.stage : { theory: "Quy tắc", mistakes: "Lỗi hay gặp" }[it.kind];
+        if (g.length && g[g.length - 1].lb === lb) g[g.length - 1].n++; else g.push({ lb: lb, n: 1, q: it.kind === "q" }); });
+      return '<ol class="route" aria-label="Các chặng của bài học">' + g.map(function (x, i) { return '<li><span class="rd">' + (i + 1) + '</span><b>' + esc(x.lb) + '</b><small>' + (x.q ? x.n + " câu" : "đọc") + '</small></li>'; }).join("") + '</ol>';
+    }
     function theory() {
-      var L = plan.lesson, p = h('<div class="panel theory"><span class="stage">Quy tắc</span></div>');
+      var L = plan.lesson, n = 0, p = h('<div class="panel theory"><span class="stage">Quy tắc</span><p class="muted tlead">Đọc từng thẻ theo thứ tự. Ví dụ cuối bài: đoán trước, bấm để xem phân tích.</p><div class="theory-cards"></div></div>'), cards = p.querySelector(".theory-cards");
+      function card(kind, title, inner) { n++; cards.appendChild(h('<section class="tcard k-' + kind + '"><span class="tnum" aria-hidden="true">' + n + '</span><div class="tin"><span class="tkind">' + KIND_VI[kind] + '</span>' + (title ? '<h3>' + esc(title) + '</h3>' : '') + inner + '</div></section>')); }
       L.explanation.forEach(function (b) {
-        var el = h('<div class="blk"></div>');
-        if (b.title_vi) el.appendChild(h('<h3>' + esc(b.title_vi) + '</h3>'));
-        if (b.kind === "text" || b.kind === "note") el.appendChild(h('<p class="' + (b.kind === "note" ? "note" : "") + '">' + esc(b.text_vi) + '</p>'));
-        if (b.kind === "formula") el.appendChild(h('<div class="formula">' + esc(b.formula) + '</div>'));
-        if (b.list) el.appendChild(h('<ul class="tips">' + b.list.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>'));
-        if (b.kind === "table") el.appendChild(h('<div class="tbl"><table><thead><tr>' + b.head.map(function (x) { return '<th scope="col">' + esc(x) + '</th>'; }).join("") + '</tr></thead><tbody>' + b.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join("") + '</tr>'; }).join("") + '</tbody></table></div>'));
-        if (b.kind === "usage") { el.appendChild(h('<p style="font-weight:600">' + esc(b.label_vi) + '</p>')); el.appendChild(h('<div class="ex-list">' + b.examples.map(function (x) { return '<div class="exm"><span class="en">' + mark(x.en, x.highlight) + '</span>' + (x.vi ? '<span class="vi">' + esc(x.vi) + '</span>' : '') + '</div>'; }).join("") + '</div>')); }
-        if (b.kind === "signal_words") el.appendChild(h('<div class="chips">' + b.words.map(function (w) { return '<span class="chip gold">' + esc(w) + '</span>'; }).join("") + '</div>'));
-        p.appendChild(el);
+        var inner = "";
+        if (b.kind === "text" || b.kind === "note") inner += '<p>' + esc(b.text_vi) + '</p>';
+        if (b.kind === "formula") inner += fmla(b.formula);
+        if (b.list) inner += '<ul class="tips">' + b.list.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>';
+        if (b.kind === "table") inner += '<div class="tbl"><table><thead><tr>' + b.head.map(function (x) { return '<th scope="col">' + esc(x) + '</th>'; }).join("") + '</tr></thead><tbody>' + b.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join("") + '</tr>'; }).join("") + '</tbody></table></div>';
+        if (b.kind === "usage") inner += '<p style="font-weight:600">' + esc(b.label_vi) + '</p><div class="ex-list">' + b.examples.map(function (x) { return '<div class="exm"><span class="en">' + mark(x.en, x.highlight) + '</span>' + (x.vi ? '<span class="vi">' + esc(x.vi) + '</span>' : '') + '</div>'; }).join("") + '</div>';
+        if (b.kind === "signal_words") inner += '<div class="chips">' + b.words.map(function (w) { return '<span class="chip gold">' + esc(w) + '</span>'; }).join("") + '</div>';
+        card(b.kind, b.title_vi, inner);
       });
-      if (L.forms) p.appendChild(h('<div class="blk"><h3>Ba dạng câu</h3><div class="formula">' + ["affirmative", "negative", "question"].filter(function (k) { return L.forms[k]; }).map(function (k) { return { affirmative: "(+)  ", negative: "(−)  ", question: "(?)  " }[k] + esc(L.forms[k]); }).join("\n") + '</div></div>'));
-      p.appendChild(h('<div class="blk"><h3>Ví dụ phân tích</h3><div class="ex-list">' + L.worked_examples.map(function (x) { return '<div class="exm"><span class="en">' + mark(x.en, x.highlight) + '</span><span class="vi">' + esc(x.analysis_vi) + '</span></div>'; }).join("") + '</div></div>'));
+      if (L.forms) card("forms", "Ba dạng câu", fmla(["affirmative", "negative", "question"].filter(function (k) { return L.forms[k]; }).map(function (k) { return { affirmative: "(+) ", negative: "(−) ", question: "(?) " }[k] + L.forms[k]; }).join("\n")));
+      card("examples", "Ví dụ phân tích", '<div class="ex-list">' + L.worked_examples.map(function (x) { return '<button type="button" class="exm flip" aria-expanded="false"><span class="en">' + mark(x.en, x.highlight) + '</span><span class="vi">' + esc(x.analysis_vi) + '</span><span class="peek">Vì sao dùng như vậy? Bấm để xem</span></button>'; }).join("") + '</div>');
+      cards.querySelectorAll(".flip").forEach(function (b) { b.onclick = function () { var o = b.classList.toggle("open"); b.setAttribute("aria-expanded", o); }; });
       p.appendChild(h('<div class="acts main"><span class="muted">Tiếp theo: luyện có gợi ý</span><button class="btn" type="button">Luyện ngay</button></div>'));
       box.appendChild(p); p.classList.add("enter"); p.querySelector(".acts .btn").onclick = next;
     }
     function mistakes() {
-      var L = plan.lesson, p = h('<div class="panel"><span class="stage">Lỗi người Việt hay mắc</span></div>');
-      L.common_mistakes.forEach(function (m) { p.appendChild(h('<div class="mist"><div class="w">' + esc(m.wrong) + '</div><div class="r">' + esc(m.right) + '</div><p>' + esc(m.why_vi) + '</p></div>')); });
+      var L = plan.lesson, p = h('<div class="panel"><span class="stage">Lỗi người Việt hay mắc</span><p class="muted tlead">Mỗi câu dưới đây có một lỗi. Tự tìm lỗi trước, rồi bấm để xem câu đúng.</p><div class="list mlist"></div></div>'), ml = p.querySelector(".mlist");
+      L.common_mistakes.forEach(function (m, i) {
+        var c = h('<button type="button" class="mistc" aria-expanded="false"><span class="mw"><b>Sai</b>' + esc(m.wrong) + '</span><span class="mr"><b>Đúng</b>' + esc(m.right) + '</span><span class="why">' + esc(m.why_vi) + '</span><span class="peek">Lỗi ở đâu? Nghĩ 3 giây rồi bấm</span></button>');
+        c.onclick = function () { c.classList.add("open"); c.setAttribute("aria-expanded", "true"); }; ml.appendChild(c);
+      });
       p.appendChild(h('<div class="blk"><h3>Vì sao người Việt hay sai</h3>' + L.vn_difficulties_vi.map(function (x) { return '<p class="muted" style="font-size:14.5px">' + esc(x) + '</p>'; }).join("") + '</div>'));
-      p.appendChild(h('<div class="acts main"><span></span><button class="btn" type="button">Sang câu viết</button></div>'));
-      box.appendChild(p); p.classList.add("enter"); p.querySelector(".acts .btn").onclick = next;
+      p.appendChild(h('<div class="acts main"><button class="link" type="button" id="all">Hiện tất cả</button><button class="btn" type="button" id="nx">Sang câu viết</button></div>'));
+      box.appendChild(p); p.classList.add("enter");
+      p.querySelector("#all").onclick = function () { ml.querySelectorAll(".mistc").forEach(function (c) { c.click(); }); };
+      p.querySelector("#nx").onclick = next;
     }
     function question(it) {
       var q = it.q, given = null, done = false;
-      var p = h('<div class="panel"><span class="stage">' + esc(it.stage) + ' · ' + ({ mcq: "Trắc nghiệm", gap_fill: "Điền từ", error_identification: "Tìm lỗi sai", error_correction: "Sửa lỗi", ordering: "Sắp xếp câu", transformation: "Viết lại câu", sentence_writing: "Tự viết" })[q.type] + '</span><p class="qi">' + esc(q.instruction_vi) + '</p><div id="qbody"></div><div id="fb"></div><div class="acts"><button class="link" type="button" id="rep">Báo lỗi câu này</button><span class="kbd" id="kb"></span></div><div class="acts main"><span></span><button class="btn" type="button" id="chk" disabled>Kiểm tra</button></div></div>');
+      var p = h('<div class="panel q"><span class="stage">' + esc(it.stage) + ' · ' + ({ mcq: "Trắc nghiệm", gap_fill: "Điền từ", error_identification: "Tìm lỗi sai", error_correction: "Sửa lỗi", ordering: "Sắp xếp câu", transformation: "Viết lại câu", sentence_writing: "Tự viết" })[q.type] + '</span><p class="qi">' + esc(q.instruction_vi) + '</p><div id="qbody"></div><div id="fb"></div><div class="acts"><button class="link" type="button" id="rep">Báo lỗi câu này</button><span class="kbd" id="kb"></span></div><div class="acts main"><span></span><button class="btn" type="button" id="chk" disabled>Kiểm tra</button></div></div>');
       box.appendChild(p); p.classList.add("enter");
       var qb = p.querySelector("#qbody"), chk = p.querySelector("#chk");
       function ready(v) { chk.disabled = !v; }
@@ -1440,6 +1536,37 @@ body.focus main{padding-bottom:120px}
   try { history.scrollRestoration = "manual"; } catch (e) {}
   var start = (location.hash || "").replace("#", "");
   go(["home", "lotrinh", "thuvien", "tiendo", "kiemtra"].indexOf(start) >= 0 ? start : "home");
+})();
+</script>
+<script>window.AZR={b:".sec-h,.week,.unit,.card,.blk,.tcard,.mistc,.res2",s:".grid,.list,.ex-list,.units,.route,.theory-cards",x:".mbar,.tk-bg,.sheet-bg,.jmap,.jhud,.hero,.panel.q,.opts"};</script>
+<script>/* AZIELTS · hiệu ứng hiện dần khi kéo trang (dùng chung mọi trang, quyết định 26/10/2026).
+   Khối (AZR.b) trượt lên khi tới nơi; nhóm nhiều ô (AZR.s) cho các ô con hiện LẦN LƯỢT. Mỗi khối chạy 1 lần.
+   Bỏ qua: máy bật giảm chuyển động, phần nằm trong AZR.x, và khối chứa ô gõ bài (textarea) — màn làm bài không có hiệu ứng.
+   Cấu hình trước khi nạp: window.AZR = { b: "selector khối", s: "selector nhóm ô", x: "selector vùng loại trừ" }. Nội dung vẽ sau (innerHTML) tự được gắn. */
+(function () {
+  var C = window.AZR || {}, B = C.b || "", S = C.s || "", X = C.x || "";
+  if (!("IntersectionObserver" in window) || !window.matchMedia || matchMedia("(prefers-reduced-motion: reduce)").matches || (!B && !S)) return;
+  var st = document.createElement("style");
+  st.textContent = ".azr{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)!important}.azr.azin{opacity:1;transform:none}";
+  document.head.appendChild(st);
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (!e.isIntersecting) return; var el = e.target; io.unobserve(el); el.classList.add("azin");
+      setTimeout(function () { el.classList.remove("azr", "azin"); el.style.transitionDelay = ""; }, 700 + (parseInt(el.style.transitionDelay) || 0)); });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  function skip(el) { return el.dataset.azr || (X && el.closest(X)) || el.querySelector("textarea"); }
+  function mark(el, delay) { el.dataset.azr = "1"; el.classList.add("azr"); if (delay) el.style.transitionDelay = delay + "ms"; io.observe(el); }
+  function tag(root) {
+    if (!root || !root.querySelectorAll) return;
+    if (B) root.querySelectorAll(B).forEach(function (el) { if (!skip(el)) mark(el, 0); });
+    if (S) root.querySelectorAll(S).forEach(function (p) { var i = 0; Array.prototype.forEach.call(p.children, function (c) { if (!skip(c)) mark(c, Math.min(i++, 8) * 70); }); });
+  }
+  function start() {
+    tag(document);
+    var q = new Set(), on = false;   // gộp các lần trang vẽ lại vào 1 nhịp khung hình
+    new MutationObserver(function (ms) { ms.forEach(function (m) { if (m.addedNodes.length) q.add(m.target); });
+      if (!on && q.size) { on = true; requestAnimationFrame(function () { on = false; var t = Array.from(q); q.clear(); t.forEach(function (r) { if (r.isConnected) tag(r); }); }); } }).observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
 </script>
 
