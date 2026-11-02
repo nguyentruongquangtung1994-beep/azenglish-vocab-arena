@@ -418,6 +418,85 @@ body.focus main{padding-bottom:120px}
 .fp{font-size:12px}
 .route li{flex-basis:78px}
 }
+/* ===== Trang chủ gọn + bảng trạm theo chặng (02/11/2026) ===== */
+.dash{background:radial-gradient(1200px 400px at 85% -10%,rgba(215,25,45,.22),transparent 60%),linear-gradient(180deg,var(--night),var(--navy));color:#fff;padding:36px 0 40px}
+.dash-in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:32px;align-items:center}
+.dash-l{display:grid;gap:16px;align-content:start}
+.dash .eyebrow{color:var(--gold-2)}
+.dash h1{font-size:clamp(30px,4vw,46px);line-height:1.08;color:#fff;margin:0}
+.dash h1 em{color:var(--gold-2);font-style:italic}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:5px;max-width:460px}
+.seg button{font:inherit;color:#C9D2E0;background:transparent;border:0;border-radius:10px;padding:10px 12px;text-align:left;cursor:pointer;display:grid;gap:2px;transition:background .2s,color .2s}
+.seg button b{font-size:16px}.seg button small{font-size:12.5px;opacity:.8}
+.seg button[aria-selected="true"]{background:#fff;color:var(--navy);box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+.seg button[aria-selected="true"] small{color:var(--ink-2);opacity:1}
+.dash-more{font-size:13.5px;color:#AEB9CB}.dash-more .link{color:var(--gold-2)}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:4px}
+.stats div{display:grid;gap:2px}.stats b{font:700 30px/1 var(--serif);color:#fff}.stats b small{font-size:16px;color:#AEB9CB;margin-left:1px}
+.stats span{font-size:12.5px;color:#AEB9CB}
+.next{background:#fff;color:var(--ink);border-radius:var(--r-xl);padding:24px;display:grid;gap:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.next::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.next .lbl{color:var(--gold)}
+.next h2{font-size:clamp(22px,2.6vw,28px);margin:0;line-height:1.2}
+.next .muted{margin:-4px 0 0;font-size:14px}
+.next .obj{margin:0;font-size:15px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.next .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}.next .acts .btn{flex:0 0 auto}
+.next .pl{justify-self:start;font-size:13.5px}
+.route-sec{padding:28px 0 56px;background:var(--bg-2)}
+.gtabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 10px;margin:0 -2px}
+.gtabs::-webkit-scrollbar{display:none}
+.gtabs button{flex:1 0 128px;font:inherit;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:7px;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s;color:var(--ink)}
+.gtabs button:hover{border-color:var(--gold-2);transform:translateY(-1px)}
+.gtabs button b{font-size:15.5px}
+.gtabs button small{font-size:12px;color:var(--ink-3)}
+.gtabs button .bar{height:5px;background:var(--bg-3);border-radius:99px;overflow:hidden}.gtabs button .bar i{display:block;height:100%;background:var(--ok);border-radius:99px}
+.gtabs button[aria-selected="true"]{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 10px 24px -14px rgba(11,20,36,.8)}
+.gtabs button[aria-selected="true"] small{color:#C9D2E0}.gtabs button[aria-selected="true"] .bar{background:rgba(255,255,255,.15)}
+.gtabs button.here small{font-weight:700}
+.ghead{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
+.ghead h2{font-size:24px;margin:0}.ghead .muted{margin:2px 0 0;font-size:14px}
+.rt{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--r-xl);padding:34px 40px 22px;min-height:120px}
+.rt-road{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.rt-road path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.rt-road .r1{stroke:#2A3954;stroke-width:16}
+.rt-road .r2{stroke:var(--gold-2);stroke-width:2;stroke-dasharray:10 12;opacity:.7}
+.rt-road .r3{stroke:var(--gold);stroke-width:6;opacity:.95}
+.rt-grid{position:relative;display:grid;row-gap:60px;column-gap:10px}
+.rt-st{font:inherit;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;display:grid;justify-items:center;gap:10px;text-align:center}
+.rt-st .nd{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #CDD3DD;color:var(--ink-3);font-size:14px;position:relative;z-index:1;transition:transform .2s}
+.rt-st:hover .nd{transform:scale(1.1)}
+.rt-st .tx{display:grid;gap:3px;max-width:168px}
+.rt-st .tx small{font-size:11.5px;color:var(--ink-3);font-weight:600;letter-spacing:.02em}
+.rt-st .tx b{font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rt-st.done .nd{background:var(--ok);border-color:var(--ok);color:#fff}
+.rt-st.cur .nd{background:var(--red);border-color:#fff;color:#fff;box-shadow:0 0 0 4px var(--red),0 0 0 10px rgba(215,25,45,.18);animation:rtpulse 2s ease-in-out infinite}
+.rt-st.cur .tx b{color:var(--red-d)}
+.rt-st.review .nd{border-color:var(--gold);color:var(--gold);border-radius:12px;transform:rotate(45deg)}.rt-st.review .nd>*{transform:rotate(-45deg)}
+.rt-st.review.done .nd{background:var(--gold);border-color:var(--gold);color:#fff}
+.rt-st.checkpoint .nd{background:var(--night);border-color:var(--night);color:var(--gold-2)}
+.rt-st.locked .tx b{color:var(--ink-2)}.rt-st.soon{opacity:.55}
+.rt-st.ping .nd{animation:rtping .8s ease-out 2}
+@keyframes rtpulse{50%{box-shadow:0 0 0 4px var(--red),0 0 0 16px rgba(215,25,45,0)}}
+@keyframes rtping{50%{transform:scale(1.25)}}
+.rt-busw{position:absolute;width:78px;transform:translate(-50%,-100%);z-index:3;pointer-events:none;transition:left .6s,top .6s}
+.rt-busw svg{display:block;width:100%;height:auto;animation:rtbob 1.6s ease-in-out infinite;filter:drop-shadow(0 6px 8px rgba(11,20,36,.25))}
+.rt-busw.flip svg{transform:scaleX(-1)}
+.rt-busw.flip svg{animation-name:rtbobf}
+@keyframes rtbob{50%{translate:0 -2px}}@keyframes rtbobf{50%{translate:0 -2px}}
+.rtfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:13.5px;color:var(--ink-2)}
+.rtfoot .lg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rtfoot .lg i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-left:8px}
+.rtfoot .lg i:first-child{margin-left:0}
+.rtfoot .lg .d{background:var(--ok)}.rtfoot .lg .c{background:var(--red)}.rtfoot .lg .r{background:var(--gold);border-radius:2px;transform:rotate(45deg)}.rtfoot .lg .k{background:var(--night)}
+/* một cột (điện thoại) */
+.rt[data-cols="1"]{padding:20px 14px 20px 14px}
+.rt[data-cols="1"] .rt-grid{row-gap:18px}
+.rt[data-cols="1"] .rt-st{grid-template-columns:40px minmax(0,1fr);justify-items:start;text-align:left;gap:14px;align-items:center}
+.rt[data-cols="1"] .rt-st .tx{max-width:none;padding-right:96px}
+.rt[data-cols="1"] .rt-st .tx b{-webkit-line-clamp:2}
+.rt-busw.v{width:78px;transform:translate(0,-60%)}
+@media (max-width:860px){.dash-in{grid-template-columns:1fr;gap:22px}.dash{padding:26px 0 30px}}
+@media (max-width:560px){.stats{gap:20px}.stats b{font-size:26px}.next{padding:20px}.gtabs button{flex-basis:112px;padding:10px 12px}.seg button small{display:none}}
 @keyframes rise{from{transform:translateY(8px);opacity:.4}to{transform:none;opacity:1}}
 .opt .k{transition:background .15s,color .15s}
 .opt[aria-pressed="true"] .k{background:var(--navy);color:#fff}
@@ -556,7 +635,6 @@ body.focus main{padding-bottom:120px}
       <button type="button" data-go="tiendo">Tiến độ</button>
     </nav>
   </div>
-  <div class="preview" id="previewBar"><div class="wrap"><b>Bản xem thử nội bộ.</b><span id="previewText" class="long"></span><span class="short">Nội dung nháp, chưa duyệt.</span></div></div>
 </header>
 <div id="app"></div>
 <footer class="foot"><div class="wrap"><span>AZ Grammar · AZEnglish · 100 Hà Thanh, Nha Trang · 0971 882 096</span><span id="buildInfo"></span></div></footer>
@@ -703,113 +781,111 @@ body.focus main{padding-bottom:120px}
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.AZG = api;
 })(typeof window !== "undefined" ? window : globalThis);
 </script>
-<script>/* AZ Grammar · bản đồ hành trình "Chuyến xe Ngữ pháp".
-   Xe buýt AZ chạy theo con đường khi cuộn (GSAP ScrollTrigger + MotionPath), thả tay thì trượt và dừng đúng trạm.
-   Không có GSAP hoặc người dùng bật giảm chuyển động → bản đồ tĩnh, xe đứng ở trạm hiện tại.
-   AZJourney.mount(el, { stops, cur, onPick, onNear }) → { moveTo(n), destroy() }
-     stops[i] = { step, act: learn|review|checkpoint, title, meta, status: done|cur|lock|soon } */
+<script>/* AZ Grammar · bảng trạm của MỘT chặng (thay bản đồ cuộn dài journey.js, 02/11/2026).
+   Trạm xếp theo hàng kiểu rắn lượn (hàng lẻ trái → phải, hàng chẵn phải → trái), một con đường nối các trạm,
+   đoạn đã đi tô vàng, xe buýt 3D đỗ ở trạm hiện tại. Màn hẹp: một cột dọc.
+   AZRoute.mount(el, { stops: [{ n, act, title, unit, status }], cur: chỉ số trạm hiện tại trong stops (-1 nếu không thuộc chặng), onPick(k) })
+   → { arrive(from, to), destroy() } */
 (function (root) {
   "use strict";
-  var WEEKS = ["Làm quen", "Giữ nhịp", "Tăng tốc", "Vững tay", "Về đích"];
-  var BUS = '<svg viewBox="0 0 64 32" class="jbus" aria-hidden="true"><rect x="2" y="3" width="58" height="26" rx="7" fill="#D7192D" stroke="#8E0E1C" stroke-width="1.5"/>' +
-    '<rect x="47" y="6" width="10" height="20" rx="3" fill="#0B1424" opacity=".85"/><rect x="10" y="7" width="33" height="18" rx="3" fill="#F5D8DC" opacity=".25"/>' +
-    '<text x="26.5" y="20.5" text-anchor="middle" font-family="Be Vietnam Pro,Arial" font-weight="800" font-size="11" fill="#fff">AZ</text><circle cx="60" cy="8" r="1.8" fill="#FFE9A8"/><circle cx="60" cy="24" r="1.8" fill="#FFE9A8"/></svg>';
+  function motionOK() { return !!root.gsap && !(root.matchMedia && root.matchMedia("(prefers-reduced-motion: reduce)").matches); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function catmull(P) {
-    var d = "M" + P[0][0] + "," + P[0][1];
-    for (var i = 0; i < P.length - 1; i++) {
-      var p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || p2;
-      d += " C" + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + "," + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + " " + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + "," + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + " " + p2[0] + "," + p2[1];
-    }
-    return d;
+  /* Xe buýt 3D (phối cảnh xiên): mặt hông đỏ, mặt đầu đậm, nóc sáng, kính phản chiếu, bánh có vành. Đầu xe quay sang phải. */
+  var BUS = '<svg class="rt-bus3d" viewBox="0 0 132 92" aria-hidden="true">' +
+    '<ellipse class="sh" cx="64" cy="84" rx="52" ry="6" fill="#0B1424" opacity=".22"/>' +
+    '<polygon points="14,30 104,30 120,18 30,18" fill="#F25C69"/>' +                       // nóc
+    '<polygon points="34,20.5 98,20.5 108,23.5 44,27.5" fill="#FFD7DB" opacity=".55"/>' +   // dải sáng trên nóc
+    '<polygon points="104,30 120,18 120,58 104,72" fill="#9E0F1E"/>' +                      // mặt đầu
+    '<polygon points="107,33 117,25.5 117,42 107,50" fill="#BFE0FF"/>' +                    // kính lái
+    '<polygon points="107,33 112,29.3 112,46 107,50" fill="#fff" opacity=".35"/>' +
+    '<rect x="14" y="30" width="90" height="42" rx="4" fill="#D7192D"/>' +                 // mặt hông
+    '<rect x="14" y="58" width="90" height="5" fill="#B01322"/>' +
+    '<g fill="#CFE6FF"><rect x="20" y="35" width="15" height="13" rx="2.5"/><rect x="39" y="35" width="15" height="13" rx="2.5"/><rect x="58" y="35" width="15" height="13" rx="2.5"/><rect x="77" y="35" width="10" height="13" rx="2.5"/></g>' +
+    '<g fill="#fff" opacity=".45"><polygon points="20,35 27,35 22,48 20,48"/><polygon points="39,35 46,35 41,48 39,48"/><polygon points="58,35 65,35 60,48 58,48"/></g>' +
+    '<rect x="90" y="35" width="11" height="25" rx="2" fill="#0B1424" opacity=".82"/>' +    // cửa
+    '<text x="52" y="56.5" text-anchor="middle" font-family="Be Vietnam Pro,Arial" font-weight="800" font-size="7.5" fill="#fff" letter-spacing=".8">AZ GRAMMAR</text>' +
+    '<rect x="117" y="52" width="3.5" height="5" rx="1" fill="#FFE9A8"/>' +                   // đèn
+    '<g class="wh"><circle cx="34" cy="72" r="9" fill="#0B1424"/><circle cx="34" cy="72" r="3.6" fill="#8A93A3"/><path d="M34 65v14M27 72h14" stroke="#5B6474" stroke-width="1.4"/></g>' +
+    '<g class="wh"><circle cx="86" cy="72" r="9" fill="#0B1424"/><circle cx="86" cy="72" r="3.6" fill="#8A93A3"/><path d="M86 65v14M79 72h14" stroke="#5B6474" stroke-width="1.4"/></g>' +
+    '</svg>';
+  function icon(st, act, n) {
+    if (st === "done") return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    if (act === "checkpoint") return '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M6 3h2v18H6zM8 4h10l-2.5 4L18 12H8z"/></svg>';
+    if (act === "review") return '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"/></svg>';
+    return '<b>' + n + '</b>';
   }
-  function motionOK() { return !!(root.gsap && root.ScrollTrigger && root.MotionPathPlugin) && !(root.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
-
-  function mount(map, o) {
-    var G = motionOK(), st = null, tw = null, road, trail, fracs = [], labs = [], bus, lastK = -1, cur = o.cur, dead = false;
-    if (G) gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
-    function build() {
-      if (st) { st.kill(); st = null; } if (tw) { tw.kill(); tw = null; }
-      var n = o.stops.length, cw = map.clientWidth, narrow = cw < 700;
-      var W = narrow ? 400 : 1000, step = narrow ? 150 : 172, top = 110;
-      var pts = o.stops.map(function (_, i) { return narrow ? [92 + 34 * Math.sin(i * 0.95), top + i * step] : [500 + 210 * Math.sin(i * 0.9), top + i * step]; });
-      var H = top + (n - 1) * step + 120, dPath = catmull([[pts[0][0], 10]].concat(pts, [[pts[n - 1][0], H - 10]]));
-      map.style.height = (cw * H / W) + "px";
-      var sw = narrow ? 24 : 38;
-      map.innerHTML = '<svg class="jroad" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
-        '<path d="' + dPath + '" fill="none" stroke="#DCD6C9" stroke-width="' + (sw + 8) + '" stroke-linecap="round"/>' +
-        '<path class="r" d="' + dPath + '" fill="none" stroke="#24324A" stroke-width="' + sw + '" stroke-linecap="round"/>' +
-        '<path class="t" d="' + dPath + '" fill="none" stroke="#C9A04B" stroke-width="' + sw + '" stroke-linecap="round" opacity=".92"/>' +
-        '<path d="' + dPath + '" fill="none" stroke="#F4E6C2" stroke-width="2" stroke-dasharray="14 16" opacity=".75"/></svg>';
-      road = map.querySelector("path.r"); trail = map.querySelector("path.t");
-      var L = road.getTotalLength();
-      // đo đường 1 lần (mỗi 5 đơn vị) rồi tìm điểm gần trạm nhất; trước đây gọi getPointAtLength ~50.000 lần, máy yếu bị đứng
-      var samp = []; for (var l = 0; l <= L; l += 5) { var q = road.getPointAtLength(l); samp.push([l, q.x, q.y]); }
-      fracs = pts.map(function (p) { var best = 0, bd = 1e12; for (var j = 0; j < samp.length; j++) { var dx = samp[j][1] - p[0], dy = samp[j][2] - p[1], dd = dx * dx + dy * dy; if (dd < bd) { bd = dd; best = samp[j][0]; } } return best / L; });
-      trail.style.strokeDasharray = L + " " + L;
-      trail.style.strokeDashoffset = L * (1 - fracs[Math.max(0, Math.min(cur, n - 1))]);
-      labs = [];
-      o.stops.forEach(function (d, i) {
-        var x = pts[i][0] / W * 100, y = pts[i][1] / H * 100, side = narrow ? "r" : (pts[i][0] >= 500 ? "r" : "l");
-        var sg = o.stages ? o.stages.filter(function (z) { return z.from === i; })[0] : (n === 30 && i % 6 === 0 ? { small: "Chặng " + (i / 6 + 1), title: WEEKS[i / 6] } : null);
-        if (sg) map.insertAdjacentHTML("beforeend", '<div class="jsign' + (narrow ? " n" : "") + '" style="left:' + (narrow ? "calc(" + x + "% + 34px)" : x + "%") + ';top:calc(' + y + '% - ' + (narrow ? 76 : 34) + 'px)"><small>' + esc(sg.small) + '</small><b>' + esc(sg.title) + '</b></div>');
-        var b = document.createElement("button"); b.type = "button";
-        b.className = "jstn " + (d.act === "review" ? "review " : d.act === "checkpoint" ? "check " : "") + d.status;
-        b.style.left = x + "%"; b.style.top = y + "%"; b.setAttribute("aria-label", d.step + ": " + d.title);
-        b.innerHTML = "<b>" + (d.act === "checkpoint" ? "🏁" : d.status === "done" ? "✓" : esc(d.step.replace("Day ", ""))) + "</b>";
-        var lab = document.createElement("button"); lab.type = "button"; lab.className = "jlab " + side; lab.style.left = x + "%"; lab.style.top = y + "%";
-        var px = cw * pts[i][0] / W, room = side === "l" ? px - 56 : cw - px - (narrow ? 42 : 50); lab.style.width = Math.max(150, Math.min(300, room)) + "px";
-        var tag = d.status === "cur" ? '<span class="tag cur">Bạn đang ở đây</span>' : d.status === "done" ? '<span class="tag done">Đã qua</span>' : d.status === "soon" ? '<span class="tag soon">Đang soạn</span>' : "";
-        lab.innerHTML = '<span class="d">' + esc(d.step) + tag + '</span><span class="t">' + esc(d.title) + '</span><span class="m">' + esc(d.meta) + '</span>';
-        b.onclick = lab.onclick = function () { o.onPick(i); };
-        map.appendChild(b); map.appendChild(lab); labs.push(lab);
-      });
-      map.insertAdjacentHTML("beforeend", BUS); bus = map.querySelector(".jbus"); bus.style.width = (narrow ? 46 : 64) + "px";
-      var mp = function (a, b) { return { path: road, align: road, alignOrigin: [0.5, 0.5], autoRotate: true, start: a, end: b }; };
-      if (!G) { placeStatic(W, H); near(cur); return; }
-      tw = gsap.fromTo(bus, { motionPath: mp(0, 0) }, { motionPath: mp(0, 1), ease: "none", paused: true });
-      // pv[i] = tiến độ cuộn khi trạm i nằm giữa màn hình. Xe nội suy theo từng đoạn (pv → fracs) nên luôn đứng ĐÚNG trạm khi trạm ở giữa;
-      // dừng trạm dùng pv, không theo hướng cuộn (trước đây cuộn ngược lên bị dừng nhầm trạm phía trên).
-      var Hpx = map.offsetHeight, vh = innerHeight, rng = Hpx - 0.1 * vh, pv = pts.map(function (p) { return Math.max(0, Math.min(1, (p[1] / H * Hpx - 0.05 * vh) / rng)); });
-      function fracAt(p) { if (p <= pv[0]) return fracs[0] * p / (pv[0] || 1); for (var i = 1; i < pv.length; i++) if (p <= pv[i]) { var t = (p - pv[i - 1]) / ((pv[i] - pv[i - 1]) || 1); return fracs[i - 1] + t * (fracs[i] - fracs[i - 1]); } return fracs[n - 1] + (p - pv[n - 1]) / ((1 - pv[n - 1]) || 1) * (1 - fracs[n - 1]); }
-      tw.progress(fracAt(0));
-      st = ScrollTrigger.create({
-        trigger: map, start: "top 45%", end: "bottom 55%",
-        snap: { snapTo: pv, directional: false, duration: { min: 0.25, max: 0.8 }, delay: 0.1, ease: "power3.inOut" },
-        onUpdate: function (self) { var p = self.progress, k = 0, bd = 9; gsap.to(tw, { progress: fracAt(p), duration: 0.6, ease: "power2.out", overwrite: true });
-          pv.forEach(function (f, i) { var dd = Math.abs(f - p); if (dd < bd) { bd = dd; k = i; } }); near(k); }
-      });
-      near(0);
+  function mount(el, o) {
+    var stops = o.stops, cur = o.cur, ro = null, dead = false, last = 0;
+    el.classList.add("rt");
+    el.innerHTML = '<svg class="rt-road" aria-hidden="true"><path class="r1"/><path class="r2"/><path class="r3"/></svg><div class="rt-grid"></div><div class="rt-busw">' + BUS + '</div>';
+    var grid = el.querySelector(".rt-grid"), svg = el.querySelector(".rt-road"), busw = el.querySelector(".rt-busw");
+    var nodes = stops.map(function (s, k) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "rt-st " + s.status + (s.act !== "learn" ? " " + s.act : "");
+      b.setAttribute("aria-label", s.n + ": " + s.title + (s.status === "done" ? " (đã qua)" : s.status === "cur" ? " (trạm hiện tại)" : ""));
+      b.innerHTML = '<span class="nd">' + icon(s.status, s.act, s.n.replace("Day ", "")) + '</span><span class="tx"><small>' + esc(s.n) + (s.unit ? ' · ' + esc(s.unit) : '') + '</small><b>' + esc(s.title) + '</b></span>';
+      b.onclick = function () { o.onPick(k); };
+      return b;
+    });
+    function cols() { var w = el.clientWidth; return w >= 960 ? 5 : w >= 640 ? 3 : 1; }
+    function layout() {
+      if (dead) return;
+      var c = cols(); el.dataset.cols = c; grid.style.gridTemplateColumns = "repeat(" + c + ", minmax(0, 1fr))"; grid.innerHTML = "";
+      for (var r = 0; r * c < nodes.length; r++) {     // hàng chẵn đảo chiều để đường đi liền mạch
+        var row = nodes.slice(r * c, r * c + c), pad = c - row.length;
+        if (r % 2) { row = row.slice().reverse(); for (var p = 0; p < pad; p++) grid.appendChild(document.createElement("i")); }
+        row.forEach(function (n) { grid.appendChild(n); });
+      }
+      draw();
     }
-    function placeStatic(W, H) { var L = road.getTotalLength(), q = road.getPointAtLength(L * fracs[Math.max(0, cur)]);
-      bus.style.left = (q.x / W * 100) + "%"; bus.style.top = (q.y / H * 100) + "%"; bus.style.transform = "translate(-50%,-50%) rotate(90deg)"; }
-    function near(k) { if (k === lastK) return; lastK = k; labs.forEach(function (l, i) { l.classList.toggle("near", i === k); }); if (o.onNear) o.onNear(k); }
-    function scrollToStop(i, dur) {
-      var y = labs[i].getBoundingClientRect().top + (root.scrollY || 0) - innerHeight * 0.5;
-      if (!G) { root.scrollTo(0, y); return; }
-      var s0 = root.scrollY, obj = { v: 0 };
-      gsap.to(obj, { v: 1, duration: dur, ease: "power2.inOut", onUpdate: function () { root.scrollTo(0, s0 + (y - s0) * obj.v); } });
+    function center(k) { var a = el.getBoundingClientRect(), b = nodes[k].querySelector(".nd").getBoundingClientRect(); return { x: b.left - a.left + b.width / 2, y: b.top - a.top + b.height / 2 }; }
+    function pathTo(upto) {   // đường đi qua tâm các trạm 0..upto; đổi hàng thì vòng cung ra mép
+      var d = "", prev = null, w = el.clientWidth;
+      for (var k = 0; k <= upto; k++) {
+        var p = center(k);
+        if (!prev) d = "M" + p.x + " " + p.y;
+        else if (el.dataset.cols === "1" || Math.abs(p.y - prev.y) < 4) d += " L" + p.x + " " + p.y;
+        else { var right = prev.x > w / 2, ex = right ? w - 10 : 10;   // quay đầu sát mép khung để không đè chữ của trạm cuối hàng
+          d += " C" + ex + " " + prev.y + " " + ex + " " + p.y + " " + p.x + " " + p.y; }
+        prev = p;
+      }
+      return d;
     }
-    var rt; function onResize() { clearTimeout(rt); rt = setTimeout(function () { if (!dead) { lastK = -1; build(); } }, 200); }
-    root.addEventListener("resize", onResize);
-    build();
+    function parkAt(k, flip) {
+      var p = center(k), vertical = el.dataset.cols === "1";
+      busw.style.left = (vertical ? el.clientWidth - 92 : p.x + (flip ? 50 : -50)) + "px"; busw.style.top = (vertical ? p.y : p.y + 16) + "px";   // xe đỗ trên đường, ngay trước trạm theo chiều chạy
+      busw.classList.toggle("flip", !!flip); busw.classList.toggle("v", vertical);
+    }
+    function rowDir(k) { var c = +el.dataset.cols; return c > 1 && Math.floor(k / c) % 2 === 1; }   // hàng chạy phải → trái thì xe quay đầu
+    function draw() {
+      svg.setAttribute("width", el.clientWidth); svg.setAttribute("height", el.clientHeight);
+      var full = pathTo(stops.length - 1);
+      svg.querySelector(".r1").setAttribute("d", full); svg.querySelector(".r2").setAttribute("d", full);
+      var doneTo = cur >= 0 ? cur : stops.filter(function (s) { return s.status === "done"; }).length - 1;
+      svg.querySelector(".r3").setAttribute("d", doneTo > 0 ? pathTo(doneTo) : "");
+      if (cur >= 0) { busw.hidden = false; parkAt(cur, rowDir(cur)); } else busw.hidden = true;
+    }
+    layout();
+    if (root.ResizeObserver) { ro = new ResizeObserver(function () { var w = el.clientWidth; if (Math.abs(w - last) > 2) { last = w; layout(); } }); ro.observe(el); }
+    if (motionOK()) {   // trạm hiện ra lần lượt, xe chạy vào bến
+      gsap.from(nodes, { y: 14, opacity: 0, duration: .45, ease: "power2.out", stagger: .03, clearProps: "transform,opacity" });
+      if (cur >= 0) gsap.from(busw, { x: rowDir(cur) ? 160 : -160, opacity: 0, duration: 1, ease: "power3.out", delay: .2, clearProps: "transform,opacity" });
+    }
     return {
-      /* học xong: đưa người học tới trạm cũ, rồi kéo dài đường vàng + cuộn để xe chạy sang trạm mới */
       arrive: function (from, to) {
-        if (!labs[from] || !labs[to]) return;
-        scrollToStop(from, 0.01);
-        var L = road.getTotalLength();
-        trail.style.strokeDashoffset = L * (1 - fracs[from]);
-        setTimeout(function () {
-          if (G) gsap.to(trail, { strokeDashoffset: L * (1 - fracs[to]), duration: 1.5, ease: "power2.inOut" }); else trail.style.strokeDashoffset = L * (1 - fracs[to]);
-          scrollToStop(to, 1.5);
-        }, 450);
+        if (from < 0 || to < 0 || from === to || !motionOK()) { cur = to; draw(); return; }
+        cur = to; draw();
+        var a = center(from), b = center(to), vertical = el.dataset.cols === "1", dx = b.x - a.x, dy = b.y - a.y;
+        if (vertical) gsap.from(busw, { y: -dy, duration: 1.1, ease: "power2.inOut" });
+        else gsap.from(busw, { x: -dx, y: -dy, duration: 1.2, ease: "power2.inOut" });
+        gsap.from(svg.querySelector(".r3"), { opacity: .2, duration: 1.2 });
+        nodes[to].classList.add("ping"); setTimeout(function () { nodes[to].classList.remove("ping"); }, 1600);
       },
-      focus: function (i, dur) { if (labs[i]) scrollToStop(i, dur == null ? 1 : dur); },
-      destroy: function () { dead = true; if (st) st.kill(); if (tw) tw.kill(); root.removeEventListener("resize", onResize); }
+      focusCur: function () { if (cur >= 0) nodes[cur].scrollIntoView({ behavior: motionOK() ? "smooth" : "auto", block: "center" }); },
+      destroy: function () { dead = true; if (ro) ro.disconnect(); }
     };
   }
-  root.AZJourney = { mount: mount, motionOK: motionOK };
+  root.AZRoute = { mount: mount, motionOK: motionOK, BUS: BUS };
 })(window);
 </script>
 <script>/* AZ Grammar · giao diện. Dữ liệu đọc từ <script id="azg-data"> (do web/build_web.py ghép từ content/); KHÔNG viết câu hỏi ở đây. */
@@ -942,10 +1018,6 @@ body.focus main{padding-bottom:120px}
   document.addEventListener("click", function (e) { var b = e.target.closest("[data-go]"); if (b) { e.preventDefault(); go(b.dataset.go); } });
 
   /* ---------- Hành trình (trang chủ): hero xe buýt + bản đồ lộ trình ---------- */
-  var HERO_BUS = '<svg class="hb" viewBox="0 0 180 80" aria-hidden="true"><rect x="6" y="10" width="166" height="52" rx="12" fill="#D7192D"/><rect x="6" y="44" width="166" height="8" fill="#B01322"/>' +
-    '<rect x="18" y="18" width="26" height="20" rx="4" fill="#CFE0F5"/><rect x="50" y="18" width="26" height="20" rx="4" fill="#CFE0F5"/><rect x="82" y="18" width="26" height="20" rx="4" fill="#CFE0F5"/><rect x="114" y="18" width="20" height="34" rx="3" fill="#0B1424" opacity=".8"/><rect x="140" y="18" width="26" height="20" rx="4" fill="#CFE0F5"/>' +
-    '<text x="62" y="58" text-anchor="middle" font-family="Be Vietnam Pro,Arial" font-weight="800" font-size="10" fill="#fff" letter-spacing="1">AZ GRAMMAR</text>' +
-    '<circle cx="44" cy="64" r="11" fill="#0B1424"/><circle cx="44" cy="64" r="4.5" fill="#8A93A3"/><circle cx="140" cy="64" r="11" fill="#0B1424"/><circle cx="140" cy="64" r="4.5" fill="#8A93A3"/><rect x="168" y="22" width="5" height="10" rx="2" fill="#FFE9A8"/></svg>';
   var WEEKN = ["Làm quen", "Giữ nhịp", "Tăng tốc", "Vững tay", "Về đích"];
   /* chặng chứa trạm i: lộ trình có "stages" (THCS–THPT) thì theo chặng, còn lại chia tuần 6 trạm */
   function stageOf(tid, i) {
@@ -955,55 +1027,70 @@ body.focus main{padding-bottom:120px}
     var w = Math.floor(i / 6); return { label: "Chặng " + (w + 1) + " · " + WEEKN[w], sub: "Day " + (w * 6 + 1) + "–" + Math.min(w * 6 + 6, t.steps.length), idx: w, last: w === Math.floor((t.steps.length - 1) / 6), from: w * 6, end: Math.min(w * 6 + 6, t.steps.length) };
   }
   function stopMeta(s) { return s.activity === "learn" ? SKILL[s.skills[0]].cefr_min + "–" + SKILL[s.skills[0]].cefr_max + " · " + SKILL[s.skills[0]].est_minutes + " phút" : s.activity === "review" ? "15 câu trộn · khoảng 12 phút" : "30 câu · chứng nhận hoàn thành chặng"; }
+  /* Trang chủ gọn (02/11/2026): dải trên = tên + chọn lộ trình + 3 số; thẻ "Trạm tiếp theo"; thanh chọn lớp; bảng trạm của 1 lớp. */
+  function stagesOf(tid) { var out = [], t = TRACK[tid]; for (var i = 0; i < t.steps.length;) { var sg = stageOf(tid, i); out.push(sg); i = sg.end; } return out; }
   function viewHome(opt) {
     var tid = opt.tab || curTrack(), ts = trackState(tid), o = ts.open !== null ? ts.list[ts.open] : null;
-    var road = TRACK[tid].stages ? TRACK[tid].stages.map(function (z) { return z.title_vi.toUpperCase(); }) : ["XUẤT PHÁT", "TĂNG TỐC", "VỀ ĐÍCH"];
-    var hero = h('<section class="hero bus"><div class="wrap"><span class="eyebrow">Miễn phí · THCS – THPT · mỗi ngày 10–15 phút</span>' +
-      '<h1><span class="ln"><span>Lên xe,</span></span><span class="ln"><span>mỗi ngày</span></span><span class="ln"><span><em>một trạm ngữ pháp</em></span></span></h1>' +
-      '<p class="lead">Hai chuyến xe riêng: <b>THCS</b> lớp 6 → 9 về đích thi vào 10, <b>THPT</b> lớp 10 → 12 về đích thi tốt nghiệp. Mỗi trạm bám một Unit trên lớp, có mẹo nhớ và phần đi sâu, học 10–15 phút rồi xe chạy tiếp.</p>' +
-      '<div class="ctas"><button class="btn" type="button" id="heroGo"></button><button class="btn light" type="button" id="heroMap">Xem cả hành trình</button></div>' +
-      '<div class="hroad" aria-hidden="true"><div class="stops">' + road.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join("") + '</div><div class="asph"></div><div class="dash"></div>' + HERO_BUS + '</div></div></section>');
-    app.appendChild(hero);
-    var hg = hero.querySelector("#heroGo");
-    if (o) { hg.textContent = "Lên xe " + o.step.step; hg.onclick = function () { openTicket(tid, o.i); }; }
-    else { hg.textContent = "Xem tiến độ"; hg.onclick = function () { go("tiendo"); }; }
-    hero.querySelector("#heroMap").onclick = function () { var el = document.getElementById("jbody"); if (el) el.scrollIntoView({ behavior: "smooth" }); };
-    var trk = h('<div class="trk"><div class="wrap"><span class="muted">Lộ trình:</span></div></div>');
-    TRACKS.forEach(function (id) {
-      var b = h('<button type="button" class="chip" aria-pressed="' + (id === tid) + '">' + esc(TRACK_INFO[id].name) + '</button>');
-      b.onclick = function () { st.track = id; if (st.user) st.user.track = id; persist(); go("home", { tab: id, toMap: true }); };
-      trk.querySelector(".wrap").appendChild(b);
+    var curI = ts.open !== null ? ts.open : -1, groups = stagesOf(tid), d0 = today();
+    var due = Object.keys(st.review).filter(function (k) { return st.review[k].due && st.review[k].due <= d0; }).length;
+    var pct = Math.round(100 * ts.done / ts.total), mainT = tid === "THCS" || tid === "THPT";
+    var top = h('<section class="dash"><div class="wrap dash-in"><div class="dash-l">' +
+      '<span class="eyebrow">Miễn phí · mỗi ngày 10–15 phút</span><h1>Mỗi ngày <em>một trạm</em> ngữ pháp</h1>' +
+      '<div class="seg" role="tablist" aria-label="Chọn lộ trình"></div>' +
+      '<div class="dash-more">' + (mainT ? 'Luyện thi khác: ' : 'Lộ trình chính: ') + '</div>' +
+      '<div class="stats"><div><b>' + streak() + '</b><span>ngày liên tiếp</span></div><div><b>' + ts.done + '<small>/' + ts.total + '</small></b><span>trạm đã qua</span></div><div><b>' + pct + '<small>%</small></b><span>' + esc(TRACK_INFO[tid].name) + '</span></div></div>' +
+      '</div><div class="next" id="next"></div></div></section>');
+    app.appendChild(top);
+    function pickTrack(id) { st.track = id; if (st.user) st.user.track = id; persist(); go("home", { tab: id }); }
+    ["THCS", "THPT"].forEach(function (id) { var b = h('<button type="button" role="tab" aria-selected="' + (id === tid) + '"><b>' + esc(TRACK_INFO[id].name.replace("Ngữ pháp ", "")) + '</b><small>' + esc(TRACK_INFO[id].who) + '</small></button>'); b.onclick = function () { pickTrack(id); }; top.querySelector(".seg").appendChild(b); });
+    (mainT ? ["TOEIC", "IELTS"] : ["THCS", "THPT"].concat(["TOEIC", "IELTS"].filter(function (x) { return x !== tid; }))).forEach(function (id, j) {
+      var b = h('<button type="button" class="link">' + esc(TRACK_INFO[id].name) + '</button>'); b.onclick = function () { pickTrack(id); };
+      var m = top.querySelector(".dash-more"); if (j) m.appendChild(document.createTextNode(" · ")); m.appendChild(b); });
+    if (!mainT) top.querySelector(".seg").hidden = true;
+    var nx = top.querySelector("#next");
+    if (o) {
+      var sk = o.step.activity === "learn" ? SKILL[o.step.skills[0]] : null, L = sk && SK[sk.id] ? SK[sk.id].lesson : null, ul = unitLabel(tid, o.i);
+      nx.innerHTML = '<span class="lbl">Trạm tiếp theo · ' + esc(o.step.step) + '</span><h2>' + esc(dayTitle(o.step)) + '</h2>' +
+        '<p class="muted">' + esc(ul || stageOf(tid, o.i).label) + '</p>' + (L ? '<p class="obj">' + esc(L.objective_vi) + '</p>' : '') +
+        '<div class="chips">' + (sk ? '<span class="chip gold">' + sk.est_minutes + ' phút</span><span class="chip">' + sk.cefr_min + '–' + sk.cefr_max + '</span>' : '<span class="chip">' + ACT[o.step.activity] + '</span>') + (due ? '<span class="chip red">' + due + ' bài cần ôn</span>' : '') + '</div>' +
+        '<div class="acts"><button class="btn" type="button" id="go">Lên xe</button><button class="btn ghost" type="button" id="peek">Xem trước</button></div>' +
+        (st.placement ? '' : '<button class="link pl" type="button" id="pl">Chưa biết bắt đầu từ đâu? Kiểm tra đầu vào 12 phút →</button>');
+      nx.querySelector("#go").onclick = function () { startDay(tid, o.i); };
+      nx.querySelector("#peek").onclick = function () { openTicket(tid, o.i); };
+    } else nx.innerHTML = '<span class="lbl">Lộ trình</span><h2>' + (ts.done >= ts.total ? "Bạn đã về đích!" : "Các trạm tiếp theo đang được soạn") + '</h2><p class="muted">Xem lại tiến độ hoặc chọn lộ trình khác.</p><div class="acts"><button class="btn" type="button" data-go="tiendo">Xem tiến độ</button></div>';
+    var pl = nx.querySelector("#pl"); if (pl) pl.onclick = function () { go("kiemtra"); };
+    /* thanh chọn lớp + bảng trạm */
+    var gi = opt.stage != null ? opt.stage : Math.max(0, groups.findIndex(function (g) { return curI >= g.from && curI < g.end; }));
+    if (opt.arrive && opt.arrive.tid === tid) gi = Math.max(0, groups.findIndex(function (g) { return opt.arrive.to >= g.from && opt.arrive.to < g.end; }));
+    var sec = h('<section class="route-sec"><div class="wrap"><div class="gtabs" role="tablist" aria-label="Chọn chặng"></div><div class="ghead"></div><div class="rtbox"></div>' +
+      '<div class="rtfoot"><span class="lg"><i class="d"></i>Đã qua<i class="c"></i>Đang ở đây<i class="r"></i>Ôn tập<i class="k"></i>Kiểm tra chặng</span><span>' +
+      (st.placement ? '<button class="link" type="button" data-pl="r">Kết quả kiểm tra đầu vào: ' + esc(st.placement.res.level) + '</button> · ' : '') + '<button class="link" type="button" id="alltrk">Xem tất cả trạm dạng danh sách</button></span></div></div></section>');
+    app.appendChild(sec);
+    sec.querySelectorAll("[data-pl]").forEach(function (b) { b.onclick = function () { go("kiemtra", { showResult: true }); }; });
+    sec.querySelector("#alltrk").onclick = function () { go("lotrinh", { tab: tid }); };
+    var tabs = sec.querySelector(".gtabs");
+    groups.forEach(function (g, j) {
+      var part = ts.list.slice(g.from, g.end), dn = part.filter(function (x) { return x.status === "done"; }).length, here = curI >= g.from && curI < g.end;
+      var b = h('<button type="button" role="tab" aria-selected="' + (j === gi) + '"' + (here ? ' class="here"' : '') + '><b>' + esc(g.label.replace(/^Chặng \d+ · /, "")) + '</b><span class="bar"><i style="width:' + Math.round(100 * dn / part.length) + '%"></i></span><small>' + dn + '/' + part.length + (here ? ' · bạn ở đây' : '') + '</small></button>');
+      b.onclick = function () { draw(j); }; tabs.appendChild(b);
     });
-    var lb = h('<button type="button" class="link sp">Xem dạng danh sách</button>'); lb.onclick = function () { go("lotrinh", { tab: tid }); }; trk.querySelector(".wrap").appendChild(lb);
-    app.appendChild(trk);
-    var body = h('<div class="jwrap" id="jbody"></div>'); app.appendChild(body);
-    var hud = h('<div class="hud"><div class="wrap"><span class="wk"></span><span class="hb2"><i style="width:' + Math.round(100 * ts.done / ts.total) + '%"></i></span><span class="dn"></span></div></div>');
-    body.appendChild(hud);
-    var pr = st.placement ? '<div class="note" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px"><span>Kết quả kiểm tra đầu vào (' + st.placement.at.split("-").reverse().join("/") + '): <b>' + esc(st.placement.res.level) + '</b></span><button class="link" type="button" data-pl="r">Xem kết quả</button><button class="link" type="button" data-pl="a">Làm lại</button></div>'
-      : '<div class="note" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px"><span><b>Chưa biết nên lên xe ở trạm nào?</b> Làm kiểm tra đầu vào 12 phút, xe sẽ đưa bạn tới đúng trạm.</span><button class="btn sm" type="button" data-pl="a">Kiểm tra đầu vào</button></div>';
-    body.appendChild(h('<main class="wrap"><div class="jintro"><span class="stage">' + esc(TRACK_INFO[tid].name) + ' · đã qua ' + ts.done + '/' + ts.total + ' trạm · chuỗi ' + streak() + ' ngày</span><h2>Cuộn xuống, xe chạy theo bạn</h2><p>Xe dừng ở từng trạm. Chạm vào một trạm để xem bài của ngày đó. Đoạn đường vàng là phần bạn đã đi; trạm đỏ là nơi bạn đang đứng. Làm đúng từ 70% thì xe chạy sang trạm sau.</p>' +
-      '' + pr + '<div class="legend"><span><i style="background:var(--ok)"></i>Đã qua</span><span><i style="background:var(--red)"></i>Bạn đang ở đây</span><span><i style="background:#CDD3DD"></i>Phía trước</span><span><i style="background:var(--gold);border-radius:3px;transform:rotate(45deg)"></i>Trạm nạp (ôn tập)</span><span><i style="background:var(--night)"></i>Về đích</span></div></div><div class="jmap" role="list" aria-label="' + esc(TRACK_INFO[tid].name) + '"></div></main>'));
-    body.querySelectorAll("[data-pl]").forEach(function (b) { b.onclick = function () { go("kiemtra", b.dataset.pl === "r" ? { showResult: true } : {}); }; });
-    if (TRACK[tid].stages && TRACK[tid].stages[0].title_vi.indexOf("Lớp") === 0) {
-      var gr = h('<div class="grades"><span class="muted">Đang học lớp mấy? Xe chở bạn tới đúng chặng:</span></div>');
-      TRACK[tid].stages.forEach(function (z) { var b = h('<button type="button" class="chip">' + esc(z.title_vi) + '</button>'); b.onclick = function () { if (journey) journey.focus(z.from, 1.2); }; gr.appendChild(b); });
-      body.querySelector(".jintro").appendChild(gr);
+    function draw(j, arrive) {
+      gi = j; [].forEach.call(tabs.children, function (b, k) { b.setAttribute("aria-selected", k === j); });
+      if (tabs.children[j]) tabs.children[j].scrollIntoView({ block: "nearest", inline: "center" });
+      var g = groups[j], part = ts.list.slice(g.from, g.end), dn = part.filter(function (x) { return x.status === "done"; }).length;
+      sec.querySelector(".ghead").innerHTML = '<div><h2>' + esc(g.label) + '</h2><p class="muted">' + esc(g.sub) + ' · ' + part.length + ' trạm · đã qua ' + dn + '</p></div>' +
+        (curI >= 0 && !(curI >= g.from && curI < g.end) ? '<button class="btn ghost sm" type="button" id="back">Về trạm hiện tại</button>' : '');
+      var bk = sec.querySelector("#back"); if (bk) bk.onclick = function () { draw(groups.findIndex(function (x) { return curI >= x.from && curI < x.end; })); };
+      if (journey) journey.destroy();
+      var stops = part.map(function (x) { var s = x.step; return { n: s.step, act: s.activity, title: dayTitle(s), unit: s.unit_ref ? s.unit_title.split(" · ")[0] : "", status: x.status === "open" ? "cur" : x.status }; });
+      var box = sec.querySelector(".rtbox"), c0 = curI >= g.from && curI < g.end ? curI - g.from : -1;
+      journey = AZRoute.mount(box, { stops: stops, cur: arrive ? arrive.from - g.from : c0, onPick: function (k) { openTicket(tid, g.from + k); } });
+      if (arrive) journey.arrive(arrive.from - g.from, c0 >= 0 ? c0 : arrive.to - g.from);
     }
-    var stops = ts.list.map(function (x) { return { step: x.step.step, act: x.step.activity, title: dayTitle(x.step), meta: (x.step.unit_ref ? x.step.unit_title.split(" · ")[0] + " · " : "") + stopMeta(x.step), status: x.status === "open" ? "cur" : x.status }; });
-    var curI = ts.open !== null ? ts.open : Math.max(0, ts.done - 1);
-    var stg = TRACK[tid].stages ? TRACK[tid].stages.map(function (z, j) { return { from: z.from, small: "Chặng " + (j + 1) + (z.cefr ? " · " + z.cefr : ""), title: z.title_vi }; }) : null;
-    journey = AZJourney.mount(body.querySelector(".jmap"), { stops: stops, cur: curI, stages: stg, onPick: function (i) { openTicket(tid, i); },
-      onNear: function (k) { var sg = stageOf(tid, k); hud.querySelector(".wk").innerHTML = esc(sg.label) + "<small>" + esc(sg.sub) + "</small>";
-        hud.querySelector(".dn").innerHTML = esc(ts.list[k].step.step) + '/' + ts.total + '<span class="x"> · ' + (ts.list[k].status === "done" ? "đã qua" : k === curI ? "bạn đang ở đây" : "phía trước") + '</span>'; } });
-    heroMotion();
-    if (opt.arrive && opt.arrive.tid === tid) journey.arrive(opt.arrive.from, opt.arrive.to);
-    else if (opt.toMap) setTimeout(function () { journey.focus(curI, 0.9); }, 60);
-  }
-  function heroMotion() {
-    if (!AZJourney.motionOK()) return;
-    gsap.from(".hero.bus h1 .ln>span", { yPercent: 110, duration: 1, ease: "expo.out", stagger: .12, delay: .05 });
-    gsap.from(".hero.bus .lead, .hero.bus .ctas, .hero.bus .eyebrow", { y: 18, opacity: 0, duration: .8, ease: "power3.out", stagger: .08, delay: .3, clearProps: "all" });
-    gsap.from(".hero.bus .hb", { x: -420, duration: 1.8, ease: "power3.out", delay: .25 });
+    var arr = opt.arrive && opt.arrive.tid === tid && opt.arrive.from >= groups[gi].from && opt.arrive.from < groups[gi].end ? opt.arrive : null;
+    draw(gi, arr);
+    if (arr || opt.toMap) setTimeout(function () { sec.scrollIntoView({ behavior: AZRoute.motionOK() ? "smooth" : "auto", block: "start" }); }, 80);
+    if (AZRoute.motionOK()) gsap.from([".dash h1", ".dash .seg", ".dash .stats", ".dash .next"], { y: 16, opacity: 0, duration: .6, ease: "power3.out", stagger: .07, clearProps: "transform,opacity" });
   }
   /* vé lên xe: ngăn trượt từ dưới lên */
   function openTicket(tid, i) {
@@ -1016,7 +1103,7 @@ body.focus main{padding-bottom:120px}
       '<div class="ticket"><div><span class="stage">Vé lên xe</span><br><b>' + esc(s.step) + '</b></div>' + (can ? '<button class="btn" type="button" id="board">' + (x.status === "done" ? "Học lại" : "Lên xe") + '</button>' : '<span class="chip">' + (x.status === "locked" ? "Qua trạm trước để mở" : "Chưa có bài") + '</span>') + '</div>' +
       (sk ? '<button class="link" type="button" id="more" style="justify-self:start">Xem chi tiết điểm ngữ pháp</button>' : '') + '<button class="btn ghost" type="button" id="cls">Đóng</button></div></div>');
     document.body.appendChild(bg);
-    var tk = bg.querySelector(".tk"), M = AZJourney.motionOK();
+    var tk = bg.querySelector(".tk"), M = AZRoute.motionOK();
     function close(then) { var done = function () { bg.remove(); if (then) then(); }; if (M) gsap.to(tk, { yPercent: 100, duration: .28, ease: "power2.in", onComplete: done }); else done(); }
     if (M) { gsap.from(bg, { opacity: 0, duration: .2 }); gsap.from(tk, { yPercent: 100, duration: .45, ease: "expo.out" }); }
     bg.addEventListener("click", function (e) { if (e.target === bg) close(); });
@@ -1040,7 +1127,7 @@ body.focus main{padding-bottom:120px}
     });
     var body = m.querySelector("#tbody");
     var ts = trackState(tab);
-    body.appendChild(h('<p class="muted" style="margin:10px 0 16px">Đã xong ' + ts.done + '/' + ts.total + ' ngày · ô nền vàng là ngày ôn · ô xanh đêm là kiểm tra cuối chặng · "Đang soạn" là ngày giáo viên chưa duyệt xong · vạch vàng là dải trình độ CEFR của bài.</p>'));
+    body.appendChild(h('<p class="muted" style="margin:10px 0 16px">Đã xong ' + ts.done + '/' + ts.total + ' ngày · ô nền vàng là ngày ôn · ô xanh đêm là kiểm tra cuối chặng · "Đang soạn" là ngày chưa có bài · vạch vàng là dải trình độ CEFR của bài.</p>'));
     var weeks = h('<div class="weeks"></div>'); body.appendChild(weeks);
     var groups = []; for (var gi = 0; gi < ts.list.length;) { var sg0 = stageOf(tab, gi); groups.push(sg0); gi = sg0.end; }
     groups.forEach(function (sg0) {
@@ -1164,7 +1251,7 @@ body.focus main{padding-bottom:120px}
       box.innerHTML = "";
       if (idx >= plan.items.length) return finish();
       var it = plan.items[idx];
-      if (AZJourney.motionOK()) setTimeout(function () { var p = box.firstElementChild; if (p) gsap.fromTo(p, { x: 64, opacity: 0 }, { x: 0, opacity: 1, duration: .5, ease: "expo.out", clearProps: "transform,opacity" }); }, 0);
+      if (AZRoute.motionOK()) setTimeout(function () { var p = box.firstElementChild; if (p) gsap.fromTo(p, { x: 64, opacity: 0 }, { x: 0, opacity: 1, duration: .5, ease: "expo.out", clearProps: "transform,opacity" }); }, 0);
       if (it.kind === "intro") return intro();
       if (it.kind === "theory") return theory();
       if (it.kind === "mistakes") return mistakes();
@@ -1177,7 +1264,6 @@ body.focus main{padding-bottom:120px}
         '<div class="chips"><span class="chip gold">' + L.est_minutes + ' phút</span><span class="chip">' + s.cefr_min + '–' + s.cefr_max + '</span><span class="chip">' + plan.items.filter(function (x) { return x.kind === "q" && x.counted; }).length + ' câu tính điểm</span><span class="chip">Đạt ' + plan.pass + '% mở ngày sau</span></div>' +
         lessonRoute() +
         (s.prerequisites.length ? '<p class="muted">Nên học trước: ' + s.prerequisites.map(function (p) { return esc(SKILL[p].title_vi); }).join(", ") + '</p>' : '') +
-        (L.review.status !== "approved" && DATA.mode === "preview" ? '<p class="note">Bài này là <b>bản nháp</b> do Claude soạn, đang chờ giáo viên AZ duyệt. Nếu thấy câu nào chưa ổn, bấm "Báo lỗi câu này" ở cuối câu hỏi.</p>' : '') +
         '<div class="acts main"><span></span><button class="btn" type="button">Bắt đầu</button></div></div>'));
       box.querySelector(".btn").onclick = next; box.firstChild.classList.add("enter");
     }
@@ -1352,7 +1438,7 @@ body.focus main{padding-bottom:120px}
     app.appendChild(root); document.body.classList.add("focus");
     root.querySelector("#quit").onclick = function () { go("home"); };
     var box = root.querySelector("#pbox"), total = PL.tiers.reduce(function (a, t) { return a + t.questions.length; }, 0);
-    function slide(el) { box.innerHTML = ""; box.appendChild(el); if (AZJourney.motionOK()) gsap.fromTo(el, { x: 64, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "expo.out", clearProps: "transform,opacity" }); window.scrollTo(0, 0); }
+    function slide(el) { box.innerHTML = ""; box.appendChild(el); if (AZRoute.motionOK()) gsap.fromTo(el, { x: 64, opacity: 0 }, { x: 0, opacity: 1, duration: .45, ease: "expo.out", clearProps: "transform,opacity" }); window.scrollTo(0, 0); }
     function intro() {
       var el = h('<div class="panel"><span class="stage">Bến xuất phát · kiểm tra đầu vào</span><h1 style="font-size:clamp(26px,3.6vw,34px)">Bạn nên lên xe ở trạm nào?</h1>' +
         '<p>30 câu, khoảng 12 phút, chia 3 chặng: Nền tảng (A1–A2) → Trung cấp (B1) → Nâng cao (B2). Không cần đăng ký để làm bài.</p>' +
@@ -1531,8 +1617,6 @@ body.focus main{padding-bottom:120px}
 
   /* ---------- khởi động ---------- */
   if (API) flush();
-  document.getElementById("previewText").textContent = DATA.mode === "preview" ? " Bài học và câu hỏi là bản nháp chờ giáo viên AZ duyệt; tiến độ, kết quả kiểm tra và thông tin đăng ký chỉ lưu trên trình duyệt này." : "";
-  if (DATA.mode !== "preview") document.getElementById("previewBar").hidden = true;   // web thật: không hiện dòng nháp (Anh Tùng, 02/11/2026); vẫn giữ nút "Báo lỗi câu này"
   document.getElementById("buildInfo").textContent = "Nội dung build " + DATA.built + " · " + CAT.skills.length + " điểm ngữ pháp · " + Object.keys(SK).length + " bài có nội dung";
   try { history.scrollRestoration = "manual"; } catch (e) {}
   var start = (location.hash || "").replace("#", "");
