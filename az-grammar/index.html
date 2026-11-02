@@ -1177,7 +1177,7 @@ body.focus main{padding-bottom:120px}
         '<div class="chips"><span class="chip gold">' + L.est_minutes + ' phút</span><span class="chip">' + s.cefr_min + '–' + s.cefr_max + '</span><span class="chip">' + plan.items.filter(function (x) { return x.kind === "q" && x.counted; }).length + ' câu tính điểm</span><span class="chip">Đạt ' + plan.pass + '% mở ngày sau</span></div>' +
         lessonRoute() +
         (s.prerequisites.length ? '<p class="muted">Nên học trước: ' + s.prerequisites.map(function (p) { return esc(SKILL[p].title_vi); }).join(", ") + '</p>' : '') +
-        (L.review.status !== "approved" ? '<p class="note">Bài này là <b>bản nháp</b> do Claude soạn, đang chờ giáo viên AZ duyệt. Nếu thấy câu nào chưa ổn, bấm "Báo lỗi câu này" ở cuối câu hỏi.</p>' : '') +
+        (L.review.status !== "approved" && DATA.mode === "preview" ? '<p class="note">Bài này là <b>bản nháp</b> do Claude soạn, đang chờ giáo viên AZ duyệt. Nếu thấy câu nào chưa ổn, bấm "Báo lỗi câu này" ở cuối câu hỏi.</p>' : '') +
         '<div class="acts main"><span></span><button class="btn" type="button">Bắt đầu</button></div></div>'));
       box.querySelector(".btn").onclick = next; box.firstChild.classList.add("enter");
     }
@@ -1532,7 +1532,7 @@ body.focus main{padding-bottom:120px}
   /* ---------- khởi động ---------- */
   if (API) flush();
   document.getElementById("previewText").textContent = DATA.mode === "preview" ? " Bài học và câu hỏi là bản nháp chờ giáo viên AZ duyệt; tiến độ, kết quả kiểm tra và thông tin đăng ký chỉ lưu trên trình duyệt này." : "";
-  if (DATA.mode !== "preview") { if (DATA.draft) { document.getElementById("previewText").textContent = " Nội dung đang được giáo viên AZ rà soát. Thấy câu nào chưa ổn, bấm \"Báo lỗi câu này\" giúp AZ nhé."; document.querySelector("#previewBar b").textContent = "Bản thử nghiệm."; document.querySelector("#previewBar .short").textContent = "Đang rà soát nội dung."; } else document.getElementById("previewBar").hidden = true; }
+  if (DATA.mode !== "preview") document.getElementById("previewBar").hidden = true;   // web thật: không hiện dòng nháp (Anh Tùng, 02/11/2026); vẫn giữ nút "Báo lỗi câu này"
   document.getElementById("buildInfo").textContent = "Nội dung build " + DATA.built + " · " + CAT.skills.length + " điểm ngữ pháp · " + Object.keys(SK).length + " bài có nội dung";
   try { history.scrollRestoration = "manual"; } catch (e) {}
   var start = (location.hash || "").replace("#", "");
